@@ -2,3 +2,4 @@
 echo "Starting SnapRAID operation: DIFF..."
 echo 'snapraid -l "/var/log/snapraid/snapraid-diff-%D-%T.log" diff >/var/log/snapraid/snaplog 2>&1' > /var/log/snapraid/lastcmd
 (nohup snapraid -l "/var/log/snapraid/snapraid-diff-%D-%T.log" diff >/var/log/snapraid/snaplog 2>&1) & 
+sleep 3
