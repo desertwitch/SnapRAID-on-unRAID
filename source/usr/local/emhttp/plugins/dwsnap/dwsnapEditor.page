@@ -14,7 +14,7 @@ Markdown="false"
     .fileTree {color:#486dba;width:305px;max-height:150px;overflow:scroll;position:absolute;z-index:100;display:none;}
 </style>
 
-<span style="float:right;margin-right:10px"><a href="https://www.snapraid.it/manual" target="_blank" title="SnapRAID User Manual"><i class="fa fa-file-text-o"></i> <u>Configuration Manual</u></a></span>
+<span style="float:right;margin-right:10px"><a href="https://www.snapraid.it/faq" target="_blank" title="SnapRAID FAQ"><i class="fa fa-file-text-o"></i> <u>Frequently Asked Questions</u></a></span>
 
 <form id="editform" method="POST">
 
