@@ -1,2 +1,2 @@
 #!/bin/bash
-echo "scrub called" | logger
+/usr/sbin/snaprunner 2>&1 | tee /var/log/snaplog

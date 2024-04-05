@@ -3,6 +3,7 @@ BOOT="/boot/config/plugins/dwsnap"
 DOCROOT="/usr/local/emhttp/plugins/dwsnap"
 
 chmod +0755 $DOCROOT/scripts/*
+chmod +0755 /usr/sbin/snaprunner
 
 if [ ! -d $BOOT/config ]; then
     mkdir $BOOT/config

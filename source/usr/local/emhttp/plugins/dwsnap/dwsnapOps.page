@@ -24,8 +24,8 @@ pre {
 <input type="button" id="snapscrub" value="SCRUB">
 <input type="button" id="snaptouch" value="TOUCH">
 <input type="button" id="snapcheck" value="CHECK">
-<input type="button" id="snapfix" value="FIX EVERYTHING">
-<input type="button" id="snapfixerrors" value="FIX ERRORS ONLY">
+<input type="button" id="snapfix" value="FIX">
+<input type="button" id="snapfixerrors" value="FIX ERRORS">
 </form>
 
 <span style="float:right;margin-right:10px"><i id="logcontrol" class="fa fa-pause"></i></span>

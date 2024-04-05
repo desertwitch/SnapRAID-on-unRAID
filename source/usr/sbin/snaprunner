@@ -1,0 +1,6 @@
+#!/bin/bash
+while :
+do
+echo "RANDOM NUMBER: $RANDOM"
+sleep 1
+done
