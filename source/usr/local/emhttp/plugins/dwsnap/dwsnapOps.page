@@ -33,7 +33,7 @@ $snapraid_lastcmd = (file_exists("/var/log/snapraid/lastcmd") ? (file_get_conten
 
 <form markdown="0" id="snapcommands" name="snapcommands" method="POST" action="/update.php" target="progressFrame">
 <input type="hidden" id="command" name="#command" value="">
-<input class="snaprun" type="button" id="snapstatus" value="STATUS">
+<input class="snaprun" type="button" id="snapstatuscmd" value="STATUS">
 <input class="snaprun" type="button" id="snapdiff" value="DIFF">
 <input class="snaprun" type="button" id="snapsync" value="SYNC">
 <input class="snaprun" type="button" id="snapscrub" value="SCRUB">
@@ -87,7 +87,7 @@ function toggleSnapLogs() {
 $(function(){
     $('#logcontrol').click(toggleSnapLogs);
 
-    $('#snapstatus').click(function(){
+    $('#snapstatuscmd').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/status');
         $('#snapcommands').submit();
     });
