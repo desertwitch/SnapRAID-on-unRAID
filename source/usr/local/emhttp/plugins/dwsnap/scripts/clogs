@@ -1,0 +1,4 @@
+#!/bin/bash
+echo "Clearing all existing SnapRAID logs..."
+rm -rf /var/log/snapraid/*
+sleep 1

@@ -23,9 +23,9 @@ $snapraid_lastcmd = (file_exists("/var/log/snapraid/lastcmd") ? (file_get_conten
 
 <table class="tablesorter shift">
 <thead><tr>
-<th><i id="snapstatus" class="fa fa-pause-circle"></i> <strong>(Last) Operation's Terminal Output</strong></th>
+<th><i id="snapstatus" class="fa fa-pause-circle"></i> <strong>(Last) Operation's  Output</strong></th>
 <th style="text-transform: none;"><strong>Command:</strong> <em><?=$snapraid_lastcmd?></em></th>
-<th style="text-transform: none;"><strong>Started:</strong> <em><?=$snapraid_laststart?></em><span style="float:right;"><strong>Refresh Terminal:</strong> <i id="logcontrol" class="fa fa-refresh fa-spin"></i></span></th>
+<th style="text-transform: none;"><strong>Started:</strong> <em><?=$snapraid_laststart?></em><span style="float:right;"><strong>Refresh:</strong> <i id="logcontrol" class="fa fa-refresh fa-spin"></i></span></th>
 </tr></thead>
 </table>
 
@@ -34,16 +34,17 @@ $snapraid_lastcmd = (file_exists("/var/log/snapraid/lastcmd") ? (file_get_conten
 <form markdown="0" id="snapcommands" name="snapcommands" method="POST" action="/update.php" target="progressFrame">
 <input type="hidden" id="command" name="#command" value="">
 <input class="snaprun" type="button" id="snapstatuscmd" value="STATUS">
+<input class="snaprun" type="button" id="snaplist" value="LIST">
 <input class="snaprun" type="button" id="snapdiff" value="DIFF">
 <input class="snaprun" type="button" id="snapdup" value="DUP">
-<input class="snaprun" type="button" id="snaplist" value="LIST">
 <input class="snaprun" type="button" id="snapsync" value="SYNC">
 <input class="snaprun" type="button" id="snapscrub" value="SCRUB">
-<input class="snaprun" type="button" id="snaptouch" value="TOUCH">
 <input class="snaprun" type="button" id="snapcheck" value="CHECK">
+<input class="snaprun" type="button" id="snaptouch" value="TOUCH">
 <input class="snaprun" type="button" id="snapfix" value="FIX">
 <input class="snaprun" type="button" id="snapfixerrors" value="FIX ERRORS">
 <span style="float:right;">
+<input type="button" id="snapclogs" value="CLEAR LOGS">
 <input class="snapnotrun" type="button" id="snapstop" value="STOP OPERATION">
 <input class="snapnotrun" type="button" id="snapkill" value="KILL OPERATION">
 </span>
@@ -138,6 +139,10 @@ $(function(){
     });
     $('#snapkill').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/kill');
+        $('#snapcommands').submit();
+    });
+    $('#snapclogs').click(function(){
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/clogs');
         $('#snapcommands').submit();
     });
 
