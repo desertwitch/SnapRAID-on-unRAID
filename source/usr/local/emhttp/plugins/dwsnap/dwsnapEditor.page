@@ -64,7 +64,7 @@ $(function(){
         );
     });
 
-    $('#editfile').val("/etc/snapraid.conf");
+    $('#editfile').val("/boot/config/plugins/dwsnap/config/snapraid.conf");
     var EditfileDefault = $('#editfile').val();
     $.getJSON('/plugins/dwsnap/include/dwsnap_edit.php', {editfile: EditfileDefault}, function (data) {
             editor.setValue(data);
