@@ -4,7 +4,7 @@
 <!ENTITY name      "dwsnap">
 <!ENTITY author    "desertwitch">
 <!ENTITY version   "2024.03.26">
-<!ENTITY launch    "Settings/dwsnapSettings">
+<!ENTITY launch    "Settings/dwsnapOps">
 <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/SnapRAID-on-unRAID/main">
 <!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
 <!ENTITY pkgURL    "&gitURL;/packages">

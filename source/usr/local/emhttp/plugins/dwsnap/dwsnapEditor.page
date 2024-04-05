@@ -1,4 +1,4 @@
-Menu="dwsnapSettings:2"
+Menu="dwsnapOps:2"
 Title="SnapRAID Configuration Editor"
 Tag="cogs"
 Markdown="false"
@@ -42,7 +42,7 @@ Markdown="false"
 <script type="text/javascript">
 $(function(){
     $('#btnCancel').click(function() {
-        location = '/Settings/dwsnapSettings';
+        location = '/Settings/dwsnapOps';
     });
 
     var editor = CodeMirror.fromTextArea($('#editdata')[0], {
