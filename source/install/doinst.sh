@@ -1,23 +1,19 @@
 #!/bin/bash
-BOOT="/boot/config/plugins/mergerfsp"
-DOCROOT="/usr/local/emhttp/plugins/mergerfsp"
+BOOT="/boot/config/plugins/dwsnap"
+DOCROOT="/usr/local/emhttp/plugins/dwsnap"
 
-# Update file permissions of scripts
-chmod +0755 $DOCROOT/event/*
-chmod +0755 $DOCROOT/mergerfs/*
+chmod +0755 $DOCROOT/scripts/*
 
-if [ ! -d /etc/mergerfsp ]; then
-    mkdir /etc/mergerfsp
+if [ ! -d $BOOT/config ]; then
+    mkdir $BOOT/config
 fi
 
-if [ ! -d $BOOT/scripts ]; then
-    mkdir $BOOT/scripts
+cp -nr $DOCROOT/defaults/snapraid.conf $BOOT/config/snapraid.conf
+
+if [ ! -L /etc/snapraid.conf ]; then
+    rm -f /etc/snapraid.conf
+    ln -sf $BOOT/config/snapraid.conf /etc/snapraid.conf
 fi
 
-cp -nr $DOCROOT/mergerfs/* $BOOT/scripts >/dev/null 2>&1
-cp -rf $BOOT/scripts/* /etc/mergerfsp >/dev/null 2>&1
-
-chmod 755 /etc/mergerfsp
-chown root:root /etc/mergerfsp
-chmod 755 /etc/mergerfsp/*
-chown root:root /etc/mergerfsp/*
+chmod 755 /etc/snapraid.conf
+chown root:root /etc/snapraid.conf
