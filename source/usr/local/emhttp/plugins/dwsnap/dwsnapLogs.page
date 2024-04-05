@@ -3,7 +3,7 @@ Title="SnapRAID Log File Viewer"
 Tag="folder-o"
 Markdown="false"
 ---
-
+<? $snapraid_lastlog = trim(shell_exec("ls -Art /var/log/snapraid/*.log | tail -n 1")); ?>
 <link type="text/css" rel="stylesheet" href="<?=autov('/webGui/styles/jquery.filetree.css');?>">
 <link type="text/css" rel="stylesheet" href="<?=autov('/plugins/dwsnap/css/codemirror.css');?>">
 <link type="text/css" rel="stylesheet" href="<?=autov('/plugins/dwsnap/css/dracula.css');?>">
@@ -49,5 +49,12 @@ $(function(){
             }
         );
     });
+
+    $('#editfile2').val("<?=$snapraid_lastlog?>");
+    var EditfileDefault2 = $('#editfile2').val();
+    $.getJSON('/plugins/dwsnap/include/dwsnap_edit.php', {editfile: EditfileDefault2}, function (data) {
+            editor2.setValue(data);
+        }
+    );
 });
 </script>
