@@ -1,2 +1,3 @@
 #!/bin/bash
+echo '/usr/sbin/snaprunner >/var/log/snaplog 2>&1' > /tmp/snap_lastcmd
 (nohup /usr/sbin/snaprunner >/var/log/snaplog 2>&1) & 

@@ -6,7 +6,7 @@ Markdown="false"
 <? $snapraid_running = (intval(trim(htmlspecialchars(shell_exec( "if pgrep -x snaprunner >/dev/null 2>&1; then echo 1; else echo 0; fi" )))) === 1 ); ?>
 
 <style type="text/css">
-pre {
+.snaplog {
     height: 400px;
     max-height: 400px;
     overflow: auto;
@@ -26,8 +26,8 @@ pre {
 <input class="snaprun" type="button" id="snaptouch" value="TOUCH">
 <input class="snaprun" type="button" id="snapcheck" value="CHECK">
 <input class="snaprun" type="button" id="snapfix" value="FIX">
-<input class="snaprun" type="button" id="snapfixerrors" value="FIX ERRORS">
-<input class="snapnotrun" type="button" id="snapstop" value="STOP RUNNING OPERATION" disabled="true">
+<input class="snaprun" type="button" id="snapfixerrors" value="FIX ERRORS"><br>
+<input class="snapnotrun" type="button" id="snapstop" value="STOP RUNNING OPERATION">
 </form>
 
 <?if ($snapraid_running):?>
@@ -41,7 +41,7 @@ function getSnapLogs() {
     $.get('/plugins/dwsnap/include/dwsnap_logger.php',function(data) {
         if (data) { 
             $('#logviewer').html(data); 
-	        var pre = $("pre");
+	        var pre = $(".snaplog");
 	        pre.scrollTop(pre.prop("scrollHeight"));
 	    }
     });
