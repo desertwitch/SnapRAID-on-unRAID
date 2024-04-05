@@ -18,7 +18,8 @@ $(function() {
 });
 </script>
 
-<span style="float:right;margin-right:10px"><a href="https://www.snapraid.it/manual" target="_blank" title="SnapRAID User Manual"><i class="fa fa-medkit"></i> <u>User Manual</u></a></span>
+<span style="float:right;margin-right:10px"><a href="https://www.snapraid.it/manual" target="_blank" title="SnapRAID User Manual"><i class="fa fa-file-text-o"></i> <u>User Manual</u></a></span>
+
 <div style="color:red;"><strong>WARNING:</strong></div>
 <div><strong>SnapRAID is a non-supported backup utility for advanced users and can - depending on how YOU set it up - wreak havoc on your system.</strong></div>
 <div><strong>Please make yourself familiar with the documentation before trying any unfamiliar SnapRAID commands - you are warned only once here.</strong></div>
