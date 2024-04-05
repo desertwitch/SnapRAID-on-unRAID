@@ -1,2 +1,4 @@
 #!/bin/bash
-echo "fixerrors called" | logger
+echo "Starting SnapRAID operation: FIX ERRORS..."
+echo 'snapraid -l "/var/log/snapraid-efix-%D-%T.log" -e fix >/var/log/snapraid/snaplog 2>&1' > /var/log/snapraid/lastcmd
+(nohup snapraid -l "/var/log/snapraid-efix-%D-%T.log" -e fix >/var/log/snapraid/snaplog 2>&1) & 

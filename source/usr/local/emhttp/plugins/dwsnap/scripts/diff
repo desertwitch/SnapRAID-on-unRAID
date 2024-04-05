@@ -1,2 +1,4 @@
 #!/bin/bash
-echo "diff called" | logger
+echo "Starting SnapRAID operation: DIFF..."
+echo 'snapraid -l "/var/log/snapraid-diff-%D-%T.log" diff >/var/log/snapraid/snaplog 2>&1' > /var/log/snapraid/lastcmd
+(nohup snapraid -l "/var/log/snapraid-diff-%D-%T.log" diff >/var/log/snapraid/snaplog 2>&1) & 

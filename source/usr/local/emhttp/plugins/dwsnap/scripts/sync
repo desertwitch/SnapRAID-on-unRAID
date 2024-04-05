@@ -1,2 +1,4 @@
 #!/bin/bash
-echo "sync called" | logger
+echo "Starting SnapRAID operation: SYNC..."
+echo 'snapraid -l "/var/log/snapraid-sync-%D-%T.log" sync >/var/log/snapraid/snaplog 2>&1' > /var/log/snapraid/lastcmd
+(nohup snapraid -l "/var/log/snapraid-sync-%D-%T.log" sync >/var/log/snapraid/snaplog 2>&1) & 

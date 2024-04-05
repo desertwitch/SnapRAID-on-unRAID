@@ -57,7 +57,7 @@ function getSnapLogs() {
 }
 function getSnapStatus() {
     $('#progress').remove();
-    showStatus('snaprunner');
+    showStatus('snapraid');
     $.get('/plugins/dwsnap/include/dwsnap_status.php',function(data) {
         if (data) { 
             if(data === "RUNNING:YES") {

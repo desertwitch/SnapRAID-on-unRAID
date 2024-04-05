@@ -1,2 +1,3 @@
 #!/bin/bash
-killall snaprunner
+echo "Stopping all running SnapRAID operations..."
+killall snapraid
