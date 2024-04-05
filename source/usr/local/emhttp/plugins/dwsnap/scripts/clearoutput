@@ -1,0 +1,4 @@
+#!/bin/bash
+echo "Clearing SnapRAID output..."
+rm -f /var/log/snapraid/snaplog
+sleep 1

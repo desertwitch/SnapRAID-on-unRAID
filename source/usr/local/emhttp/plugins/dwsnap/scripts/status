@@ -2,5 +2,5 @@
 echo "Starting SnapRAID operation: STATUS..."
 date +"%d.%m.%Y %k:%M:%S %Z" > /var/log/snapraid/laststart
 echo 'snapraid -l "/var/log/snapraid/snapraid-status-%D-%T.log" status >/var/log/snapraid/snaplog 2>&1' > /var/log/snapraid/lastcmd
-(nohup snapraid -l "/var/log/snapraid/snapraid-status-%D-%T.log" status >/var/log/snapraid/snaplog 2>&1) & 
+nohup snapraid -l "/var/log/snapraid/snapraid-status-%D-%T.log" status >/var/log/snapraid/snaplog 2>&1 & 
 sleep 1

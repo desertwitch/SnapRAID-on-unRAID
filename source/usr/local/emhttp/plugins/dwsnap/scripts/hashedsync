@@ -1,0 +1,6 @@
+#!/bin/bash
+echo "Starting SnapRAID operation: PREHASHED SYNC..."
+date +"%d.%m.%Y %k:%M:%S %Z" > /var/log/snapraid/laststart
+echo 'snapraid -l "/var/log/snapraid/snapraid-hsync-%D-%T.log" -h sync >/var/log/snapraid/snaplog 2>&1' > /var/log/snapraid/lastcmd
+nohup snapraid -l "/var/log/snapraid/snapraid-hsync-%D-%T.log" -h sync >/var/log/snapraid/snaplog 2>&1 & 
+sleep 1

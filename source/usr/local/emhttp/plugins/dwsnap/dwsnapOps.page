@@ -23,7 +23,7 @@ $snapraid_lastcmd = (file_exists("/var/log/snapraid/lastcmd") ? (file_get_conten
 
 <table class="tablesorter shift">
 <thead><tr>
-<th><i id="snapstatus" class="fa fa-pause-circle"></i> <strong>(Last) Operation's  Output</strong></th>
+<th><i id="snapstatusicon" class="fa fa-pause-circle"></i> <strong>(Last) Operation's  Output</strong></th>
 <th style="text-transform: none;"><strong>Command:</strong> <em><?=$snapraid_lastcmd?></em></th>
 <th style="text-transform: none;"><strong>Started:</strong> <em><?=$snapraid_laststart?></em><span style="float:right;"><strong>Refresh:</strong> <i id="logcontrol" class="fa fa-refresh fa-spin"></i></span></th>
 </tr></thead>
@@ -33,23 +33,23 @@ $snapraid_lastcmd = (file_exists("/var/log/snapraid/lastcmd") ? (file_get_conten
 
 <form markdown="0" id="snapcommands" name="snapcommands" method="POST" action="/update.php" target="progressFrame">
 <input type="hidden" id="command" name="#command" value="">
-<input class="snaprun" type="button" id="snapstatuscmd" value="STATUS">
+<input class="snaprun" type="button" id="snapstatus" value="STATUS">
 <input class="snaprun" type="button" id="snaplist" value="LIST">
 <input class="snaprun" type="button" id="snapdiff" value="DIFF">
 <input class="snaprun" type="button" id="snapdup" value="DUP">
 <input class="snaprun" type="button" id="snapscrub" value="SCRUB">
 <input class="snaprun" type="button" id="snapcheck" value="CHECK">
 <span style="float:right;">
-<input type="button" id="snapclogs" value="CLEAR OUTPUT">
-<input type="button" id="snapclogs" value="CLEAR ALL LOGS">
+<input class="snaprun" type="button" id="clearoutput" value="CLEAR OUTPUT">
+<input class="snaprun" type="button" id="clearlogs" value="CLEAR ALL LOGS">
 <input class="snapnotrun" type="button" id="snapstop" value="STOP OPERATION">
 <input class="snapnotrun" type="button" id="snapkill" value="KILL OPERATION">
 </span><br>
 <input class="snaprun" type="button" id="snapsync" value="SYNC">
-<input class="snaprun" type="button" id="snapsync" value="PREHASH SYNC">
+<input class="snaprun" type="button" id="snaphashedsync" value="PREHASHED SYNC">
 <input class="snaprun" type="button" id="snaptouch" value="TOUCH">
 <input class="snaprun" type="button" id="snapfix" value="FIX">
-<input class="snaprun" type="button" id="snapfixerrors" value="FIX MISSING">
+<input class="snaprun" type="button" id="snapfixmissing" value="FIX MISSING">
 <input class="snaprun" type="button" id="snapfixerrors" value="FIX ERRORS">
 </form> 
 
@@ -69,11 +69,11 @@ function getSnapStatus() {
     $.get('/plugins/dwsnap/include/dwsnap_status.php',function(data) {
         if (data) { 
             if(data === "RUNNING:YES") {
-                $('#snapstatus').attr("class", "fa fa-play-circle");
+                $('#snapstatusicon').attr("class", "fa fa-play-circle");
                 $('.snaprun').prop('disabled', true);
                 $('.snapnotrun').prop('disabled', false);
             } else if (data === "RUNNING:NO") {
-                $('#snapstatus').attr("class", "fa fa-pause-circle");
+                $('#snapstatusicon').attr("class", "fa fa-pause-circle");
                 $('.snaprun').prop('disabled', false);
                 $('.snapnotrun').prop('disabled', true);
                 $('#logcontrol').attr("class", "fa fa-refresh");
@@ -96,8 +96,12 @@ function toggleSnapLogs() {
 $(function(){
     $('#logcontrol').click(toggleSnapLogs);
 
-    $('#snapstatuscmd').click(function(){
+    $('#snapstatus').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/status');
+        $('#snapcommands').submit();
+    });
+    $('#snaplist').click(function(){
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/list');
         $('#snapcommands').submit();
     });
     $('#snapdiff').click(function(){
@@ -108,32 +112,21 @@ $(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/dup');
         $('#snapcommands').submit();
     });
-    $('#snaplist').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/list');
-        $('#snapcommands').submit();
-    });
-    $('#snapsync').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/sync');
-        $('#snapcommands').submit();
-    });
     $('#snapscrub').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/scrub');
-        $('#snapcommands').submit();
-    });
-    $('#snaptouch').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/touch');
         $('#snapcommands').submit();
     });
     $('#snapcheck').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/check');
         $('#snapcommands').submit();
     });
-    $('#snapfix').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/fix');
+
+    $('#clearoutput').click(function(){
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/clearoutput');
         $('#snapcommands').submit();
     });
-    $('#snapfixerrors').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/fixerrors');
+    $('#clearlogs').click(function(){
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/clearlogs');
         $('#snapcommands').submit();
     });
     $('#snapstop').click(function(){
@@ -144,8 +137,29 @@ $(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/kill');
         $('#snapcommands').submit();
     });
-    $('#snapclogs').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/clogs');
+
+    $('#snapsync').click(function(){
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/sync');
+        $('#snapcommands').submit();
+    });
+    $('#snaphashedsync').click(function(){
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/hashedsync');
+        $('#snapcommands').submit();
+    });
+    $('#snaptouch').click(function(){
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/touch');
+        $('#snapcommands').submit();
+    });
+    $('#snapfix').click(function(){
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/fix');
+        $('#snapcommands').submit();
+    });
+    $('#snapfixmissing').click(function(){
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/fixmissing');
+        $('#snapcommands').submit();
+    });
+    $('#snapfixerrors').click(function(){
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/fixerrors');
         $('#snapcommands').submit();
     });
 
