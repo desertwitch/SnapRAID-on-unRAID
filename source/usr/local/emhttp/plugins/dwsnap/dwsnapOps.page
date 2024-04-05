@@ -1,6 +1,8 @@
-Menu="dwsnapSettings:1"
-Title="SnapRAID Last / Current Operation"
-Tag="cogs"
+Menu="OtherSettings"
+Type="xmenu"
+Title="SnapRAID"
+Icon="hdd-o"
+Tag="hdd-o"
 Markdown="false"
 ---
 <?
@@ -20,10 +22,12 @@ $snapraid_lastcmd = (file_exists("/tmp/snap_lastcmd") ? (file_get_contents("/tmp
 }
 </style>
 
-
-<div><strong>Last Command:</strong> <em><?=$snapraid_lastcmd?></em>
+<table class="tablesorter shift">
+<thead><tr><th style="text-transform: none;">
+<strong>(Last) Command:</strong> <em><?=$snapraid_lastcmd?></em>
 <?if ($snapraid_running):?><span style="float:right;margin-right:10px"><i id="logcontrol" class="fa fa-pause"></i></span><?endif;?>
-</div><br>
+</th></tr></thead>
+</table>
 
 <span id="logviewer"></span>
 

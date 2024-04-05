@@ -1,8 +1,6 @@
-Menu="OtherSettings"
-Type="xmenu"
+Menu="dwsnapSettings:1"
 Title="SnapRAID Settings"
-Icon="hdd-o"
-Tag="hdd-o"
+Tag="cogs"
 Markdown="false"
 ---
 <? $snapraid_backend = trim(shell_exec("find /var/log/packages/ -type f -iname 'snapraid-*' -printf '%f\n' 2> /dev/null")); ?>
