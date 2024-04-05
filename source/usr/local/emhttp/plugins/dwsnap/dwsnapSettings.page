@@ -29,11 +29,11 @@ $(function() {
 <dl>
     <dt>SnapRAID backend:</dt>
     <dd>
-	    <strong><?= isset($snapraid_backend) && $snapraid_backend ? $snapraid_backend : "n/a" ?></strong>
+	    <?= isset($snapraid_backend) && $snapraid_backend ? $snapraid_backend : "n/a" ?>
     </dd>
 </dl>
 
 <dl>
     <dt>SnapRAID available binaries:</dt>
-    <dd><strong>/usr/bin/snapraid</strong></dd>
+    <dd>/usr/bin/snapraid</dd>
 </dl>
