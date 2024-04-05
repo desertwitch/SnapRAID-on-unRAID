@@ -33,9 +33,5 @@ $(function() {
 
 <dl>
     <dt>SnapRAID available binaries:</dt>
-    <dd>
-<pre>
-/usr/bin/snapraid
-</pre>
-    </dd>
+    <dd><strong>/usr/bin/snapraid</strong></dd>
 </dl>
