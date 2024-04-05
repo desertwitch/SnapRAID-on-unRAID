@@ -1,4 +1,4 @@
-SnapRAID on unRAID
+SnapRAID on UNRAID
 ================
 _Proof of Concept Project: SnapRAID on top of unRAID, the best of two worlds?_
 
