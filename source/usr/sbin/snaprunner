@@ -1,5 +1,5 @@
 #!/bin/bash
-for i in {1..30}; do
+for i in {1..5}; do
 echo -ne '#####                     (33%)\r'
 sleep 1
 echo -ne '#############             (66%)\r'
