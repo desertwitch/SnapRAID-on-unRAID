@@ -35,6 +35,7 @@ $snapraid_lastcmd = (file_exists("/var/log/snapraid/lastcmd") ? (file_get_conten
 <input type="hidden" id="command" name="#command" value="">
 <input class="snaprun" type="button" id="snapstatuscmd" value="STATUS">
 <input class="snaprun" type="button" id="snapdiff" value="DIFF">
+<input class="snaprun" type="button" id="snapdup" value="DUP">
 <input class="snaprun" type="button" id="snapsync" value="SYNC">
 <input class="snaprun" type="button" id="snapscrub" value="SCRUB">
 <input class="snaprun" type="button" id="snaptouch" value="TOUCH">
@@ -42,6 +43,7 @@ $snapraid_lastcmd = (file_exists("/var/log/snapraid/lastcmd") ? (file_get_conten
 <input class="snaprun" type="button" id="snapfix" value="FIX">
 <input class="snaprun" type="button" id="snapfixerrors" value="FIX ERRORS">
 <input class="snapnotrun" type="button" id="snapstop" value="STOP OPERATION" style="float:right;margin-right:10px">
+<input class="snapnotrun" type="button" id="snapkill" value="KILL OPERATION" style="float:right;margin-right:10px">
 </form> 
 
 <script type="text/javascript">
@@ -95,6 +97,10 @@ $(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/diff');
         $('#snapcommands').submit();
     });
+    $('#snapdup').click(function(){
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/dup');
+        $('#snapcommands').submit();
+    });
     $('#snapsync').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/sync');
         $('#snapcommands').submit();
@@ -121,6 +127,10 @@ $(function(){
     });
     $('#snapstop').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/stop');
+        $('#snapcommands').submit();
+    });
+    $('#snapkill').click(function(){
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/kill');
         $('#snapcommands').submit();
     });
 
