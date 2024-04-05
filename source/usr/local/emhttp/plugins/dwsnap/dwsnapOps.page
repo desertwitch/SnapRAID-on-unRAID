@@ -16,15 +16,19 @@ pre {
 }
 </style>
 
-<span style="float:right;margin-right:10px"><i id="logcontrol" class="fa fa-pause"></i></span>
 <form markdown="0" id="snapcommands" name="snapcommands" method="POST" action="/update.php" target="progressFrame">
 <input type="hidden" id="command" name="#command" value="">
+<input type="button" id="snapstatus" value="STATUS">
+<input type="button" id="snapdiff" value="DIFF">
+<input type="button" id="snapsync" value="SYNC">
 <input type="button" id="snapscrub" value="SCRUB">
+<input type="button" id="snaptouch" value="TOUCH">
 <input type="button" id="snapcheck" value="CHECK">
-<input type="button" id="snapfix" value="FIX">
-<input type="button" id="snapfixerrors" value="FIX ERRORS">
+<input type="button" id="snapfix" value="FIX EVERYTHING">
+<input type="button" id="snapfixerrors" value="FIX ERRORS ONLY">
 </form>
 
+<span style="float:right;margin-right:10px"><i id="logcontrol" class="fa fa-pause"></i></span>
 <span id="logviewer"></span>
 
 <script type="text/javascript">
@@ -50,8 +54,24 @@ function toggleSnapLogs() {
 }
 $(function(){
     $('#logcontrol').click(toggleSnapLogs);
+    $('#snapstatus').click(function(){
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/status');
+        $('#snapcommands').submit();
+    });
+    $('#snapdiff').click(function(){
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/diff');
+        $('#snapcommands').submit();
+    });
+    $('#snapsync').click(function(){
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/sync');
+        $('#snapcommands').submit();
+    });
     $('#snapscrub').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/scrub');
+        $('#snapcommands').submit();
+    });
+    $('#snaptouch').click(function(){
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/touch');
         $('#snapcommands').submit();
     });
     $('#snapcheck').click(function(){
