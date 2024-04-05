@@ -61,7 +61,7 @@ killall snapraid
 removepkg &plgPATH;/*.txz
 
 rm -f /etc/snapraid.conf
-rm -rf &plgPATH;
+rm -rf &plgPATH;/*.txz
 rm -rf &emhttp;
 
 echo ""
