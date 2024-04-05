@@ -1,4 +1,4 @@
-<?php
+<?
 if(file_exists("/var/log/snapraid/snaplog")) {
     $snaplog = file_get_contents("/var/log/snapraid/snaplog");
     if(!empty($snaplog)) {
