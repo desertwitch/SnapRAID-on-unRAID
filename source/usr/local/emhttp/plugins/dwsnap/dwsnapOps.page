@@ -1,5 +1,5 @@
 Menu="dwsnapSettings:1"
-Title="SnapRAID Last Operation Results"
+Title="SnapRAID Last / Current Operation"
 Tag="cogs"
 Markdown="false"
 ---
@@ -13,22 +13,59 @@ pre {
     word-break: normal !important;
     word-wrap: normal !important;
     white-space: pre !important;
-}​
+}
 </style>
+
+<span style="float:right;margin-right:10px"><i id="logcontrol" class="fa fa-pause"></i></span>
+<form markdown="0" id="snapcommands" name="snapcommands" method="POST" action="/update.php" target="progressFrame">
+<input type="hidden" id="command" name="#command" value="">
+<input type="button" id="snapscrub" value="SCRUB">
+<input type="button" id="snapcheck" value="CHECK">
+<input type="button" id="snapfix" value="FIX">
+<input type="button" id="snapfixerrors" value="FIX ERRORS">
+</form>
 
 <span id="logviewer"></span>
 
 <script type="text/javascript">
 function getSnapLogs() {
     $.get('/plugins/dwsnap/include/dwsnap_logger.php',function(data) {
-        if (data) { $('#logviewer').html(data); }
+        if (data) { 
+            $('#logviewer').html(data); 
+	        var pre = $("pre");
+	        pre.scrollTop(pre.prop("scrollHeight"));
+	    }
     });
-    var textarea = document.getElementById('logviewer');
-    textarea.scrollTop = textarea.scrollHeight;
     clearTimeout(timers.getSnapLogs);
-    timers.getSnapLogs = setTimeout(getSnapLogs, 1000);
+    timers.getSnapLogs = setTimeout(getSnapLogs, 500);
+}
+function toggleSnapLogs() {
+    if($('#logcontrol').attr("class") == "fa fa-pause") {
+        $('#logcontrol').attr("class", "fa fa-play");
+        clearTimeout(timers.getSnapLogs);
+    } else {
+        $('#logcontrol').attr("class", "fa fa-pause");
+        getSnapLogs();
+    }
 }
 $(function(){
-getSnapLogs();
+    $('#logcontrol').click(toggleSnapLogs);
+    $('#snapscrub').click(function(){
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/scrub');
+        $('#snapcommands').submit();
+    });
+    $('#snapcheck').click(function(){
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/check');
+        $('#snapcommands').submit();
+    });
+    $('#snapfix').click(function(){
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/fix');
+        $('#snapcommands').submit();
+    });
+    $('#snapfixerrors').click(function(){
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/fixerrors');
+        $('#snapcommands').submit();
+    });
+    getSnapLogs();
 });
 </script>
