@@ -29,7 +29,10 @@ pre {
 <input class="snaprun" type="button" id="snapfixerrors" value="FIX ERRORS">
 </form>
 
+<?if ($snapraid_running):?>
 <span style="float:right;margin-right:10px"><i id="logcontrol" class="fa fa-pause"></i></span>
+<?endif;?>
+
 <span id="logviewer"></span>
 
 <script type="text/javascript">
@@ -46,6 +49,7 @@ function getSnapLogs() {
     timers.getSnapLogs = setTimeout(getSnapLogs, 500);
     <?endif;?>
 }
+<?if ($snapraid_running):?>
 function toggleSnapLogs() {
     if($('#logcontrol').attr("class") == "fa fa-pause") {
         $('#logcontrol').attr("class", "fa fa-play");
@@ -55,8 +59,8 @@ function toggleSnapLogs() {
         getSnapLogs();
     }
 }
+<?endif;?>
 $(function(){
-    $('#logcontrol').click(toggleSnapLogs);
     $('#snapstatus').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/status');
         $('#snapcommands').submit();
@@ -92,6 +96,7 @@ $(function(){
 
     <?if ($snapraid_running):?>
     $('.snaprun').prop('disabled', true);
+    $('#logcontrol').click(toggleSnapLogs);
     <?endif;?>
 
     getSnapLogs();
