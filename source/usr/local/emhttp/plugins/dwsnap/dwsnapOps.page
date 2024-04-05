@@ -24,7 +24,7 @@ $snapraid_lastcmd = (file_exists("/var/log/snapraid/lastcmd") ? (file_get_conten
 <table class="tablesorter shift">
 <thead><tr><th><strong>(Last) Operation's Terminal</strong></th><th style="text-transform: none;">
 <strong>(Last) Operation's Command:</strong> <em><?=$snapraid_lastcmd?></em>
-<span style="float:right;"><strong>Refresh Status/Terminal:</strong> <i id="logcontrol" class="fa fa-refresh fa-spin"></i></span>
+<span style="float:right;"><strong>Refresh Terminal:</strong> <i id="logcontrol" class="fa fa-refresh fa-spin"></i></span>
 </th></tr></thead>
 </table>
 
@@ -66,6 +66,8 @@ function getSnapStatus() {
             } else if (data === "RUNNING:NO") {
                 $('.snaprun').prop('disabled', false);
                 $('.snapnotrun').prop('disabled', true);
+                $('#logcontrol').attr("class", "fa fa-refresh");
+                clearTimeout(timers.getSnapLogs);
             }
 	    }
     });
@@ -76,10 +78,8 @@ function toggleSnapLogs() {
     if($('#logcontrol').attr("class") == "fa fa-refresh fa-spin") {
         $('#logcontrol').attr("class", "fa fa-refresh");
         clearTimeout(timers.getSnapLogs);
-        clearTimeout(timers.getSnapStatus);
     } else {
         $('#logcontrol').attr("class", "fa fa-refresh fa-spin");
-        getSnapStatus();
         getSnapLogs();
     }
 }

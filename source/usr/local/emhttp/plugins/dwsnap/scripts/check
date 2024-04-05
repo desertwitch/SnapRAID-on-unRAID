@@ -1,4 +1,4 @@
 #!/bin/bash
 echo "Starting SnapRAID operation: CHECK..."
-echo 'snapraid -l "/var/log/snapraid-check-%D-%T.log" check >/var/log/snapraid/snaplog 2>&1' > /var/log/snapraid/lastcmd
-(nohup snapraid -l "/var/log/snapraid-check-%D-%T.log" check >/var/log/snapraid/snaplog 2>&1) & 
+echo 'snapraid -l "/var/log/snapraid/snapraid-check-%D-%T.log" check >/var/log/snapraid/snaplog 2>&1' > /var/log/snapraid/lastcmd
+(nohup snapraid -l "/var/log/snapraid/snapraid-check-%D-%T.log" check >/var/log/snapraid/snaplog 2>&1) & 
