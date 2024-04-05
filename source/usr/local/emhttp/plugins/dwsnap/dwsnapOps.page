@@ -23,9 +23,9 @@ $snapraid_lastcmd = (file_exists("/var/log/snapraid/lastcmd") ? (file_get_conten
 
 <table class="tablesorter shift">
 <thead><tr>
-<th><i id="snapstatus" class="fa fa-cog"></i> <strong>(Last) Operation's Terminal Output</strong></th>
-<th style="text-transform: none;"><strong>Start:</strong> <em><?=$snapraid_laststart?></em></th>
-<th style="text-transform: none;"><strong>Command:</strong> <em><?=$snapraid_lastcmd?></em><span style="float:right;"><strong>Refresh Terminal:</strong> <i id="logcontrol" class="fa fa-refresh fa-spin"></i></span></th>
+<th><i id="snapstatus" class="fa fa-pause-circle"></i> <strong>(Last) Operation's Terminal Output</strong></th>
+<th style="text-transform: none;"><strong>Command:</strong> <em><?=$snapraid_lastcmd?></em></th>
+<th style="text-transform: none;"><strong>Started:</strong> <em><?=$snapraid_laststart?></em><span style="float:right;"><strong>Refresh Terminal:</strong> <i id="logcontrol" class="fa fa-refresh fa-spin"></i></span></th>
 </tr></thead>
 </table>
 
@@ -60,11 +60,11 @@ function getSnapStatus() {
     $.get('/plugins/dwsnap/include/dwsnap_status.php',function(data) {
         if (data) { 
             if(data === "RUNNING:YES") {
-                $('#snapstatus').attr("class", "fa fa-cog fa-spin");
+                $('#snapstatus').attr("class", "fa fa-play-circle");
                 $('.snaprun').prop('disabled', true);
                 $('.snapnotrun').prop('disabled', false);
             } else if (data === "RUNNING:NO") {
-                $('#snapstatus').attr("class", "fa fa-cog");
+                $('#snapstatus').attr("class", "fa fa-pause-circle");
                 $('.snaprun').prop('disabled', false);
                 $('.snapnotrun').prop('disabled', true);
                 $('#logcontrol').attr("class", "fa fa-refresh");
