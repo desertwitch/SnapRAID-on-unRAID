@@ -4,9 +4,9 @@ if(file_exists("/var/log/snaplog")) {
     if(!empty($snaplog)) {
         echo("<pre>".$snaplog."</pre>");
     } else {
-        echo("file exists but empty");
+        echo("<pre>LOG FILE FOUND BUT IS EMPTY</pre>");
     }
 } else {
-    echo("file does not exist");
+    echo("<pre>NO LOG FILE FOUND</pre>");
 }
 ?>

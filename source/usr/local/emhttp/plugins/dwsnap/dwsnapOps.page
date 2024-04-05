@@ -7,7 +7,7 @@ Markdown="false"
 
 <style type="text/css">
 pre {
-    height: auto;
+    height: 400px;
     max-height: 400px;
     overflow: auto;
     background-color: #eeeeee;
