@@ -1,2 +1,2 @@
 #!/bin/bash
-/usr/sbin/snaprunner 2>&1 | tee /var/log/snaplog
+nohup /usr/sbin/snaprunner >/var/log/snaplog 2>&1 
