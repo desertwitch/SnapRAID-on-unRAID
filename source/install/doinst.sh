@@ -6,7 +6,11 @@ chmod +0755 $DOCROOT/scripts/*
 chmod +0755 /usr/sbin/snaprunner
 
 if [ ! -d $BOOT/config ]; then
-    mkdir $BOOT/config
+    mkdir -p $BOOT/config
+fi
+
+if [ ! -d /var/log/snapraid ]; then
+    mkdir -p /var/log/snapraid
 fi
 
 cp -nr $DOCROOT/defaults/snapraid.conf $BOOT/config/snapraid.conf

@@ -1,0 +1,55 @@
+Menu="dwsnapOps:2"
+Title="SnapRAID Log File Viewer"
+Tag="cogs"
+Markdown="false"
+---
+
+<link type="text/css" rel="stylesheet" href="<?=autov('/webGui/styles/jquery.filetree.css');?>">
+<link type="text/css" rel="stylesheet" href="<?=autov('/plugins/dwsnap/css/codemirror.css');?>">
+<link type="text/css" rel="stylesheet" href="<?=autov('/plugins/dwsnap/css/dracula.css');?>">
+<style type="text/css">
+    .CodeMirror { border: 1px solid #eee; cursor: text; margin-top: 15px; margin-bottom: 10px; }
+    .CodeMirror pre.CodeMirror-placeholder { color: #999; }
+    .errortext {color: #EF3D47;display: none;}
+    .fileTree {color:#486dba;width:305px;max-height:150px;overflow:scroll;position:absolute;z-index:100;display:none;}
+</style>
+
+<form id="editform2" method="POST">
+
+<img id="editfolder2" style="cursor:pointer;margin-left: 10px;" src="/webGui/images/explore.png" >
+<input id="editfile2" type="text" name="editfile2" value="" readonly="" data-picktop="/var/log/snapraid/" data-pickcloseonfile="true" data-pickfilter="log" data-pickroot="/var/log/snapraid/" data-pickfolders="false" required="required" >
+
+<textarea id="editdata2" name="editdata2" placeholder="Select Configuration File" autofocus></textarea>
+<input type="hidden" name="commit" value="1" />
+
+</form>
+
+<script src="<?=autov('/webGui/javascript/jquery.filetree.js');?>"></script>
+<script src="<?=autov('/plugins/dwsnap/js/codemirror.js');?>"></script>
+<script src="<?=autov('/plugins/dwsnap/js/autorefresh.js');?>"></script>
+<script src="<?=autov('/plugins/dwsnap/js/properties.js');?>"></script>
+
+<script type="text/javascript">
+$(function(){
+    var editor2 = CodeMirror.fromTextArea($('#editdata2')[0], {
+        theme: '<?=($display["theme"] == 'white' || $display["theme"] == 'azure') ? "default" : "dracula";?>',
+        mode: 'properties',
+        lineNumbers: true,
+        autoRefresh: true
+    });
+
+    editor2.setSize(null, 400);
+
+    $('#editfile2').fileTreeAttach(null, null, function(file) {
+        $('#editfile2').val(file);
+    });
+
+    $('#editfile2').on('change', function () {
+        var Editfile2 = $('#editfile2').val();
+        $.getJSON('/plugins/dwsnap/include/dwsnap_edit.php', {editfile: Editfile2}, function (data) {
+                editor2.setValue(data);
+            }
+        );
+    });
+});
+</script>

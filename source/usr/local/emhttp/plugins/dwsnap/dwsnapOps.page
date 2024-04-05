@@ -6,7 +6,7 @@ Tag="hdd-o"
 Markdown="false"
 ---
 <?
-$snapraid_lastcmd = (file_exists("/tmp/snap_lastcmd") ? (file_get_contents("/tmp/snap_lastcmd") ?? "n/a") : "n/a");
+$snapraid_lastcmd = (file_exists("/var/log/snapraid/lastcmd") ? (file_get_contents("/var/log/snapraid/lastcmd") ?? "n/a") : "n/a");
 ?>
 
 <style type="text/css">
@@ -76,8 +76,10 @@ function toggleSnapLogs() {
     if($('#logcontrol').attr("class") == "fa fa-pause") {
         $('#logcontrol').attr("class", "fa fa-play");
         clearTimeout(timers.getSnapLogs);
+        clearTimeout(timers.getSnapStatus);
     } else {
         $('#logcontrol').attr("class", "fa fa-pause");
+        getSnapStatus();
         getSnapLogs();
     }
 }
