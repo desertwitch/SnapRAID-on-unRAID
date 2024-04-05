@@ -14,6 +14,3 @@ if [ ! -L /etc/snapraid.conf ]; then
     rm -f /etc/snapraid.conf
     ln -sf $BOOT/config/snapraid.conf /etc/snapraid.conf
 fi
-
-chmod 755 /etc/snapraid.conf
-chown root:root /etc/snapraid.conf
