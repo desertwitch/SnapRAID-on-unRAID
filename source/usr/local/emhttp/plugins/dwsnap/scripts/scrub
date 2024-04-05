@@ -1,5 +1,6 @@
 #!/bin/bash
 echo "Starting SnapRAID operation: SCRUB..."
+date +"%d.%m.%Y %k:%M:%S %Z" > /var/log/snapraid/laststart
 echo 'snapraid -l "/var/log/snapraid/snapraid-scrub-%D-%T.log" scrub >/var/log/snapraid/snaplog 2>&1' > /var/log/snapraid/lastcmd
 (nohup snapraid -l "/var/log/snapraid/snapraid-scrub-%D-%T.log" scrub >/var/log/snapraid/snaplog 2>&1) & 
 sleep 3
