@@ -1,0 +1,88 @@
+Menu="dwsnapSettings:1"
+Title="SnapRAID Configuration Editor"
+Tag="cogs"
+Markdown="false"
+---
+
+<link type="text/css" rel="stylesheet" href="<?=autov('/webGui/styles/jquery.filetree.css');?>">
+<link type="text/css" rel="stylesheet" href="<?=autov('/plugins/dwsnap/css/codemirror.css');?>">
+<link type="text/css" rel="stylesheet" href="<?=autov('/plugins/dwsnap/css/dracula.css');?>">
+<style type="text/css">
+    .CodeMirror { border: 1px solid #eee; cursor: text; margin-top: 15px; margin-bottom: 10px; }
+    .CodeMirror pre.CodeMirror-placeholder { color: #999; }
+    .errortext {color: #EF3D47;display: none;}
+    .fileTree {color:#486dba;width:305px;max-height:150px;overflow:scroll;position:absolute;z-index:100;display:none;}
+</style>
+
+<form id="editform" method="POST">
+
+<img id="editfolder" style="cursor:pointer;margin-left: 10px;" src="/webGui/images/explore.png" >
+<input id="editfile" type="text" name="editfile" value="" readonly="" data-picktop="/boot/config/plugins/dwsnap/config" data-pickcloseonfile="true" data-pickfilter="conf" data-pickroot="/boot/config/plugins/dwsnap/config" data-pickfolders="false" required="required" >
+
+<textarea id="editdata" name="editdata" placeholder="Select Configuration File" autofocus></textarea>
+<input type="hidden" name="commit" value="1" />
+
+<dl>
+    <dt>
+        <input type="button" value="Save" id="btnSubmit" title="Save Configuration File" />
+        <input type="button" value="Cancel" id="btnCancel" />
+    </dt>
+    <dd></dd>
+</dl>
+
+</form>
+
+<script src="<?=autov('/webGui/javascript/jquery.filetree.js');?>"></script>
+<script src="<?=autov('/plugins/dwsnap/js/codemirror.js');?>"></script>
+<script src="<?=autov('/plugins/dwsnap/js/autorefresh.js');?>"></script>
+<script src="<?=autov('/plugins/dwsnap/js/properties.js');?>"></script>
+
+<script type="text/javascript">
+$(function(){
+    $('#btnCancel').click(function() {
+        location = '/Settings/dwsnapSettings';
+    });
+
+    var editor = CodeMirror.fromTextArea($('#editdata')[0], {
+        theme: '<?=($display["theme"] == 'white' || $display["theme"] == 'azure') ? "default" : "dracula";?>',
+        mode: 'properties',
+        lineNumbers: true,
+        autoRefresh: true
+    });
+
+    editor.setSize(null, 400);
+
+    $('#editfile').fileTreeAttach(null, null, function(file) {
+        $('#editfile').val(file);
+    });
+
+    $('#editfile').on('change', function () {
+        var Editfile = $('#editfile').val();
+        $.getJSON('/plugins/dwsnap/include/dwsnap_edit.php', {editfile: Editfile}, function (data) {
+                editor.setValue(data);
+            }
+        );
+    });
+
+    $('#editfile').val("/etc/snapraid.conf");
+    var EditfileDefault = $('#editfile').val();
+    $.getJSON('/plugins/dwsnap/include/dwsnap_edit.php', {editfile: EditfileDefault}, function (data) {
+            editor.setValue(data);
+        }
+    );
+
+    $('#btnSubmit').click(function () {
+        editor.save();
+        $.post('/plugins/dwsnap/include/dwsnap_save.php', $('#editform').serializeArray(), function (data) {
+            var Title = 'Configuration ';
+
+            if(data.success)
+                swal({title: Title+'Saved', text: data.saved, timer: 3500, showConfirmButton: false, type:'success'
+                });
+            if(data.error)
+                swal({title:Title+'Error', text: data.error+'\n\nThere was an error saving the configuration file.', type:'error'});
+
+        }, 'json');
+    });
+});
+</script>

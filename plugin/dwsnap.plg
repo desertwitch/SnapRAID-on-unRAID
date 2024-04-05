@@ -1,0 +1,76 @@
+<?xml version='1.0' standalone='yes'?>
+
+<!DOCTYPE PLUGIN [
+<!ENTITY name      "dwsnap">
+<!ENTITY author    "desertwitch">
+<!ENTITY version   "2024.03.26">
+<!ENTITY launch    "Settings/dwsnapSettings">
+<!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/SnapRAID-on-unRAID/main">
+<!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
+<!ENTITY pkgURL    "&gitURL;/packages">
+<!ENTITY plgPATH   "/boot/config/plugins/&name;">
+<!ENTITY plgNAME   "mergerfsp-2024.02.23-x86_64-1">
+<!ENTITY plgMD5    "ac306af793619a8522f944ab057eb92b">
+<!ENTITY emhttp    "/usr/local/emhttp/plugins/&name;">
+]>
+
+<PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" min="6.8.3">
+
+<CHANGES>
+## SnapRAID on UNRAID
+###2024.04.05
+- release note: welcome to the first version of the experimental SnapRAID package.
+</CHANGES>
+
+<!--
+install or upgrade dependency files
+-->
+<FILE Name="&plgPATH;/snapraid-12.3-x86_64-1.txz" Min="6.8.3" Run="upgradepkg --install-new">
+<URL>&pkgURL;/snapraid-12.3-x86_64-1.txz</URL>
+<MD5>5e38f8b11a012fbd9bfa07e8ad0d6307</MD5>
+</FILE>
+
+<!--
+install or upgrade the plugin itself
+-->
+<FILE Name="&plgPATH;/&plgNAME;.txz" Min="6.8.3" Run="upgradepkg --install-new">
+<URL>&gitURL;/archive/&plgNAME;.txz</URL>
+<MD5>&plgMD5;</MD5>
+</FILE>
+
+<!--
+run the post-installation scripts
+-->
+<FILE Run="/bin/bash">
+<INLINE> 
+echo ""
+echo "-------------------------------------------------------------"
+echo " SnapRAID on UNRAID (&version;) has been installed."
+echo " Copyright 2023 - &author;"
+echo "-------------------------------------------------------------"
+echo ""
+</INLINE>
+</FILE>
+
+<!--
+definition for uninstallation of the plugin
+-->
+<FILE Run="/bin/bash" Method="remove">
+<INLINE>
+killall snapraid
+removepkg &plgPATH;/*.txz
+
+rm -f /etc/snapraid.conf
+rm -rf &plgPATH;
+rm -rf &emhttp;
+
+echo ""
+echo "-----------------------------------------------------------"
+echo " SnapRAID on UNRAID (&version;) has been removed."
+echo " Copyright 2023 - &author;"
+echo "-----------------------------------------------------------"
+echo ""
+</INLINE>
+</FILE>
+
+</PLUGIN>

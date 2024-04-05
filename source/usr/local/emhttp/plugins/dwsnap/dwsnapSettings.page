@@ -1,0 +1,41 @@
+Menu="OtherSettings"
+Type="xmenu"
+Title="SnapRAID Settings"
+Icon="hdd-o"
+Tag="hdd-o"
+Markdown="false"
+---
+<? $snapraid_backend = trim(shell_exec("find /var/log/packages/ -type f -iname 'snapraid-*' -printf '%f\n' 2> /dev/null")); ?>
+<script>
+$(function() {
+    // dynamix plugin update api
+    <?if (function_exists('plugin_update_available') && $version = plugin_update_available('dwsnap')):?>
+        showNotice('SnapRAID <?=htmlspecialchars($version);?> available. <a>Update</a>','dwsnap');
+        $('#user-notice a').on('click', function () {
+        $('#user-notice').empty();
+    });
+    <?endif;?>
+});
+</script>
+
+<span style="float:right;margin-right:10px"><a href="https://www.snapraid.it/manual" target="_blank" title="SnapRAID User Manual"><i class="fa fa-medkit"></i> <u>User Manual</u></a></span>
+<div style="color:red;"><strong>WARNING:</strong></div>
+<div><strong>SnapRAID is a non-supported backup utility for advanced users and can - depending on how YOU set it up - wreak havoc on your system.</strong></div>
+<div><strong>Please make yourself familiar with the documentation before trying any unfamiliar SnapRAID commands - you are warned only once here.</strong></div>
+
+<br>
+<dl>
+    <dt>SnapRAID backend:</dt>
+    <dd>
+	    <strong><?= isset($snapraid_backend) && $snapraid_backend ? $snapraid_backend : "n/a" ?></strong>
+    </dd>
+</dl>
+
+<dl>
+    <dt>SnapRAID available binaries:</dt>
+    <dd>
+<pre>
+/usr/bin/snapraid
+</pre>
+    </dd>
+</dl>
