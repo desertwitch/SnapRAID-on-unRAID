@@ -56,13 +56,14 @@ function getSnapLogs() {
     timers.getSnapLogs = setTimeout(getSnapLogs, 1000);
 }
 function getSnapStatus() {
+    $('#progress').remove();
     showStatus('snaprunner');
     $.get('/plugins/dwsnap/include/dwsnap_status.php',function(data) {
         if (data) { 
-            if(data === "RUNNING:true") {
+            if(data === "RUNNING:YES") {
                 $('.snaprun').prop('disabled', true);
                 $('.snapnotrun').prop('disabled', false);
-            } else {
+            } else if (data === "RUNNING:NO") {
                 $('.snaprun').prop('disabled', false);
                 $('.snapnotrun').prop('disabled', true);
             }
