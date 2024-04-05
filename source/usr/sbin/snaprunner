@@ -1,6 +1,5 @@
 #!/bin/bash
-while :
-do
+for i in {1..30}; do
 echo -ne '#####                     (33%)\r'
 sleep 1
 echo -ne '#############             (66%)\r'
@@ -9,3 +8,4 @@ echo -ne '#######################   (100%)\r'
 echo -ne '\n'
 sleep 1
 done
+echo "DONE"

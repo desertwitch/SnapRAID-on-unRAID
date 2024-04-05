@@ -6,7 +6,6 @@ Tag="hdd-o"
 Markdown="false"
 ---
 <?
-$snapraid_running = (intval(trim(htmlspecialchars(shell_exec( "if pgrep -x snaprunner >/dev/null 2>&1; then echo 1; else echo 0; fi" )))) === 1 );
 $snapraid_lastcmd = (file_exists("/tmp/snap_lastcmd") ? (file_get_contents("/tmp/snap_lastcmd") ?? "n/a") : "n/a");
 ?>
 
@@ -25,7 +24,7 @@ $snapraid_lastcmd = (file_exists("/tmp/snap_lastcmd") ? (file_get_contents("/tmp
 <table class="tablesorter shift">
 <thead><tr><th style="text-transform: none;">
 <strong>(Last) Command:</strong> <em><?=$snapraid_lastcmd?></em>
-<?if ($snapraid_running):?><span style="float:right;margin-right:10px"><i id="logcontrol" class="fa fa-pause"></i></span><?endif;?>
+<span style="float:right;margin-right:10px"><i id="logcontrol" class="fa fa-pause"></i></span>
 </th></tr></thead>
 </table>
 
@@ -41,7 +40,7 @@ $snapraid_lastcmd = (file_exists("/tmp/snap_lastcmd") ? (file_get_contents("/tmp
 <input class="snaprun" type="button" id="snapcheck" value="CHECK">
 <input class="snaprun" type="button" id="snapfix" value="FIX">
 <input class="snaprun" type="button" id="snapfixerrors" value="FIX ERRORS">
-<input class="snapnotrun" type="button" id="snapstop" value="STOP OPERATION" style="float:right;margin-right:10px" disabled="true">
+<input class="snapnotrun" type="button" id="snapstop" value="STOP OPERATION" style="float:right;margin-right:10px">
 </form> 
 
 <script type="text/javascript">
@@ -54,12 +53,24 @@ function getSnapLogs() {
 	    }
     });
     clearTimeout(timers.getSnapLogs);
-
-    <?if ($snapraid_running):?>
     timers.getSnapLogs = setTimeout(getSnapLogs, 1000);
-    <?endif;?>
 }
-<?if ($snapraid_running):?>
+function getSnapStatus() {
+    showStatus('snaprunner');
+    $.get('/plugins/dwsnap/include/dwsnap_status.php',function(data) {
+        if (data) { 
+            if(data === "RUNNING:true") {
+                $('.snaprun').prop('disabled', true);
+                $('.snapnotrun').prop('disabled', false);
+            } else {
+                $('.snaprun').prop('disabled', false);
+                $('.snapnotrun').prop('disabled', true);
+            }
+	    }
+    });
+    clearTimeout(timers.getSnapStatus);
+    timers.getSnapStatus = setTimeout(getSnapStatus, 3000);
+}
 function toggleSnapLogs() {
     if($('#logcontrol').attr("class") == "fa fa-pause") {
         $('#logcontrol').attr("class", "fa fa-play");
@@ -69,13 +80,8 @@ function toggleSnapLogs() {
         getSnapLogs();
     }
 }
-<?endif;?>
 $(function(){
-    <?if ($snapraid_running):?>
-    $('.snaprun').prop('disabled', true);
-    $('.snapnotrun').prop('disabled', false);
     $('#logcontrol').click(toggleSnapLogs);
-    <?endif;?>
 
     $('#snapstatus').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/status');
@@ -114,6 +120,15 @@ $(function(){
         $('#snapcommands').submit();
     });
 
+    getSnapStatus()
     getSnapLogs();
+
+    // dynamix plugin update api
+    <?if (function_exists('plugin_update_available') && $version = plugin_update_available('dwsnap')):?>
+        showNotice('SnapRAID <?=htmlspecialchars($version);?> available. <a>Update</a>','dwsnap');
+        $('#user-notice a').on('click', function () {
+        $('#user-notice').empty();
+    });
+    <?endif;?>
 });
 </script>
