@@ -27,10 +27,11 @@ pre {
 <input class="snaprun" type="button" id="snapcheck" value="CHECK">
 <input class="snaprun" type="button" id="snapfix" value="FIX">
 <input class="snaprun" type="button" id="snapfixerrors" value="FIX ERRORS">
+<input class="snapnotrun" type="button" id="snapstop" value="STOP RUNNING OPERATION" disabled="true">
 </form>
 
 <?if ($snapraid_running):?>
-<span style="float:right;margin-right:10px"><i id="logcontrol" class="fa fa-pause"></i></span>
+<span style="float:right;margin-right:10px"><i id="logcontrol" class="fa fa-pause"></i></span><br>
 <?endif;?>
 
 <span id="logviewer"></span>
@@ -45,8 +46,9 @@ function getSnapLogs() {
 	    }
     });
     clearTimeout(timers.getSnapLogs);
+
     <?if ($snapraid_running):?>
-    timers.getSnapLogs = setTimeout(getSnapLogs, 500);
+    timers.getSnapLogs = setTimeout(getSnapLogs, 1000);
     <?endif;?>
 }
 <?if ($snapraid_running):?>
@@ -93,9 +95,14 @@ $(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/fixerrors');
         $('#snapcommands').submit();
     });
+    $('#snapstop').click(function(){
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/stop');
+        $('#snapcommands').submit();
+    });
 
     <?if ($snapraid_running):?>
     $('.snaprun').prop('disabled', true);
+    $('.snapnotrun').prop('disabled', false);
     $('#logcontrol').click(toggleSnapLogs);
     <?endif;?>
 

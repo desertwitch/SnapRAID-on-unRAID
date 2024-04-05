@@ -1,2 +1,2 @@
 #!/bin/bash
-nohup /usr/sbin/snaprunner >/var/log/snaplog 2>&1 
+(nohup /usr/sbin/snaprunner >/var/log/snaplog 2>&1) & 
