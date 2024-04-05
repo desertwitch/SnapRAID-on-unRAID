@@ -8,7 +8,7 @@ Markdown="false"
 <? $snapraid_backend = trim(shell_exec("find /var/log/packages/ -type f -iname 'snapraid-*' -printf '%f\n' 2> /dev/null")); ?>
 <script>
 $(function() {
-    showStatus('snapraid');
+    showStatus('snaprunner');
     // dynamix plugin update api
     <?if (function_exists('plugin_update_available') && $version = plugin_update_available('dwsnap')):?>
         showNotice('SnapRAID <?=htmlspecialchars($version);?> available. <a>Update</a>','dwsnap');

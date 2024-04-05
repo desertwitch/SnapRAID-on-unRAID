@@ -3,6 +3,7 @@ Title="SnapRAID Last / Current Operation"
 Tag="cogs"
 Markdown="false"
 ---
+<? $snapraid_running = (intval(trim(htmlspecialchars(shell_exec( "if pgrep -x snaprunner >/dev/null 2>&1; then echo 1; else echo 0; fi" )))) === 1 ); ?>
 
 <style type="text/css">
 pre {
@@ -17,15 +18,15 @@ pre {
 </style>
 
 <form markdown="0" id="snapcommands" name="snapcommands" method="POST" action="/update.php" target="progressFrame">
-<input type="hidden" id="command" name="#command" value="">
-<input type="button" id="snapstatus" value="STATUS">
-<input type="button" id="snapdiff" value="DIFF">
-<input type="button" id="snapsync" value="SYNC">
-<input type="button" id="snapscrub" value="SCRUB">
-<input type="button" id="snaptouch" value="TOUCH">
-<input type="button" id="snapcheck" value="CHECK">
-<input type="button" id="snapfix" value="FIX">
-<input type="button" id="snapfixerrors" value="FIX ERRORS">
+<input class="snaprun" type="hidden" id="command" name="#command" value="">
+<input class="snaprun" type="button" id="snapstatus" value="STATUS">
+<input class="snaprun" type="button" id="snapdiff" value="DIFF">
+<input class="snaprun" type="button" id="snapsync" value="SYNC">
+<input class="snaprun" type="button" id="snapscrub" value="SCRUB">
+<input class="snaprun" type="button" id="snaptouch" value="TOUCH">
+<input class="snaprun" type="button" id="snapcheck" value="CHECK">
+<input class="snaprun" type="button" id="snapfix" value="FIX">
+<input class="snaprun" type="button" id="snapfixerrors" value="FIX ERRORS">
 </form>
 
 <span style="float:right;margin-right:10px"><i id="logcontrol" class="fa fa-pause"></i></span>
@@ -41,7 +42,9 @@ function getSnapLogs() {
 	    }
     });
     clearTimeout(timers.getSnapLogs);
+    <?if ($snapraid_running):?>
     timers.getSnapLogs = setTimeout(getSnapLogs, 500);
+    <?endif;?>
 }
 function toggleSnapLogs() {
     if($('#logcontrol').attr("class") == "fa fa-pause") {
@@ -86,6 +89,11 @@ $(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/fixerrors');
         $('#snapcommands').submit();
     });
+
+    <?if ($snapraid_running):?>
+    $('.snaprun').prop('disabled', true);
+    <?endif;?>
+
     getSnapLogs();
 });
 </script>
