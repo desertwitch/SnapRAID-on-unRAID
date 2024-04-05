@@ -1,0 +1,34 @@
+Menu="dwsnapSettings:1"
+Title="SnapRAID Last Operation Results"
+Tag="cogs"
+Markdown="false"
+---
+
+<style type="text/css">
+pre {
+    height: auto;
+    max-height: 400px;
+    overflow: auto;
+    background-color: #eeeeee;
+    word-break: normal !important;
+    word-wrap: normal !important;
+    white-space: pre !important;
+}​
+</style>
+
+<span id="logviewer"></span>
+
+<script type="text/javascript">
+function getSnapLogs() {
+    $.get('/plugins/dwsnap/include/dwsnap_logger.php',function(data) {
+        if (data) { $('#logviewer').html(data); }
+    });
+    var textarea = document.getElementById('logviewer');
+    textarea.scrollTop = textarea.scrollHeight;
+    clearTimeout(timers.getSnapLogs);
+    timers.getSnapLogs = setTimeout(getSnapLogs, 1000);
+}
+$(function(){
+getSnapLogs();
+});
+</script>
