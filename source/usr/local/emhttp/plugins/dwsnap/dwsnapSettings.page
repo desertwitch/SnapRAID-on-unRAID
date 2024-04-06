@@ -19,7 +19,7 @@ Markdown="false"
     </dd>
 </dl>
 
-<form markdown="0" id="dwdvm-settings" name="dwdvm_settings" method="POST" action="/update.php" target="progressFrame">
+<form markdown="0" id="dwsnap-settings" name="dwsnap_settings" method="POST" action="/update.php" target="progressFrame">
 <input type="hidden" name="#file" value="dwsnap/dwsnap.cfg">
 
     <dl>
@@ -51,7 +51,9 @@ Markdown="false"
 
 <script type="text/javascript">
 $(function(){
-
+    $('#btnApply').click(function(){
+        $('#dwsnap-settings').submit();
+    });
 });
 </script>
     
