@@ -30,6 +30,7 @@ Markdown="false"
 
 <form markdown="0" id="snapcommands" name="snapcommands" method="POST" action="/update.php" target="progressFrame">
 <input type="hidden" id="command" name="#command" value="">
+<input type="hidden" id="arg" name="#arg[1]" value="">
 <input class="snaprun" type="button" id="snapstatus" value="STATUS">
 <input class="snaprun" type="button" id="snaplist" value="LIST">
 <input class="snaprun" type="button" id="snapdiff" value="DIFF">
@@ -94,27 +95,33 @@ $(function(){
     $('#logcontrol').click(toggleSnapLogs);
 
     $('#snapstatus').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start status');
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
+        $('#arg').val('status');
         $('#snapcommands').submit();
     });
     $('#snaplist').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start list');
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
+        $('#arg').val('list');
         $('#snapcommands').submit();
     });
     $('#snapdiff').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start diff');
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
+        $('#arg').val('diff');
         $('#snapcommands').submit();
     });
     $('#snapdup').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start dup');
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
+        $('#arg').val('dup');
         $('#snapcommands').submit();
     });
     $('#snapscrub').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start scrub');
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
+        $('#arg').val('scrub');
         $('#snapcommands').submit();
     });
     $('#snapcheck').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start check');
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
+        $('#arg').val('check');
         $('#snapcommands').submit();
     });
 
@@ -136,27 +143,33 @@ $(function(){
     });
 
     $('#snapsync').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start sync');
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
+        $('#arg').val('sync');
         $('#snapcommands').submit();
     });
     $('#snaphashedsync').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start hashedsync');
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
+        $('#arg').val('hashedsync');
         $('#snapcommands').submit();
     });
     $('#snaptouch').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start touch');
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
+        $('#arg').val('touch');
         $('#snapcommands').submit();
     });
     $('#snapfix').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start fix');
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
+        $('#arg').val('fix');
         $('#snapcommands').submit();
     });
     $('#snapfixmissing').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start fixmissing');
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
+        $('#arg').val('fixmissing');
         $('#snapcommands').submit();
     });
     $('#snapfixerrors').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start fixerrors');
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
+        $('#arg').val('fixerrors');
         $('#snapcommands').submit();
     });
 
