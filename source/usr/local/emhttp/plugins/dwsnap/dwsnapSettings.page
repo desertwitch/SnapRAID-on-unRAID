@@ -3,7 +3,7 @@ Title="SnapRAID Settings"
 Tag="cogs"
 Markdown="false"
 ---
-<? $snapraid_backend = trim(shell_exec("find /var/log/packages/ -type f -iname 'snapraid-*' -printf '%f\n' 2> /dev/null")); ?>
+<? require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php'; ?>
 
 <span style="float:right;margin-right:10px"><a href="https://www.snapraid.it/manual" target="_blank" title="SnapRAID User Manual"><i class="fa fa-file-text-o"></i> <u>User Manual</u></a></span>
 
@@ -19,7 +19,39 @@ Markdown="false"
     </dd>
 </dl>
 
-<dl>
-    <dt>SnapRAID available binaries:</dt>
-    <dd>/usr/bin/snapraid</dd>
-</dl>
+<form markdown="0" id="dwdvm-settings" name="dwdvm_settings" method="POST" action="/update.php" target="progressFrame">
+<input type="hidden" name="#file" value="dwsnap/dwsnap.cfg">
+
+    <dl>
+        <dt><strong>SnapRAID Process Priority:</strong></dt>
+        <dd>
+            <select id="PRIO" name="PRIO" size="1">
+                <?=mk_option($dwsnap_prio, "disable", "System Default");?>
+                <?=mk_option($dwsnap_prio, "idle", "Idle");?>
+                <?=mk_option($dwsnap_prio, "besteffort", "Best Effort");?>
+                <?=mk_option($dwsnap_prio, "realtime", "Real Time");?>
+            </select>
+        </dd>
+    </dl>
+
+    <blockquote class="inline_help">
+    </blockquote>
+
+    <dl>
+        <dt>
+            <input id="DEFAULT" type="submit" name="#default" value="Default">
+            <input id="RESETCONF" class="snaprun" type="button" value="Reset Config">
+        </dt>
+        <dd>
+            <input type="submit" id="btnApply" name="#apply" value="Apply">
+            <input type="button" value="Done" onclick="done()">
+        </dd>
+    </dl>
+</form>
+
+<script type="text/javascript">
+$(function(){
+
+});
+</script>
+    
