@@ -20,7 +20,7 @@ Markdown="false"
 
 <table class="tablesorter shift">
 <thead><tr>
-<th><i id="snapstatusicon" class="fa fa-pause-circle orange-text"></i> <strong>Array Operation Output</strong></th>
+<th><i id="snapstatusicon" class="fa fa-cog fa-spin" style="display:none;"></i> <strong>Array Operation Output</strong></th>
 <th style="text-transform: none;"><strong>Started:</strong> <em><?=$snapraid_laststart?></em></th>
 <th style="text-transform: none;"><strong>Finished:</strong> <em><?=$snapraid_lastfinish?></em><span style="float:right;"><strong>Refresh:</strong> <i id="logcontrol" class="fa fa-refresh fa-spin"></i></span></th>
 </tr></thead>
@@ -67,11 +67,11 @@ function getSnapStatus() {
     $.get('/plugins/dwsnap/include/dwsnap_status.php',function(data) {
         if (data) { 
             if(data === "RUNNING:YES") {
-                $('#snapstatusicon').attr("class", "fa fa-play-circle green-text");
+                $('#snapstatusicon').show();
                 $('.snaprun').prop('disabled', true);
                 $('.snapnotrun').prop('disabled', false);
             } else if (data === "RUNNING:NO") {
-                $('#snapstatusicon').attr("class", "fa fa-pause-circle orange-text");
+                $('#snapstatusicon').hide();
                 $('.snaprun').prop('disabled', false);
                 $('.snapnotrun').prop('disabled', true);
                 $('#logcontrol').attr("class", "fa fa-refresh");
