@@ -1,4 +1,4 @@
 #!/bin/bash
 echo "Starting SnapRAID operation: $1..."
-nohup /usr/bin/snapraid-plugin "$1" &
+nohup /usr/bin/snapraid-runner "$1" &
 sleep 1
