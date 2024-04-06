@@ -1,137 +1,57 @@
 #!/bin/bash
 
+run_snapraid() {
+    CMD="$1"
+    [ "$CMD" == "fixerrors" ] && CMD="-e fix"
+    [ "$CMD" == "fixmissing" ] && CMD="-m fix"
+    [ "$CMD" == "hashedsync" ] && CMD="-h sync"
+    rm -f /var/log/snapraid/lastfinish
+    OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
+    echo "$OPTIME" >/var/log/snapraid/laststart
+    echo "### snapraid -l \"/var/log/snapraid/snapraid-${CMD}-%D-%T.log\" ${CMD} >>/var/log/snapraid/snaplog 2>&1" >/var/log/snapraid/snaplog 2>&1 
+    echo "### STARTED: ${OPTIME}" >>/var/log/snapraid/snaplog 2>&1 
+    snapraid -l "/var/log/snapraid/snapraid-${CMD}-%D-%T.log" $CMD >>/var/log/snapraid/snaplog 2>&1 
+    OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
+    echo "$OPTIME" >/var/log/snapraid/lastfinish
+    echo "### FINISHED: ${OPTIME}" >>/var/log/snapraid/snaplog 2>&1 
+}
+
 case "$1" in
     check)
-        rm -f /var/log/snapraid/lastfinish
-        OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
-        echo "$OPTIME" >/var/log/snapraid/laststart
-        echo '### snapraid -l "/var/log/snapraid/snapraid-check-%D-%T.log" check >>/var/log/snapraid/snaplog 2>&1' >>/var/log/snapraid/snaplog 2>&1 
-        echo "### STARTED: ${OPTIME}" >/var/log/snapraid/snaplog 2>&1 
-        snapraid -l "/var/log/snapraid/snapraid-check-%D-%T.log" check >>/var/log/snapraid/snaplog 2>&1 
-        OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
-        echo "$OPTIME" >/var/log/snapraid/lastfinish
-        echo "### FINISHED: ${OPTIME}" >>/var/log/snapraid/snaplog 2>&1 
+        run_snapraid check
         ;;
     diff)
-        rm -f /var/log/snapraid/lastfinish
-        OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
-        echo "$OPTIME" >/var/log/snapraid/laststart 
-        echo '### snapraid -l "/var/log/snapraid/snapraid-diff-%D-%T.log" diff >>/var/log/snapraid/snaplog 2>&1' >>/var/log/snapraid/snaplog 2>&1 
-        echo "### STARTED: ${OPTIME}" >/var/log/snapraid/snaplog 2>&1 
-        snapraid -l "/var/log/snapraid/snapraid-diff-%D-%T.log" diff >>/var/log/snapraid/snaplog 2>&1 
-        OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
-        echo "$OPTIME" >/var/log/snapraid/lastfinish
-        echo "### FINISHED: ${OPTIME}" >>/var/log/snapraid/snaplog 2>&1 
+        run_snapraid diff
         ;;
     dup)
-        rm -f /var/log/snapraid/lastfinish
-        OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
-        echo "$OPTIME" >/var/log/snapraid/laststart
-        echo '### snapraid -l "/var/log/snapraid/snapraid-dup-%D-%T.log" dup >>/var/log/snapraid/snaplog 2>&1' >>/var/log/snapraid/snaplog 2>&1 
-        echo "### STARTED: ${OPTIME}" >/var/log/snapraid/snaplog 2>&1 
-        snapraid -l "/var/log/snapraid/snapraid-dup-%D-%T.log" dup >>/var/log/snapraid/snaplog 2>&1 
-        OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
-        echo "$OPTIME" >/var/log/snapraid/lastfinish
-        echo "### FINISHED: ${OPTIME}" >>/var/log/snapraid/snaplog 2>&1 
+        run_snapraid dup
         ;;
     fix)
-        rm -f /var/log/snapraid/lastfinish
-        OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
-        echo "$OPTIME" >/var/log/snapraid/laststart
-        echo '### snapraid -l "/var/log/snapraid/snapraid-fix-%D-%T.log" fix >>/var/log/snapraid/snaplog 2>&1' >>/var/log/snapraid/snaplog 2>&1 
-        echo "### STARTED: ${OPTIME}" >/var/log/snapraid/snaplog 2>&1 
-        snapraid -l "/var/log/snapraid/snapraid-fix-%D-%T.log" fix >>/var/log/snapraid/snaplog 2>&1 
-        OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
-        echo "$OPTIME" >/var/log/snapraid/lastfinish
-        echo "### FINISHED: ${OPTIME}" >>/var/log/snapraid/snaplog 2>&1 
+        run_snapraid fix
         ;;
     fixerrors) 
-        rm -f /var/log/snapraid/lastfinish
-        OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
-        echo "$OPTIME" >/var/log/snapraid/laststart
-        echo '### snapraid -l "/var/log/snapraid/snapraid-efix-%D-%T.log" -e fix >>/var/log/snapraid/snaplog 2>&1' >>/var/log/snapraid/snaplog 2>&1 
-        echo "### STARTED: ${OPTIME}" >/var/log/snapraid/snaplog 2>&1 
-        snapraid -l "/var/log/snapraid/snapraid-efix-%D-%T.log" -e fix >>/var/log/snapraid/snaplog 2>&1 
-        OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
-        echo "$OPTIME" >/var/log/snapraid/lastfinish
-        echo "### FINISHED: ${OPTIME}" >>/var/log/snapraid/snaplog 2>&1 
+        run_snapraid fixerrors
         ;;
     fixmissing)
-        rm -f /var/log/snapraid/lastfinish
-        OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
-        echo "$OPTIME" >/var/log/snapraid/laststart
-        echo '### snapraid -l "/var/log/snapraid/snapraid-mfix-%D-%T.log" -m fix >>/var/log/snapraid/snaplog 2>&1' >>/var/log/snapraid/snaplog 2>&1 
-        echo "### STARTED: ${OPTIME}" >/var/log/snapraid/snaplog 2>&1 
-        snapraid -l "/var/log/snapraid/snapraid-mfix-%D-%T.log" -m fix >>/var/log/snapraid/snaplog 2>&1 
-        OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
-        echo "$OPTIME" >/var/log/snapraid/lastfinish
-        echo "### FINISHED: ${OPTIME}" >>/var/log/snapraid/snaplog 2>&1 
+        run_snapraid fixmissing
         ;;
     hashedsync)
-        rm -f /var/log/snapraid/lastfinish
-        OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
-        echo "$OPTIME" >/var/log/snapraid/laststart
-        echo '### snapraid -l "/var/log/snapraid/snapraid-hsync-%D-%T.log" -h sync >>/var/log/snapraid/snaplog 2>&1' >>/var/log/snapraid/snaplog 2>&1 
-        echo "### STARTED: ${OPTIME}" >/var/log/snapraid/snaplog 2>&1 
-        snapraid -l "/var/log/snapraid/snapraid-hsync-%D-%T.log" -h sync >>/var/log/snapraid/snaplog 2>&1 
-        OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
-        echo "$OPTIME" >/var/log/snapraid/lastfinish
-        echo "### FINISHED: ${OPTIME}" >>/var/log/snapraid/snaplog 2>&1 
+        run_snapraid hashedsync
         ;;
     list)
-        rm -f /var/log/snapraid/lastfinish
-        OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
-        echo "$OPTIME" >/var/log/snapraid/laststart 
-        echo '### snapraid -l "/var/log/snapraid/snapraid-list-%D-%T.log" list >>/var/log/snapraid/snaplog 2>&1' >>/var/log/snapraid/snaplog 2>&1 
-        echo "### STARTED: ${OPTIME}" >/var/log/snapraid/snaplog 2>&1 
-        snapraid -l "/var/log/snapraid/snapraid-list-%D-%T.log" list >>/var/log/snapraid/snaplog 2>&1 
-        OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
-        echo "$OPTIME" >/var/log/snapraid/lastfinish
-        echo "### FINISHED: ${OPTIME}" >>/var/log/snapraid/snaplog 2>&1 
+        run_snapraid list
         ;;
     scrub)
-        rm -f /var/log/snapraid/lastfinish
-        OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
-        echo "$OPTIME" >/var/log/snapraid/laststart
-        echo '### snapraid -l "/var/log/snapraid/snapraid-scrub-%D-%T.log" scrub >>/var/log/snapraid/snaplog 2>&1' >>/var/log/snapraid/snaplog 2>&1 
-        echo "### STARTED: ${OPTIME}" >/var/log/snapraid/snaplog 2>&1 
-        snapraid -l "/var/log/snapraid/snapraid-scrub-%D-%T.log" scrub >>/var/log/snapraid/snaplog 2>&1 
-        OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
-        echo "$OPTIME" >/var/log/snapraid/lastfinish
-        echo "### FINISHED: ${OPTIME}" >>/var/log/snapraid/snaplog 2>&1 
+        run_snapraid scrub
         ;;
     status)
-        rm -f /var/log/snapraid/lastfinish
-        OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
-        echo "$OPTIME" >/var/log/snapraid/laststart
-        echo '### snapraid -l "/var/log/snapraid/snapraid-status-%D-%T.log" status >>/var/log/snapraid/snaplog 2>&1' >>/var/log/snapraid/snaplog 2>&1 
-        echo "### STARTED: ${OPTIME}" >/var/log/snapraid/snaplog 2>&1 
-        snapraid -l "/var/log/snapraid/snapraid-status-%D-%T.log" status >>/var/log/snapraid/snaplog 2>&1 
-        OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
-        echo "$OPTIME" >/var/log/snapraid/lastfinish
-        echo "### FINISHED: ${OPTIME}" >>/var/log/snapraid/snaplog 2>&1 
+        run_snapraid status
         ;;
     sync)
-        rm -f /var/log/snapraid/lastfinish
-        OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
-        echo "$OPTIME" >/var/log/snapraid/laststart
-        echo '### snapraid -l "/var/log/snapraid/snapraid-sync-%D-%T.log" sync >>/var/log/snapraid/snaplog 2>&1' >>/var/log/snapraid/snaplog 2>&1 
-        echo "### STARTED: ${OPTIME}" >/var/log/snapraid/snaplog 2>&1 
-        snapraid -l "/var/log/snapraid/snapraid-sync-%D-%T.log" sync >>/var/log/snapraid/snaplog 2>&1 
-        OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
-        echo "$OPTIME" >/var/log/snapraid/lastfinish
-        echo "### FINISHED: ${OPTIME}" >>/var/log/snapraid/snaplog 2>&1 
+        run_snapraid sync
         ;;
     touch)
-        rm -f /var/log/snapraid/lastfinish
-        OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
-        echo "$OPTIME" >/var/log/snapraid/laststart
-        echo '### snapraid -l "/var/log/snapraid/snapraid-touch-%D-%T.log" touch >>/var/log/snapraid/snaplog 2>&1' >>/var/log/snapraid/snaplog 2>&1 
-        echo "### STARTED: ${OPTIME}" >/var/log/snapraid/snaplog 2>&1 
-        snapraid -l "/var/log/snapraid/snapraid-touch-%D-%T.log" touch >>/var/log/snapraid/snaplog 2>&1 
-        OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
-        echo "$OPTIME" >/var/log/snapraid/lastfinish
-        echo "### FINISHED: ${OPTIME}" >>/var/log/snapraid/snaplog 2>&1 
+        run_snapraid touch
         ;;
     write_config)
         write_config
