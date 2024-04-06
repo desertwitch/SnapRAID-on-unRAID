@@ -20,7 +20,7 @@ Markdown="false"
 
 <table class="tablesorter shift">
 <thead><tr>
-<th><i id="snapstatusicon" class="fa fa-cog fa-spin" style="display:none;"></i> <strong>Array Operation Output</strong></th>
+<th><i id="snapstatusicon" class="fa fa-cog fa-spin" style="display:none;"></i> <strong>Array Operation Screen</strong></th>
 <th style="text-transform: none;"><strong>Started:</strong> <em><?=$snapraid_laststart?></em></th>
 <th style="text-transform: none;"><strong>Finished:</strong> <em><?=$snapraid_lastfinish?></em><span style="float:right;"><strong>Refresh:</strong> <i id="logcontrol" class="fa fa-refresh fa-spin"></i></span></th>
 </tr></thead>
@@ -38,7 +38,7 @@ Markdown="false"
 <input class="snaprun" type="button" id="snapscrub" value="SCRUB">
 <input class="snaprun" type="button" id="snapcheck" value="CHECK">
 <span style="float:right;">
-<input class="snaprun" type="button" id="clearoutput" value="CLEAR OUTPUT">
+<input class="snaprun" type="button" id="clearoutput" value="CLEAR SCREEN">
 <input class="snaprun" type="button" id="clearlogs" value="CLEAR ALL LOGS">
 <input class="snapnotrun" type="button" id="snapstop" value="STOP OPERATION">
 <input class="snapnotrun" type="button" id="snapkill" value="KILL OPERATION">
