@@ -23,7 +23,7 @@ Markdown="false"
 <input type="hidden" name="#file" value="dwsnap/dwsnap.cfg">
 
     <dl>
-        <dt><strong>SnapRAID Process Priority:</strong></dt>
+        <dt>SnapRAID Process Priority:</dt>
         <dd>
             <select id="PRIO" name="PRIO" size="1">
                 <?=mk_option($dwsnap_prio, "disable", "System Default");?>
