@@ -12,41 +12,43 @@ Markdown="false"
 <div>Please make yourself familiar with the documentation before trying any unfamiliar SnapRAID commands - you are warned only once here.</div>
 
 <br>
+
+<form markdown="0" id="dwsnap-settings" name="dwsnap_settings" method="POST" action="/update.php" target="progressFrame">
+<input type="hidden" name="#file" value="dwsnap/dwsnap.cfg">
+<input type="hidden" id="command2" name="#command" value="">
 <dl>
-    <dt>SnapRAID backend:</dt>
+    <dt>SnapRAID Backend:</dt>
     <dd>
 	    <strong><?= isset($snapraid_backend) && $snapraid_backend ? $snapraid_backend : "n/a" ?></strong>
     </dd>
 </dl>
 
-<form markdown="0" id="dwsnap-settings" name="dwsnap_settings" method="POST" action="/update.php" target="progressFrame">
-<input type="hidden" name="#file" value="dwsnap/dwsnap.cfg">
+<dl>
+    <dt>SnapRAID Process Priority:</dt>
+    <dd>
+        <select id="PRIO" name="PRIO" size="1">
+            <?=mk_option($dwsnap_prio, "disable", "System Default");?>
+            <?=mk_option($dwsnap_prio, "idle", "Idle");?>
+            <?=mk_option($dwsnap_prio, "besteffort", "Best Effort");?>
+            <?=mk_option($dwsnap_prio, "realtime", "Real Time");?>
+        </select>
+    </dd>
+</dl>
 
-    <dl>
-        <dt>SnapRAID Process Priority:</dt>
-        <dd>
-            <select id="PRIO" name="PRIO" size="1">
-                <?=mk_option($dwsnap_prio, "disable", "System Default");?>
-                <?=mk_option($dwsnap_prio, "idle", "Idle");?>
-                <?=mk_option($dwsnap_prio, "besteffort", "Best Effort");?>
-                <?=mk_option($dwsnap_prio, "realtime", "Real Time");?>
-            </select>
-        </dd>
-    </dl>
+<blockquote class="inline_help">
+</blockquote>
 
-    <blockquote class="inline_help">
-    </blockquote>
+<dl>
+    <dt>
+        <input id="DEFAULT" type="submit" name="#default" value="Default">
+        <input id="RESETCONF" class="snaprun" type="button" value="Reset Config">
+    </dt>
+    <dd>
+        <input type="submit" id="btnApply" name="#apply" value="Apply">
+        <input type="button" value="Done" onclick="done()">
+    </dd>
+</dl>
 
-    <dl>
-        <dt>
-            <input id="DEFAULT" type="submit" name="#default" value="Default">
-            <input id="RESETCONF" class="snaprun" type="button" value="Reset Config">
-        </dt>
-        <dd>
-            <input type="submit" id="btnApply" name="#apply" value="Apply">
-            <input type="button" value="Done" onclick="done()">
-        </dd>
-    </dl>
 </form>
 
 <script type="text/javascript">
