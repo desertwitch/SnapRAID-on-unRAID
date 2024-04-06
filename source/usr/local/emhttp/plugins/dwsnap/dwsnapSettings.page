@@ -24,7 +24,7 @@ Markdown="false"
 </dl>
 
 <dl>
-    <dt>SnapRAID Process Priority:</dt>
+    <dt>SnapRAID I/O Process Priority:</dt>
     <dd>
         <select id="PRIO" name="PRIO" size="1">
             <?=mk_option($dwsnap_prio, "disable", "System Default");?>
