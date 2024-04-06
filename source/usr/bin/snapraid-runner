@@ -9,9 +9,9 @@ run_snapraid() {
     OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
     echo "$OPTIME" >/var/log/snapraid/laststart
     echo "### STARTED: ${OPTIME}" >/var/log/snapraid/snaplog 2>&1 
-    echo "### snapraid -l \"/var/log/snapraid/snapraid-${1}-%D-%T.log\" ${CMD} >>/var/log/snapraid/snaplog 2>&1" >>/var/log/snapraid/snaplog 2>&1 
+    echo "### snapraid -l \"/var/log/snapraid/${1}-%D-%T.log\" ${CMD} >>/var/log/snapraid/snaplog 2>&1" >>/var/log/snapraid/snaplog 2>&1 
     echo "" >>/var/log/snapraid/snaplog
-    snapraid -l "/var/log/snapraid/snapraid-${1}-%D-%T.log" $CMD >>/var/log/snapraid/snaplog 2>&1 
+    snapraid -l "/var/log/snapraid/${1}-%D-%T.log" $CMD >>/var/log/snapraid/snaplog 2>&1 
     OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
     echo "$OPTIME" >/var/log/snapraid/lastfinish
     echo "" >>/var/log/snapraid/snaplog
