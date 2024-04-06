@@ -1,4 +1,5 @@
 #!/bin/bash
+rm -f /var/log/snapraid/lastfinish
 echo "Starting SnapRAID operation: $1..."
 nohup /usr/bin/snapraid-plugin "$1" &
 sleep 1
