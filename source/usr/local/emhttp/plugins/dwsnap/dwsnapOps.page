@@ -20,7 +20,7 @@ Markdown="false"
 
 <table class="tablesorter shift">
 <thead><tr>
-<th><i id="snapstatusicon" class="fa fa-pause-circle orange-text"></i> <strong>Operation's Output</strong></th>
+<th><i id="snapstatusicon" class="fa fa-pause-circle orange-text"></i> <strong>Array Operation Output</strong></th>
 <th style="text-transform: none;"><strong>Started:</strong> <em><?=$snapraid_laststart?></em></th>
 <th style="text-transform: none;"><strong>Finished:</strong> <em><?=$snapraid_lastfinish?></em><span style="float:right;"><strong>Refresh:</strong> <i id="logcontrol" class="fa fa-refresh fa-spin"></i></span></th>
 </tr></thead>
