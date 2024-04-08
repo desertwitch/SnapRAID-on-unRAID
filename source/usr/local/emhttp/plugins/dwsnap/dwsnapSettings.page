@@ -67,6 +67,37 @@ Markdown="false"
 </blockquote>
 
 <dl>
+    <dt><strong>SnapRAID Maintenance - Cron Schedule Day (for Weekly):</strong></dt>
+    <dd>
+        <select class="snaprun" id="CRONDOW" name="CRONDOW" size="1">
+            <?=mk_option($dwsnap_crondow, "0", "Sunday");?>
+            <?=mk_option($dwsnap_crondow, "1", "Monday");?>
+            <?=mk_option($dwsnap_crondow, "2", "Tuesday");?>
+            <?=mk_option($dwsnap_crondow, "3", "Wednesday");?>
+            <?=mk_option($dwsnap_crondow, "4", "Thursday");?>
+            <?=mk_option($dwsnap_crondow, "5", "Friday");?>
+            <?=mk_option($dwsnap_crondow, "6", "Saturday");?>
+            <?=mk_option($dwsnap_crondow, "monthly", "Monthly");?>
+        </select>
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+</blockquote>
+
+<dl>
+    <dt><strong>SnapRAID Maintenance - Cron Schedule Day (for Monthly):</strong></dt>
+    <dd>
+        <select class="snaprun" id="CRONDOM" name="CRONDOM" size="1">
+            <? echo snap_dom_options($dwsnap_crondom);?>
+        </select>
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+</blockquote>
+
+<dl>
     <dt>SnapRAID Maintenance - Cron Notifications:</dt>
     <dd>
         <select class="snaprun" id="NOTIFY" name="NOTIFY" size="1">

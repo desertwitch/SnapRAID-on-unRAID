@@ -12,10 +12,24 @@ function snap_hour_options($time){
     return $options;
 }
 
+function snap_dom_options($time){
+    $options = '';
+        for($i = 1; $i <= 31; $i++){
+            $options .= '<option value="'.$i.'"';
+            if(intval($time) === $i)
+                $options .= ' selected';
+
+            $options .= '>'.$i.'</option>';
+        }
+    return $options;
+}
+
 $dwsnap_cfg  = parse_ini_file("/boot/config/plugins/dwsnap/dwsnap.cfg");
 $dwsnap_prio = trim(isset($dwsnap_cfg['PRIO']) ? htmlspecialchars($dwsnap_cfg['PRIO']) : 'disable');
 $dwsnap_cron = trim(isset($dwsnap_cfg['CRON']) ? htmlspecialchars($dwsnap_cfg['CRON']) : 'disable');
 $dwsnap_cronhour = trim(isset($dwsnap_cfg['CRONHOUR']) ? htmlspecialchars($dwsnap_cfg['CRONHOUR']) : '1');
+$dwsnap_crondow = trim(isset($dwsnap_cfg['CRONDOW']) ? htmlspecialchars($dwsnap_cfg['CRONDOW']) : '0');
+$dwsnap_crondom = trim(isset($dwsnap_cfg['CRONDOM']) ? htmlspecialchars($dwsnap_cfg['CRONDOM']) : '1');
 $dwsnap_notify = trim(isset($dwsnap_cfg['NOTIFY']) ? htmlspecialchars($dwsnap_cfg['NOTIFY']) : 'enable');
 $dwsnap_touch = trim(isset($dwsnap_cfg['TOUCH']) ? htmlspecialchars($dwsnap_cfg['TOUCH']) : 'enable');
 $dwsnap_diff = trim(isset($dwsnap_cfg['DIFF']) ? htmlspecialchars($dwsnap_cfg['DIFF']) : 'enable');
