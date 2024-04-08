@@ -121,6 +121,7 @@ if [ "$SYNC" == "enable" ]; then
                 failure_exit_cron
             fi
         fi
+        echo "### CRON -- Sync has finished, proceeding..." >>/var/log/snapraid/snaplog
     fi
 else
     echo "### CRON -- Sync is disabled, proceeding..." >>/var/log/snapraid/snaplog
@@ -134,6 +135,7 @@ if [ "$SCRUB" == "enable" ]; then
             echo "### CRON -- Scrub has failed, exiting..." >>/var/log/snapraid/snaplog
             failure_exit_cron
     fi
+    echo "### CRON -- Scrub has finished, proceeding..." >>/var/log/snapraid/snaplog
 else
     echo "### CRON -- Scrub is disabled, proceeding..." >>/var/log/snapraid/snaplog
 fi
