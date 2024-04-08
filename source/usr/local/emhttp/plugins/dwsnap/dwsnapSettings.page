@@ -43,9 +43,9 @@ Markdown="false"
     <dd>
         <select id="CRON" name="CRON" size="1">
             <?=mk_option($dwsnap_cron, "disable", "Never");?>
-            <?=mk_option($dwsnap_cron, "idle", "Daily");?>
-            <?=mk_option($dwsnap_cron, "besteffort", "Weekly");?>
-            <?=mk_option($dwsnap_cron, "realtime", "Monthly");?>
+            <?=mk_option($dwsnap_cron, "daily", "Daily");?>
+            <?=mk_option($dwsnap_cron, "weekly", "Weekly");?>
+            <?=mk_option($dwsnap_cron, "monthly", "Monthly");?>
         </select>
     </dd>
 </dl>
