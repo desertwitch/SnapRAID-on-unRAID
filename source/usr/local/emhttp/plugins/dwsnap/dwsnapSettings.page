@@ -36,6 +36,9 @@ Markdown="false"
 </dl>
 
 <blockquote class="inline_help">
+<p>This setting controls how much SnapRAID interferes with other running I/O operations.</p>
+<p>If you are running SnapRAID during the day it is recommended to choose 'Idle' as process priority.</p>
+<p>This will ensure that other processes accessing your protected data will be given priority over SnapRAID itself (which will in turn run slower).</p>
 </blockquote>
 
 <hr>
@@ -54,6 +57,8 @@ Markdown="false"
 </dl>
 
 <blockquote class="inline_help">
+<p>This setting controls how often the SnapRAID maintenance will be performed.</p>
+<p>As a bare minimum it is recommended to frequently scrub the array in order to detect data corruption and other anomalies.</p>
 </blockquote>
 
 <div id="CRONDOWSETTING">
@@ -71,9 +76,6 @@ Markdown="false"
             </select>
         </dd>
     </dl>
-
-    <blockquote class="inline_help">
-    </blockquote>
 </div>
 
 <div id="CRONDOMSETTING">
@@ -85,9 +87,6 @@ Markdown="false"
             </select>
         </dd>
     </dl>
-
-    <blockquote class="inline_help">
-    </blockquote>
 </div>
 
 <div id="CRONHOURSETTING">
@@ -99,23 +98,37 @@ Markdown="false"
             </select>
         </dd>
     </dl>
-
-    <blockquote class="inline_help">
-    </blockquote>
 </div>
 
 <div id="CRONSETTINGS">
     <dl>
-        <dt>SnapRAID Maintenance - Cron Notifications:</dt>
+        <dt>SnapRAID Maintenance - Cron Started Notifications:</dt>
         <dd>
-            <select class="snaprun" id="NOTIFY" name="NOTIFY" size="1">
-                <?=mk_option($dwsnap_notify, "disable", "No");?>
-                <?=mk_option($dwsnap_notify, "enable", "Yes");?>
+            <select class="snaprun" id="STARTNOTIFY" name="STARTNOTIFY" size="1">
+                <?=mk_option($dwsnap_startnotify, "disable", "No");?>
+                <?=mk_option($dwsnap_startnotify, "enable", "Yes");?>
             </select>
         </dd>
     </dl>
 
     <blockquote class="inline_help">
+    <p>When enabled you will receive notifications when the array maintenance starts.</p>
+    <p>The notifications will be delivered according to Unraid's system-wide notification settings.</p>
+    </blockquote>
+
+    <dl>
+        <dt>SnapRAID Maintenance - Cron Finished Notifications:</dt>
+        <dd>
+            <select class="snaprun" id="FINISHNOTIFY" name="FINISHNOTIFY" size="1">
+                <?=mk_option($dwsnap_finishnotify, "disable", "No");?>
+                <?=mk_option($dwsnap_finishnotify, "enable", "Yes");?>
+            </select>
+        </dd>
+    </dl>
+
+    <blockquote class="inline_help">
+    <p>When enabled you will receive notifications when the array maintenance finishes.</p>
+    <p>The notifications will be delivered according to Unraid's system-wide notification settings.</p>
     </blockquote>
 
     <hr>
@@ -131,6 +144,8 @@ Markdown="false"
     </dl>
 
     <blockquote class="inline_help">
+    <p>Sets arbitrarily the sub-second time-stamp of all the files that have it at zero.</p>
+    <p>This improves the SnapRAID capability to recognize moved and copied files as it makes the time-stamp almost unique, removing possible duplicates.</p> 
     </blockquote>
 
     <dl>
@@ -144,6 +159,10 @@ Markdown="false"
     </dl>
 
     <blockquote class="inline_help">
+    <p>This setting controls if the array maintenance should proceed when a certain portion of the array has changed.</p>
+    <p>This is a safeguard against automated array maintenance being performed on a wiped out or otherwise corrupted array.</p>
+    <p>It is important to set reasonable numbers here, so corruption and large-scale unwanted changes to not make it into the snapshots.</p>
+    <p>Beware that a value of zero means that no change is acceptable (= always exit on changes), a negative value means that any amount of changes are acceptable (= never exit on changes).</p>
     </blockquote>
 
     <div id="THRESHOLDSETTINGS">
@@ -154,18 +173,12 @@ Markdown="false"
             </dd>
         </dl>
 
-        <blockquote class="inline_help">
-        </blockquote>
-
         <dl>
             <dt>SnapRAID Maintenance - Deleted Files Threshold:</dt>
             <dd>
                 <input id="DELETED" type="text" class="narrow snaprun" name="DELETED" maxlength="30" value="<?=$dwsnap_deleted?>">
             </dd>
         </dl>
-
-        <blockquote class="inline_help">
-        </blockquote>
 
         <dl>
             <dt>SnapRAID Maintenance - Updated Files Threshold:</dt>
@@ -174,18 +187,12 @@ Markdown="false"
             </dd>
         </dl>
 
-        <blockquote class="inline_help">
-        </blockquote>
-
         <dl>
             <dt>SnapRAID Maintenance - Moved Files Threshold:</dt>
             <dd>
                 <input id="MOVED" type="text" class="narrow snaprun" name="MOVED" maxlength="30" value="<?=$dwsnap_moved?>">
             </dd>
         </dl>
-
-        <blockquote class="inline_help">
-        </blockquote>
 
         <dl>
             <dt>SnapRAID Maintenance - Copied Files Threshold:</dt>
@@ -194,9 +201,6 @@ Markdown="false"
             </dd>
         </dl>
 
-        <blockquote class="inline_help">
-        </blockquote>
-
         <dl>
             <dt>SnapRAID Maintenance - Restored Files Threshold:</dt>
             <dd>
@@ -204,8 +208,6 @@ Markdown="false"
             </dd>
         </dl>
 
-        <blockquote class="inline_help">
-        </blockquote>
     </div>
 
     <dl>
@@ -219,6 +221,8 @@ Markdown="false"
     </dl>
 
     <blockquote class="inline_help">
+    <p>This setting controls if a new array snapshot should be taken (overwriting the previous snapshot).</p>
+    <p>It is recommended to only enable this setting when difference checking and thresholds are also in effect (as configured above).</p>
     </blockquote>
 
     <div id="PREHASHSETTING">
@@ -233,6 +237,8 @@ Markdown="false"
         </dl>
 
         <blockquote class="inline_help">
+        <p>When enabled a preliminary hashing phase of all the new data (to have an additional verification before the parity computation) will be performed.</p>
+        <p>This can be useful to detect corruption and bit-flips during parity computation (when the machine is under heavy load), it will however take longer than a regular sync.</p> 
         </blockquote>
     </div>
 
@@ -247,6 +253,9 @@ Markdown="false"
     </dl>
 
     <blockquote class="inline_help">
+    <p>Possibly the most important array operation to perform on a regular basis.</p>
+    <p>This operation checks your array for corruption and other anomalies, any reported errors can then be fixed.</p>
+    <p>Scrub is never performed on the whole array at once, but rather in alternating chunks every time a scrub is performed.</p>
     </blockquote>
 </div>
 
