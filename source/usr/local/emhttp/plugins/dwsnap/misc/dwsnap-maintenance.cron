@@ -1,0 +1,2 @@
+# SnapRAID Maintenance:
+* * * * * /usr/bin/snapraid-cron > /dev/null 2>&1

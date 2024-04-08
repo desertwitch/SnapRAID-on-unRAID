@@ -15,7 +15,7 @@ Markdown="false"
 
 <form markdown="0" id="dwsnap-settings" name="dwsnap_settings" method="POST" action="/update.php" target="progressFrame">
 <input type="hidden" name="#file" value="dwsnap/dwsnap.cfg">
-<input type="hidden" id="command2" name="#command" value="">
+<input type="hidden" id="command2" name="#command" value="/usr/local/emhttp/plugins/dwsnap/scripts/write_config">
 <dl>
     <dt>SnapRAID Backend:</dt>
     <dd>
@@ -43,6 +43,7 @@ Markdown="false"
     <dd>
         <select class="snaprun" id="CRON" name="CRON" size="1">
             <?=mk_option($dwsnap_cron, "disable", "Never");?>
+            <?=mk_option($dwsnap_cron, "hourly", "Hourly");?>
             <?=mk_option($dwsnap_cron, "daily", "Daily");?>
             <?=mk_option($dwsnap_cron, "weekly", "Weekly");?>
             <?=mk_option($dwsnap_cron, "monthly", "Monthly");?>
