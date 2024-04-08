@@ -50,7 +50,7 @@ Markdown="false"
 <input class="snaprun" type="button" id="snapfixmissing" value="FIX MISSING">
 <input class="snaprun" type="button" id="snapfixerrors" value="FIX ERRORS">
 <span style="float:right;">
-<input class="snaprun" type="button" id="crontest" value="TEST MAINTENANCE CRONJOB">
+<input class="snaprun" type="button" id="crontest" value="RUN MAINTENANCE CRONJOB">
 </span>
 </form> 
 
