@@ -1,4 +1,10 @@
 #!/bin/bash
+SNAP_BIN="/usr/bin/snapraid"
+SNAP_CONF="/etc/snapraid.conf"
+
+[ "$PRIO" == "idle" ] && SNAP_BIN="/usr/bin/ionice -c 3 /usr/bin/snapraid"
+[ "$PRIO" == "besteffort" ] && SNAP_BIN="/usr/bin/ionice -c 2 /usr/bin/snapraid"
+[ "$PRIO" == "realtime" ] && SNAP_BIN="/usr/bin/ionice -c 1 /usr/bin/snapraid"
 
 run_snapraid() {
     CMD="$1"
@@ -6,13 +12,13 @@ run_snapraid() {
     [ "$CMD" == "fixmissing" ] && CMD="-m fix"
     [ "$CMD" == "hashedsync" ] && CMD="-h sync"
     rm -f /var/log/snapraid/lastfinish
-    OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
+    OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     echo "$OPTIME" >/var/log/snapraid/laststart
     echo "### STARTED: ${OPTIME}" >/var/log/snapraid/snaplog 2>&1 
-    echo "### snapraid -l \"/var/log/snapraid/${1}-%D-%T.log\" ${CMD} >>/var/log/snapraid/snaplog 2>&1" >>/var/log/snapraid/snaplog 2>&1 
+    echo "### $SNAP_BIN -c $SNAP_CONF -l \"/var/log/snapraid/${1}-%D-%T.log\" ${CMD} >>/var/log/snapraid/snaplog 2>&1" >>/var/log/snapraid/snaplog 2>&1 
     echo "" >>/var/log/snapraid/snaplog
-    snapraid -l "/var/log/snapraid/${1}-%D-%T.log" $CMD >>/var/log/snapraid/snaplog 2>&1 
-    OPTIME=$(date +"%d.%m.%Y %k:%M:%S %Z")
+    $SNAP_BIN -c $SNAP_CONF -l "/var/log/snapraid/${1}-%D-%T.log" $CMD >>/var/log/snapraid/snaplog 2>&1 
+    OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     echo "$OPTIME" >/var/log/snapraid/lastfinish
     echo "" >>/var/log/snapraid/snaplog
     echo "### FINISHED: ${OPTIME}" >>/var/log/snapraid/snaplog 2>&1 

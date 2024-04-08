@@ -49,6 +49,7 @@ Markdown="false"
 <input class="snaprun" type="button" id="snapfix" value="FIX">
 <input class="snaprun" type="button" id="snapfixmissing" value="FIX MISSING">
 <input class="snaprun" type="button" id="snapfixerrors" value="FIX ERRORS">
+<input class="snaprun" type="button" id="crontest" value="CRON TEST">
 </form> 
 
 <script type="text/javascript">
@@ -170,6 +171,10 @@ $(function(){
     $('#snapfixerrors').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
         $('#arg').val('fixerrors');
+        $('#snapcommands').submit();
+    });
+    $('#crontest').click(function(){
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/crontest');
         $('#snapcommands').submit();
     });
 

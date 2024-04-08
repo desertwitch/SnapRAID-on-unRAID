@@ -1,0 +1,4 @@
+#!/bin/bash
+echo "Starting SnapRAID operation: CRONTEST..."
+nohup /usr/bin/snapraid-cron >/dev/null 2>&1 &
+sleep 1

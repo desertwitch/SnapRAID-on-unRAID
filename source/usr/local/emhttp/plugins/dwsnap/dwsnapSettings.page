@@ -39,6 +39,136 @@ Markdown="false"
 </blockquote>
 
 <dl>
+    <dt>SnapRAID Maintenance - Cron Schedule:</dt>
+    <dd>
+        <select id="CRON" name="CRON" size="1">
+            <?=mk_option($dwsnap_cron, "disable", "Never");?>
+            <?=mk_option($dwsnap_cron, "idle", "Daily");?>
+            <?=mk_option($dwsnap_cron, "besteffort", "Weekly");?>
+            <?=mk_option($dwsnap_cron, "realtime", "Monthly");?>
+        </select>
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+</blockquote>
+
+<dl>
+    <dt>SnapRAID Maintenance - Touch (Step 1):</dt>
+    <dd>
+        <select id="TOUCH" name="TOUCH" size="1">
+            <?=mk_option($dwsnap_touch, "disable", "No");?>
+            <?=mk_option($dwsnap_touch, "enable", "Yes");?>
+        </select>
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+</blockquote>
+
+<dl>
+    <dt>SnapRAID Maintenance - Diff / Check Thresholds (Step 2):</dt>
+    <dd>
+        <select id="DIFF" name="DIFF" size="1">
+            <?=mk_option($dwsnap_diff, "disable", "No");?>
+            <?=mk_option($dwsnap_diff, "enable", "Yes");?>
+        </select>
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+</blockquote>
+
+<dl>
+    <dt>SnapRAID Maintenance - Sync (Step 3):</dt>
+    <dd>
+        <select id="SYNC" name="SYNC" size="1">
+            <?=mk_option($dwsnap_sync, "disable", "No");?>
+            <?=mk_option($dwsnap_sync, "enable", "Yes");?>
+        </select>
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+</blockquote>
+
+<dl>
+    <dt><em>SnapRAID Maintenance - Sync (Step 3) - Prehashed Sync:</em></dt>
+    <dd>
+        <select id="PREHASH" name="PREHASH" size="1">
+            <?=mk_option($dwsnap_prehash, "disable", "No");?>
+            <?=mk_option($dwsnap_prehash, "enable", "Yes");?>
+        </select>
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+</blockquote>
+
+<dl>
+    <dt>SnapRAID Maintenance - Scrub (Step 4):</dt>
+    <dd>
+        <select id="SCRUB" name="SCRUB" size="1">
+            <?=mk_option($dwsnap_scrub, "disable", "No");?>
+            <?=mk_option($dwsnap_scrub, "enable", "Yes");?>
+        </select>
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+</blockquote>
+
+<dl>
+    <dt>SnapRAID Maintenance - Added File Threshold:</dt>
+    <dd>
+        <input id="ADDED" type="text" class="narrow" name="ADDED" maxlength="30" value="<?=$dwsnap_added?>">
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+</blockquote>
+
+<dl>
+    <dt>SnapRAID Maintenance - Deleted File Threshold:</dt>
+    <dd>
+        <input id="DELETED" type="text" class="narrow" name="DELETED" maxlength="30" value="<?=$dwsnap_deleted?>">
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+</blockquote>
+
+<dl>
+    <dt>SnapRAID Maintenance - Updated File Threshold:</dt>
+    <dd>
+        <input id="UPDATED" type="text" class="narrow" name="UPDATED" maxlength="30" value="<?=$dwsnap_updated?>">
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+</blockquote>
+
+<dl>
+    <dt>SnapRAID Maintenance - Moved File Threshold:</dt>
+    <dd>
+        <input id="MOVED" type="text" class="narrow" name="MOVED" maxlength="30" value="<?=$dwsnap_moved?>">
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+</blockquote>
+
+<dl>
+    <dt>SnapRAID Maintenance - Copied File Threshold:</dt>
+    <dd>
+        <input id="COPIED" type="text" class="narrow" name="COPIED" maxlength="30" value="<?=$dwsnap_copied?>">
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+</blockquote>
+
+<dl>
     <dt>
         <input id="DEFAULT" type="submit" name="#default" value="Default">
         <input id="RESETCONF" class="snaprun" type="button" value="Reset Config">

@@ -1,0 +1,125 @@
+#!/bin/bash
+# Copyright: https://github.com/auanasgheps/snapraid-aio-script (parts of code)
+
+SNAP_BIN="/usr/bin/snapraid"
+SNAP_CONF="/etc/snapraid.conf"
+CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
+
+[ -e "$CONFIG" ] && source $CONFIG
+
+[ "$PRIO" == "idle" ] && SNAP_BIN="/usr/bin/ionice -c 3 /usr/bin/snapraid"
+[ "$PRIO" == "besteffort" ] && SNAP_BIN="/usr/bin/ionice -c 2 /usr/bin/snapraid"
+[ "$PRIO" == "realtime" ] && SNAP_BIN="/usr/bin/ionice -c 1 /usr/bin/snapraid"
+
+exit_cron() {
+    OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+    LOGTIME=$(date +"%Y%m%d-%H%M%S")
+    echo "$OPTIME" >/var/log/snapraid/lastfinish
+    echo "" >>/var/log/snapraid/snaplog
+    echo "### FINISHED: ${OPTIME}" >>/var/log/snapraid/snaplog 2>&1 
+    cp /var/log/snapraid/snaplog /var/log/snapraid/cron-"${LOGTIME}".log
+}
+
+failure_exit_cron() {
+    OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+    LOGTIME=$(date +"%Y%m%d-%H%M%S")
+    echo "$OPTIME" >/var/log/snapraid/lastfinish
+    echo "" >>/var/log/snapraid/snaplog
+    echo "### FINISHED: ${OPTIME}" >>/var/log/snapraid/snaplog 2>&1 
+    cp /var/log/snapraid/snaplog /var/log/snapraid/cron-"${LOGTIME}".log
+    exit 1
+}
+
+rm -f /var/log/snapraid/lastfinish
+OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+echo "$OPTIME" >/var/log/snapraid/laststart
+echo "### CRON STARTED: ${OPTIME}" >/var/log/snapraid/snaplog 2>&1 
+echo "" >>/var/log/snapraid/snaplog
+
+if [ "$TOUCH" == "enable" ]; then
+    echo "### Checking for files to be TOUCHed..." >>/var/log/snapraid/snaplog
+    TIMESTATUS=$($SNAP_BIN -c $SNAP_CONF status 2>&1 | tee -a /var/log/snapraid/snaplog | grep 'You have [1-9][0-9]* files with zero sub-second timestamp\.' | sed 's/^You have/Found/g')
+    if [ -n "$TIMESTATUS" ]; then
+        echo "### TOUCHing detected files..." >>/var/log/snapraid/snaplog
+        if ! $SNAP_BIN -c $SNAP_CONF touch >>/var/log/snapraid/snaplog 2>&1; then
+            echo "### TOUCHing detected files has failed... exiting" >>/var/log/snapraid/snaplog
+            failure_exit_cron
+        fi
+    else
+        echo "### No files to be TOUCHed, proceeding..." >>/var/log/snapraid/snaplog
+    fi
+else
+    echo "### TOUCH is disabled, proceeding..." >>/var/log/snapraid/snaplog
+fi
+
+if [ "$DIFF" == "enable" ]; then
+    echo "### Checking for DIFFerences..." >>/var/log/snapraid/snaplog
+    DIFFS=$($SNAP_BIN -c $SNAP_CONF diff 2>&1 | tee -a /var/log/snapraid/snaplog)
+    EQ_COUNT=$(grep -w '^ \{1,\}[0-9]* equal' "$DIFFS" | sed 's/^ *//g' | cut -d ' ' -f1)
+    ADD_COUNT=$(grep -w '^ \{1,\}[0-9]* added' "$DIFFS" | sed 's/^ *//g' | cut -d ' ' -f1)
+    DEL_COUNT=$(grep -w '^ \{1,\}[0-9]* removed' "$DIFFS" | sed 's/^ *//g' | cut -d ' ' -f1)
+    UPDATE_COUNT=$(grep -w '^ \{1,\}[0-9]* updated' "$DIFFS" | sed 's/^ *//g' | cut -d ' ' -f1)
+    MOVE_COUNT=$(grep -w '^ \{1,\}[0-9]* moved' "$DIFFS" | sed 's/^ *//g' | cut -d ' ' -f1)
+    COPY_COUNT=$(grep -w '^ \{1,\}[0-9]* copied' "$DIFFS" | sed 's/^ *//g' | cut -d ' ' -f1)
+
+    if [ -z "$DEL_COUNT" ] || [ -z "$ADD_COUNT" ] || [ -z "$MOVE_COUNT" ] || [ -z "$COPY_COUNT" ] || [ -z "$UPDATE_COUNT" ]; then
+        echo "### Checking for DIFFerences has failed, exiting..." >>/var/log/snapraid/snaplog
+        failure_exit_cron
+    fi
+
+    echo "### DIFFerences: Equal [$EQ_COUNT] - Added [$ADD_COUNT] - Deleted [$DEL_COUNT] - Moved [$MOVE_COUNT] - Copied [$COPY_COUNT] - Updated [$UPDATE_COUNT]" >>/var/log/snapraid/snaplog
+
+    if [ "$ADDED" -ge 0 ] && [ "$ADD_COUNT" -gt "$ADDED" ]; then
+        echo "### Added count ${ADD_COUNT} exceeded threshold ${ADDED}, exiting..." >>/var/log/snapraid/snaplog
+        failure_exit_cron
+    fi
+    if [ "$DELETED" -ge 0 ] && [ "$DEL_COUNT" -gt "$DELETED" ]; then
+        echo "### Deleted count ${DEL_COUNT} exceeded threshold ${DELETED}, exiting..." >>/var/log/snapraid/snaplog
+        failure_exit_cron
+    fi
+    if [ "$MOVED" -ge 0 ] && [ "$MOVE_COUNT" -gt "$MOVED" ]; then
+        echo "### Moved count ${MOVE_COUNT} exceeded threshold ${MOVED}, exiting..." >>/var/log/snapraid/snaplog
+        failure_exit_cron
+    fi
+    if [ "$COPIED" -ge 0 ] && [ "$COPY_COUNT" -gt "$COPIED" ]; then
+        echo "### Copied count ${COPY_COUNT} exceeded threshold ${COPIED}, exiting..." >>/var/log/snapraid/snaplog
+        failure_exit_cron
+    fi
+    if [ "$UPDATED" -ge 0 ] && [ "$UPDATE_COUNT" -gt "$UPDATED" ]; then
+        echo "### Copied count ${UPDATE_COUNT} exceeded threshold ${UPDATED}, exiting..." >>/var/log/snapraid/snaplog
+        failure_exit_cron
+    fi
+    echo "### No DIFFerence thresholds exceeded, proceeding..." >>/var/log/snapraid/snaplog
+else
+    echo "### DIFFerence checking is disabled, proceeding..." >>/var/log/snapraid/snaplog
+fi
+
+if [ "$SYNC" == "enable" ]; then
+    if [ "$PRESHASH" == "enable" ]; then
+        echo "### Prehashed SYNCing..." >>/var/log/snapraid/snaplog
+        if ! $SNAP_BIN -c $SNAP_CONF -h sync >>/var/log/snapraid/snaplog 2>&1; then
+            echo "### Prehashed SYNCing has failed, exiting..." >>/var/log/snapraid/snaplog
+            failure_exit_cron
+        fi
+    else
+        echo "### SYNCing..." >>/var/log/snapraid/snaplog
+        if ! $SNAP_BIN -c $SNAP_CONF sync >>/var/log/snapraid/snaplog 2>&1; then
+            echo "### SYNCing has failed, exiting..." >>/var/log/snapraid/snaplog
+            failure_exit_cron
+        fi
+    fi
+else
+    echo "### SYNC is disabled, proceeding..." >>/var/log/snapraid/snaplog
+fi
+
+if [ "$SCRUB" == "enable" ]; then
+    echo "### SCRUB..."
+    if ! $SNAP_BIN -c $SNAP_CONF scrub >>/var/log/snapraid/snaplog 2>&1; then
+            echo "### SCRUB has failed, exiting..." >>/var/log/snapraid/snaplog
+            failure_exit_cron
+    fi
+else
+    echo "### SCRUB is disabled, proceeding..." >>/var/log/snapraid/snaplog
+fi
+
+exit_cron
