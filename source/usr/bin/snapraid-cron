@@ -151,7 +151,7 @@ fi
 echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
 
 if [ "$SCRUB" == "enable" ]; then
-    echo "### CRON -- Scrub..." 2>&1 | tee -a /var/log/snapraid/snaplog
+    echo "### CRON -- Scrubbing..." 2>&1 | tee -a /var/log/snapraid/snaplog
     if ! $SNAP_BIN -c $SNAP_CONF scrub >>/var/log/snapraid/snaplog 2>&1; then
             echo "### CRON -- Scrub has failed, exiting..." 2>&1 | tee -a /var/log/snapraid/snaplog
             FAILUREMSG="The scrub has failed - check LOG."
