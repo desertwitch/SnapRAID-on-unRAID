@@ -1,6 +1,9 @@
 #!/bin/bash
 SNAP_BIN="/usr/bin/snapraid"
 SNAP_CONF="/etc/snapraid.conf"
+CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
+
+[ -e "$CONFIG" ] && source $CONFIG
 
 [ "$PRIO" == "idle" ] && SNAP_BIN="/usr/bin/ionice -c 3 /usr/bin/snapraid"
 [ "$PRIO" == "besteffort" ] && SNAP_BIN="/usr/bin/ionice -c 2 /usr/bin/snapraid"
