@@ -141,7 +141,7 @@ $(function(){
             text: "This action will delete any stored SnapRAID logfiles.",
             type: "warning",
             showCancelButton: true,
-            confirmButtonText: "Clear Logs",
+            confirmButtonText: "Clear All Logs",
             html: true
             },
             function(){
