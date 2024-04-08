@@ -84,7 +84,7 @@ if [ "$DIFF" == "enable" ]; then
         failure_exit_cron
     fi
 
-    echo "### CRON -- Difference Stats: Equal [$EQ_COUNT] - Added [$ADD_COUNT] - Deleted [$DEL_COUNT] - Moved [$MOVE_COUNT] - Copied [$COPY_COUNT] - Updated [$UPDATE_COUNT] - Restored [$RESTORE_COUNT]"  2>&1 | tee -a /var/log/snapraid/snaplog
+    echo "### CRON -- Equal [$EQ_COUNT] - Added [$ADD_COUNT] - Deleted [$DEL_COUNT] - Moved [$MOVE_COUNT] - Copied [$COPY_COUNT] - Updated [$UPDATE_COUNT] - Restored [$RESTORE_COUNT]"  2>&1 | tee -a /var/log/snapraid/snaplog
 
     if [ "$ADDED" -ge 0 ] && [ "$ADD_COUNT" -gt "$ADDED" ]; then
         echo "### CRON -- Added count ${ADD_COUNT} exceeded threshold ${ADDED}, exiting..." 2>&1 | tee -a /var/log/snapraid/snaplog
@@ -128,14 +128,14 @@ if [ "$SYNC" == "enable" ]; then
         echo "### CRON -- No differences detected (skipping sync), proceeding..." 2>&1 | tee -a /var/log/snapraid/snaplog
     else
         if [ "$PRESHASH" == "enable" ]; then
-            echo "### CRON -- Prehashed Sync..." 2>&1 | tee -a /var/log/snapraid/snaplog
+            echo "### CRON -- Prehashed Syncing..." 2>&1 | tee -a /var/log/snapraid/snaplog
             if ! $SNAP_BIN -c $SNAP_CONF -h sync >>/var/log/snapraid/snaplog 2>&1; then
                 echo "### CRON -- Prehashed Sync has failed, exiting..." 2>&1 | tee -a /var/log/snapraid/snaplog
                 FAILUREMSG="The prehashed sync has failed - check LOG."
                 failure_exit_cron
             fi
         else
-            echo "### CRON -- Sync..." 2>&1 | tee -a /var/log/snapraid/snaplog
+            echo "### CRON -- Syncing..." 2>&1 | tee -a /var/log/snapraid/snaplog
             if ! $SNAP_BIN -c $SNAP_CONF sync >>/var/log/snapraid/snaplog 2>&1; then
                 echo "### CRON -- Sync has failed, exiting..." 2>&1 | tee -a /var/log/snapraid/snaplog
                 FAILUREMSG="The sync has failed - check LOG."
