@@ -1,4 +1,5 @@
 #!/bin/bash
+DOCROOT="/usr/local/emhttp/plugins/dwsnap"
 CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
 [ -e "$CONFIG" ] && source $CONFIG
 
