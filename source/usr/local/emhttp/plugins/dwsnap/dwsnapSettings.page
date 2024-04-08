@@ -44,7 +44,7 @@ Markdown="false"
 <hr>
 
 <dl>
-    <dt><strong>SnapRAID Maintenance - Cron Schedule:</strong></dt>
+    <dt><strong>SnapRAID Maintenance - Schedule:</strong></dt>
     <dd>
         <select class="snaprun" id="CRON" name="CRON" size="1">
             <?=mk_option($dwsnap_cron, "disable", "Never");?>
@@ -63,7 +63,7 @@ Markdown="false"
 
 <div id="CRONDOWSETTING">
     <dl>
-        <dt>SnapRAID Maintenance - Cron Schedule Day of Week:</dt>
+        <dt>SnapRAID Maintenance - Schedule Day of Week:</dt>
         <dd>
             <select class="snaprun" id="CRONDOW" name="CRONDOW" size="1">
                 <?=mk_option($dwsnap_crondow, "0", "Sunday");?>
@@ -80,7 +80,7 @@ Markdown="false"
 
 <div id="CRONDOMSETTING">
     <dl>
-        <dt>SnapRAID Maintenance - Cron Schedule Day of Month:</dt>
+        <dt>SnapRAID Maintenance - Schedule Day of Month:</dt>
         <dd>
             <select class="snaprun" id="CRONDOM" name="CRONDOM" size="1">
                 <? echo snap_dom_options($dwsnap_crondom);?>
@@ -91,7 +91,7 @@ Markdown="false"
 
 <div id="CRONHOURSETTING">
     <dl>
-        <dt>SnapRAID Maintenance - Cron Schedule Hour:</dt>
+        <dt>SnapRAID Maintenance - Schedule Hour:</dt>
         <dd>
             <select class="snaprun" id="CRONHOUR" name="CRONHOUR" size="1">
                 <? echo snap_hour_options($dwsnap_cronhour);?>
@@ -102,7 +102,7 @@ Markdown="false"
 
 <div id="CRONSETTINGS">
     <dl>
-        <dt>SnapRAID Maintenance - Cron Started Notifications:</dt>
+        <dt>SnapRAID Maintenance - Started Notifications:</dt>
         <dd>
             <select class="snaprun" id="STARTNOTIFY" name="STARTNOTIFY" size="1">
                 <?=mk_option($dwsnap_startnotify, "disable", "No");?>
@@ -117,7 +117,7 @@ Markdown="false"
     </blockquote>
 
     <dl>
-        <dt>SnapRAID Maintenance - Cron Finished Notifications:</dt>
+        <dt>SnapRAID Maintenance - Finished Notifications:</dt>
         <dd>
             <select class="snaprun" id="FINISHNOTIFY" name="FINISHNOTIFY" size="1">
                 <?=mk_option($dwsnap_finishnotify, "disable", "No");?>
