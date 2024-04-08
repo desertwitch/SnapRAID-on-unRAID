@@ -63,13 +63,14 @@ if [ "$DIFF" == "enable" ]; then
     UPDATE_COUNT=$(grep -w '^ \{1,\}[0-9]* updated' <<< "$DIFFS" | sed 's/^ *//g' | cut -d ' ' -f1)
     MOVE_COUNT=$(grep -w '^ \{1,\}[0-9]* moved' <<< "$DIFFS" | sed 's/^ *//g' | cut -d ' ' -f1)
     COPY_COUNT=$(grep -w '^ \{1,\}[0-9]* copied' <<< "$DIFFS" | sed 's/^ *//g' | cut -d ' ' -f1)
+    RESTORE_COUNT=$(grep -w '^ \{1,\}[0-9]* restored' <<< "$DIFFS" | sed 's/^ *//g' | cut -d ' ' -f1)
 
-    if [ -z "$DEL_COUNT" ] || [ -z "$ADD_COUNT" ] || [ -z "$MOVE_COUNT" ] || [ -z "$COPY_COUNT" ] || [ -z "$UPDATE_COUNT" ]; then
+    if [ -z "$DEL_COUNT" ] || [ -z "$ADD_COUNT" ] || [ -z "$MOVE_COUNT" ] || [ -z "$COPY_COUNT" ] || [ -z "$UPDATE_COUNT" ] || [ -z "$RESTORE_COUNT" ]; then
         echo "### Checking for differences has failed, exiting..." >>/var/log/snapraid/snaplog
         failure_exit_cron
     fi
 
-    echo "### Differences Summary: Equal [$EQ_COUNT] - Added [$ADD_COUNT] - Deleted [$DEL_COUNT] - Moved [$MOVE_COUNT] - Copied [$COPY_COUNT] - Updated [$UPDATE_COUNT]" >>/var/log/snapraid/snaplog
+    echo "### Differences Summary: Equal [$EQ_COUNT] - Added [$ADD_COUNT] - Deleted [$DEL_COUNT] - Moved [$MOVE_COUNT] - Copied [$COPY_COUNT] - Updated [$UPDATE_COUNT] - Restored [$RESTORE_COUNT]" >>/var/log/snapraid/snaplog
 
     if [ "$ADDED" -ge 0 ] && [ "$ADD_COUNT" -gt "$ADDED" ]; then
         echo "### Added count ${ADD_COUNT} exceeded threshold ${ADDED}, exiting..." >>/var/log/snapraid/snaplog
@@ -89,6 +90,10 @@ if [ "$DIFF" == "enable" ]; then
     fi
     if [ "$UPDATED" -ge 0 ] && [ "$UPDATE_COUNT" -gt "$UPDATED" ]; then
         echo "### Copied count ${UPDATE_COUNT} exceeded threshold ${UPDATED}, exiting..." >>/var/log/snapraid/snaplog
+        failure_exit_cron
+    fi
+    if [ "$RESTORED" -ge 0 ] && [ "$RESTORE_COUNT" -gt "$RESTORED" ]; then
+        echo "### Copied count ${RESTORE_COUNT} exceeded threshold ${RESTORED}, exiting..." >>/var/log/snapraid/snaplog
         failure_exit_cron
     fi
     echo "### No difference thresholds exceeded, proceeding..." >>/var/log/snapraid/snaplog
