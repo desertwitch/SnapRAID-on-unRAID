@@ -36,7 +36,7 @@ $(function(){
         autoRefresh: true
     });
 
-    editor2.setSize(null, 800);
+    editor2.setSize(null, 600);
 
     $('#editfile2').fileTreeAttach(null, null, function(file) {
         $('#editfile2').val(file);
