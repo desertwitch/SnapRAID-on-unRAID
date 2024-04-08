@@ -90,17 +90,19 @@ Markdown="false"
     </blockquote>
 </div>
 
-<dl>
-    <dt>SnapRAID Maintenance - Cron Schedule Hour:</dt>
-    <dd>
-        <select class="snaprun" id="CRONHOUR" name="CRONHOUR" size="1">
-            <? echo snap_hour_options($dwsnap_cronhour);?>
-        </select>
-    </dd>
-</dl>
+<div id="CRONHOURSETTING">
+    <dl>
+        <dt>SnapRAID Maintenance - Cron Schedule Hour:</dt>
+        <dd>
+            <select class="snaprun" id="CRONHOUR" name="CRONHOUR" size="1">
+                <? echo snap_hour_options($dwsnap_cronhour);?>
+            </select>
+        </dd>
+    </dl>
 
-<blockquote class="inline_help">
-</blockquote>
+    <blockquote class="inline_help">
+    </blockquote>
+</div>
 
 <dl>
     <dt>SnapRAID Maintenance - Cron Notifications:</dt>
@@ -257,13 +259,20 @@ Markdown="false"
 
 <script type="text/javascript">
 function checkCronSettings() {
-    if ($("#CRON").val() === "weekly") {
+    if ($("#CRON").val() === "hourly") {
+        $("#CRONHOURSETTING").show();
+        $("#CRONDOWSETTING").hide();
+        $("#CRONDOMSETTING").hide();
+    } else if ($("#CRON").val() === "weekly") {
+        $("#CRONHOURSETTING").show();
         $("#CRONDOWSETTING").show();
         $("#CRONDOMSETTING").hide();
     } else if ($("#CRON").val() === "monthly") {
+        $("#CRONHOURSETTING").show();
         $("#CRONDOWSETTING").hide();
         $("#CRONDOMSETTING").show();
     } else {
+        $("#CRONHOURSETTING").hide();
         $("#CRONDOWSETTING").hide();
         $("#CRONDOMSETTING").hide();
     }
