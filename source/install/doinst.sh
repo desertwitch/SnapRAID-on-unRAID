@@ -15,7 +15,7 @@ if [ ! -d /var/log/snapraid ]; then
 fi
 
 cp -n $DOCROOT/default.cfg $BOOT/dwsnap.cfg
-cp -nr $DOCROOT/defaults/snapraid.conf $BOOT/config/snapraid.conf
+cp -n $DOCROOT/defaults/snapraid.conf $BOOT/config/snapraid.conf
 
 if [ ! -L /etc/snapraid.conf ]; then
     rm -f /etc/snapraid.conf

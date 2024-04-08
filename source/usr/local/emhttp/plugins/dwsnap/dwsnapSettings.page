@@ -303,9 +303,11 @@ function checkCronSettings() {
     }
 }
 $(function(){
-    $('#btnApply').click(function(){
+    $('#RESETCONF').click(function(){
+        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/reset_config');
         $('#dwsnap-settings').submit();
     });
+
     $("#DIFF").change(checkCronSettings);
     $("#SYNC").change(checkCronSettings);
     $("#CRON").change(checkCronSettings);

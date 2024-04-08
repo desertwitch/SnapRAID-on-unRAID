@@ -1,0 +1,35 @@
+#!/bin/bash
+echo "Resetting SnapRAID configuration..."
+
+if [ -f /boot/config/plugins/dynamix/dwsnap-maintenance.cron ]; then
+    rm -f /boot/config/plugins/dynamix/dwsnap-maintenance.cron
+    sleep 1
+    update_cron
+    sleep 1
+fi
+
+rm -f /etc/snapraid.conf
+rm -f /boot/config/plugins/dwsnap/dwsnap.cfg
+rm -rf /boot/config/plugins/dwsnap/config
+rm -rf /var/log/snapraid
+
+BOOT="/boot/config/plugins/dwsnap"
+DOCROOT="/usr/local/emhttp/plugins/dwsnap"
+
+if [ ! -d $BOOT/config ]; then
+    mkdir -p $BOOT/config
+fi
+
+if [ ! -d /var/log/snapraid ]; then
+    mkdir -p /var/log/snapraid
+fi
+
+cp -f $DOCROOT/default.cfg $BOOT/dwsnap.cfg
+cp -f $DOCROOT/defaults/snapraid.conf $BOOT/config/snapraid.conf
+
+if [ ! -L /etc/snapraid.conf ]; then
+    rm -f /etc/snapraid.conf
+    ln -sf $BOOT/config/snapraid.conf /etc/snapraid.conf
+fi
+
+
