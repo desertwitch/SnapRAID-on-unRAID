@@ -32,7 +32,6 @@ exit_cron() {
     echo "### CRON -- FINISHED: ${OPTIME}" 2>&1 | tee -a /var/log/snapraid/snaplog
     cp /var/log/snapraid/snaplog /var/log/snapraid/cron-"${LOGTIME}".log
     [ "$NOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Finished" -d "The SnapRAID maintenance has finished with success." -i "normal"
-    sleep 3
 }
 
 failure_exit_cron() {
@@ -41,7 +40,6 @@ failure_exit_cron() {
     echo "### CRON -- FINISHED: ${OPTIME}" 2>&1 | tee -a /var/log/snapraid/snaplog
     cp /var/log/snapraid/snaplog /var/log/snapraid/cron-"${LOGTIME}".log
     [ "$NOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "The SnapRAID maintenance has finished with errors. ${FAILUREMSG}" -i "alert"
-    sleep 3
     exit 1
 }
 

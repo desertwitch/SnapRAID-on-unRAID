@@ -74,6 +74,9 @@ function getSnapStatus() {
                 $('.snaprun').prop('disabled', true);
                 $('.snapnotrun').prop('disabled', false);
             } else if (data === "RUNNING:NO") {
+                if($('#snapstatusicon').is(":visible")) {
+                    window.location.reload();
+                }
                 $('#snapstatusicon').hide();
                 $('.snaprun').prop('disabled', false);
                 $('.snapnotrun').prop('disabled', true);
