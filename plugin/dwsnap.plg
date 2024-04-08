@@ -65,6 +65,13 @@ rm -f /etc/snapraid.conf
 rm -rf &plgPATH;/*.txz
 rm -rf &emhttp;
 
+if [ -f /boot/config/plugins/dynamix/dwsnap-maintenance.cron ]; then
+    rm -f /boot/config/plugins/dynamix/dwsnap-maintenance.cron
+    sleep 1
+    update_cron
+    sleep 1
+fi
+
 echo ""
 echo "-----------------------------------------------------------"
 echo " SnapRAID on UNRAID (&version;) has been removed."
