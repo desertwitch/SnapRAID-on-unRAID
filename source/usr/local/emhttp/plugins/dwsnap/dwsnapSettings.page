@@ -254,7 +254,7 @@ Markdown="false"
 
     <blockquote class="inline_help">
     <p>Possibly the most important array operation to perform on a regular basis.</p>
-    <p>This operation checks your array for corruption and other anomalies, any reported errors can then be fixed.</p>
+    <p>This operation checks your array for corruption and other anomalies, any reported errors can then be fixed with e.g. 'Fix Errors'.</p>
     <p>Scrub is never performed on the whole array at once, but rather in alternating chunks every time a scrub is performed.</p>
     </blockquote>
 </div>
