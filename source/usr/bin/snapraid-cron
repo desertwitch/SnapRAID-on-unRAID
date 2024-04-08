@@ -50,7 +50,7 @@ echo "$OPTIME" >/var/log/snapraid/laststart
 echo "### CRON -- STARTED: ${OPTIME}" 2>&1 | tee /var/log/snapraid/snaplog
 echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
 
-[ "$NOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Warning ${SUBJECT} Maintenance Started" -d "The SnapRAID maintenance has started." -i "warning"
+[ "$NOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Started" -d "The SnapRAID maintenance has started." -i "warning"
 
 if [ "$TOUCH" == "enable" ]; then
     echo "### CRON -- Checking for files to be touched..." 2>&1 | tee -a /var/log/snapraid/snaplog
