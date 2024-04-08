@@ -304,8 +304,18 @@ function checkCronSettings() {
 }
 $(function(){
     $('#RESETCONF').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/reset_config');
-        $('#dwsnap-settings').submit();
+        swal({
+            title: "Are you sure?",
+            text: "This action will reset your whole configuration (including the array's).",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Reset Configuration",
+            html: true
+            },
+            function(){
+                $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/reset_config');
+                $('#snapcommands').submit();
+            });
     });
 
     $("#DIFF").change(checkCronSettings);

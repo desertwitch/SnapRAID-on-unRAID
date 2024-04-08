@@ -136,51 +136,151 @@ $(function(){
         $('#snapcommands').submit();
     });
     $('#clearlogs').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/clearlogs');
-        $('#snapcommands').submit();
+        swal({
+            title: "Are you sure?",
+            text: "This action will delete any stored SnapRAID logfiles.",
+            type: "info",
+            showCancelButton: true,
+            confirmButtonText: "Clear Logs",
+            html: true
+            },
+            function(){
+                $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/clearlogs');
+                $('#snapcommands').submit();
+            });
     });
     $('#snapstop').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/stop');
-        $('#snapcommands').submit();
+        swal({
+            title: "Are you sure?",
+            text: "This action will stop all running SnapRAID instances.",
+            type: "info",
+            showCancelButton: true,
+            confirmButtonText: "Stop Operation",
+            html: true
+            },
+            function(){
+                $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/stop');
+                $('#snapcommands').submit();
+            });
     });
     $('#snapkill').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/kill');
-        $('#snapcommands').submit();
+        swal({
+            title: "Destructive Operation",
+            text: "This action will kill all running SnapRAID instances.<br>Data corruption can be a result of this.",
+            type: "error",
+            showCancelButton: true,
+            confirmButtonText: "Kill Operation",
+            html: true
+            },
+            function(){
+                $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/kill');
+                $('#snapcommands').submit();
+            });
     });
 
     $('#snapsync').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-        $('#arg').val('sync');
-        $('#snapcommands').submit();
-    });
+        swal({
+            title: "Destructive Operation",
+            text: "This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Start Operation",
+            html: true
+            },
+            function(){
+                $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
+                $('#arg').val('sync');
+                $('#snapcommands').submit();
+            });
+    });  
     $('#snaphashedsync').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-        $('#arg').val('hashedsync');
-        $('#snapcommands').submit();
+        swal({
+            title: "Destructive Operation",
+            text: "This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Start Operation",
+            html: true
+            },
+            function(){
+                $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
+                $('#arg').val('hashedsync');
+                $('#snapcommands').submit();
+            });
     });
     $('#snaptouch').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-        $('#arg').val('touch');
-        $('#snapcommands').submit();
+        swal({
+            title: "Destructive Operation",
+            text: "This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Start Operation",
+            html: true
+            },
+            function(){
+                $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
+                $('#arg').val('touch');
+                $('#snapcommands').submit();
+            });
     });
     $('#snapfix').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-        $('#arg').val('fix');
-        $('#snapcommands').submit();
+        swal({
+            title: "Destructive Operation",
+            text: "This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Start Operation",
+            html: true
+            },
+            function(){
+                $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
+                $('#arg').val('fix');
+                $('#snapcommands').submit();
+            });
     });
     $('#snapfixmissing').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-        $('#arg').val('fixmissing');
-        $('#snapcommands').submit();
+        swal({
+            title: "Destructive Operation",
+            text: "This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Start Operation",
+            html: true
+            },
+            function(){
+                $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
+                $('#arg').val('fixmissing');
+                $('#snapcommands').submit();
+            });
     });
     $('#snapfixerrors').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-        $('#arg').val('fixerrors');
-        $('#snapcommands').submit();
+        swal({
+            title: "Destructive Operation",
+            text: "This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Start Operation",
+            html: true
+            },
+            function(){
+                $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
+                $('#arg').val('fixerrors');
+                $('#snapcommands').submit();
+            });
     });
     $('#crontest').click(function(){
-        $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/crontest');
-        $('#snapcommands').submit();
+        swal({
+            title: "Are you sure?",
+            text: "This action is not simulated, it will really run (as configured).",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Start Operation",
+            html: true
+            },
+            function(){
+                $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/crontest');
+                $('#snapcommands').submit();
+            });
     });
 
     getSnapStatus()
