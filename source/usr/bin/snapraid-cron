@@ -52,15 +52,17 @@ else
     echo "### Touch is disabled, proceeding..." >>/var/log/snapraid/snaplog
 fi
 
+echo "" >>/var/log/snapraid/snaplog
+
 if [ "$DIFF" == "enable" ]; then
     echo "### Checking for differences..." >>/var/log/snapraid/snaplog
     DIFFS=$($SNAP_BIN -c $SNAP_CONF diff 2>&1 | tee -a /var/log/snapraid/snaplog)
-    EQ_COUNT=$(grep -w '^ \{1,\}[0-9]* equal' "$DIFFS" | sed 's/^ *//g' | cut -d ' ' -f1)
-    ADD_COUNT=$(grep -w '^ \{1,\}[0-9]* added' "$DIFFS" | sed 's/^ *//g' | cut -d ' ' -f1)
-    DEL_COUNT=$(grep -w '^ \{1,\}[0-9]* removed' "$DIFFS" | sed 's/^ *//g' | cut -d ' ' -f1)
-    UPDATE_COUNT=$(grep -w '^ \{1,\}[0-9]* updated' "$DIFFS" | sed 's/^ *//g' | cut -d ' ' -f1)
-    MOVE_COUNT=$(grep -w '^ \{1,\}[0-9]* moved' "$DIFFS" | sed 's/^ *//g' | cut -d ' ' -f1)
-    COPY_COUNT=$(grep -w '^ \{1,\}[0-9]* copied' "$DIFFS" | sed 's/^ *//g' | cut -d ' ' -f1)
+    EQ_COUNT=$(grep -w '^ \{1,\}[0-9]* equal' <<< "$DIFFS" | sed 's/^ *//g' | cut -d ' ' -f1)
+    ADD_COUNT=$(grep -w '^ \{1,\}[0-9]* added' <<< "$DIFFS" | sed 's/^ *//g' | cut -d ' ' -f1)
+    DEL_COUNT=$(grep -w '^ \{1,\}[0-9]* removed' <<< "$DIFFS" | sed 's/^ *//g' | cut -d ' ' -f1)
+    UPDATE_COUNT=$(grep -w '^ \{1,\}[0-9]* updated' <<< "$DIFFS" | sed 's/^ *//g' | cut -d ' ' -f1)
+    MOVE_COUNT=$(grep -w '^ \{1,\}[0-9]* moved' <<< "$DIFFS" | sed 's/^ *//g' | cut -d ' ' -f1)
+    COPY_COUNT=$(grep -w '^ \{1,\}[0-9]* copied' <<< "$DIFFS" | sed 's/^ *//g' | cut -d ' ' -f1)
 
     if [ -z "$DEL_COUNT" ] || [ -z "$ADD_COUNT" ] || [ -z "$MOVE_COUNT" ] || [ -z "$COPY_COUNT" ] || [ -z "$UPDATE_COUNT" ]; then
         echo "### Checking for differences has failed, exiting..." >>/var/log/snapraid/snaplog
@@ -94,23 +96,31 @@ else
     echo "### Difference checking is disabled, proceeding..." >>/var/log/snapraid/snaplog
 fi
 
+echo "" >>/var/log/snapraid/snaplog
+
 if [ "$SYNC" == "enable" ]; then
-    if [ "$PRESHASH" == "enable" ]; then
-        echo "### Prehashed Sync..." >>/var/log/snapraid/snaplog
-        if ! $SNAP_BIN -c $SNAP_CONF -h sync >>/var/log/snapraid/snaplog 2>&1; then
-            echo "### Prehashed Sync has failed, exiting..." >>/var/log/snapraid/snaplog
-            failure_exit_cron
-        fi
+    if [ "$DEL_COUNT" -eq 0 ] && [ "$ADD_COUNT" -eq 0 ] && [ "$MOVE_COUNT" -eq 0 ] && [ "$COPY_COUNT" -eq 0 ] && [ "$UPDATE_COUNT" -eq 0 ]; then
+        echo "### No differences detected, skipping sync and proceeding..." >>/var/log/snapraid/snaplog
     else
-        echo "### Sync..." >>/var/log/snapraid/snaplog
-        if ! $SNAP_BIN -c $SNAP_CONF sync >>/var/log/snapraid/snaplog 2>&1; then
-            echo "### Sync has failed, exiting..." >>/var/log/snapraid/snaplog
-            failure_exit_cron
+        if [ "$PRESHASH" == "enable" ]; then
+            echo "### Prehashed Sync..." >>/var/log/snapraid/snaplog
+            if ! $SNAP_BIN -c $SNAP_CONF -h sync >>/var/log/snapraid/snaplog 2>&1; then
+                echo "### Prehashed Sync has failed, exiting..." >>/var/log/snapraid/snaplog
+                failure_exit_cron
+            fi
+        else
+            echo "### Sync..." >>/var/log/snapraid/snaplog
+            if ! $SNAP_BIN -c $SNAP_CONF sync >>/var/log/snapraid/snaplog 2>&1; then
+                echo "### Sync has failed, exiting..." >>/var/log/snapraid/snaplog
+                failure_exit_cron
+            fi
         fi
     fi
 else
     echo "### Sync is disabled, proceeding..." >>/var/log/snapraid/snaplog
 fi
+
+echo "" >>/var/log/snapraid/snaplog
 
 if [ "$SCRUB" == "enable" ]; then
     echo "### Scrub..."
