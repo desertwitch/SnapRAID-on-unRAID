@@ -139,7 +139,7 @@ $(function(){
         swal({
             title: "Are you sure?",
             text: "This action will delete any stored SnapRAID logfiles.",
-            type: "info",
+            type: "warning",
             showCancelButton: true,
             confirmButtonText: "Clear Logs",
             html: true
@@ -152,8 +152,8 @@ $(function(){
     $('#snapstop').click(function(){
         swal({
             title: "Are you sure?",
-            text: "This action will stop all running SnapRAID instances.",
-            type: "info",
+            text: "This action will (gracefully) stop all running SnapRAID instances.",
+            type: "warning",
             showCancelButton: true,
             confirmButtonText: "Stop Operation",
             html: true
@@ -166,7 +166,7 @@ $(function(){
     $('#snapkill').click(function(){
         swal({
             title: "Destructive Operation",
-            text: "This action will kill all running SnapRAID instances.<br>Data corruption can be a result of this.",
+            text: "This action will kill all running SnapRAID instances.<br>Be advised data corruption can be a result of this action.",
             type: "error",
             showCancelButton: true,
             confirmButtonText: "Kill Operation",
@@ -271,7 +271,7 @@ $(function(){
     $('#crontest').click(function(){
         swal({
             title: "Are you sure?",
-            text: "This action is not simulated, it will really run (as configured).",
+            text: "This action is <u>not simulated</u>, it will really run (as configured).",
             type: "warning",
             showCancelButton: true,
             confirmButtonText: "Start Operation",

@@ -306,8 +306,8 @@ $(function(){
     $('#RESETCONF').click(function(){
         swal({
             title: "Are you sure?",
-            text: "This action will reset your whole configuration (including the array's).",
-            type: "warning",
+            text: "This action will reset your entire configuration.<br>Your array configuration is also reset (take note of it).",
+            type: "error",
             showCancelButton: true,
             confirmButtonText: "Reset Configuration",
             html: true
