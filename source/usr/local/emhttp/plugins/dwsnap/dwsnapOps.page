@@ -18,7 +18,7 @@ Markdown="false"
 }
 </style>
 
-<table class="tablesorter shift">
+<table class="tablesorter shift" autofocus>
 <thead><tr>
 <th><i id="snapstatusicon" class="fa fa-cog fa-spin" style="display:none;"></i> <strong>Array Operation Screen</strong></th>
 <th style="text-transform: none;"><strong>Started:</strong> <em><?=$snapraid_laststart?></em></th>
