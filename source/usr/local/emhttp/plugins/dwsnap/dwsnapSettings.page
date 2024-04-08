@@ -38,6 +38,8 @@ Markdown="false"
 <blockquote class="inline_help">
 </blockquote>
 
+<hr>
+
 <dl>
     <dt><strong>SnapRAID Maintenance - Cron Schedule:</strong></dt>
     <dd>
