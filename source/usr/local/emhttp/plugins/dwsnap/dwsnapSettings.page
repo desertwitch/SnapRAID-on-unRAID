@@ -252,12 +252,12 @@ Markdown="false"
 
 <dl>
     <dt>
-        <input id="DEFAULT" type="submit" name="#default" value="Default">
+        <input id="DEFAULT" class="snaprun" type="submit" name="#default" value="Default">
         <input id="RESETCONF" class="snaprun" type="button" value="Reset Config">
     </dt>
     <dd>
-        <input type="submit" id="btnApply" name="#apply" value="Apply">
-        <input type="button" value="Done" onclick="done()">
+        <input type="submit" class="snaprun" id="btnApply" name="#apply" value="Apply">
+        <input type="button" class="snaprun" value="Done" onclick="done()">
     </dd>
 </dl>
 
