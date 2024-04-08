@@ -57,7 +57,7 @@ Markdown="false"
 <br><div><strong>INFORMATION:</strong></div>
 <div>When using SnapRAID on top of Unraid's parity, always attempt to recover drive failures using Unraid's parity first, before using any SnapRAID recovery functions.</div>
 <div>Ideally you can restore a drive failure with Unraid (including the non-corrupted SnapRAID snapshot) and then fix any late corruption on the recovered drive using SnapRAID.</div>
-<div>A failing drive will possibly write bogus data before Unraid disables it as failing (if at all), and SnapRAID may fill that gap to recover from corruption using the "good" snapshot.</div>
+<div>A failing drive will possibly write bogus data before Unraid disables it as failing (if at all) and SnapRAID may fill that gap to recover from corruption using the "good" snapshot.</div>
 
 <script type="text/javascript">
 function getSnapLogs() {
