@@ -146,65 +146,67 @@ Markdown="false"
     <blockquote class="inline_help">
     </blockquote>
 
-    <dl>
-        <dt>SnapRAID Maintenance - <em>Added</em> Files Threshold:</dt>
-        <dd>
-            <input id="ADDED" type="text" class="narrow snaprun" name="ADDED" maxlength="30" value="<?=$dwsnap_added?>">
-        </dd>
-    </dl>
+    <div id="THRESHOLDSETTINGS">
+        <dl>
+            <dt>SnapRAID Maintenance - <em>Added</em> Files Threshold:</dt>
+            <dd>
+                <input id="ADDED" type="text" class="narrow snaprun" name="ADDED" maxlength="30" value="<?=$dwsnap_added?>">
+            </dd>
+        </dl>
 
-    <blockquote class="inline_help">
-    </blockquote>
+        <blockquote class="inline_help">
+        </blockquote>
 
-    <dl>
-        <dt>SnapRAID Maintenance - <em>Deleted</em> Files Threshold:</dt>
-        <dd>
-            <input id="DELETED" type="text" class="narrow snaprun" name="DELETED" maxlength="30" value="<?=$dwsnap_deleted?>">
-        </dd>
-    </dl>
+        <dl>
+            <dt>SnapRAID Maintenance - <em>Deleted</em> Files Threshold:</dt>
+            <dd>
+                <input id="DELETED" type="text" class="narrow snaprun" name="DELETED" maxlength="30" value="<?=$dwsnap_deleted?>">
+            </dd>
+        </dl>
 
-    <blockquote class="inline_help">
-    </blockquote>
+        <blockquote class="inline_help">
+        </blockquote>
 
-    <dl>
-        <dt>SnapRAID Maintenance - <em>Updated</em> Files Threshold:</dt>
-        <dd>
-            <input id="UPDATED" type="text" class="narrow snaprun" name="UPDATED" maxlength="30" value="<?=$dwsnap_updated?>">
-        </dd>
-    </dl>
+        <dl>
+            <dt>SnapRAID Maintenance - <em>Updated</em> Files Threshold:</dt>
+            <dd>
+                <input id="UPDATED" type="text" class="narrow snaprun" name="UPDATED" maxlength="30" value="<?=$dwsnap_updated?>">
+            </dd>
+        </dl>
 
-    <blockquote class="inline_help">
-    </blockquote>
+        <blockquote class="inline_help">
+        </blockquote>
 
-    <dl>
-        <dt>SnapRAID Maintenance - <em>Moved</em> Files Threshold:</dt>
-        <dd>
-            <input id="MOVED" type="text" class="narrow snaprun" name="MOVED" maxlength="30" value="<?=$dwsnap_moved?>">
-        </dd>
-    </dl>
+        <dl>
+            <dt>SnapRAID Maintenance - <em>Moved</em> Files Threshold:</dt>
+            <dd>
+                <input id="MOVED" type="text" class="narrow snaprun" name="MOVED" maxlength="30" value="<?=$dwsnap_moved?>">
+            </dd>
+        </dl>
 
-    <blockquote class="inline_help">
-    </blockquote>
+        <blockquote class="inline_help">
+        </blockquote>
 
-    <dl>
-        <dt>SnapRAID Maintenance - <em>Copied</em> Files Threshold:</dt>
-        <dd>
-            <input id="COPIED" type="text" class="narrow snaprun" name="COPIED" maxlength="30" value="<?=$dwsnap_copied?>">
-        </dd>
-    </dl>
+        <dl>
+            <dt>SnapRAID Maintenance - <em>Copied</em> Files Threshold:</dt>
+            <dd>
+                <input id="COPIED" type="text" class="narrow snaprun" name="COPIED" maxlength="30" value="<?=$dwsnap_copied?>">
+            </dd>
+        </dl>
 
-    <blockquote class="inline_help">
-    </blockquote>
+        <blockquote class="inline_help">
+        </blockquote>
 
-    <dl>
-        <dt>SnapRAID Maintenance - <em>Restored</em> Files Threshold:</dt>
-        <dd>
-            <input id="RESTORED" type="text" class="narrow snaprun" name="RESTORED" maxlength="30" value="<?=$dwsnap_restored?>">
-        </dd>
-    </dl>
+        <dl>
+            <dt>SnapRAID Maintenance - <em>Restored</em> Files Threshold:</dt>
+            <dd>
+                <input id="RESTORED" type="text" class="narrow snaprun" name="RESTORED" maxlength="30" value="<?=$dwsnap_restored?>">
+            </dd>
+        </dl>
 
-    <blockquote class="inline_help">
-    </blockquote>
+        <blockquote class="inline_help">
+        </blockquote>
+    </div>
 
     <dl>
         <dt><strong>SnapRAID Maintenance - <u>Sync</u> (Step 3):</strong></dt>
@@ -263,6 +265,11 @@ Markdown="false"
 
 <script type="text/javascript">
 function checkCronSettings() {
+    if ($("#DIFF").val() === "enable") {
+        $("#THRESHOLDSETTINGS").show();
+    } else {
+        $("#THRESHOLDSETTINGS").hide();
+    }
     if ($("#SYNC").val() === "enable") {
         $("#PREHASHSETTING").show();
     } else {
@@ -299,6 +306,7 @@ $(function(){
     $('#btnApply').click(function(){
         $('#dwsnap-settings').submit();
     });
+    $("#DIFF").change(checkCronSettings);
     $("#SYNC").change(checkCronSettings);
     $("#CRON").change(checkCronSettings);
     checkCronSettings();
