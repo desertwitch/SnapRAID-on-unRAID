@@ -43,6 +43,7 @@ run the post-installation scripts
 -->
 <FILE Run="/bin/bash">
 <INLINE> 
+/usr/local/emhttp/plugins/dwsnap/scripts/write_config
 echo ""
 echo "-------------------------------------------------------------"
 echo " SnapRAID on UNRAID (&version;) has been installed."
