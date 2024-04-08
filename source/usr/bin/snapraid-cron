@@ -43,7 +43,7 @@ failure_exit_cron() {
 rm -f /var/log/snapraid/lastfinish
 OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
 echo "$OPTIME" >/var/log/snapraid/laststart
-echo "### CRON -- STARTED: ${OPTIME}" 2>&1 | tee -a /var/log/snapraid/snaplog
+echo "### CRON -- STARTED: ${OPTIME}" 2>&1 | tee /var/log/snapraid/snaplog
 echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
 
 [ "$NOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Warning ${SUBJECT} Maintenance Started" -d "The SnapRAID maintenance has started." -i "warning"
@@ -62,7 +62,7 @@ if [ "$TOUCH" == "enable" ]; then
         echo "### CRON -- No files to be touched, proceeding..." 2>&1 | tee -a /var/log/snapraid/snaplog
     fi
 else
-    echo "### CRON -- Touch is disabled, proceeding..." 2>&1 | tee -a /var/log/snapraid/snaplog
+    echo "### CRON -- Checking for files to be touched is disabled, proceeding..." 2>&1 | tee -a /var/log/snapraid/snaplog
 fi
 
 echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
@@ -84,7 +84,7 @@ if [ "$DIFF" == "enable" ]; then
         failure_exit_cron
     fi
 
-    echo "### CRON -- Differences Summary: Equal [$EQ_COUNT] - Added [$ADD_COUNT] - Deleted [$DEL_COUNT] - Moved [$MOVE_COUNT] - Copied [$COPY_COUNT] - Updated [$UPDATE_COUNT] - Restored [$RESTORE_COUNT]"  2>&1 | tee -a /var/log/snapraid/snaplog
+    echo "### CRON -- Difference Stats: Equal [$EQ_COUNT] - Added [$ADD_COUNT] - Deleted [$DEL_COUNT] - Moved [$MOVE_COUNT] - Copied [$COPY_COUNT] - Updated [$UPDATE_COUNT] - Restored [$RESTORE_COUNT]"  2>&1 | tee -a /var/log/snapraid/snaplog
 
     if [ "$ADDED" -ge 0 ] && [ "$ADD_COUNT" -gt "$ADDED" ]; then
         echo "### CRON -- Added count ${ADD_COUNT} exceeded threshold ${ADDED}, exiting..." 2>&1 | tee -a /var/log/snapraid/snaplog
@@ -118,7 +118,7 @@ if [ "$DIFF" == "enable" ]; then
     fi
     echo "### CRON -- No difference thresholds have been exceeded, proceeding..." 2>&1 | tee -a /var/log/snapraid/snaplog
 else
-    echo "### CRON -- Difference checking is disabled, proceeding..." 2>&1 | tee -a /var/log/snapraid/snaplog
+    echo "### CRON -- Checking for differences is disabled, proceeding..." 2>&1 | tee -a /var/log/snapraid/snaplog
 fi
 
 echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
