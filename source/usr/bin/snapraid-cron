@@ -15,10 +15,8 @@ exit_cron() {
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     LOGTIME=$(date +"%Y%m%d-%H%M%S")
     echo "$OPTIME" >/var/log/snapraid/lastfinish
-    echo "" >>/var/log/snapraid/snaplog
     echo "### CRON -- FINISHED: ${OPTIME}" >>/var/log/snapraid/snaplog 2>&1 
     cp /var/log/snapraid/snaplog /var/log/snapraid/cron-"${LOGTIME}".log
-    sleep 5
 }
 
 failure_exit_cron() {
@@ -27,7 +25,6 @@ failure_exit_cron() {
     echo "$OPTIME" >/var/log/snapraid/lastfinish
     echo "### CRON -- FINISHED: ${OPTIME}" >>/var/log/snapraid/snaplog 2>&1 
     cp /var/log/snapraid/snaplog /var/log/snapraid/cron-"${LOGTIME}".log
-    sleep 5
     exit 1
 }
 
@@ -97,7 +94,7 @@ if [ "$DIFF" == "enable" ]; then
         echo "### CRON -- Copied count ${RESTORE_COUNT} exceeded threshold ${RESTORED}, exiting..." >>/var/log/snapraid/snaplog
         failure_exit_cron
     fi
-    echo "### CRON -- No difference thresholds exceeded, proceeding..." >>/var/log/snapraid/snaplog
+    echo "### CRON -- No difference thresholds have been exceeded, proceeding..." >>/var/log/snapraid/snaplog
 else
     echo "### CRON -- Difference checking is disabled, proceeding..." >>/var/log/snapraid/snaplog
 fi
@@ -106,7 +103,7 @@ echo "################################################################" >>/var/l
 
 if [ "$SYNC" == "enable" ]; then
     if [ "$DEL_COUNT" -eq 0 ] && [ "$ADD_COUNT" -eq 0 ] && [ "$MOVE_COUNT" -eq 0 ] && [ "$COPY_COUNT" -eq 0 ] && [ "$UPDATE_COUNT" -eq 0 ]; then
-        echo "### CRON -- No differences detected, skipping sync and proceeding..." >>/var/log/snapraid/snaplog
+        echo "### CRON -- No differences detected (skipping sync), proceeding..." >>/var/log/snapraid/snaplog
     else
         if [ "$PRESHASH" == "enable" ]; then
             echo "### CRON -- Prehashed Sync..." >>/var/log/snapraid/snaplog
