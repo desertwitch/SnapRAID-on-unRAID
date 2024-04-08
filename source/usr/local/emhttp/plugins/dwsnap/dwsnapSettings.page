@@ -156,6 +156,16 @@ Markdown="false"
 </blockquote>
 
 <dl>
+    <dt>SnapRAID Maintenance - Restored File Threshold:</dt>
+    <dd>
+        <input id="RESTORED" type="text" class="narrow snaprun" name="RESTORED" maxlength="30" value="<?=$dwsnap_restored?>">
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+</blockquote>
+
+<dl>
     <dt>SnapRAID Maintenance - Sync as Prehashed Sync:</dt>
     <dd>
         <select class="snaprun" id="PREHASH" name="PREHASH" size="1">
