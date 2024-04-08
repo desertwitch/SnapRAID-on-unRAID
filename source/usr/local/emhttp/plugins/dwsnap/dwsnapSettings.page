@@ -55,6 +55,18 @@ Markdown="false"
 </blockquote>
 
 <dl>
+    <dt>SnapRAID Maintenance - Cron Schedule Hour:</dt>
+    <dd>
+        <select class="snaprun" id="CRONHOUR" name="CRONHOUR" size="1">
+            <? echo get_minute_options($dwsnap_cronhour);?>
+        </select>
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+</blockquote>
+
+<dl>
     <dt>SnapRAID Maintenance - Cron Notifications:</dt>
     <dd>
         <select class="snaprun" id="NOTIFY" name="NOTIFY" size="1">
@@ -68,7 +80,7 @@ Markdown="false"
 </blockquote>
 
 <dl>
-    <dt>SnapRAID Maintenance - Touch (Step 1):</dt>
+    <dt><em>SnapRAID Maintenance - Touch (Step 1):</em></dt>
     <dd>
         <select class="snaprun" id="TOUCH" name="TOUCH" size="1">
             <?=mk_option($dwsnap_touch, "disable", "No");?>
@@ -81,7 +93,7 @@ Markdown="false"
 </blockquote>
 
 <dl>
-    <dt>SnapRAID Maintenance - Diff / Check Thresholds (Step 2):</dt>
+    <dt><em>SnapRAID Maintenance - Diff / Check Thresholds (Step 2):</em></dt>
     <dd>
         <select class="snaprun" id="DIFF" name="DIFF" size="1">
             <?=mk_option($dwsnap_diff, "disable", "No");?>
@@ -94,7 +106,7 @@ Markdown="false"
 </blockquote>
 
 <dl>
-    <dt>SnapRAID Maintenance - Sync (Step 3):</dt>
+    <dt><em>SnapRAID Maintenance - Sync (Step 3):</em></dt>
     <dd>
         <select class="snaprun" id="SYNC" name="SYNC" size="1">
             <?=mk_option($dwsnap_sync, "disable", "No");?>
@@ -107,7 +119,7 @@ Markdown="false"
 </blockquote>
 
 <dl>
-    <dt>SnapRAID Maintenance - Scrub (Step 4):</dt>
+    <dt><em>SnapRAID Maintenance - Scrub (Step 4):</em></dt>
     <dd>
         <select class="snaprun" id="SCRUB" name="SCRUB" size="1">
             <?=mk_option($dwsnap_scrub, "disable", "No");?>
@@ -120,7 +132,7 @@ Markdown="false"
 </blockquote>
 
 <dl>
-    <dt>SnapRAID Maintenance - Added File Threshold:</dt>
+    <dt><em>SnapRAID Maintenance - Added File Threshold:</em></dt>
     <dd>
         <input id="ADDED" type="text" class="narrow snaprun" name="ADDED" maxlength="30" value="<?=$dwsnap_added?>">
     </dd>
@@ -130,7 +142,7 @@ Markdown="false"
 </blockquote>
 
 <dl>
-    <dt>SnapRAID Maintenance - Deleted File Threshold:</dt>
+    <dt><em>SnapRAID Maintenance - Deleted File Threshold:</em></dt>
     <dd>
         <input id="DELETED" type="text" class="narrow snaprun" name="DELETED" maxlength="30" value="<?=$dwsnap_deleted?>">
     </dd>
@@ -140,7 +152,7 @@ Markdown="false"
 </blockquote>
 
 <dl>
-    <dt>SnapRAID Maintenance - Updated File Threshold:</dt>
+    <dt><em>SnapRAID Maintenance - Updated File Threshold:</em></dt>
     <dd>
         <input id="UPDATED" type="text" class="narrow snaprun" name="UPDATED" maxlength="30" value="<?=$dwsnap_updated?>">
     </dd>
@@ -150,7 +162,7 @@ Markdown="false"
 </blockquote>
 
 <dl>
-    <dt>SnapRAID Maintenance - Moved File Threshold:</dt>
+    <dt><em>SnapRAID Maintenance - Moved File Threshold:</em></dt>
     <dd>
         <input id="MOVED" type="text" class="narrow snaprun" name="MOVED" maxlength="30" value="<?=$dwsnap_moved?>">
     </dd>
@@ -160,7 +172,7 @@ Markdown="false"
 </blockquote>
 
 <dl>
-    <dt>SnapRAID Maintenance - Copied File Threshold:</dt>
+    <dt><em>SnapRAID Maintenance - Copied File Threshold:</em></dt>
     <dd>
         <input id="COPIED" type="text" class="narrow snaprun" name="COPIED" maxlength="30" value="<?=$dwsnap_copied?>">
     </dd>
@@ -170,7 +182,7 @@ Markdown="false"
 </blockquote>
 
 <dl>
-    <dt>SnapRAID Maintenance - Restored File Threshold:</dt>
+    <dt><em>SnapRAID Maintenance - Restored File Threshold:</em></dt>
     <dd>
         <input id="RESTORED" type="text" class="narrow snaprun" name="RESTORED" maxlength="30" value="<?=$dwsnap_restored?>">
     </dd>
@@ -180,7 +192,7 @@ Markdown="false"
 </blockquote>
 
 <dl>
-    <dt>SnapRAID Maintenance - Sync as Prehashed Sync:</dt>
+    <dt><em>SnapRAID Maintenance - Sync as Prehashed Sync:</em></dt>
     <dd>
         <select class="snaprun" id="PREHASH" name="PREHASH" size="1">
             <?=mk_option($dwsnap_prehash, "disable", "No");?>
