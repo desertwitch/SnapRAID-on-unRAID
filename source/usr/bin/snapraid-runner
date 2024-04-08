@@ -26,6 +26,7 @@ run_snapraid() {
     echo "$OPTIME" >/var/log/snapraid/lastfinish
     echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
     echo "### ${BIGOP} FINISHED: ${OPTIME}" 2>&1 | tee -a /var/log/snapraid/snaplog
+    sleep 3
 }
 
 case "$1" in
