@@ -75,7 +75,7 @@ function getSnapStatus() {
                 $('.snapnotrun').prop('disabled', false);
             } else if (data === "RUNNING:NO") {
                 if($('#snapstatusicon').is(":visible")) {
-                    window.location.reload();
+                    location = '/Settings/dwsnapOps';
                 }
                 $('#snapstatusicon').hide();
                 $('.snaprun').prop('disabled', false);
