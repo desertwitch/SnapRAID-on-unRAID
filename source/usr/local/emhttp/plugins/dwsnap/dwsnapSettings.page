@@ -263,7 +263,7 @@ Markdown="false"
 function checkCronSettings() {
     if ($("#CRON").val() === "hourly") {
         $("#CRONSETTINGS").show();
-        $("#CRONHOURSETTING").show();
+        $("#CRONHOURSETTING").hide();
         $("#CRONDOWSETTING").hide();
         $("#CRONDOMSETTING").hide();
     } else if ($("#CRON").val() === "daily") {
