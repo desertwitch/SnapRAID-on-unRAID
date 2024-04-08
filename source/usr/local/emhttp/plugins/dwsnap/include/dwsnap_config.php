@@ -1,6 +1,6 @@
 <?
 
-function get_hour_options($time){
+function snap_hour_options($time){
     $options = '';
         for($i = 0; $i <= 23; $i++){
             $options .= '<option value="'.$i.'"';

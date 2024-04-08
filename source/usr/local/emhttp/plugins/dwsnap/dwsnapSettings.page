@@ -58,7 +58,7 @@ Markdown="false"
     <dt><strong>SnapRAID Maintenance - Cron Schedule Hour:</strong></dt>
     <dd>
         <select class="snaprun" id="CRONHOUR" name="CRONHOUR" size="1">
-            <? echo get_minute_options($dwsnap_cronhour);?>
+            <? echo snap_hour_options($dwsnap_cronhour);?>
         </select>
     </dd>
 </dl>
