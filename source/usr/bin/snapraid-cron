@@ -28,7 +28,6 @@ SUBJECT="[${HOST}] SnapRAID"
 
 exit_cron() {
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
-    LOGTIME=$(date +"%Y%m%d-%H%M%S")
     echo "$OPTIME" >/var/log/snapraid/lastfinish
     echo "### CRON -- FINISHED: ${OPTIME}" 2>&1 | tee -a /var/log/snapraid/snaplog
     cp /var/log/snapraid/snaplog /var/log/snapraid/cron-"${LOGTIME}".log
@@ -37,7 +36,6 @@ exit_cron() {
 
 failure_exit_cron() {
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
-    LOGTIME=$(date +"%Y%m%d-%H%M%S")
     echo "$OPTIME" >/var/log/snapraid/lastfinish
     echo "### CRON -- FINISHED: ${OPTIME}" 2>&1 | tee -a /var/log/snapraid/snaplog
     cp /var/log/snapraid/snaplog /var/log/snapraid/cron-"${LOGTIME}".log
@@ -46,6 +44,7 @@ failure_exit_cron() {
 }
 
 rm -f /var/log/snapraid/lastfinish
+LOGTIME=$(date +"%Y%m%d-%H%M%S")
 OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
 echo "$OPTIME" >/var/log/snapraid/laststart
 echo "### CRON -- STARTED: ${OPTIME}" 2>&1 | tee /var/log/snapraid/snaplog
