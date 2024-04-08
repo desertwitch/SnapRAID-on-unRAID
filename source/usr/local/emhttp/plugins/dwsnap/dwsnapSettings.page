@@ -104,145 +104,147 @@ Markdown="false"
     </blockquote>
 </div>
 
-<dl>
-    <dt>SnapRAID Maintenance - Cron Notifications:</dt>
-    <dd>
-        <select class="snaprun" id="NOTIFY" name="NOTIFY" size="1">
-            <?=mk_option($dwsnap_notify, "disable", "No");?>
-            <?=mk_option($dwsnap_notify, "enable", "Yes");?>
-        </select>
-    </dd>
-</dl>
+<div id="CRONSETTINGS">
+    <dl>
+        <dt>SnapRAID Maintenance - Cron Notifications:</dt>
+        <dd>
+            <select class="snaprun" id="NOTIFY" name="NOTIFY" size="1">
+                <?=mk_option($dwsnap_notify, "disable", "No");?>
+                <?=mk_option($dwsnap_notify, "enable", "Yes");?>
+            </select>
+        </dd>
+    </dl>
 
-<blockquote class="inline_help">
-</blockquote>
+    <blockquote class="inline_help">
+    </blockquote>
 
-<hr>
+    <hr>
 
-<dl>
-    <dt><strong>SnapRAID Maintenance - <u>Touch</u> (Step 1):</strong></dt>
-    <dd>
-        <select class="snaprun" id="TOUCH" name="TOUCH" size="1">
-            <?=mk_option($dwsnap_touch, "disable", "No");?>
-            <?=mk_option($dwsnap_touch, "enable", "Yes");?>
-        </select>
-    </dd>
-</dl>
+    <dl>
+        <dt><strong>SnapRAID Maintenance - <u>Touch</u> (Step 1):</strong></dt>
+        <dd>
+            <select class="snaprun" id="TOUCH" name="TOUCH" size="1">
+                <?=mk_option($dwsnap_touch, "disable", "No");?>
+                <?=mk_option($dwsnap_touch, "enable", "Yes");?>
+            </select>
+        </dd>
+    </dl>
 
-<blockquote class="inline_help">
-</blockquote>
+    <blockquote class="inline_help">
+    </blockquote>
 
-<dl>
-    <dt><strong>SnapRAID Maintenance - <u>Diff</u> / Check Thresholds (Step 2):</strong></dt>
-    <dd>
-        <select class="snaprun" id="DIFF" name="DIFF" size="1">
-            <?=mk_option($dwsnap_diff, "disable", "No");?>
-            <?=mk_option($dwsnap_diff, "enable", "Yes");?>
-        </select>
-    </dd>
-</dl>
+    <dl>
+        <dt><strong>SnapRAID Maintenance - <u>Diff</u> / Check Thresholds (Step 2):</strong></dt>
+        <dd>
+            <select class="snaprun" id="DIFF" name="DIFF" size="1">
+                <?=mk_option($dwsnap_diff, "disable", "No");?>
+                <?=mk_option($dwsnap_diff, "enable", "Yes");?>
+            </select>
+        </dd>
+    </dl>
 
-<blockquote class="inline_help">
-</blockquote>
+    <blockquote class="inline_help">
+    </blockquote>
 
-<dl>
-    <dt>SnapRAID Maintenance - Added File Threshold:</dt>
-    <dd>
-        <input id="ADDED" type="text" class="narrow snaprun" name="ADDED" maxlength="30" value="<?=$dwsnap_added?>">
-    </dd>
-</dl>
+    <dl>
+        <dt>SnapRAID Maintenance - Added File Threshold:</dt>
+        <dd>
+            <input id="ADDED" type="text" class="narrow snaprun" name="ADDED" maxlength="30" value="<?=$dwsnap_added?>">
+        </dd>
+    </dl>
 
-<blockquote class="inline_help">
-</blockquote>
+    <blockquote class="inline_help">
+    </blockquote>
 
-<dl>
-    <dt>SnapRAID Maintenance - Deleted File Threshold:</dt>
-    <dd>
-        <input id="DELETED" type="text" class="narrow snaprun" name="DELETED" maxlength="30" value="<?=$dwsnap_deleted?>">
-    </dd>
-</dl>
+    <dl>
+        <dt>SnapRAID Maintenance - Deleted File Threshold:</dt>
+        <dd>
+            <input id="DELETED" type="text" class="narrow snaprun" name="DELETED" maxlength="30" value="<?=$dwsnap_deleted?>">
+        </dd>
+    </dl>
 
-<blockquote class="inline_help">
-</blockquote>
+    <blockquote class="inline_help">
+    </blockquote>
 
-<dl>
-    <dt>SnapRAID Maintenance - Updated File Threshold:</dt>
-    <dd>
-        <input id="UPDATED" type="text" class="narrow snaprun" name="UPDATED" maxlength="30" value="<?=$dwsnap_updated?>">
-    </dd>
-</dl>
+    <dl>
+        <dt>SnapRAID Maintenance - Updated File Threshold:</dt>
+        <dd>
+            <input id="UPDATED" type="text" class="narrow snaprun" name="UPDATED" maxlength="30" value="<?=$dwsnap_updated?>">
+        </dd>
+    </dl>
 
-<blockquote class="inline_help">
-</blockquote>
+    <blockquote class="inline_help">
+    </blockquote>
 
-<dl>
-    <dt>SnapRAID Maintenance - Moved File Threshold:</dt>
-    <dd>
-        <input id="MOVED" type="text" class="narrow snaprun" name="MOVED" maxlength="30" value="<?=$dwsnap_moved?>">
-    </dd>
-</dl>
+    <dl>
+        <dt>SnapRAID Maintenance - Moved File Threshold:</dt>
+        <dd>
+            <input id="MOVED" type="text" class="narrow snaprun" name="MOVED" maxlength="30" value="<?=$dwsnap_moved?>">
+        </dd>
+    </dl>
 
-<blockquote class="inline_help">
-</blockquote>
+    <blockquote class="inline_help">
+    </blockquote>
 
-<dl>
-    <dt>SnapRAID Maintenance - Copied File Threshold:</dt>
-    <dd>
-        <input id="COPIED" type="text" class="narrow snaprun" name="COPIED" maxlength="30" value="<?=$dwsnap_copied?>">
-    </dd>
-</dl>
+    <dl>
+        <dt>SnapRAID Maintenance - Copied File Threshold:</dt>
+        <dd>
+            <input id="COPIED" type="text" class="narrow snaprun" name="COPIED" maxlength="30" value="<?=$dwsnap_copied?>">
+        </dd>
+    </dl>
 
-<blockquote class="inline_help">
-</blockquote>
+    <blockquote class="inline_help">
+    </blockquote>
 
-<dl>
-    <dt>SnapRAID Maintenance - Restored File Threshold:</dt>
-    <dd>
-        <input id="RESTORED" type="text" class="narrow snaprun" name="RESTORED" maxlength="30" value="<?=$dwsnap_restored?>">
-    </dd>
-</dl>
+    <dl>
+        <dt>SnapRAID Maintenance - Restored File Threshold:</dt>
+        <dd>
+            <input id="RESTORED" type="text" class="narrow snaprun" name="RESTORED" maxlength="30" value="<?=$dwsnap_restored?>">
+        </dd>
+    </dl>
 
-<blockquote class="inline_help">
-</blockquote>
+    <blockquote class="inline_help">
+    </blockquote>
 
-<dl>
-    <dt><strong>SnapRAID Maintenance - <u>Sync</u> (Step 3):</strong></dt>
-    <dd>
-        <select class="snaprun" id="SYNC" name="SYNC" size="1">
-            <?=mk_option($dwsnap_sync, "disable", "No");?>
-            <?=mk_option($dwsnap_sync, "enable", "Yes");?>
-        </select>
-    </dd>
-</dl>
+    <dl>
+        <dt><strong>SnapRAID Maintenance - <u>Sync</u> (Step 3):</strong></dt>
+        <dd>
+            <select class="snaprun" id="SYNC" name="SYNC" size="1">
+                <?=mk_option($dwsnap_sync, "disable", "No");?>
+                <?=mk_option($dwsnap_sync, "enable", "Yes");?>
+            </select>
+        </dd>
+    </dl>
 
-<blockquote class="inline_help">
-</blockquote>
+    <blockquote class="inline_help">
+    </blockquote>
 
-<dl>
-    <dt>SnapRAID Maintenance - Sync as Prehashed Sync:</dt>
-    <dd>
-        <select class="snaprun" id="PREHASH" name="PREHASH" size="1">
-            <?=mk_option($dwsnap_prehash, "disable", "No");?>
-            <?=mk_option($dwsnap_prehash, "enable", "Yes");?>
-        </select>
-    </dd>
-</dl>
+    <dl>
+        <dt>SnapRAID Maintenance - Sync as Prehashed Sync:</dt>
+        <dd>
+            <select class="snaprun" id="PREHASH" name="PREHASH" size="1">
+                <?=mk_option($dwsnap_prehash, "disable", "No");?>
+                <?=mk_option($dwsnap_prehash, "enable", "Yes");?>
+            </select>
+        </dd>
+    </dl>
 
-<blockquote class="inline_help">
-</blockquote>
+    <blockquote class="inline_help">
+    </blockquote>
 
-<dl>
-    <dt><strong>SnapRAID Maintenance - <u>Scrub</u> (Step 4):</strong></dt>
-    <dd>
-        <select class="snaprun" id="SCRUB" name="SCRUB" size="1">
-            <?=mk_option($dwsnap_scrub, "disable", "No");?>
-            <?=mk_option($dwsnap_scrub, "enable", "Yes");?>
-        </select>
-    </dd>
-</dl>
+    <dl>
+        <dt><strong>SnapRAID Maintenance - <u>Scrub</u> (Step 4):</strong></dt>
+        <dd>
+            <select class="snaprun" id="SCRUB" name="SCRUB" size="1">
+                <?=mk_option($dwsnap_scrub, "disable", "No");?>
+                <?=mk_option($dwsnap_scrub, "enable", "Yes");?>
+            </select>
+        </dd>
+    </dl>
 
-<blockquote class="inline_help">
-</blockquote>
+    <blockquote class="inline_help">
+    </blockquote>
+</div>
 
 <dl>
     <dt>
@@ -260,18 +262,27 @@ Markdown="false"
 <script type="text/javascript">
 function checkCronSettings() {
     if ($("#CRON").val() === "hourly") {
+        $("#CRONSETTINGS").show();
+        $("#CRONHOURSETTING").show();
+        $("#CRONDOWSETTING").hide();
+        $("#CRONDOMSETTING").hide();
+    } else if ($("#CRON").val() === "daily") {
+        $("#CRONSETTINGS").show();
         $("#CRONHOURSETTING").show();
         $("#CRONDOWSETTING").hide();
         $("#CRONDOMSETTING").hide();
     } else if ($("#CRON").val() === "weekly") {
+        $("#CRONSETTINGS").show();
         $("#CRONHOURSETTING").show();
         $("#CRONDOWSETTING").show();
         $("#CRONDOMSETTING").hide();
     } else if ($("#CRON").val() === "monthly") {
+        $("#CRONSETTINGS").show();
         $("#CRONHOURSETTING").show();
         $("#CRONDOWSETTING").hide();
         $("#CRONDOMSETTING").show();
     } else {
+        $("#CRONSETTINGS").hide();
         $("#CRONHOURSETTING").hide();
         $("#CRONDOWSETTING").hide();
         $("#CRONDOMSETTING").hide();
