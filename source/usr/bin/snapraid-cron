@@ -35,7 +35,7 @@ rm -f /var/log/snapraid/lastfinish
 OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
 echo "$OPTIME" >/var/log/snapraid/laststart
 echo "### CRON -- STARTED: ${OPTIME}" >/var/log/snapraid/snaplog 2>&1 
-echo "### -----------------------------------------------------" >>/var/log/snapraid/snaplog
+echo "################################################################" >>/var/log/snapraid/snaplog
 
 if [ "$TOUCH" == "enable" ]; then
     echo "### CRON -- Checking for files to be touched..." >>/var/log/snapraid/snaplog
@@ -53,7 +53,7 @@ else
     echo "### CRON -- Touch is disabled, proceeding..." >>/var/log/snapraid/snaplog
 fi
 
-echo "### -----------------------------------------------------" >>/var/log/snapraid/snaplog
+echo "################################################################" >>/var/log/snapraid/snaplog
 
 if [ "$DIFF" == "enable" ]; then
     echo "### CRON -- Checking for differences..." >>/var/log/snapraid/snaplog
@@ -102,7 +102,7 @@ else
     echo "### CRON -- Difference checking is disabled, proceeding..." >>/var/log/snapraid/snaplog
 fi
 
-echo "### -----------------------------------------------------" >>/var/log/snapraid/snaplog
+echo "################################################################" >>/var/log/snapraid/snaplog
 
 if [ "$SYNC" == "enable" ]; then
     if [ "$DEL_COUNT" -eq 0 ] && [ "$ADD_COUNT" -eq 0 ] && [ "$MOVE_COUNT" -eq 0 ] && [ "$COPY_COUNT" -eq 0 ] && [ "$UPDATE_COUNT" -eq 0 ]; then
@@ -126,7 +126,7 @@ else
     echo "### CRON -- Sync is disabled, proceeding..." >>/var/log/snapraid/snaplog
 fi
 
-echo "### -----------------------------------------------------" >>/var/log/snapraid/snaplog
+echo "################################################################" >>/var/log/snapraid/snaplog
 
 if [ "$SCRUB" == "enable" ]; then
     echo "### CRON -- Scrub..." >>/var/log/snapraid/snaplog
@@ -138,6 +138,6 @@ else
     echo "### CRON -- Scrub is disabled, proceeding..." >>/var/log/snapraid/snaplog
 fi
 
-echo "### -----------------------------------------------------" >>/var/log/snapraid/snaplog
+echo "################################################################" >>/var/log/snapraid/snaplog
 
 exit_cron
