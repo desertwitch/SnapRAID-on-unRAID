@@ -58,7 +58,7 @@ Markdown="false"
 
 <div id="CRONDOWSETTING">
     <dl>
-        <dt>SnapRAID Maintenance - Cron Schedule Day of Week:</dt>
+        <dt>SnapRAID Maintenance - Cron Schedule <em>Day of Week</em>:</dt>
         <dd>
             <select class="snaprun" id="CRONDOW" name="CRONDOW" size="1">
                 <?=mk_option($dwsnap_crondow, "0", "Sunday");?>
@@ -78,7 +78,7 @@ Markdown="false"
 
 <div id="CRONDOMSETTING">
     <dl>
-        <dt>SnapRAID Maintenance - Cron Schedule Day of Month:</dt>
+        <dt>SnapRAID Maintenance - Cron Schedule <em>Day of Month</em>:</dt>
         <dd>
             <select class="snaprun" id="CRONDOM" name="CRONDOM" size="1">
                 <? echo snap_dom_options($dwsnap_crondom);?>
@@ -92,7 +92,7 @@ Markdown="false"
 
 <div id="CRONHOURSETTING">
     <dl>
-        <dt>SnapRAID Maintenance - Cron Schedule Hour:</dt>
+        <dt>SnapRAID Maintenance - Cron Schedule <em>Hour</em>:</dt>
         <dd>
             <select class="snaprun" id="CRONHOUR" name="CRONHOUR" size="1">
                 <? echo snap_hour_options($dwsnap_cronhour);?>
@@ -147,7 +147,7 @@ Markdown="false"
     </blockquote>
 
     <dl>
-        <dt>SnapRAID Maintenance - Added File Threshold:</dt>
+        <dt>SnapRAID Maintenance - <em>Added</em> Files Threshold:</dt>
         <dd>
             <input id="ADDED" type="text" class="narrow snaprun" name="ADDED" maxlength="30" value="<?=$dwsnap_added?>">
         </dd>
@@ -157,7 +157,7 @@ Markdown="false"
     </blockquote>
 
     <dl>
-        <dt>SnapRAID Maintenance - Deleted File Threshold:</dt>
+        <dt>SnapRAID Maintenance - <em>Deleted</em> Files Threshold:</dt>
         <dd>
             <input id="DELETED" type="text" class="narrow snaprun" name="DELETED" maxlength="30" value="<?=$dwsnap_deleted?>">
         </dd>
@@ -167,7 +167,7 @@ Markdown="false"
     </blockquote>
 
     <dl>
-        <dt>SnapRAID Maintenance - Updated File Threshold:</dt>
+        <dt>SnapRAID Maintenance - <em>Updated</em> Files Threshold:</dt>
         <dd>
             <input id="UPDATED" type="text" class="narrow snaprun" name="UPDATED" maxlength="30" value="<?=$dwsnap_updated?>">
         </dd>
@@ -177,7 +177,7 @@ Markdown="false"
     </blockquote>
 
     <dl>
-        <dt>SnapRAID Maintenance - Moved File Threshold:</dt>
+        <dt>SnapRAID Maintenance - <em>Moved</em> Files Threshold:</dt>
         <dd>
             <input id="MOVED" type="text" class="narrow snaprun" name="MOVED" maxlength="30" value="<?=$dwsnap_moved?>">
         </dd>
@@ -187,7 +187,7 @@ Markdown="false"
     </blockquote>
 
     <dl>
-        <dt>SnapRAID Maintenance - Copied File Threshold:</dt>
+        <dt>SnapRAID Maintenance - <em>Copied</em> Files Threshold:</dt>
         <dd>
             <input id="COPIED" type="text" class="narrow snaprun" name="COPIED" maxlength="30" value="<?=$dwsnap_copied?>">
         </dd>
@@ -197,7 +197,7 @@ Markdown="false"
     </blockquote>
 
     <dl>
-        <dt>SnapRAID Maintenance - Restored File Threshold:</dt>
+        <dt>SnapRAID Maintenance - <em>Restored</em> Files Threshold:</dt>
         <dd>
             <input id="RESTORED" type="text" class="narrow snaprun" name="RESTORED" maxlength="30" value="<?=$dwsnap_restored?>">
         </dd>
