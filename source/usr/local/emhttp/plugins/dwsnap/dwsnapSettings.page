@@ -38,7 +38,7 @@ Markdown="false"
 <blockquote class="inline_help">
 <p>This setting controls how much SnapRAID interferes with other running I/O operations.</p>
 <p>If you are running SnapRAID during the day it is recommended to choose 'Idle' as process priority.</p>
-<p>This will ensure that other processes accessing your protected data will be given priority over SnapRAID itself (which will in turn run slower).</p>
+<p>This will ensure that other processes accessing your array will be given priority over SnapRAID itself (which will in turn run slower).</p>
 </blockquote>
 
 <hr>
@@ -161,7 +161,7 @@ Markdown="false"
     <blockquote class="inline_help">
     <p>This setting controls if the array maintenance should proceed when a certain portion of the array has changed.</p>
     <p>This is a safeguard against automated array maintenance being performed on a wiped out or otherwise corrupted array.</p>
-    <p>It is important to set reasonable numbers here, so corruption and large-scale unwanted changes to not make it into the snapshots.</p>
+    <p>It is important to set reasonable numbers here, so corruption and large-scale unwanted changes do not make it into the snapshots.</p>
     <p>Beware that a value of zero means that no change is acceptable (= always exit on changes), a negative value means that any amount of changes are acceptable (= never exit on changes).</p>
     </blockquote>
 
@@ -253,9 +253,9 @@ Markdown="false"
     </dl>
 
     <blockquote class="inline_help">
-    <p>Possibly the most important array operation to perform on a regular basis.</p>
+    <p>Possibly the most important array operation to perform on a regular - as often as possible - basis.</p>
     <p>This operation checks your array for corruption and other anomalies, any reported errors can then be fixed with e.g. 'Fix Errors'.</p>
-    <p>Scrub is never performed on the whole array at once, but rather in alternating chunks every time a scrub is performed.</p>
+    <p>Scrub is never performed on the whole array at once, but rather in alternating chunks every time a scrub is performed (eventually resulting in the complete array having been scrubbed).</p>
     </blockquote>
 </div>
 
