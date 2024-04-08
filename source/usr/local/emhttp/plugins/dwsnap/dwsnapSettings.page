@@ -254,14 +254,14 @@ Markdown="false"
 <script type="text/javascript">
 function checkCronSettings() {
     if ($("#CRON").val() === "weekly") {
-        $("#CRONDOWSETTING).show();
-        $("#CRONDOMSETTING).hide();
+        $("#CRONDOWSETTING").show();
+        $("#CRONDOMSETTING").hide();
     } else if ($("#CRON").val() === "monthly") {
-        $("#CRONDOWSETTING).hide();
-        $("#CRONDOMSETTING).show();
+        $("#CRONDOWSETTING").hide();
+        $("#CRONDOMSETTING").show();
     } else {
-        $("#CRONDOWSETTING).hide();
-        $("#CRONDOMSETTING).hide();
+        $("#CRONDOWSETTING").hide();
+        $("#CRONDOMSETTING").hide();
     }
 }
 $(function(){
