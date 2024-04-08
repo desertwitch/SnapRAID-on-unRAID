@@ -14,6 +14,11 @@ Markdown="false"
     .fileTree {color:#486dba;width:305px;max-height:150px;overflow:scroll;position:absolute;z-index:100;display:none;}
 </style>
 
+<div><strong>WARNING:</strong></div>
+<div>You cannot use your Unraid parity drive as SnapRAID parity drive as SnapRAID operates on a file level (as opposed to block level).</div>
+<div>In order to use SnapRAID you will need to sacrifice one Unraid data drive with at least the size of the other to be protected data drives.</div>
+<br>
+
 <form id="editform" method="POST">
 
 <img id="editfolder" style="cursor:pointer;margin-left: 10px;" src="/webGui/images/explore.png" >
