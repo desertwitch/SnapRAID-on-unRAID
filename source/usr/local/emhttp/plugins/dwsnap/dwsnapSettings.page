@@ -54,21 +54,9 @@ Markdown="false"
 <blockquote class="inline_help">
 </blockquote>
 
-<dl>
-    <dt><strong>SnapRAID Maintenance - Cron Schedule Hour:</strong></dt>
-    <dd>
-        <select class="snaprun" id="CRONHOUR" name="CRONHOUR" size="1">
-            <? echo snap_hour_options($dwsnap_cronhour);?>
-        </select>
-    </dd>
-</dl>
-
-<blockquote class="inline_help">
-</blockquote>
-
 <div id="CRONDOWSETTING">
     <dl>
-        <dt><strong>SnapRAID Maintenance - Cron Schedule Day (for Weekly):</strong></dt>
+        <dt><strong>SnapRAID Maintenance - Cron Schedule Day of Week:</strong></dt>
         <dd>
             <select class="snaprun" id="CRONDOW" name="CRONDOW" size="1">
                 <?=mk_option($dwsnap_crondow, "0", "Sunday");?>
@@ -88,7 +76,7 @@ Markdown="false"
 
 <div id="CRONDOMSETTING">
     <dl>
-        <dt><strong>SnapRAID Maintenance - Cron Schedule Day (for Monthly):</strong></dt>
+        <dt><strong>SnapRAID Maintenance - Cron Schedule Day of Month:</strong></dt>
         <dd>
             <select class="snaprun" id="CRONDOM" name="CRONDOM" size="1">
                 <? echo snap_dom_options($dwsnap_crondom);?>
@@ -99,6 +87,18 @@ Markdown="false"
     <blockquote class="inline_help">
     </blockquote>
 </div>
+
+<dl>
+    <dt><strong>SnapRAID Maintenance - Cron Schedule Hour:</strong></dt>
+    <dd>
+        <select class="snaprun" id="CRONHOUR" name="CRONHOUR" size="1">
+            <? echo snap_hour_options($dwsnap_cronhour);?>
+        </select>
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+</blockquote>
 
 <dl>
     <dt>SnapRAID Maintenance - Cron Notifications:</dt>
