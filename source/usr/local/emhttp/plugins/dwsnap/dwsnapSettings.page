@@ -93,19 +93,6 @@ Markdown="false"
 </blockquote>
 
 <dl>
-    <dt><em>SnapRAID Maintenance - Sync (Step 3) - Prehashed Sync:</em></dt>
-    <dd>
-        <select id="PREHASH" name="PREHASH" size="1">
-            <?=mk_option($dwsnap_prehash, "disable", "No");?>
-            <?=mk_option($dwsnap_prehash, "enable", "Yes");?>
-        </select>
-    </dd>
-</dl>
-
-<blockquote class="inline_help">
-</blockquote>
-
-<dl>
     <dt>SnapRAID Maintenance - Scrub (Step 4):</dt>
     <dd>
         <select id="SCRUB" name="SCRUB" size="1">
@@ -162,6 +149,19 @@ Markdown="false"
     <dt>SnapRAID Maintenance - Copied File Threshold:</dt>
     <dd>
         <input id="COPIED" type="text" class="narrow" name="COPIED" maxlength="30" value="<?=$dwsnap_copied?>">
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+</blockquote>
+
+<dl>
+    <dt>SnapRAID Maintenance - Sync as Prehashed Sync:</dt>
+    <dd>
+        <select id="PREHASH" name="PREHASH" size="1">
+            <?=mk_option($dwsnap_prehash, "disable", "No");?>
+            <?=mk_option($dwsnap_prehash, "enable", "Yes");?>
+        </select>
     </dd>
 </dl>
 
