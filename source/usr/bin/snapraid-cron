@@ -13,6 +13,11 @@ if [ "$CRON" != "hourly" ] && [ "$CRON" != "daily" ] && [ "$CRON" != "weekly" ] 
     exit 1
 fi
 
+if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-runner >/dev/null 2>&1; then
+    echo "### SnapRAID is already running, exiting..."
+    exit 1
+fi
+
 HOST="$(echo "$HOSTNAME" | awk '{print toupper($0)}')"
 EVENT="SnapRAID Operation"
 SUBJECT="[${HOST}] SnapRAID"
