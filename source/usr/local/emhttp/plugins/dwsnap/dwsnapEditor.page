@@ -24,8 +24,8 @@ Markdown="false"
 
 <dl>
     <dt>
-        <input type="button" value="Save" id="btnSubmit" title="Save Configuration File" />
-        <input type="button" value="Cancel" id="btnCancel" />
+        <input type="button" class="snaprun" value="Save" id="btnSubmit" title="Save Configuration File" />
+        <input type="button" class="snaprun" value="Cancel" id="btnCancel" />
     </dt>
     <dd></dd>
 </dl>
