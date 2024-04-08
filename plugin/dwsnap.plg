@@ -43,6 +43,7 @@ run the post-installation scripts
 -->
 <FILE Run="/bin/bash">
 <INLINE> 
+echo ""
 /usr/local/emhttp/plugins/dwsnap/scripts/write_config
 echo ""
 echo "-------------------------------------------------------------"
