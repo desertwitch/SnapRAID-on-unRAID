@@ -54,6 +54,19 @@ Markdown="false"
 </blockquote>
 
 <dl>
+    <dt>SnapRAID Maintenance - Cron Notifications:</dt>
+    <dd>
+        <select class="snaprun" id="NOTIFY" name="NOTIFY" size="1">
+            <?=mk_option($dwsnap_notify, "disable", "No");?>
+            <?=mk_option($dwsnap_notify, "enable", "Yes");?>
+        </select>
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+</blockquote>
+
+<dl>
     <dt>SnapRAID Maintenance - Touch (Step 1):</dt>
     <dd>
         <select class="snaprun" id="TOUCH" name="TOUCH" size="1">
