@@ -16,7 +16,7 @@ exit_cron() {
     LOGTIME=$(date +"%Y%m%d-%H%M%S")
     echo "$OPTIME" >/var/log/snapraid/lastfinish
     echo "" >>/var/log/snapraid/snaplog
-    echo "### FINISHED: ${OPTIME}" >>/var/log/snapraid/snaplog 2>&1 
+    echo "### CRON FINISHED: ${OPTIME}" >>/var/log/snapraid/snaplog 2>&1 
     cp /var/log/snapraid/snaplog /var/log/snapraid/cron-"${LOGTIME}".log
 }
 
@@ -25,7 +25,7 @@ failure_exit_cron() {
     LOGTIME=$(date +"%Y%m%d-%H%M%S")
     echo "$OPTIME" >/var/log/snapraid/lastfinish
     echo "" >>/var/log/snapraid/snaplog
-    echo "### FINISHED: ${OPTIME}" >>/var/log/snapraid/snaplog 2>&1 
+    echo "### CRON FINISHED: ${OPTIME}" >>/var/log/snapraid/snaplog 2>&1 
     cp /var/log/snapraid/snaplog /var/log/snapraid/cron-"${LOGTIME}".log
     exit 1
 }
