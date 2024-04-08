@@ -5,9 +5,9 @@ CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
 
 [ -e "$CONFIG" ] && source $CONFIG
 
-[ "$PRIO" == "idle" ] && SNAP_BIN="/usr/bin/ionice -c 3 /usr/bin/snapraid"
-[ "$PRIO" == "besteffort" ] && SNAP_BIN="/usr/bin/ionice -c 2 /usr/bin/snapraid"
-[ "$PRIO" == "realtime" ] && SNAP_BIN="/usr/bin/ionice -c 1 /usr/bin/snapraid"
+[ "$PRIO" == "idle" ] && SNAP_BIN="ionice -c 3 /usr/bin/snapraid"
+[ "$PRIO" == "besteffort" ] && SNAP_BIN="ionice -c 2 /usr/bin/snapraid"
+[ "$PRIO" == "realtime" ] && SNAP_BIN="ionice -c 1 /usr/bin/snapraid"
 
 run_snapraid() {
     CMD="$1"

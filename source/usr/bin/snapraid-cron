@@ -22,9 +22,9 @@ HOST="$(echo "$HOSTNAME" | awk '{print toupper($0)}')"
 EVENT="SnapRAID Operation"
 SUBJECT="[${HOST}] SnapRAID"
 
-[ "$PRIO" == "idle" ] && SNAP_BIN="/usr/bin/ionice -c 3 /usr/bin/snapraid"
-[ "$PRIO" == "besteffort" ] && SNAP_BIN="/usr/bin/ionice -c 2 /usr/bin/snapraid"
-[ "$PRIO" == "realtime" ] && SNAP_BIN="/usr/bin/ionice -c 1 /usr/bin/snapraid"
+[ "$PRIO" == "idle" ] && SNAP_BIN="ionice -c 3 /usr/bin/snapraid"
+[ "$PRIO" == "besteffort" ] && SNAP_BIN="ionice -c 2 /usr/bin/snapraid"
+[ "$PRIO" == "realtime" ] && SNAP_BIN="ionice -c 1 /usr/bin/snapraid"
 
 exit_cron() {
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
