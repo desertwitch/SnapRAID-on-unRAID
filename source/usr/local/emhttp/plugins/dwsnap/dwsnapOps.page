@@ -9,8 +9,8 @@ Markdown="false"
 
 <style type="text/css">
 .snaplog {
-    height: 600px;
-    max-height: 600px;
+    height: 400px;
+    max-height: 400px;
     overflow: auto;
     word-break: normal !important;
     word-wrap: normal !important;
