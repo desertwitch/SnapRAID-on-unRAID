@@ -3,7 +3,7 @@ DOCROOT="/usr/local/emhttp/plugins/dwsnap"
 CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
 [ -e "$CONFIG" ] && source $CONFIG
 
-echo "Writing SnapRAID configuration..."
+echo "Initiating SnapRAID configuration..."
 
 if [ "$CRON" == "hourly" ]; then
     cp -f $DOCROOT/misc/dwsnap-maintenance.cron /boot/config/plugins/dynamix/dwsnap-maintenance.cron

@@ -36,9 +36,9 @@ Markdown="false"
 </dl>
 
 <blockquote class="inline_help">
-<p>This setting controls how much SnapRAID interferes with other running I/O operations.</p>
-<p>If you are running SnapRAID during the day it is recommended to choose 'Idle' as process priority.</p>
-<p>This will ensure that other processes accessing your array will be given priority over SnapRAID itself (which will in turn run slower).</p>
+<p>This setting controls how much SnapRAID interferes with other running I/O (data transfer) operations.</p>
+<p>If you are running SnapRAID during the day it is recommended to choose 'Idle' as low-interference process priority.</p>
+<p>This will ensure that other processes accessing your array will be given priority over SnapRAID itself, which will in turn run slower.</p>
 </blockquote>
 
 <hr>
