@@ -27,11 +27,13 @@ Markdown="false"
 <script src="<?=autov('/webGui/javascript/jquery.filetree.js');?>"></script>
 <script src="<?=autov('/plugins/dwsnap/js/codemirror.js');?>"></script>
 <script src="<?=autov('/plugins/dwsnap/js/autorefresh.js');?>"></script>
+<script src="<?=autov('/plugins/dwsnap/js/properties.js');?>"></script>
 
 <script type="text/javascript">
 $(function(){
     var editor2 = CodeMirror.fromTextArea($('#editdata2')[0], {
         theme: '<?=($display["theme"] == 'white' || $display["theme"] == 'azure') ? "default" : "dracula";?>',
+        mode: 'properties',
         lineNumbers: true,
         autoRefresh: true
     });
