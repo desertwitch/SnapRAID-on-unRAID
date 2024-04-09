@@ -225,7 +225,7 @@ Markdown="false"
     <p>It is recommended to only enable this setting when difference checking and thresholds are also in effect (as configured above).</p>
     </blockquote>
 
-    <div id="PREHASHSETTING">
+    <div id="SYNCSETTINGS">
         <dl>
             <dt>SnapRAID Maintenance - Sync as Prehashed Sync:</dt>
             <dd>
@@ -239,6 +239,23 @@ Markdown="false"
         <blockquote class="inline_help">
         <p>When enabled a preliminary hashing phase of all the new data (to have an additional verification before the parity computation) will be performed.</p>
         <p>This can be useful to detect corruption and bit-flips during parity computation (when the machine is under heavy load), it will however take longer than a regular sync.</p> 
+        </blockquote>
+
+        <dl>
+            <dt>SnapRAID Maintenance - Sync Zero Size Files:</dt>
+            <dd>
+                <select class="snaprun" id="FORCEZERO" name="FORCEZERO" size="1">
+                    <?=mk_option($dwsnap_forcezero, "disable", "No");?>
+                    <?=mk_option($dwsnap_forcezero, "enable", "Yes");?>
+                </select>
+            </dd>
+        </dl>
+
+        <blockquote class="inline_help">
+        <p>Forces the insecure operation of syncing a file with zero size that before was not.</p>
+        <p>If SnapRAID detects a such condition, it stops proceeding unless you specify this option.</p>
+        <p>This allows to easily detect when after a system crash, some accessed files were truncated.</p>
+        <p>This, however, can also be a normal possible condition in Linux with e.g. the ext3/ext4 file-systems.</p>
         </blockquote>
     </div>
 
@@ -257,6 +274,45 @@ Markdown="false"
     <p>This operation checks your array for corruption and other anomalies, any reported errors can then be fixed with e.g. 'Fix Errors'.</p>
     <p>Scrub is never performed on the whole array at once, but rather in alternating chunks every time a scrub is performed (eventually resulting in the complete array having been scrubbed).</p>
     </blockquote>
+
+    <div id="SCRUBSETTINGS">
+        <dl>
+            <dt>SnapRAID Maintenance - Scrub Percentage:</dt>
+            <dd>
+                <input id="SCRUBPERCENT" type="text" class="narrow snaprun" name="SCRUBPERCENT" maxlength="30" value="<?=$dwsnap_scrubpercent?>">
+            </dd>
+        </dl>
+
+        <blockquote class="inline_help">
+        <p>The percentage of the array to be scrubbed during a single scrub operation.</p>
+        </blockquote>
+
+        <dl>
+            <dt>SnapRAID Maintenance - Scrub Age:</dt>
+            <dd>
+                <input id="SCRUBAGE" type="text" class="narrow snaprun" name="SCRUBAGE" maxlength="30" value="<?=$dwsnap_scrubage?>">
+            </dd>
+        </dl>
+
+        <blockquote class="inline_help">
+        <p>The minimum age in days for a block to be scrubbed during a single scrub operation.</p>
+        </blockquote>
+
+        <dl>
+            <dt>SnapRAID Maintenance - Scrub New Blocks:</dt>
+            <dd>
+                <select class="snaprun" id="SCRUBNEW" name="SCRUBNEW" size="1">
+                    <?=mk_option($dwsnap_scrubnew, "disable", "No");?>
+                    <?=mk_option($dwsnap_scrubnew, "enable", "Yes");?>
+                </select>
+            </dd>
+        </dl>
+
+        <blockquote class="inline_help">
+        <p>By default newly synced blocks are not instantly scrubbed due to being at lower risk of data corruption.</p>
+        <p>When enabled an additional scrub operation is performed scrubbing also any newly synced blocks, in addition to the older blocks to be scrubbed.</p>
+        </blockquote>
+    </div>
 </div>
 
 <dl>
@@ -280,9 +336,14 @@ function checkCronSettings() {
         $("#THRESHOLDSETTINGS").hide();
     }
     if ($("#SYNC").val() === "enable") {
-        $("#PREHASHSETTING").show();
+        $("#SYNCSETTINGS").show();
     } else {
-        $("#PREHASHSETTING").hide();
+        $("#SYNCSETTINGS").hide();
+    }
+    if ($("#SCRUB").val() === "enable") {
+        $("#SCRUBSETTINGS").show();
+    } else {
+        $("#SCRUBSETTINGS").hide();
     }
     if ($("#CRON").val() === "hourly") {
         $("#CRONSETTINGS").show();
