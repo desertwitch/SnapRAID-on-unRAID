@@ -96,20 +96,20 @@ Markdown="false"
             preg_match_all($data_re, $config_file, $data_disks, PREG_SET_ORDER);
 
             foreach ($parity_disks as $parity_disk){
-                $fs = htmlspecialchars(shell_exec("cat /etc/mtab | grep " . $parity_disk[2] . " | awk '{print $3}'"));
-                $util = htmlspecialchars(shell_exec("df -h | grep " . $parity_disk[2] . " | awk '{print $5}'"));
-                $free = htmlspecialchars(shell_exec("df -h | grep " . $parity_disk[2] . " | awk '{print $4}'"));
-                $used = htmlspecialchars(shell_exec("df -h | grep " . $parity_disk[2] . " | awk '{print $3}'"));
-                $total = htmlspecialchars(shell_exec("df -h | grep " . $parity_disk[2] . " | awk '{print $2}'"));
+                $fs = htmlspecialchars(shell_exec("cat /etc/mtab | grep " . $parity_disk[2] . " | awk '{print $3}'") ?? "n/a");
+                $util = htmlspecialchars(shell_exec("df -h | grep " . $parity_disk[2] . " | awk '{print $5}'") ?? "n/a");
+                $free = htmlspecialchars(shell_exec("df -h | grep " . $parity_disk[2] . " | awk '{print $4}'") ?? "n/a");
+                $used = htmlspecialchars(shell_exec("df -h | grep " . $parity_disk[2] . " | awk '{print $3}'") ?? "n/a");
+                $total = htmlspecialchars(shell_exec("df -h | grep " . $parity_disk[2] . " | awk '{print $2}'") ?? "n/a");
                 echo("<tr><td>PARITY</td><td>$parity_disk[1]</td><td>$parity_disk[2]</td><td>$fs</td><td>$total</td><td>$used</td><td>$free</td><td>$util</td><td><input type='button' class='snaprun' id='$parity_disk[1]-check' value='Check'><input type='button' class='snaprun' id='$parity_disk[1]-fix' value='Fix'><input type='button' class='snaprun' id='$parity_disk[1]-fixmissing' value='Fix Missing'></td></tr>");
             }
 
             foreach ($data_disks as $data_disk){
-                $fs = htmlspecialchars(shell_exec("cat /etc/mtab | grep " . $data_disk[2] . " | awk '{print $3}'"));
-                $util = htmlspecialchars(shell_exec("df -h | grep " . $data_disk[2] . " | awk '{print $5}'"));
-                $free = htmlspecialchars(shell_exec("df -h | grep " . $data_disk[2] . " | awk '{print $4}'"));
-                $used = htmlspecialchars(shell_exec("df -h | grep " . $data_disk[2] . " | awk '{print $3}'"));
-                $total = htmlspecialchars(shell_exec("df -h | grep " . $data_disk[2] . " | awk '{print $2}'"));
+                $fs = htmlspecialchars(shell_exec("cat /etc/mtab | grep " . $data_disk[2] . " | awk '{print $3}'") ?? "n/a");
+                $util = htmlspecialchars(shell_exec("df -h | grep " . $data_disk[2] . " | awk '{print $5}'") ?? "n/a");
+                $free = htmlspecialchars(shell_exec("df -h | grep " . $data_disk[2] . " | awk '{print $4}'") ?? "n/a");
+                $used = htmlspecialchars(shell_exec("df -h | grep " . $data_disk[2] . " | awk '{print $3}'") ?? "n/a");
+                $total = htmlspecialchars(shell_exec("df -h | grep " . $data_disk[2] . " | awk '{print $2}'") ?? "n/a");
                 echo("<tr><td>DATA</td><td>$data_disk[1]</td><td>$data_disk[2]</td><td>$fs</td><td>$total</td><td>$used</td><td>$free</td><td>$util</td><td><input type='button' class='snaprun' id='$data_disk[1]-check' value='Check'><input type='button' class='snaprun' id='$data_disk[1]-fix' value='Fix'><input type='button' class='snaprun' id='$data_disk[1]-fixmissing' value='Fix Missing'></td></tr>");
             }
             ?>
