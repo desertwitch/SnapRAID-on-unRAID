@@ -80,7 +80,7 @@ Markdown="false"
     <table class="tablesorter snapdisks">
         <thead>
             <tr>
-                <th colspan="9"><strong>DISK ARRAY OVERVIEW</strong></th>
+                <th colspan="9"><strong>OVERVIEW OF ARRAY WITH INDIVIDUAL DISKS</strong></th>
             </tr>
             <tr>
                 <th>Type</th><th>Disk</th><th>Mountpoint</th><th>FileSystem</th><th>Total Space</th><th>Used Space</th><th>Free Space</th><th>Utilization</th><th class="cmds">Disk-Specific Operations</th>
