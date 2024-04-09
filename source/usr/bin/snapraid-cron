@@ -135,7 +135,7 @@ if [ "$SYNC" == "enable" ]; then
             FORCEZEROARG="-Z"
             FORCEZEROMSG=" (w/ Force Zero)"
         fi
-        if [ "$PRESHASH" == "enable" ]; then
+        if [ "$PREHASH" == "enable" ]; then
             echo "### CRON -- Prehashed Syncing...${FORCEZEROMSG}" 2>&1 | tee -a /var/log/snapraid/snaplog
             if ! $SNAP_BIN -c $SNAP_CONF -h sync "$FORCEZEROARG" >>/var/log/snapraid/snaplog 2>&1; then
                 echo "### CRON -- Prehashed Sync has failed, exiting..." 2>&1 | tee -a /var/log/snapraid/snaplog
