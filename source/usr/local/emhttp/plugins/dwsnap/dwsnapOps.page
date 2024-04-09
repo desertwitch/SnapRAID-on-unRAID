@@ -26,6 +26,10 @@ Markdown="false"
     height: 30px;
     font-size: x-small;
 }
+.disktype {
+    font-family: bitstream;
+    font-size: 1.1rem;
+}
 </style>
 
 <table class="tablesorter shift" autofocus>
@@ -83,7 +87,7 @@ Markdown="false"
                 <th colspan="9"><strong>OVERVIEW OF ARRAY WITH INDIVIDUAL DISKS</strong></th>
             </tr>
             <tr>
-                <th>Type</th><th>Disk Name</th><th>Mountpoint</th><th>FileSystem</th><th>Total Space</th><th>Used Space</th><th>Free Space</th><th>Utilization</th><th>Disk-Specific Operations</th>
+                 <th><strong>Disk Type</strong></th><th><strong><strong>Disk Name</strong></th><th><strong>Mountpoint</strong></th><th><strong>FileSystem</strong></th><th><strong>Total Space</strong></th><th><strong>Used Space</strong></th><th><strong>Free Space</strong></th><th><strong>Utilization</strong></th><th><strong>Disk-Specific Operations</strong></th>
             </tr>
         </thead>
         <tbody>
@@ -101,7 +105,7 @@ Markdown="false"
                 $free = htmlspecialchars(shell_exec("df -h | grep " . $parity_disk[2] . " | awk '{print $4}'") ?? "-");
                 $used = htmlspecialchars(shell_exec("df -h | grep " . $parity_disk[2] . " | awk '{print $3}'") ?? "-");
                 $total = htmlspecialchars(shell_exec("df -h | grep " . $parity_disk[2] . " | awk '{print $2}'") ?? "-");
-                echo("<tr><td>PARITY</td><td>$parity_disk[1]</td><td>$parity_disk[2]</td><td>$fs</td><td>$total</td><td>$used</td><td>$free</td><td>$util</td><td><input type='button' class='snaprun' id='$parity_disk[1]-check' value='Check'><input type='button' class='snaprun' id='$parity_disk[1]-fix' value='Fix'><input type='button' class='snaprun' id='$parity_disk[1]-fixmissing' value='Fix Missing'></td></tr>");
+                echo("<tr><td class='disktype'>PARITY</td><td>$parity_disk[1]</td><td><a class='view' href='/Shares/Browse?dir=$parity_disk[2]/' target='_blank'><i class='icon-u-tab' title='Browse $parity_disk[2]/'></i></a>$parity_disk[2]</td><td>$fs</td><td>$total</td><td>$used</td><td>$free</td><td>$util</td><td><input type='button' class='snaprun' id='$parity_disk[1]-check' value='Check'><input type='button' class='snaprun' id='$parity_disk[1]-fix' value='Fix'><input type='button' class='snaprun' id='$parity_disk[1]-fixmissing' value='Fix Missing'></td></tr>");
             }
 
             foreach ($data_disks as $data_disk){
@@ -110,7 +114,7 @@ Markdown="false"
                 $free = htmlspecialchars(shell_exec("df -h | grep " . $data_disk[2] . " | awk '{print $4}'") ?? "-");
                 $used = htmlspecialchars(shell_exec("df -h | grep " . $data_disk[2] . " | awk '{print $3}'") ?? "-");
                 $total = htmlspecialchars(shell_exec("df -h | grep " . $data_disk[2] . " | awk '{print $2}'") ?? "-");
-                echo("<tr><td>DATA</td><td>$data_disk[1]</td><td>$data_disk[2]</td><td>$fs</td><td>$total</td><td>$used</td><td>$free</td><td>$util</td><td><input type='button' class='snaprun' id='$data_disk[1]-check' value='Check'><input type='button' class='snaprun' id='$data_disk[1]-fix' value='Fix'><input type='button' class='snaprun' id='$data_disk[1]-fixmissing' value='Fix Missing'></td></tr>");
+                echo("<tr><td class='disktype'>DATA</td><td>$data_disk[1]</td><td><a class='view' href='/Shares/Browse?dir=$data_disk[2]/' target='_blank'><i class='icon-u-tab' title='Browse $data_disk[2]/'></i></a>$data_disk[2]</td><td>$fs</td><td>$total</td><td>$used</td><td>$free</td><td>$util</td><td><input type='button' class='snaprun' id='$data_disk[1]-check' value='Check'><input type='button' class='snaprun' id='$data_disk[1]-fix' value='Fix'><input type='button' class='snaprun' id='$data_disk[1]-fixmissing' value='Fix Missing'></td></tr>");
             }
             ?>
         </tbody>
