@@ -15,7 +15,7 @@ Markdown="false"
 </style>
 
 <div><strong>INFORMATION:</strong></div>
-<div>Always use the disk mountpoints <strong>/mnt/disk[0-9]</strong> when refering to drives in the array configuration, never physical drive locations otherwhere on the system.</div>
+<div>Always use the disk mountpoints <strong>/mnt/disk<em><sup>[number]</sup></em><span style="color:red;">/</span></strong> when refering to drives in the array configuration, never physical drive locations otherwhere on the system.</div>
 <div>You cannot use your Unraid parity drive as SnapRAID parity drive due to SnapRAID operating on a file level as opposed to Unraid's parity operating on a block level.</div>
 <div>That means in order to use SnapRAID you will need to sacrifice one Unraid data drive with at least the size of the largest to be protected data drive (same rules as on Unraid).</div>
 <br>
