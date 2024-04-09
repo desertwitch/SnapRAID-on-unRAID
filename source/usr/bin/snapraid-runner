@@ -15,6 +15,10 @@ run_snapraid() {
     [ "$CMD" == "fixerrors" ] && CMD="-e fix"
     [ "$CMD" == "fixmissing" ] && CMD="-m fix"
     [ "$CMD" == "hashedsync" ] && CMD="-h sync"
+    [ "$CMD" == "diskcheck" ] && CMD="-d ${2} check"
+    [ "$CMD" == "diskfix" ] && CMD="-d ${2} fix"
+    [ "$CMD" == "diskfixerrors" ] && CMD="-d ${2} -e fix"
+    [ "$CMD" == "diskfixmissing" ] && CMD="-d ${2} -m fix"
     rm -f /var/log/snapraid/lastfinish
     LOGTIME=$(date +"%Y%m%d-%H%M%S")
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
@@ -34,6 +38,9 @@ case "$1" in
     check)
         run_snapraid check
         ;;
+    diskcheck)
+        run_snapraid diskcheck "$2"
+        ;; 
     diff)
         run_snapraid diff
         ;;
@@ -43,12 +50,21 @@ case "$1" in
     fix)
         run_snapraid fix
         ;;
+    diskfix)
+        run_snapraid diskfix "$2"
+        ;; 
     fixerrors) 
         run_snapraid fixerrors
         ;;
+    diskfixerrors)
+        run_snapraid diskfixerrors "$2"
+        ;; 
     fixmissing)
         run_snapraid fixmissing
         ;;
+    diskfixmissing)
+        run_snapraid diskmissing "$2"
+        ;; 
     hashedsync) 
         run_snapraid hashedsync
         ;;

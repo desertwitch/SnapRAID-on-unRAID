@@ -16,48 +16,105 @@ Markdown="false"
     word-wrap: normal !important;
     white-space: pre !important;
 }
+.snapdisks tr:nth-child(2) > th {
+    text-align: center !important;
+}
+.snapdisks td {
+    text-align: center !important;
+}
+.snapdisks input {
+    height: 30px;
+    font-size: x-small;
+}
 </style>
 
 <table class="tablesorter shift" autofocus>
-<thead><tr>
-<th><i id="snapstatusicon" class="fa fa-cog fa-spin" style="display:none;"></i> <strong>Array Operation Screen</strong></th>
-<th style="text-transform: none;"><strong>Started:</strong> <em><?=$snapraid_laststart?></em></th>
-<th style="text-transform: none;"><strong>Finished:</strong> <em><?=$snapraid_lastfinish?></em><span style="float:right;"><strong>Refresh:</strong> <i id="logcontrol" class="fa fa-refresh fa-spin"></i></span></th>
-</tr></thead>
+    <thead>
+        <tr>
+            <th><i id="snapstatusicon" class="fa fa-cog fa-spin" style="display:none;"></i> <strong>Array Operation Screen</strong></th>
+            <th style="text-transform: none;"><strong>Started:</strong> <em><?=$snapraid_laststart?></em></th>
+            <th style="text-transform: none;"><strong>Finished:</strong> <em><?=$snapraid_lastfinish?></em><span style="float:right;"><strong>Refresh:</strong> <i id="logcontrol" class="fa fa-refresh fa-spin"></i></span></th>
+        </tr>
+    </thead>
 </table>
 
 <span id="logviewer"></span>
 
 <form markdown="0" id="snapcommands" name="snapcommands" method="POST" action="/update.php" target="progressFrame">
-<input type="hidden" id="command" name="#command" value="">
-<input type="hidden" id="arg" name="#arg[1]" value="">
-<input class="snaprun" type="button" id="snapstatus" value="STATUS">
-<input class="snaprun" type="button" id="snaplist" value="LIST">
-<input class="snaprun" type="button" id="snapdiff" value="DIFF">
-<input class="snaprun" type="button" id="snapdup" value="DUP">
-<input class="snaprun" type="button" id="snapscrub" value="SCRUB">
-<input class="snaprun" type="button" id="snapcheck" value="CHECK">
-<span style="float:right;">
-<input class="snaprun" type="button" id="clearoutput" value="CLEAR SCREEN">
-<input class="snaprun" type="button" id="clearlogs" value="CLEAR ALL LOGS">
-<input class="snapnotrun" type="button" id="snapstop" value="STOP OPERATION">
-<input class="snapnotrun" type="button" id="snapkill" value="KILL OPERATION">
-</span><br>
-<input class="snaprun" type="button" id="snapsync" value="SYNC">
-<input class="snaprun" type="button" id="snaphashedsync" value="PREHASHED SYNC">
-<input class="snaprun" type="button" id="snaptouch" value="TOUCH">
-<input class="snaprun" type="button" id="snapfix" value="FIX">
-<input class="snaprun" type="button" id="snapfixmissing" value="FIX MISSING">
-<input class="snaprun" type="button" id="snapfixerrors" value="FIX ERRORS">
-<span style="float:right;">
-<input class="snaprun" type="button" id="crontest" value="RUN MAINTENANCE CRONJOB">
-</span>
-</form> 
+    <input type="hidden" id="command" name="#command" value="">
+    <input type="hidden" id="arg" name="#arg[1]" value="">
 
-<br><div><strong>INFORMATION:</strong></div>
-<div>When using SnapRAID on top of Unraid's parity, always attempt to recover drive failures using Unraid's parity first, before using any SnapRAID recovery functions.</div>
-<div>Ideally you can restore a drive failure with Unraid and then fix any file level corruption on the recovered drive using a previous (non-corrupted) SnapRAID snapshot.</div>
-<div>A failing drive may write bogus data before Unraid disables it (if at all), and SnapRAID may fill that gap to recover from corruption using a sync state from before that.</div>
+    <input class="snaprun" type="button" id="snapstatus" value="STATUS">
+    <input class="snaprun" type="button" id="snaplist" value="LIST">
+    <input class="snaprun" type="button" id="snapdiff" value="DIFF">
+    <input class="snaprun" type="button" id="snapdup" value="DUP">
+    <input class="snaprun" type="button" id="snapscrub" value="SCRUB">
+    <input class="snaprun" type="button" id="snapcheck" value="CHECK">
+
+    <span style="float:right;">
+        <input class="snaprun" type="button" id="clearoutput" value="CLEAR SCREEN">
+        <input class="snaprun" type="button" id="clearlogs" value="CLEAR ALL LOGS">
+        <input class="snapnotrun" type="button" id="snapstop" value="STOP OPERATION">
+        <input class="snapnotrun" type="button" id="snapkill" value="KILL OPERATION">
+    </span><br>
+
+    <input class="snaprun" type="button" id="snapsync" value="SYNC">
+    <input class="snaprun" type="button" id="snaphashedsync" value="PREHASHED SYNC">
+    <input class="snaprun" type="button" id="snaptouch" value="TOUCH">
+    <input class="snaprun" type="button" id="snapfix" value="FIX">
+    <input class="snaprun" type="button" id="snapfixmissing" value="FIX MISSING">
+    <input class="snaprun" type="button" id="snapfixerrors" value="FIX ERRORS">
+
+    <span style="float:right;">
+        <input class="snaprun" type="button" id="crontest" value="RUN MAINTENANCE CRONJOB">
+    </span><br>
+
+    <div><strong>INFORMATION:</strong></div>
+    <div>When using SnapRAID on top of Unraid's parity, always attempt to recover drive failures using Unraid's parity first, before using any SnapRAID recovery functions.</div>
+    <div>Ideally you can restore a drive failure with Unraid and then fix any file level corruption on the recovered drive using a previous (non-corrupted) SnapRAID snapshot.</div>
+    <div>A failing drive may write bogus data before Unraid disables it (if at all), and SnapRAID may fill that gap to recover from corruption using a sync state from before that.</div>
+    
+    <br>
+
+    <table class="tablesorter snapdisks">
+        <thead>
+            <tr>
+                <th colspan="9"><strong>ARRAY LAYOUT WITH INDIVIDUAL DISKS</strong></th>
+            </tr>
+            <tr>
+                <th>Type</th><th>Disk</th><th>Mountpoint</th><th>FileSystem</th><th>Total Space</th><th>Used Space</th><th>Free Space</th><th>Utilization</th><th class="cmds">Disk-Specific Operations</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?
+            $config_file = file_get_contents("/etc/snapraid.conf");
+            $parity_re = '/(.*?parity) (\/mnt\/disk.*?)\//m';
+            $data_re = '/data (.*?) (\/mnt\/disk.*?)\//m';
+
+            preg_match_all($parity_re, $config_file, $parity_disks, PREG_SET_ORDER);
+            preg_match_all($data_re, $config_file, $data_disks, PREG_SET_ORDER);
+
+            foreach ($parity_disks as $parity_disk){
+                $fs = shell_exec("cat /etc/mtab | grep " . $parity_disk[2] . " | awk '{print $3}'");
+                $util = shell_exec("df -h | grep " . $parity_disk[2] . " | awk '{print $5}'");
+                $free = shell_exec("df -h | grep " . $parity_disk[2] . " | awk '{print $4}'");
+                $used = shell_exec("df -h | grep " . $parity_disk[2] . " | awk '{print $3}'");
+                $total = shell_exec("df -h | grep " . $parity_disk[2] . " | awk '{print $2}'");
+                echo("<tr><td>PARITY</td><td>$parity_disk[1]</td><td>$parity_disk[2]</td><td>$fs</td><td>$total</td><td>$used</td><td>$free</td><td>$util</td><td><input type='button' id='$parity_disk[1]-check' value='Check'><input type='button' id='$parity_disk[1]-fix' value='Fix'><input type='button' id='$parity_disk[1]-fixmissing' value='Fix Missing'><input type='button' id='$parity_disk[1]-fixerrors' value='Fix Errors'></td></tr>");
+            }
+
+            foreach ($data_disks as $data_disk){
+                $fs = shell_exec("cat /etc/mtab | grep " . $data_disk[2] . " | awk '{print $3}'");
+                $util = shell_exec("df -h | grep " . $data_disk[2] . " | awk '{print $5}'");
+                $free = shell_exec("df -h | grep " . $data_disk[2] . " | awk '{print $4}'");
+                $used = shell_exec("df -h | grep " . $data_disk[2] . " | awk '{print $3}'");
+                $total = shell_exec("df -h | grep " . $data_disk[2] . " | awk '{print $2}'");
+                echo("<tr><td>DATA</td><td>$data_disk[1]</td><td>$data_disk[2]</td><td>$fs</td><td>$total</td><td>$used</td><td>$free</td><td>$util</td><td><input type='button' id='$data_disk[1]-check' value='Check'><input type='button' id='$data_disk[1]-fix' value='Fix'><input type='button' id='$data_disk[1]-fixmissing' value='Fix Missing'><input type='button' id='$data_disk[1]-fixerrors' value='Fix Errors'></td></tr>");
+            }
+            ?>
+        </tbody>
+    </table>
+</form> 
 
 <script type="text/javascript">
 function getSnapLogs() {
@@ -103,6 +160,7 @@ function toggleSnapLogs() {
     }
 }
 $(function(){
+
     $('#logcontrol').click(toggleSnapLogs);
 
     $('#snapstatus').click(function(){
@@ -287,6 +345,21 @@ $(function(){
                 $('#snapcommands').submit();
             });
     });
+
+    <?
+    foreach ($parity_disks as $parity_disk) {
+        echo("\$('#".$parity_disk[1]."-check').click(function(){\$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');\$('#arg').val('diskcheck ".$parity_disk[1]."');\$('#snapcommands').submit(); });");
+        echo("\$('#".$parity_disk[1]."-fix').click(function(){ swal({ title: \"Destructive Operation\", text: \"This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.\", type: \"warning\", showCancelButton: true, confirmButtonText: \"Start Operation\", html: true }, function(){ \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg').val('diskfix ".$parity_disk[1]."'); \$('#snapcommands').submit(); }); });");
+        echo("\$('#".$parity_disk[1]."-fixmissing').click(function(){ swal({ title: \"Destructive Operation\", text: \"This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.\", type: \"warning\", showCancelButton: true, confirmButtonText: \"Start Operation\", html: true }, function(){ \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg').val('diskfixmissing ".$parity_disk[1]."'); \$('#snapcommands').submit(); }); });");
+        echo("\$('#".$parity_disk[1]."-fixerrors').click(function(){ swal({ title: \"Destructive Operation\", text: \"This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.\", type: \"warning\", showCancelButton: true, confirmButtonText: \"Start Operation\", html: true }, function(){ \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg').val('diskfixerrors ".$parity_disk[1]."'); \$('#snapcommands').submit(); }); });");
+    }
+    foreach ($data_disks as $data_disk) {
+        echo("\$('#".$data_disk[1]."-check').click(function(){\$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');\$('#arg').val('diskcheck ".$data_disk[1]."');\$('#snapcommands').submit(); });");
+        echo("\$('#".$data_disk[1]."-fix').click(function(){ swal({ title: \"Destructive Operation\", text: \"This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.\", type: \"warning\", showCancelButton: true, confirmButtonText: \"Start Operation\", html: true }, function(){ \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg').val('diskfix ".$data_disk[1]."'); \$('#snapcommands').submit(); }); });");
+        echo("\$('#".$data_disk[1]."-fixmissing').click(function(){ swal({ title: \"Destructive Operation\", text: \"This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.\", type: \"warning\", showCancelButton: true, confirmButtonText: \"Start Operation\", html: true }, function(){ \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg').val('diskfixmissing ".$data_disk[1]."'); \$('#snapcommands').submit(); }); });");
+        echo("\$('#".$data_disk[1]."-fixerrors').click(function(){ swal({ title: \"Destructive Operation\", text: \"This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.\", type: \"warning\", showCancelButton: true, confirmButtonText: \"Start Operation\", html: true }, function(){ \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg').val('diskfixerrors ".$data_disk[1]."'); \$('#snapcommands').submit(); }); });");
+    }
+    ?>
 
     getSnapStatus()
     getSnapLogs();
