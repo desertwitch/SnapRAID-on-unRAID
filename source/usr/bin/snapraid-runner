@@ -12,9 +12,9 @@ CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
 run_snapraid() {
     CMD="$1"
     BIGOP="$(echo "$1" | awk '{print toupper($0)}')"
-    [ "$CMD" == "fixerrors" ] && CMD="-e fix"
-    [ "$CMD" == "fixmissing" ] && CMD="-m fix"
-    [ "$CMD" == "hashedsync" ] && CMD="-h sync"
+    [ "$CMD" == "fixerrors" ] && CMD="fix -e"
+    [ "$CMD" == "fixmissing" ] && CMD="fix -m"
+    [ "$CMD" == "hashedsync" ] && CMD="sync -h"
     rm -f /var/log/snapraid/lastfinish
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     echo "$OPTIME" >/var/log/snapraid/laststart
