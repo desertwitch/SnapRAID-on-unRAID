@@ -21,15 +21,6 @@ Markdown="false"
 <br>
 <details>
 <summary><strong>Example Array Configuration on Unraid:</strong></summary>
-<br>
-<div>Disk 1 is a regular Unraid data drive that is being sacrificed as SnapRAID parity drive.</div>
-<div>Disk 2-5 are regular Unraid data drives with media that should be protected in the SnapRAID array.</div>
-<br>
-<div>The content files (which act as the file and hash catalogues) are put on the cache (for fast accessing) and also on all to be protected data drives.</div>
-<div>The content files take up little space and are put on as many drives as possible (excluding the parity drive) to never be lost or corruptible during a drive failure.</div>
-<br>
-<div>For only partially protecting data (SnapRAID does large, rarely changing files best) like certain folders you can use include/exclude patterns (check the manual about this).</div>
-<div>You will still access all your protected data as you normally would through Unraid's user shares, the data of all protected disks will remain pooled as if SnapRAID was not there.</div>
 <pre style="font-size:x-small;">
 parity /mnt/disk1/snapraid.parity
 content /mnt/cache/snapraid.content
@@ -42,6 +33,14 @@ data d3 /mnt/disk3/
 data d4 /mnt/disk4/
 data d5 /mnt/disk5/
 </pre>
+<div>Disk 1 is a regular Unraid data drive that is being sacrificed as SnapRAID parity drive.</div>
+<div>Disk 2-5 are regular Unraid data drives with media that should be protected in the SnapRAID array.</div>
+<br>
+<div>The content files (which act as the file and hash catalogues) are put on the cache (for fast accessing) and also on all to be protected data drives.</div>
+<div>The content files take up little space and are put on as many drives as possible (excluding the parity drive) to never be lost or corruptible during a drive failure.</div>
+<br>
+<div>For only partially protecting data (SnapRAID does large, rarely changing files best) like certain folders you can use include/exclude patterns (check the manual about this).</div>
+<div>You will still access all your protected data as you normally would through Unraid's user shares, the data of all protected disks will remain pooled as if SnapRAID was not there.</div>
 </details><br>
 
 <form id="editform" method="POST">
