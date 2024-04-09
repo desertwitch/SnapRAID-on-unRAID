@@ -390,6 +390,7 @@ $(function(){
 
     $("#DIFF").change(checkCronSettings);
     $("#SYNC").change(checkCronSettings);
+    $("#SCRUB").change(checkCronSettings);
     $("#CRON").change(checkCronSettings);
     checkCronSettings();
 });
