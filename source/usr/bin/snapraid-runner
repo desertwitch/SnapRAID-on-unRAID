@@ -12,6 +12,7 @@ CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
 run_snapraid() {
     CMD="$1"
     BIGOP="$(echo "$1" | awk '{print toupper($0)}')"
+    [ -n "$2" ] && BIGOP="$(echo "$1 $2" | awk '{print toupper($0)}')"
     [ "$CMD" == "fixerrors" ] && CMD="-e fix"
     [ "$CMD" == "fixmissing" ] && CMD="-m fix"
     [ "$CMD" == "hashedsync" ] && CMD="-h sync"
