@@ -33,7 +33,7 @@ data d3 /mnt/disk3/
 data d4 /mnt/disk4/
 data d5 /mnt/disk5/
 </pre>
-<div>Disk 1 is a regular Unraid data drive that is being sacrificed as SnapRAID parity drive.</div>
+<em><div>Disk 1 is a regular Unraid data drive that is being sacrificed as SnapRAID parity drive.</div>
 <div>Disk 2-5 are regular Unraid data drives with media that should be protected in the SnapRAID array.</div>
 <br>
 <div>The content files (which act as the file and hash catalogues) are put on the cache (for fast accessing) and also on all to be protected data drives.</div>
@@ -41,7 +41,7 @@ data d5 /mnt/disk5/
 <br>
 <div>For only partially protecting data (SnapRAID does large, rarely changing files best) like certain folders you can use include/exclude patterns (check the manual about this).</div>
 <div>You will still access all your protected data as you normally would through Unraid's user shares, the data of all protected disks will remain pooled as if SnapRAID was not there.</div>
-</details><br>
+</em></details><br>
 
 <form id="editform" method="POST">
 
