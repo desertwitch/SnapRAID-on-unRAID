@@ -1,5 +1,5 @@
 #!/bin/bash
 BIGOP="$(echo "$1" | awk '{print toupper($0)}')"
 echo "Starting SnapRAID operation: $BIGOP..."
-nohup /usr/bin/snapraid-runner "$1" >/dev/null 2>&1 &
+nohup /usr/bin/snapraid-runner "$1" "$2" >/dev/null 2>&1 &
 sleep 1
