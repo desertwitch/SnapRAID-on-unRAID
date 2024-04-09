@@ -137,14 +137,14 @@ if [ "$SYNC" == "enable" ]; then
         fi
         if [ "$PREHASH" == "enable" ]; then
             echo "### CRON -- Prehashed Syncing...${FORCEZEROMSG}" 2>&1 | tee -a /var/log/snapraid/snaplog
-            if ! $SNAP_BIN -c $SNAP_CONF -h sync "$FORCEZEROARG" >>/var/log/snapraid/snaplog 2>&1; then
+            if ! $SNAP_BIN -c $SNAP_CONF -h "$FORCEZEROARG" sync >>/var/log/snapraid/snaplog 2>&1; then
                 echo "### CRON -- Prehashed Sync has failed, exiting..." 2>&1 | tee -a /var/log/snapraid/snaplog
                 FAILUREMSG="The prehashed sync has failed - check LOG."
                 failure_exit_cron
             fi
         else
             echo "### CRON -- Syncing...${FORCEZEROMSG}" 2>&1 | tee -a /var/log/snapraid/snaplog
-            if ! $SNAP_BIN -c $SNAP_CONF sync "$FORCEZEROARG" >>/var/log/snapraid/snaplog 2>&1; then
+            if ! $SNAP_BIN -c $SNAP_CONF "$FORCEZEROARG" sync >>/var/log/snapraid/snaplog 2>&1; then
                 echo "### CRON -- Sync has failed, exiting..." 2>&1 | tee -a /var/log/snapraid/snaplog
                 FAILUREMSG="The sync has failed - check LOG."
                 failure_exit_cron
@@ -161,7 +161,7 @@ echo "################################################################" 2>&1 | t
 if [ "$SCRUB" == "enable" ]; then
     if [ "$SCRUBNEW" == "enable" ]; then
         echo "### CRON -- Scrubbing New Blocks..." 2>&1 | tee -a /var/log/snapraid/snaplog
-        if ! $SNAP_BIN -c $SNAP_CONF scrub -p new >>/var/log/snapraid/snaplog 2>&1; then
+        if ! $SNAP_BIN -c $SNAP_CONF -p new scrub >>/var/log/snapraid/snaplog 2>&1; then
                 echo "### CRON -- Scrub New Blocks has failed, exiting..." 2>&1 | tee -a /var/log/snapraid/snaplog
                 FAILUREMSG="The new block scrub has failed - check LOG."
                 failure_exit_cron
@@ -170,7 +170,7 @@ if [ "$SCRUB" == "enable" ]; then
         echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
     fi
     echo "### CRON -- Scrubbing [${SCRUBPERCENT} % / ${SCRUBAGE} days age]..." 2>&1 | tee -a /var/log/snapraid/snaplog
-    if ! $SNAP_BIN -c $SNAP_CONF scrub -p "$SCRUBPERCENT" -o "$SCRUBAGE" >>/var/log/snapraid/snaplog 2>&1; then
+    if ! $SNAP_BIN -c $SNAP_CONF -p "$SCRUBPERCENT" -o "$SCRUBAGE" scrub >>/var/log/snapraid/snaplog 2>&1; then
             echo "### CRON -- Scrub has failed, exiting..." 2>&1 | tee -a /var/log/snapraid/snaplog
             FAILUREMSG="The scrub has failed - check LOG."
             failure_exit_cron
@@ -181,5 +181,4 @@ else
 fi
 
 echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
-
 exit_cron
