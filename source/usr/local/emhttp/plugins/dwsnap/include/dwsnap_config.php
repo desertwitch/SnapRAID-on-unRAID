@@ -75,7 +75,7 @@ function dwsnap_hour_options($time){
             if(intval($time) === $i)
                 $options .= ' selected';
 
-            $options .= '>'.$i.'</option>';
+            $options .= '>'.$i.':00</option>';
         }
     return $options;
 }
