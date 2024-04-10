@@ -1,0 +1,59 @@
+Menu="Buttons:197"
+Link="nav-user"
+---
+<?if($dwsnap_footer == "enable"):?>
+<?
+require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
+$snap_footer_html = "";
+if($dwsnap_lastsync !== "-" && $dwsnap_lastscrub !== "-") {
+    $snap_lastsync_ago = dwsnap_time_ago($dwsnap_lastsync);
+    $snap_lastscrub_ago = dwsnap_time_ago($dwsnap_lastscrub);
+    if (strpos($snap_lastsync_ago, "orange-text") !== false || strpos($snap_lastscrub_ago, "orange-text") !== false) {
+        $snap_footer_html = "<span class='snaptip' title='Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'>SnapRAID<i class='fa fa-clock-o orange-text'></i></span>";
+    } else {
+        $snap_footer_html = "<span class='snaptip' title='Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'>SnapRAID<i class='fa fa-check green-text'></i></span>";
+    }
+}
+?>
+
+<style type="text/css">
+#snap_footer {
+    float: right;
+    margin-right: 24px;
+}
+#snap_footer i {
+    padding-left: 5px;
+}
+</style>
+
+<script type="text/javascript">
+function getSnapFooter() {
+    $.get('/plugins/dwsnap/include/dwsnap_status.php',function(data) {
+        if (data) { 
+            if(data === "RUNNING:YES") {
+                $('#snap_footer').show();
+                $('#snap_footer').html('<span class="snaptip" title="Array Operation in Progress">SnapRAID<i class="fa fa-cog fa-spin"></i></span>');
+                $('.snaptip').tooltipster();
+            } else if (data === "RUNNING:NO") {
+                var snapFooter = "<?=$snap_footer_html?>";
+                if(snapFooter) {
+                    $('#snap_footer').show();	
+                    $('#snap_footer').html(snapFooter);
+                    $('.snaptip').tooltipster();
+                } else {
+                    $('#snap_footer').html("");
+                    $('#snap_footer').hide();
+                }
+            }
+	    }
+    });
+    clearTimeout(timers.getSnapFooter);
+    timers.getSnapFooter = setTimeout(getSnapFooter, 3000);
+}
+$(function()
+{
+    var snap_footer = $("<span id='snap_footer'></span>").insertAfter("div#footer > span#copyright");
+    getSnapFooter();
+});
+</script>
+<?endif;?>

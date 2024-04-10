@@ -41,6 +41,21 @@ Markdown="false"
 <p>This will ensure that other processes accessing your array will be given priority over SnapRAID itself, which will in turn run slower.</p>
 </blockquote>
 
+<dl>
+    <dt>SnapRAID Array Status Footer:</dt>
+    <dd>
+        <select class="snaprun" id="FOOTER" name="FOOTER" size="1">
+            <?=mk_option($dwsnap_footer, "disable", "No");?>
+            <?=mk_option($dwsnap_footer, "enable", "Yes");?>
+        </select>
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+<p>This setting will display a miniature array status information in the page footer, for the user to be advised of any running array operations and overdue array maintenance.</p>
+<p>The footer will be shown only if either an array operation is presently running or at least one sync <u>and</u> one scrub have already (ever) been performed on the array (since the beginning).</p>
+</blockquote>
+
 <hr>
 
 <dl>
