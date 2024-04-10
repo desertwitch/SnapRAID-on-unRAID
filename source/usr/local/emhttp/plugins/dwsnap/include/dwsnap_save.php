@@ -2,7 +2,7 @@
 $base     = '/boot/config/plugins/dwsnap/config/';
 $editfile = realpath($_POST['editfile']);
 
-if(file_exists($editfile) && array_key_exists('editdata', $_POST)){
+if(file_exists($editfile) && array_key_exists('editdata', $_POST)) {
     // remove carriage returns
     $editdata = str_replace("\r", '', $_POST['editdata']);
 
@@ -11,16 +11,16 @@ if(file_exists($editfile) && array_key_exists('editdata', $_POST)){
         mkdir($base);
     }
 
-    // save conf file to local system
+    // save conf file
     $return_var = file_put_contents($editfile, $editdata);
-}else{
+} else {
     $return_var = false;
 }
 
-if($return_var)
+if($return_var) {
     $return = ['success' => true, 'saved' => $editfile];
-else
+} else {
     $return = ['error' => $editfile];
-
+}
 echo json_encode($return);
 ?>
