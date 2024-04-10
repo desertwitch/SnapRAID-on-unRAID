@@ -203,5 +203,4 @@ else
     echo "### CRON -- Scrub is disabled, proceeding..." 2>&1 | tee -a /var/log/snapraid/snaplog
 fi
 
-echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
 exit_cron
