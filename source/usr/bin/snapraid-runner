@@ -11,16 +11,6 @@ CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
 
 signal_exit_snapraid() {
     echo "Received SIGTERM, finishing up..." | logger -t "snapraid-runner"
-    killall snapraid
-    sleep 3
-    if pgrep -x snapraid >/dev/null 2>&1; then
-        echo "Still stopping SnapRAID..." | logger -t "snapraid-runner"
-        while killall snapraid 2>/dev/null; do
-            sleep 1
-            killall snapraid
-        done
-    fi
-    echo "SnapRAID was stopped gracefully, writing logs..." | logger -t "snapraid-runner"
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     echo "$OPTIME" >/var/log/snapraid/lastfinish
     echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
