@@ -19,7 +19,7 @@ Markdown="false"
 <dl>
     <dt>SnapRAID Backend:</dt>
     <dd>
-	    <strong><?= isset($snapraid_backend) && $snapraid_backend ? $snapraid_backend : "n/a" ?></strong>
+	    <strong><?= isset($dwsnap_backend) && $dwsnap_backend ? $dwsnap_backend : "n/a" ?></strong>
     </dd>
 </dl>
 
@@ -83,7 +83,7 @@ Markdown="false"
         <dt>SnapRAID Maintenance - Schedule Day of Month:</dt>
         <dd>
             <select class="snaprun" id="CRONDOM" name="CRONDOM" size="1">
-                <? echo snap_dom_options($dwsnap_crondom);?>
+                <? echo dwsnap_dom_options($dwsnap_crondom);?>
             </select>
         </dd>
     </dl>
@@ -94,7 +94,7 @@ Markdown="false"
         <dt>SnapRAID Maintenance - Schedule Hour:</dt>
         <dd>
             <select class="snaprun" id="CRONHOUR" name="CRONHOUR" size="1">
-                <? echo snap_hour_options($dwsnap_cronhour);?>
+                <? echo dwsnap_hour_options($dwsnap_cronhour);?>
             </select>
         </dd>
     </dl>
