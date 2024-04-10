@@ -49,7 +49,6 @@ failure_exit_cron() {
 }
 
 signal_exit_cron() {
-    echo "Received SIGTERM, finishing up..." | logger -t "snapraid-cron"
     FAILUREMSG="SIGTERM was received during the ${RUNNINGOP} operation."
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     echo "$OPTIME" >/var/log/snapraid/lastfinish

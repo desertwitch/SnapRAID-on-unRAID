@@ -10,7 +10,6 @@ CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
 [ "$PRIO" == "realtime" ] && SNAP_BIN="ionice -c 1 /usr/bin/snapraid"
 
 signal_exit_snapraid() {
-    echo "Received SIGTERM, finishing up..." | logger -t "snapraid-runner"
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     echo "$OPTIME" >/var/log/snapraid/lastfinish
     echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
