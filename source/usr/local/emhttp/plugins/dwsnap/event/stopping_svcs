@@ -1,0 +1,53 @@
+#!/bin/bash
+echo "SnapRAID: Now attempting to stop any running services..."
+killall snapraid-runner
+killall snapraid-cron
+sleep 5
+
+if pgrep -x snapraid-runner >/dev/null 2>&1; then
+    echo "SnapRAID WARNING: Shutting down hanging 'snapraid-runner' service..."
+    TIMER=0
+    while killall snapraid-runner 2>/dev/null; do
+        sleep 1
+        killall snapraid-runner
+        TIMER=$((TIMER+1))
+        if [ $TIMER -ge 10 ]; then
+            echo "SNAPRAID WARNING: Hard-killing hanging 'snapraid-runner' service..."
+            killall -9 snapraid-runner
+            sleep 1
+            break
+        fi
+    done
+fi
+
+if pgrep -x snapraid-cron >/dev/null 2>&1; then
+    echo "SnapRAID WARNING: Shutting down hanging 'snapraid-cron' service..."
+    TIMER=0
+    while killall snapraid-cron 2>/dev/null; do
+        sleep 1
+        killall snapraid-cron
+        TIMER=$((TIMER+1))
+        if [ $TIMER -ge 10 ]; then
+            echo "SNAPRAID WARNING: Hard-killing hanging 'snapraid-cron' service..."
+            killall -9 snapraid-cron
+            sleep 1
+            break
+        fi
+    done
+fi
+
+if pgrep -x snapraid >/dev/null 2>&1; then
+    echo "SnapRAID WARNING: Shutting down hanging 'snapraid' service..."
+    TIMER=0
+    while killall snapraid 2>/dev/null; do
+        sleep 1
+        killall snapraid
+        TIMER=$((TIMER+1))
+        if [ $TIMER -ge 15 ]; then
+            echo "SNAPRAID WARNING: Hard-killing hanging 'snapraid' service..."
+            killall -9 snapraid
+            sleep 1
+            break
+        fi
+    done
+fi

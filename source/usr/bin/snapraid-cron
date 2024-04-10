@@ -5,6 +5,7 @@ SNAP_BIN="/usr/bin/snapraid"
 SNAP_CONF="/etc/snapraid.conf"
 NOTIFY_BIN="/usr/local/emhttp/plugins/dynamix/scripts/notify"
 CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
+RUNNINGOP="INIT"
 
 [ -e "$CONFIG" ] && source $CONFIG
 
@@ -27,6 +28,7 @@ SUBJECT="[${HOST}] SnapRAID"
 [ "$PRIO" == "realtime" ] && SNAP_BIN="ionice -c 1 /usr/bin/snapraid"
 
 exit_cron() {
+    RUNNINGOP="LOGWRITE"
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     echo "$OPTIME" >/var/log/snapraid/lastfinish
     echo "### CRON -- FINISHED: ${OPTIME}" 2>&1 | tee -a /var/log/snapraid/snaplog
@@ -35,11 +37,34 @@ exit_cron() {
 }
 
 failure_exit_cron() {
+    RUNNINGOP="LOGWRITE"
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     echo "$OPTIME" >/var/log/snapraid/lastfinish
     echo "### CRON -- FINISHED: ${OPTIME}" 2>&1 | tee -a /var/log/snapraid/snaplog
     cp /var/log/snapraid/snaplog /var/log/snapraid/cron-"${LOGTIME}".log
     [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "The SnapRAID maintenance has finished with errors. ${FAILUREMSG}" -i "alert"
+    exit 1
+}
+
+signal_exit_cron() {
+    echo "Received SIGTERM, finishing up..." | logger -t "snapraid-cron"
+    killall snapraid
+    sleep 3
+    if pgrep -x snapraid >/dev/null 2>&1; then
+        echo "Still stopping SnapRAID..." | logger -t "snapraid-cron"
+        while killall snapraid 2>/dev/null; do
+            sleep 1
+            killall snapraid
+        done
+    fi
+    echo "SnapRAID was stopped gracefully, writing logs..." | logger -t "snapraid-cron"
+    FAILUREMSG="SIGTERM was received during the ${RUNNINGOP} operation."
+    OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+    echo "$OPTIME" >/var/log/snapraid/lastfinish
+    echo "### CRON -- INTERRUPTED: ${OPTIME}" 2>&1 | tee -a /var/log/snapraid/snaplog
+    cp /var/log/snapraid/snaplog /var/log/snapraid/cron-"${LOGTIME}".log
+    [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "The SnapRAID maintenance has been interrupted. ${FAILUREMSG}" -i "alert"
+    echo "Now exiting..." | logger -t "snapraid-cron"
     exit 1
 }
 
@@ -50,9 +75,12 @@ echo "$OPTIME" >/var/log/snapraid/laststart
 echo "### CRON -- STARTED: ${OPTIME}" 2>&1 | tee /var/log/snapraid/snaplog
 echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
 
+trap 'signal_exit_cron' SIGTERM
+
 [ "$STARTNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Started" -d "The SnapRAID maintenance has started." -i "warning"
 
 if [ "$TOUCH" == "enable" ]; then
+    RUNNINGOP="TOUCH"
     echo "### CRON -- Checking for files to be touched..." 2>&1 | tee -a /var/log/snapraid/snaplog
     TIMESTATUS=$($SNAP_BIN -c $SNAP_CONF status 2>&1 | tee -a /var/log/snapraid/snaplog | grep 'You have [1-9][0-9]* files with zero sub-second timestamp\.' | sed 's/^You have/Found/g')
     if [ -n "$TIMESTATUS" ]; then
@@ -72,6 +100,7 @@ fi
 echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
 
 if [ "$DIFF" == "enable" ]; then
+    RUNNINGOP="DIFF"
     echo "### CRON -- Checking for differences..." 2>&1 | tee -a /var/log/snapraid/snaplog
     DIFFS=$($SNAP_BIN -c $SNAP_CONF diff 2>&1 | tee -a /var/log/snapraid/snaplog)
     EQ_COUNT=$(grep -w '^ \{1,\}[0-9]* equal' <<< "$DIFFS" | sed 's/^ *//g' | cut -d ' ' -f1)
@@ -128,6 +157,7 @@ fi
 echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
 
 if [ "$SYNC" == "enable" ]; then
+    RUNNINGOP="SYNC"
     if [ "$DEL_COUNT" -eq 0 ] && [ "$ADD_COUNT" -eq 0 ] && [ "$MOVE_COUNT" -eq 0 ] && [ "$COPY_COUNT" -eq 0 ] && [ "$UPDATE_COUNT" -eq 0 ]; then
         echo "### CRON -- No differences detected (skipping sync), proceeding..." 2>&1 | tee -a /var/log/snapraid/snaplog
     else
@@ -159,6 +189,7 @@ fi
 echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
 
 if [ "$SCRUB" == "enable" ]; then
+    RUNNINGOP="SCRUB"
     if [ "$SCRUBNEW" == "enable" ]; then
         echo "### CRON -- Scrubbing New Blocks..." 2>&1 | tee -a /var/log/snapraid/snaplog
         if ! $SNAP_BIN -c $SNAP_CONF -p new scrub >>/var/log/snapraid/snaplog 2>&1; then

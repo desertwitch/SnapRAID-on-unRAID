@@ -9,6 +9,31 @@ CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
 [ "$PRIO" == "besteffort" ] && SNAP_BIN="ionice -c 2 /usr/bin/snapraid"
 [ "$PRIO" == "realtime" ] && SNAP_BIN="ionice -c 1 /usr/bin/snapraid"
 
+signal_exit_snapraid() {
+    echo "Received SIGTERM, finishing up..." | logger -t "snapraid-runner"
+    killall snapraid
+    sleep 3
+    if pgrep -x snapraid >/dev/null 2>&1; then
+        echo "Still stopping SnapRAID..." | logger -t "snapraid-runner"
+        while killall snapraid 2>/dev/null; do
+            sleep 1
+            killall snapraid
+        done
+    fi
+    echo "SnapRAID was stopped gracefully, writing logs..." | logger -t "snapraid-runner"
+    OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+    echo "$OPTIME" >/var/log/snapraid/lastfinish
+    echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
+    echo "### ${BIGOP} INTERRUPTED [SIGTERM]: ${OPTIME}" 2>&1 | tee -a /var/log/snapraid/snaplog
+    if [ -n "$2" ]; then
+        cp "/var/log/snapraid/snaplog" "/var/log/snapraid/${1}-${2}-${LOGTIME}.log"
+    else
+        cp "/var/log/snapraid/snaplog" "/var/log/snapraid/${1}-${LOGTIME}.log"
+    fi
+    echo "Now exiting..." | logger -t "snapraid-runner"
+    exit 1
+}
+
 run_snapraid() {
     CMD="$1"
     BIGOP="$(echo "$1" | awk '{print toupper($0)}')"
@@ -22,6 +47,11 @@ run_snapraid() {
     rm -f /var/log/snapraid/lastfinish
     LOGTIME=$(date +"%Y%m%d-%H%M%S")
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+    if [ -n "$2" ]; then
+        trap 'signal_exit_snapraid $1 $2' SIGTERM
+    else
+        trap 'signal_exit_snapraid $1' SIGTERM
+    fi
     echo "$OPTIME" >/var/log/snapraid/laststart
     echo "### ${BIGOP} STARTED: ${OPTIME}" 2>&1 | tee /var/log/snapraid/snaplog
     if [ -n "$2" ]; then
