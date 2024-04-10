@@ -7,4 +7,4 @@ sleep 5
 killall -s9 snapraid
 killall -s9 snapraid-runner
 killall -s9 snapraid-cron
-sleep 3
+sleep 1

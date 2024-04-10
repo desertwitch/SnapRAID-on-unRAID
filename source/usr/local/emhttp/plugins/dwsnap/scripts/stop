@@ -1,4 +1,4 @@
 #!/bin/bash
 echo "Stopping all running SnapRAID instances..."
 killall snapraid
-sleep 3
+sleep 5
