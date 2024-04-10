@@ -162,6 +162,9 @@ if [ "$SYNC" == "enable" ]; then
                 echo "### CRON -- Prehashed Sync has failed, exiting..." 2>&1 | tee -a /var/log/snapraid/snaplog
                 FAILUREMSG="The prehashed sync has failed - check LOG."
                 failure_exit_cron
+            else
+                OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+                echo "$OPTIME" > /boot/config/plugins/dwsnap/config/lastsync
             fi
         else
             echo "### CRON -- Syncing...${FORCEZEROMSG}" 2>&1 | tee -a /var/log/snapraid/snaplog
@@ -169,6 +172,9 @@ if [ "$SYNC" == "enable" ]; then
                 echo "### CRON -- Sync has failed, exiting..." 2>&1 | tee -a /var/log/snapraid/snaplog
                 FAILUREMSG="The sync has failed - check LOG."
                 failure_exit_cron
+            else
+                OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+                echo "$OPTIME" > /boot/config/plugins/dwsnap/config/lastsync
             fi
         fi
         echo "### CRON -- Sync has finished, proceeding..." 2>&1 | tee -a /var/log/snapraid/snaplog
@@ -187,6 +193,9 @@ if [ "$SCRUB" == "enable" ]; then
                 echo "### CRON -- Scrub New Blocks has failed, exiting..." 2>&1 | tee -a /var/log/snapraid/snaplog
                 FAILUREMSG="The new block scrub has failed - check LOG."
                 failure_exit_cron
+        else
+            OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+            echo "$OPTIME" > /boot/config/plugins/dwsnap/config/lastscrub
         fi
         echo "### CRON -- Scrub New Blocks has finished, proceeding..." 2>&1 | tee -a /var/log/snapraid/snaplog
         echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
@@ -197,6 +206,9 @@ if [ "$SCRUB" == "enable" ]; then
             echo "### CRON -- Scrub has failed, exiting..." 2>&1 | tee -a /var/log/snapraid/snaplog
             FAILUREMSG="The scrub has failed - check LOG."
             failure_exit_cron
+    else
+        OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+        echo "$OPTIME" > /boot/config/plugins/dwsnap/config/lastscrub
     fi
     echo "### CRON -- Scrub has finished, proceeding..." 2>&1 | tee -a /var/log/snapraid/snaplog
 else

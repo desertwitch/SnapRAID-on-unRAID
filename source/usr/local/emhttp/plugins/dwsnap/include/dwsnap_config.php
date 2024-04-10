@@ -23,9 +23,43 @@ $dwsnap_moved = trim(isset($dwsnap_cfg['MOVED']) ? htmlspecialchars($dwsnap_cfg[
 $dwsnap_copied = trim(isset($dwsnap_cfg['COPIED']) ? htmlspecialchars($dwsnap_cfg['COPIED']) : '-1');
 $dwsnap_restored = trim(isset($dwsnap_cfg['RESTORED']) ? htmlspecialchars($dwsnap_cfg['RESTORED']) : '-1');
 
-$snapraid_backend = trim(shell_exec("find /var/log/packages/ -type f -iname 'snapraid-*' -printf '%f\n' 2> /dev/null"));
-$snapraid_laststart = (file_exists("/var/log/snapraid/laststart") ? (file_get_contents("/var/log/snapraid/laststart") ?? "n/a") : "n/a");
-$snapraid_lastfinish = (file_exists("/var/log/snapraid/lastfinish") ? (file_get_contents("/var/log/snapraid/lastfinish") ?? "n/a") : "n/a");
+$snapraid_backend = trim(htmlspecialchars(shell_exec("find /var/log/packages/ -type f -iname 'snapraid-*' -printf '%f\n' 2> /dev/null")));
+$snapraid_laststart = trim(htmlspecialchars(file_exists("/var/log/snapraid/laststart") ? (file_get_contents("/var/log/snapraid/laststart") ?? "n/a") : "n/a"));
+$snapraid_lastfinish = trim(htmlspecialchars(file_exists("/var/log/snapraid/lastfinish") ? (file_get_contents("/var/log/snapraid/lastfinish") ?? "n/a") : "n/a"));
+$snapraid_lastsync = trim(htmlspecialchars(file_exists("/boot/config/plugins/dwsnap/config/lastsync") ? (file_get_contents("/var/log/snapraid/laststart") ?? "n/a") : "n/a"));
+$snapraid_lastscrub = trim(htmlspecialchars(file_exists("/boot/config/plugins/dwsnap/config/lastscrub") ? (file_get_contents("/var/log/snapraid/lastfinish") ?? "n/a") : "n/a"));
+
+function snap_time_ago ($oldTime) {
+    $timeCalc = strtotime("now") - strtotime($oldTime);
+    if ($timeCalc >= (60*60*24*30*12*2)){
+        $timeCalc = "<span class='orange-text'>" . intval($timeCalc/60/60/24/30/12) . " years ago</span>";
+        }else if ($timeCalc >= (60*60*24*30*12)){
+            $timeCalc = "<span class='orange-text'>" . intval($timeCalc/60/60/24/30/12) . " year ago</span>";
+        }else if ($timeCalc >= (60*60*24*30*2)){
+            $timeCalc = "<span class='orange-text'>" . intval($timeCalc/60/60/24/30) . " months ago</span>";
+        }else if ($timeCalc >= (60*60*24*30)){
+            $timeCalc = "<span class='orange-text'>" . intval($timeCalc/60/60/24/30) . " month ago</span>";
+        }else if ($timeCalc >= (60*60*24*2)){
+            if(($timeCalc/60/60/24) > 14) {
+                $timeCalc = "<span class='orange-text'>" . intval($timeCalc/60/60/24) . " days ago</span>";
+            } else {
+                $timeCalc = "<span class='green-text'>" . intval($timeCalc/60/60/24) . " days ago</span>";
+            }
+        }else if ($timeCalc >= (60*60*24)){
+            $timeCalc = "<span class='green-text'>" . "1 day ago</span>";
+        }else if ($timeCalc >= (60*60*2)){
+            $timeCalc = "<span class='green-text'>" . intval($timeCalc/60/60) . " hours ago</span>";
+        }else if ($timeCalc >= (60*60)){
+            $timeCalc = "<span class='green-text'>" . intval($timeCalc/60/60) . " hour ago</span>";
+        }else if ($timeCalc >= 60*2){
+            $timeCalc = "<span class='green-text'>" . intval($timeCalc/60) . " minutes ago</span>";
+        }else if ($timeCalc >= 60){
+            $timeCalc = "<span class='green-text'>" . intval($timeCalc/60) . " minute ago</span>";
+        }else if ($timeCalc > 0){
+            $timeCalc .= "<span class='green-text'>a few seconds ago</span>";
+        }
+    return $timeCalc;
+}
 
 function snap_hour_options($time){
     $options = '';
