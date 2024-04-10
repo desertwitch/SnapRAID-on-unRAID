@@ -3,4 +3,4 @@ echo "Stopping all running SnapRAID instances..."
 killall snapraid-runner
 killall snapraid-cron
 killall snapraid
-sleep 5
+sleep 1
