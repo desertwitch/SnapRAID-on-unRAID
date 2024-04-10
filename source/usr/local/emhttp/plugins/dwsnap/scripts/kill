@@ -1,4 +1,6 @@
 #!/bin/bash
 echo "Killing all running SnapRAID instances..."
+killall -s9 snapraid-runner
+killall -s9 snapraid-cron
 killall -s9 snapraid
 sleep 1
