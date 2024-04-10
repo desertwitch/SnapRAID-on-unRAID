@@ -184,42 +184,42 @@ Markdown="false"
         <dl>
             <dt>SnapRAID Maintenance - Added Files Threshold:</dt>
             <dd>
-                <input id="ADDED" type="text" class="narrow snaprun" name="ADDED" maxlength="30" value="<?=$dwsnap_added?>"> files
+                <input id="ADDED" type="text" class="narrow snaprun" name="ADDED" maxlength="30" value="<?=$dwsnap_added?>">files
             </dd>
         </dl>
 
         <dl>
             <dt>SnapRAID Maintenance - Deleted Files Threshold:</dt>
             <dd>
-                <input id="DELETED" type="text" class="narrow snaprun" name="DELETED" maxlength="30" value="<?=$dwsnap_deleted?>"> files
+                <input id="DELETED" type="text" class="narrow snaprun" name="DELETED" maxlength="30" value="<?=$dwsnap_deleted?>">files
             </dd>
         </dl>
 
         <dl>
             <dt>SnapRAID Maintenance - Updated Files Threshold:</dt>
             <dd>
-                <input id="UPDATED" type="text" class="narrow snaprun" name="UPDATED" maxlength="30" value="<?=$dwsnap_updated?>"> files
+                <input id="UPDATED" type="text" class="narrow snaprun" name="UPDATED" maxlength="30" value="<?=$dwsnap_updated?>">files
             </dd>
         </dl>
 
         <dl>
             <dt>SnapRAID Maintenance - Moved Files Threshold:</dt>
             <dd>
-                <input id="MOVED" type="text" class="narrow snaprun" name="MOVED" maxlength="30" value="<?=$dwsnap_moved?>"> files
+                <input id="MOVED" type="text" class="narrow snaprun" name="MOVED" maxlength="30" value="<?=$dwsnap_moved?>">files
             </dd>
         </dl>
 
         <dl>
             <dt>SnapRAID Maintenance - Copied Files Threshold:</dt>
             <dd>
-                <input id="COPIED" type="text" class="narrow snaprun" name="COPIED" maxlength="30" value="<?=$dwsnap_copied?>"> files
+                <input id="COPIED" type="text" class="narrow snaprun" name="COPIED" maxlength="30" value="<?=$dwsnap_copied?>">files
             </dd>
         </dl>
 
         <dl>
             <dt>SnapRAID Maintenance - Restored Files Threshold:</dt>
             <dd>
-                <input id="RESTORED" type="text" class="narrow snaprun" name="RESTORED" maxlength="30" value="<?=$dwsnap_restored?>"> files
+                <input id="RESTORED" type="text" class="narrow snaprun" name="RESTORED" maxlength="30" value="<?=$dwsnap_restored?>">files
             </dd>
         </dl>
 
@@ -294,7 +294,7 @@ Markdown="false"
         <dl>
             <dt>SnapRAID Maintenance - Scrub Age:</dt>
             <dd>
-                <input id="SCRUBAGE" type="text" class="narrow snaprun" name="SCRUBAGE" maxlength="30" value="<?=$dwsnap_scrubage?>"> days
+                <input id="SCRUBAGE" type="text" class="narrow snaprun" name="SCRUBAGE" maxlength="30" value="<?=$dwsnap_scrubage?>">days
             </dd>
         </dl>
 
@@ -305,7 +305,7 @@ Markdown="false"
         <dl>
             <dt>SnapRAID Maintenance - Scrub Percentage:</dt>
             <dd>
-                <input id="SCRUBPERCENT" type="text" class="narrow snaprun" name="SCRUBPERCENT" maxlength="30" value="<?=$dwsnap_scrubpercent?>"> %
+                <input id="SCRUBPERCENT" type="text" class="narrow snaprun" name="SCRUBPERCENT" maxlength="30" value="<?=$dwsnap_scrubpercent?>">%
             </dd>
         </dl>
 
