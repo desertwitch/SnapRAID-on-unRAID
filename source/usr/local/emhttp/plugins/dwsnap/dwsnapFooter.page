@@ -22,7 +22,7 @@ if($dwsnap_lastsync !== "-" && $dwsnap_lastscrub !== "-") {
     margin-right: 24px;
 }
 #snap_footer i {
-    padding-left: 5px;
+    margin-left: 5px;
 }
 </style>
 
