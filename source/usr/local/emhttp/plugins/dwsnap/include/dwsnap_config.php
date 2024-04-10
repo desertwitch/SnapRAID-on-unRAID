@@ -56,7 +56,7 @@ function snap_time_ago ($oldTime) {
         }else if ($timeCalc >= 60){
             $timeCalc = "<span class='green-text'>" . intval($timeCalc/60) . " minute ago</span>";
         }else if ($timeCalc > 0){
-            $timeCalc .= "<span class='green-text'>a few seconds ago</span>";
+            $timeCalc = "<span class='green-text'>" . $timeCalc . " seconds ago</span>";
         }
     return $timeCalc;
 }
