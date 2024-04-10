@@ -20,7 +20,6 @@ signal_exit_snapraid() {
     else
         cp "/var/log/snapraid/snaplog" "/var/log/snapraid/${1}-${LOGTIME}.log"
     fi
-    echo "Now exiting..." | logger -t "snapraid-runner"
     exit 1
 }
 

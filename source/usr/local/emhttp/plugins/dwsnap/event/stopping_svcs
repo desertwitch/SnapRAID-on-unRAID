@@ -1,7 +1,9 @@
 #!/bin/bash
-echo "SnapRAID: Now attempting to stop any running services..."
-killall snapraid
-sleep 5
+if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 || pgrep -x snapraid-runner >/dev/null 2>&1; then
+    echo "SnapRAID: Now attempting to stop any running services..."
+    killall snapraid
+    sleep 5
+fi
 
 if pgrep -x snapraid >/dev/null 2>&1; then
     echo "SnapRAID WARNING: Shutting down hanging 'snapraid' service..."
