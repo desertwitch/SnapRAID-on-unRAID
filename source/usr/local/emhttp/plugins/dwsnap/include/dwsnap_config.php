@@ -29,10 +29,11 @@ $snapraid_lastfinish = trim(htmlspecialchars(file_exists("/var/log/snapraid/last
 $snapraid_lastsync = trim(htmlspecialchars(file_exists("/boot/config/plugins/dwsnap/config/lastsync") ? (file_get_contents("/var/log/snapraid/laststart") ?? "n/a") : "n/a"));
 $snapraid_lastscrub = trim(htmlspecialchars(file_exists("/boot/config/plugins/dwsnap/config/lastscrub") ? (file_get_contents("/var/log/snapraid/lastfinish") ?? "n/a") : "n/a"));
 
-function snap_time_ago ($oldTime) {
-    $timeCalc = strtotime("now") - strtotime($oldTime);
-    if ($timeCalc >= (60*60*24*30*12*2)){
-        $timeCalc = "<span class='orange-text'>" . intval($timeCalc/60/60/24/30/12) . " years ago</span>";
+function snap_time_ago($oldTime) {
+    try {
+        $timeCalc = strtotime("now") - strtotime($oldTime);
+        if ($timeCalc >= (60*60*24*30*12*2)){
+            $timeCalc = "<span class='orange-text'>" . intval($timeCalc/60/60/24/30/12) . " years ago</span>";
         }else if ($timeCalc >= (60*60*24*30*12)){
             $timeCalc = "<span class='orange-text'>" . intval($timeCalc/60/60/24/30/12) . " year ago</span>";
         }else if ($timeCalc >= (60*60*24*30*2)){
@@ -58,7 +59,12 @@ function snap_time_ago ($oldTime) {
         }else if ($timeCalc > 0){
             $timeCalc = "<span class='green-text'>" . $timeCalc . " seconds ago</span>";
         }
-    return $timeCalc;
+        return "(" . $timeCalc . ")";
+    } catch (Throwable $e) { // For PHP 7
+        return "";
+    } catch (Exception $e) { // For PHP 5
+        return "";
+    }
 }
 
 function snap_hour_options($time){

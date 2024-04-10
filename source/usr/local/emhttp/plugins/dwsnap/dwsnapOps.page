@@ -9,8 +9,8 @@ Markdown="false"
 require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 $lastsync_html = "n/a";
 $lastscrub_html = "n/a";
-if($snapraid_lastsync !== "n/a") { $lastsync_html = $snapraid_lastsync . "(" . snap_time_ago($snapraid_lastsync) . ")"; }
-if($snapraid_lastscrub !== "n/a") { $lastscrub_html = $snapraid_lastscrub . "(" . snap_time_ago($snapraid_lastscrub) . ")"; }
+if($snapraid_lastsync !== "n/a") { $lastsync_html = $snapraid_lastsync . " " . snap_time_ago($snapraid_lastsync); }
+if($snapraid_lastscrub !== "n/a") { $lastscrub_html = $snapraid_lastscrub . " " . snap_time_ago($snapraid_lastscrub); }
 ?>
 
 <style type="text/css">
@@ -90,10 +90,10 @@ if($snapraid_lastscrub !== "n/a") { $lastscrub_html = $snapraid_lastscrub . "(" 
     <table class="tablesorter snapdisks">
         <thead>
             <tr>
-                <th colspan="9"><strong>OVERVIEW OF ARRAY WITH INDIVIDUAL DISKS /</strong> <span style="text-transform: none;"><strong>Last Sync:</strong> <?=$lastsync_html?> <strong>/</strong> <strong>Last Scrub:</strong> <?=$lastscrub_html?> </span></th>
+                <th colspan="9"><strong>OVERVIEW OF ARRAY WITH INDIVIDUAL DISKS</strong> <span style="text-transform: none;float:right;"><span style="margin-left:10px;"><strong>Last Sync:</strong> <?=$lastsync_html?></span><span style="margin-left:10px;"><strong>Last Scrub:</strong> <?=$lastscrub_html?></span></span></th>
             </tr>
             <tr>
-                 <th><strong>Disk Type</strong></th><th><strong><strong>Disk Name</strong></th><th><strong>Mountpoint</strong></th><th><strong>FileSystem</strong></th><th><strong>Total Space</strong></th><th><strong>Used Space</strong></th><th><strong>Free Space</strong></th><th><strong>Utilization</strong></th><th><strong>Disk-Specific Operations</strong></th>
+                 <th><strong>Disk Type</strong></th><th><strong>Disk Name</strong></th><th><strong>Mountpoint</strong></th><th><strong>FileSystem</strong></th><th><strong>Total Space</strong></th><th><strong>Used Space</strong></th><th><strong>Free Space</strong></th><th><strong>Utilization</strong></th><th><strong>Disk-Specific Operations</strong></th>
             </tr>
         </thead>
         <tbody>
