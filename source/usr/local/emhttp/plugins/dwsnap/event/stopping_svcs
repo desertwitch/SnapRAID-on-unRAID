@@ -1,19 +1,19 @@
 #!/bin/bash
 if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 || pgrep -x snapraid-runner >/dev/null 2>&1; then
-    echo "SnapRAID: Now attempting to stop any running services..."
+    echo "SnapRAID: Now attempting to stop any running services..." | logger -t "snapraid"
     killall snapraid
     sleep 5
 fi
 
 if pgrep -x snapraid >/dev/null 2>&1; then
-    echo "SnapRAID WARNING: Shutting down hanging 'snapraid' service..."
+    echo "SnapRAID WARNING: Shutting down hanging 'snapraid' service..." | logger -t "snapraid"
     TIMER=0
     while killall snapraid 2>/dev/null; do
         sleep 1
         killall snapraid
         TIMER=$((TIMER+1))
         if [ $TIMER -ge 10 ]; then
-            echo "SNAPRAID WARNING: Hard-killing hanging 'snapraid' service..."
+            echo "SNAPRAID WARNING: Hard-killing hanging 'snapraid' service..." | logger -t "snapraid"
             killall -9 snapraid
             sleep 1
             break
@@ -22,14 +22,14 @@ if pgrep -x snapraid >/dev/null 2>&1; then
 fi
 
 if pgrep -x snapraid-runner >/dev/null 2>&1; then
-    echo "SnapRAID WARNING: Shutting down hanging 'snapraid-runner' service..."
+    echo "SnapRAID WARNING: Shutting down hanging 'snapraid-runner' service..." | logger -t "snapraid"
     TIMER=0
     while killall snapraid-runner 2>/dev/null; do
         sleep 1
         killall snapraid-runner
         TIMER=$((TIMER+1))
         if [ $TIMER -ge 5 ]; then
-            echo "SNAPRAID WARNING: Hard-killing hanging 'snapraid-runner' service..."
+            echo "SNAPRAID WARNING: Hard-killing hanging 'snapraid-runner' service..." | logger -t "snapraid"
             killall -9 snapraid-runner
             sleep 1
             break
@@ -38,14 +38,14 @@ if pgrep -x snapraid-runner >/dev/null 2>&1; then
 fi
 
 if pgrep -x snapraid-cron >/dev/null 2>&1; then
-    echo "SnapRAID WARNING: Shutting down hanging 'snapraid-cron' service..."
+    echo "SnapRAID WARNING: Shutting down hanging 'snapraid-cron' service..." | logger -t "snapraid"
     TIMER=0
     while killall snapraid-cron 2>/dev/null; do
         sleep 1
         killall snapraid-cron
         TIMER=$((TIMER+1))
         if [ $TIMER -ge 5 ]; then
-            echo "SNAPRAID WARNING: Hard-killing hanging 'snapraid-cron' service..."
+            echo "SNAPRAID WARNING: Hard-killing hanging 'snapraid-cron' service..." | logger -t "snapraid"
             killall -9 snapraid-cron
             sleep 1
             break
