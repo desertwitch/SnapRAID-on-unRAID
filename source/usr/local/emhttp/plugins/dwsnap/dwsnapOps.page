@@ -7,10 +7,10 @@ Markdown="false"
 ---
 <? 
 require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
-$lastsync_html = "n/a";
-$lastscrub_html = "n/a";
-if($snapraid_lastsync !== "n/a") { $lastsync_html = $snapraid_lastsync . " " . snap_time_ago($snapraid_lastsync); }
-if($snapraid_lastscrub !== "n/a") { $lastscrub_html = $snapraid_lastscrub . " " . snap_time_ago($snapraid_lastscrub); }
+$lastsync_html = "-";
+$lastscrub_html = "-";
+if($snapraid_lastsync !== "-") { $lastsync_html = $snapraid_lastsync . " " . snap_time_ago($snapraid_lastsync); }
+if($snapraid_lastscrub !== "-") { $lastscrub_html = $snapraid_lastscrub . " " . snap_time_ago($snapraid_lastscrub); }
 ?>
 
 <style type="text/css">

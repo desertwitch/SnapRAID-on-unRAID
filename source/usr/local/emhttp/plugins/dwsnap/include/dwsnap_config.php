@@ -23,11 +23,10 @@ $dwsnap_moved = trim(isset($dwsnap_cfg['MOVED']) ? htmlspecialchars($dwsnap_cfg[
 $dwsnap_copied = trim(isset($dwsnap_cfg['COPIED']) ? htmlspecialchars($dwsnap_cfg['COPIED']) : '-1');
 $dwsnap_restored = trim(isset($dwsnap_cfg['RESTORED']) ? htmlspecialchars($dwsnap_cfg['RESTORED']) : '-1');
 
-$snapraid_backend = trim(htmlspecialchars(shell_exec("find /var/log/packages/ -type f -iname 'snapraid-*' -printf '%f\n' 2> /dev/null")));
-$snapraid_laststart = trim(htmlspecialchars(file_exists("/var/log/snapraid/laststart") ? (file_get_contents("/var/log/snapraid/laststart") ?? "n/a") : "n/a"));
-$snapraid_lastfinish = trim(htmlspecialchars(file_exists("/var/log/snapraid/lastfinish") ? (file_get_contents("/var/log/snapraid/lastfinish") ?? "n/a") : "n/a"));
-$snapraid_lastsync = trim(htmlspecialchars(file_exists("/boot/config/plugins/dwsnap/config/lastsync") ? (file_get_contents("/boot/config/plugins/dwsnap/config/lastsync") ?? "n/a") : "n/a"));
-$snapraid_lastscrub = trim(htmlspecialchars(file_exists("/boot/config/plugins/dwsnap/config/lastscrub") ? (file_get_contents("/boot/config/plugins/dwsnap/config/lastscrub") ?? "n/a") : "n/a"));
+$snapraid_laststart = trim(file_exists("/var/log/snapraid/laststart") ? htmlspecialchars(file_get_contents("/var/log/snapraid/laststart")) : "-");
+$snapraid_lastfinish = trim(file_exists("/var/log/snapraid/lastfinish") ? htmlspecialchars(file_get_contents("/var/log/snapraid/lastfinish")) : "-");
+$snapraid_lastsync = trim(file_exists("/boot/config/plugins/dwsnap/config/lastsync") ? htmlspecialchars(file_get_contents("/boot/config/plugins/dwsnap/config/lastsync")) : "-");
+$snapraid_lastscrub = trim(file_exists("/boot/config/plugins/dwsnap/config/lastscrub") ? htmlspecialchars(file_get_contents("/boot/config/plugins/dwsnap/config/lastscrub")) : "-");
 
 function snap_time_ago($oldTime) {
     try {
