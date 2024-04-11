@@ -95,7 +95,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
                 <th colspan="10"><strong>OVERVIEW OF ARRAY WITH INDIVIDUAL DISKS</strong> <span style="text-transform: none;float:right;"><span style="margin-left:10px;"><strong>Last Sync:</strong> <?=$snap_lastsync_html?></span><span style="margin-left:10px;"><strong>Last Scrub:</strong> <?=$snap_lastscrub_html?></span></span></th>
             </tr>
             <tr>
-                 <th><strong>Disk Mounted</strong></th><th><strong>Disk Type</strong></th><th><strong>Disk Name</strong></th><th><strong>Mountpoint</strong></th><th><strong>FileSystem</strong></th><th><strong>Total Space</strong></th><th><strong>Used Space</strong></th><th><strong>Free Space</strong></th><th><strong>Utilization</strong></th><th><strong>Disk-Specific Operations</strong></th>
+                 <th><strong>Disk Type</strong></th><th><strong>Disk Name</strong></th><th><strong>Mountpoint</strong></th><th><strong>Mounted</strong></th><th><strong>FileSystem</strong></th><th><strong>Total Space</strong></th><th><strong>Used Space</strong></th><th><strong>Free Space</strong></th><th><strong>Utilization</strong></th><th><strong>Disk-Specific Operations</strong></th>
             </tr>
         </thead>
         <tbody>
@@ -107,7 +107,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
                 $snap_disk_used = htmlspecialchars(shell_exec("df -h | grep " . $snap_parity_disk[2] . " | awk '{print $3}'") ?? "-");
                 $snap_disk_total = htmlspecialchars(shell_exec("df -h | grep " . $snap_parity_disk[2] . " | awk '{print $2}'") ?? "-");
                 $snap_disk_status = ($snap_disk_fs !== "-") ? "<i class='fa fa-check green-text'></i>" : "<i class='fa fa-times red-text'></i>"; 
-                echo("<tr><td>$snap_disk_status</td><td class='snapdisktype'>PARITY</td><td>$snap_parity_disk[1]</td><td><a class='view' href='/Shares/Browse?dir=$snap_parity_disk[2]/' target='_blank'><i class='icon-u-tab' title='Browse $snap_parity_disk[2]/'></i></a>$snap_parity_disk[2]</td><td>$snap_disk_fs</td><td>$snap_disk_total</td><td>$snap_disk_used</td><td>$snap_disk_free</td><td>$snap_disk_util</td><td><input type='button' class='snaprun' id='$snap_parity_disk[1]-check' value='Check'><input type='button' class='snaprun' id='$snap_parity_disk[1]-fix' value='Fix'><input type='button' class='snaprun' id='$snap_parity_disk[1]-fixmissing' value='Fix Missing'></td></tr>");
+                echo("<tr><td class='snapdisktype'>PARITY</td><td>$snap_parity_disk[1]</td><td><a class='view' href='/Shares/Browse?dir=$snap_parity_disk[2]/' target='_blank'><i class='icon-u-tab' title='Browse $snap_parity_disk[2]/'></i></a>$snap_parity_disk[2]</td><td>$snap_disk_status</td><td>$snap_disk_fs</td><td>$snap_disk_total</td><td>$snap_disk_used</td><td>$snap_disk_free</td><td>$snap_disk_util</td><td><input type='button' class='snaprun' id='$snap_parity_disk[1]-check' value='Check'><input type='button' class='snaprun' id='$snap_parity_disk[1]-fix' value='Fix'><input type='button' class='snaprun' id='$snap_parity_disk[1]-fixmissing' value='Fix Missing'></td></tr>");
             }
             foreach ($dwsnap_data_disks as $snap_data_disk){
                 $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab | grep " . $snap_data_disk[2] . " | awk '{print $3}'") ?? "-");
@@ -116,7 +116,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
                 $snap_disk_used = htmlspecialchars(shell_exec("df -h | grep " . $snap_data_disk[2] . " | awk '{print $3}'") ?? "-");
                 $snap_disk_total = htmlspecialchars(shell_exec("df -h | grep " . $snap_data_disk[2] . " | awk '{print $2}'") ?? "-");
                 $snap_disk_status = ($snap_disk_fs !== "-") ? "<i class='fa fa-check green-text'></i>" : "<i class='fa fa-times red-text'></i>"; 
-                echo("<tr><td>$snap_disk_status</td><td class='snapdisktype'>DATA</td><td>$snap_data_disk[1]</td><td><a class='view' href='/Shares/Browse?dir=$snap_data_disk[2]/' target='_blank'><i class='icon-u-tab' title='Browse $snap_data_disk[2]/'></i></a>$snap_data_disk[2]</td><td>$snap_disk_fs</td><td>$snap_disk_total</td><td>$snap_disk_used</td><td>$snap_disk_free</td><td>$snap_disk_util</td><td><input type='button' class='snaprun' id='$snap_data_disk[1]-check' value='Check'><input type='button' class='snaprun' id='$snap_data_disk[1]-fix' value='Fix'><input type='button' class='snaprun' id='$snap_data_disk[1]-fixmissing' value='Fix Missing'></td></tr>");
+                echo("<tr><td class='snapdisktype'>DATA</td><td>$snap_data_disk[1]</td><td><a class='view' href='/Shares/Browse?dir=$snap_data_disk[2]/' target='_blank'><i class='icon-u-tab' title='Browse $snap_data_disk[2]/'></i></a>$snap_data_disk[2]</td><td>$snap_disk_status</td><td>$snap_disk_fs</td><td>$snap_disk_total</td><td>$snap_disk_used</td><td>$snap_disk_free</td><td>$snap_disk_util</td><td><input type='button' class='snaprun' id='$snap_data_disk[1]-check' value='Check'><input type='button' class='snaprun' id='$snap_data_disk[1]-fix' value='Fix'><input type='button' class='snaprun' id='$snap_data_disk[1]-fixmissing' value='Fix Missing'></td></tr>");
             }
             ?>
         </tbody>
