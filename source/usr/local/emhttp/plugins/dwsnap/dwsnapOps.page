@@ -7,12 +7,10 @@ Markdown="false"
 ---
 <? 
 require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
-
 $snap_lastsync_html = "-";
 $snap_lastscrub_html = "-";
 if($dwsnap_lastsync !== "-") { $snap_lastsync_html = $dwsnap_lastsync . " (<strong>" . dwsnap_time_ago($dwsnap_lastsync) . "</strong>)"; }
 if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<strong>" . dwsnap_time_ago($dwsnap_lastscrub) . "</strong>)"; }
-
 ?>
 
 <style type="text/css">
