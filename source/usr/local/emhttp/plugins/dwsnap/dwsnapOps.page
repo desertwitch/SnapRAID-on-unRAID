@@ -13,23 +13,6 @@ $snap_lastscrub_html = "-";
 if($dwsnap_lastsync !== "-") { $snap_lastsync_html = $dwsnap_lastsync . " (<strong>" . dwsnap_time_ago($dwsnap_lastsync) . "</strong>)"; }
 if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<strong>" . dwsnap_time_ago($dwsnap_lastscrub) . "</strong>)"; }
 
-$snap_disk_status_html = "";
-if(!empty($dwsnap_parity_disks) && !empty($dwsnap_data_disks)) {
-    $snap_all_disks_available = true;
-    foreach ($dwsnap_parity_disks as $snap_parity_disk){
-        $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab | grep " . $snap_parity_disk[2] . " | awk '{print $3}'"));
-        if(empty($snap_disk_fs)) { $snap_all_disks_available = false; }
-    }
-    foreach ($dwsnap_data_disks as $snap_data_disk){
-        $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab | grep " . $snap_data_disk[2] . " | awk '{print $3}'") ?? "-");
-        if(empty($snap_disk_fs)) { $snap_all_disks_available = false; }
-    }
-    if($snap_all_disks_available) {
-        $snap_disk_status_html = "<i class='fa fa-circle green-orb' title='All disks online and mounted'></i>";
-    } else {
-        $snap_disk_status_html = "<i class='fa fa-circle red-orb' title='At least one disk is not mounted'></i>";
-    }
-}
 ?>
 
 <style type="text/css">
@@ -109,10 +92,10 @@ if(!empty($dwsnap_parity_disks) && !empty($dwsnap_data_disks)) {
     <table class="tablesorter snapdisks">
         <thead>
             <tr>
-                <th colspan="9"><?=$snap_disk_status_html?><strong>OVERVIEW OF ARRAY WITH INDIVIDUAL DISKS</strong> <span style="text-transform: none;float:right;"><span style="margin-left:10px;"><strong>Last Sync:</strong> <?=$snap_lastsync_html?></span><span style="margin-left:10px;"><strong>Last Scrub:</strong> <?=$snap_lastscrub_html?></span></span></th>
+                <th colspan="10"><strong>OVERVIEW OF ARRAY WITH INDIVIDUAL DISKS</strong> <span style="text-transform: none;float:right;"><span style="margin-left:10px;"><strong>Last Sync:</strong> <?=$snap_lastsync_html?></span><span style="margin-left:10px;"><strong>Last Scrub:</strong> <?=$snap_lastscrub_html?></span></span></th>
             </tr>
             <tr>
-                 <th><strong>Disk Type</strong></th><th><strong>Disk Name</strong></th><th><strong>Mountpoint</strong></th><th><strong>FileSystem</strong></th><th><strong>Total Space</strong></th><th><strong>Used Space</strong></th><th><strong>Free Space</strong></th><th><strong>Utilization</strong></th><th><strong>Disk-Specific Operations</strong></th>
+                 <th><strong>Disk Mounted</strong></th><th><strong>Disk Type</strong></th><th><strong>Disk Name</strong></th><th><strong>Mountpoint</strong></th><th><strong>FileSystem</strong></th><th><strong>Total Space</strong></th><th><strong>Used Space</strong></th><th><strong>Free Space</strong></th><th><strong>Utilization</strong></th><th><strong>Disk-Specific Operations</strong></th>
             </tr>
         </thead>
         <tbody>
@@ -123,7 +106,8 @@ if(!empty($dwsnap_parity_disks) && !empty($dwsnap_data_disks)) {
                 $snap_disk_free = htmlspecialchars(shell_exec("df -h | grep " . $snap_parity_disk[2] . " | awk '{print $4}'") ?? "-");
                 $snap_disk_used = htmlspecialchars(shell_exec("df -h | grep " . $snap_parity_disk[2] . " | awk '{print $3}'") ?? "-");
                 $snap_disk_total = htmlspecialchars(shell_exec("df -h | grep " . $snap_parity_disk[2] . " | awk '{print $2}'") ?? "-");
-                echo("<tr><td class='disktype'>PARITY</td><td>$snap_parity_disk[1]</td><td><a class='view' href='/Shares/Browse?dir=$snap_parity_disk[2]/' target='_blank'><i class='icon-u-tab' title='Browse $snap_parity_disk[2]/'></i></a>$snap_parity_disk[2]</td><td>$snap_disk_fs</td><td>$snap_disk_total</td><td>$snap_disk_used</td><td>$snap_disk_free</td><td>$snap_disk_util</td><td><input type='button' class='snaprun' id='$snap_parity_disk[1]-check' value='Check'><input type='button' class='snaprun' id='$snap_parity_disk[1]-fix' value='Fix'><input type='button' class='snaprun' id='$snap_parity_disk[1]-fixmissing' value='Fix Missing'></td></tr>");
+                $snap_disk_orb = ($snap_disk_fs !== "-") ? "<i class='fa fa-circle snaporb green-orb snaptip' title='Disk is online and mounted'></i>" : "<i class='fa fa-circle snaporb red-orb snaptip' title='Disk is not mounted'></i>"; 
+                echo("<tr><td>$snap_disk_orb</td><td class='disktype'>PARITY</td><td>$snap_parity_disk[1]</td><td><a class='view' href='/Shares/Browse?dir=$snap_parity_disk[2]/' target='_blank'><i class='icon-u-tab' title='Browse $snap_parity_disk[2]/'></i></a>$snap_parity_disk[2]</td><td>$snap_disk_fs</td><td>$snap_disk_total</td><td>$snap_disk_used</td><td>$snap_disk_free</td><td>$snap_disk_util</td><td><input type='button' class='snaprun' id='$snap_parity_disk[1]-check' value='Check'><input type='button' class='snaprun' id='$snap_parity_disk[1]-fix' value='Fix'><input type='button' class='snaprun' id='$snap_parity_disk[1]-fixmissing' value='Fix Missing'></td></tr>");
             }
             foreach ($dwsnap_data_disks as $snap_data_disk){
                 $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab | grep " . $snap_data_disk[2] . " | awk '{print $3}'") ?? "-");
@@ -131,7 +115,8 @@ if(!empty($dwsnap_parity_disks) && !empty($dwsnap_data_disks)) {
                 $snap_disk_free = htmlspecialchars(shell_exec("df -h | grep " . $snap_data_disk[2] . " | awk '{print $4}'") ?? "-");
                 $snap_disk_used = htmlspecialchars(shell_exec("df -h | grep " . $snap_data_disk[2] . " | awk '{print $3}'") ?? "-");
                 $snap_disk_total = htmlspecialchars(shell_exec("df -h | grep " . $snap_data_disk[2] . " | awk '{print $2}'") ?? "-");
-                echo("<tr><td class='disktype'>DATA</td><td>$snap_data_disk[1]</td><td><a class='view' href='/Shares/Browse?dir=$snap_data_disk[2]/' target='_blank'><i class='icon-u-tab' title='Browse $snap_data_disk[2]/'></i></a>$snap_data_disk[2]</td><td>$snap_disk_fs</td><td>$snap_disk_total</td><td>$snap_disk_used</td><td>$snap_disk_free</td><td>$snap_disk_util</td><td><input type='button' class='snaprun' id='$snap_data_disk[1]-check' value='Check'><input type='button' class='snaprun' id='$snap_data_disk[1]-fix' value='Fix'><input type='button' class='snaprun' id='$snap_data_disk[1]-fixmissing' value='Fix Missing'></td></tr>");
+                $snap_disk_orb = ($snap_disk_fs !== "-") ? "<i class='fa fa-circle snaporb green-orb snaptip' title='Disk is online and mounted'></i>" : "<i class='fa fa-circle snaporb red-orb snaptip' title='Disk is not mounted'></i>"; 
+                echo("<tr><td>$snap_disk_orb</td><td class='disktype'>DATA</td><td>$snap_data_disk[1]</td><td><a class='view' href='/Shares/Browse?dir=$snap_data_disk[2]/' target='_blank'><i class='icon-u-tab' title='Browse $snap_data_disk[2]/'></i></a>$snap_data_disk[2]</td><td>$snap_disk_fs</td><td>$snap_disk_total</td><td>$snap_disk_used</td><td>$snap_disk_free</td><td>$snap_disk_util</td><td><input type='button' class='snaprun' id='$snap_data_disk[1]-check' value='Check'><input type='button' class='snaprun' id='$snap_data_disk[1]-fix' value='Fix'><input type='button' class='snaprun' id='$snap_data_disk[1]-fixmissing' value='Fix Missing'></td></tr>");
             }
             ?>
         </tbody>
@@ -382,6 +367,7 @@ $(function(){
 
     getSnapStatus()
     getSnapLogs();
+    $('.snaptip').tooltipster();
 
     // dynamix plugin update api
     <?if (function_exists('plugin_update_available') && $version = plugin_update_available('dwsnap')):?>
