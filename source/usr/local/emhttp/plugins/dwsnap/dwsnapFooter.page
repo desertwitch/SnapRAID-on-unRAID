@@ -8,12 +8,12 @@ $snap_footer_html = "";
 if(!empty($dwsnap_parity_disks) && !empty($dwsnap_data_disks)) {
     $snap_all_disks_available = true;
     foreach ($dwsnap_parity_disks as $snap_parity_disk){
-        $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab | grep " . $snap_parity_disk[2] . " | awk '{print $3}'"));
-        if(empty($snap_disk_fs)) { $snap_all_disks_available = false; }
+        $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab | grep " . $snap_parity_disk[2] . " | awk '{print $3}'") ?? "-");
+        if($snap_disk_fs == "-") { $snap_all_disks_available = false; }
     }
     foreach ($dwsnap_data_disks as $snap_data_disk){
-        $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab | grep " . $snap_data_disk[2] . " | awk '{print $3}'"));
-        if(empty($snap_disk_fs)) { $snap_all_disks_available = false; }
+        $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab | grep " . $snap_data_disk[2] . " | awk '{print $3}'") ?? "-");
+        if($snap_disk_fs == "-") { $snap_all_disks_available = false; }
     }
     if($snap_all_disks_available) {
         if($dwsnap_lastsync !== "-" && $dwsnap_lastscrub !== "-") {
