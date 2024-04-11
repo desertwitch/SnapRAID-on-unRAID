@@ -25,9 +25,9 @@ try {
                 } else {
                     $snap_footer_html = "<span class='snaptip' title='All disks online and mounted / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'>SnapRAID<i class='fa fa-check green-text'></i></span>";
                 }
-            } elseif ($dwsnap_lastsync !== "-" && dwsnap_lastscrub == "-") {
+            } elseif ($dwsnap_lastsync !== "-" && $dwsnap_lastscrub == "-") {
                 $snap_footer_html = "<span class='snaptip' title='All disks online and mounted / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: Never'>SnapRAID<i class='fa fa-clock-o orange-text'></i></span>";
-            } elseif ($dwsnap_lastsync == "-" && dwsnap_lastscrub !== "-") {
+            } elseif ($dwsnap_lastsync == "-" && $dwsnap_lastscrub !== "-") {
                 $snap_footer_html = "<span class='snaptip' title='All disks online and mounted / Last Sync: Never / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'>SnapRAID<i class='fa fa-clock-o orange-text'></i></span>";
             } else {
                 $snap_footer_html = "<span class='snaptip' title='All disks online and mounted / Last Sync: Never / Last Scrub: Never'>SnapRAID<i class='fa fa-clock-o orange-text'></i></span>";
