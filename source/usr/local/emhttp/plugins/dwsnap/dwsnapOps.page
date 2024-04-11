@@ -8,18 +8,28 @@ Markdown="false"
 <? 
 require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 
-$snap_cfg_content = file_get_contents("/etc/snapraid.conf");
-$snap_parity_re = '/(.*?parity) (\/mnt\/disk.*?)\//m';
-$snap_data_re = '/data (.*?) (\/mnt\/disk.*?)\//m';
-
-preg_match_all($snap_parity_re, $snap_cfg_content, $snap_parity_disks, PREG_SET_ORDER);
-preg_match_all($snap_data_re, $snap_cfg_content, $snap_data_disks, PREG_SET_ORDER);
-
 $snap_lastsync_html = "-";
 $snap_lastscrub_html = "-";
 if($dwsnap_lastsync !== "-") { $snap_lastsync_html = $dwsnap_lastsync . " (<strong>" . dwsnap_time_ago($dwsnap_lastsync) . "</strong>)"; }
 if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<strong>" . dwsnap_time_ago($dwsnap_lastscrub) . "</strong>)"; }
 
+$snap_disk_status_html = "";
+if(!empty($dwsnap_parity_disks) && !empty($dwsnap_data_disks)) {
+    $snap_all_disks_available = true;
+    foreach ($dwsnap_parity_disks as $snap_parity_disk){
+        $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab | grep " . $snap_parity_disk[2] . " | awk '{print $3}'"));
+        if(empty($snap_disk_fs)) { $snap_all_disks_available = false; }
+    }
+    foreach ($dwsnap_data_disks as $snap_data_disk){
+        $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab | grep " . $snap_data_disk[2] . " | awk '{print $3}'") ?? "-");
+        if(empty($snap_disk_fs)) { $snap_all_disks_available = false; }
+    }
+    if($snap_all_disks_available) {
+        $snap_disk_status_html = "<i class='fa fa-circle green-orb' title='All disks online and mounted'></i>";
+    } else {
+        $snap_disk_status_html = "<i class='fa fa-circle red-orb' title='At least one disk is not mounted'></i>";
+    }
+}
 ?>
 
 <style type="text/css">
@@ -99,7 +109,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     <table class="tablesorter snapdisks">
         <thead>
             <tr>
-                <th colspan="9"><strong>OVERVIEW OF ARRAY WITH INDIVIDUAL DISKS</strong> <span style="text-transform: none;float:right;"><span style="margin-left:10px;"><strong>Last Sync:</strong> <?=$snap_lastsync_html?></span><span style="margin-left:10px;"><strong>Last Scrub:</strong> <?=$snap_lastscrub_html?></span></span></th>
+                <th colspan="9"><?=$snap_disk_status_html?><strong>OVERVIEW OF ARRAY WITH INDIVIDUAL DISKS</strong> <span style="text-transform: none;float:right;"><span style="margin-left:10px;"><strong>Last Sync:</strong> <?=$snap_lastsync_html?></span><span style="margin-left:10px;"><strong>Last Scrub:</strong> <?=$snap_lastscrub_html?></span></span></th>
             </tr>
             <tr>
                  <th><strong>Disk Type</strong></th><th><strong>Disk Name</strong></th><th><strong>Mountpoint</strong></th><th><strong>FileSystem</strong></th><th><strong>Total Space</strong></th><th><strong>Used Space</strong></th><th><strong>Free Space</strong></th><th><strong>Utilization</strong></th><th><strong>Disk-Specific Operations</strong></th>
@@ -107,7 +117,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
         </thead>
         <tbody>
             <?
-            foreach ($snap_parity_disks as $snap_parity_disk){
+            foreach ($dwsnap_parity_disks as $snap_parity_disk){
                 $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab | grep " . $snap_parity_disk[2] . " | awk '{print $3}'") ?? "-");
                 $snap_disk_util = htmlspecialchars(shell_exec("df -h | grep " . $snap_parity_disk[2] . " | awk '{print $5}'") ?? "-");
                 $snap_disk_free = htmlspecialchars(shell_exec("df -h | grep " . $snap_parity_disk[2] . " | awk '{print $4}'") ?? "-");
@@ -115,7 +125,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
                 $snap_disk_total = htmlspecialchars(shell_exec("df -h | grep " . $snap_parity_disk[2] . " | awk '{print $2}'") ?? "-");
                 echo("<tr><td class='disktype'>PARITY</td><td>$snap_parity_disk[1]</td><td><a class='view' href='/Shares/Browse?dir=$snap_parity_disk[2]/' target='_blank'><i class='icon-u-tab' title='Browse $snap_parity_disk[2]/'></i></a>$snap_parity_disk[2]</td><td>$snap_disk_fs</td><td>$snap_disk_total</td><td>$snap_disk_used</td><td>$snap_disk_free</td><td>$snap_disk_util</td><td><input type='button' class='snaprun' id='$snap_parity_disk[1]-check' value='Check'><input type='button' class='snaprun' id='$snap_parity_disk[1]-fix' value='Fix'><input type='button' class='snaprun' id='$snap_parity_disk[1]-fixmissing' value='Fix Missing'></td></tr>");
             }
-            foreach ($snap_data_disks as $snap_data_disk){
+            foreach ($dwsnap_data_disks as $snap_data_disk){
                 $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab | grep " . $snap_data_disk[2] . " | awk '{print $3}'") ?? "-");
                 $snap_disk_util = htmlspecialchars(shell_exec("df -h | grep " . $snap_data_disk[2] . " | awk '{print $5}'") ?? "-");
                 $snap_disk_free = htmlspecialchars(shell_exec("df -h | grep " . $snap_data_disk[2] . " | awk '{print $4}'") ?? "-");
@@ -358,12 +368,12 @@ $(function(){
     });
 
     <?
-    foreach ($snap_parity_disks as $snap_parity_disk) {
+    foreach ($dwsnap_parity_disks as $snap_parity_disk) {
         echo("\$('#".$snap_parity_disk[1]."-check').click(function(){\$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');\$('#arg').val('diskcheck'); \$('#diskarg').val('".$snap_parity_disk[1]."');\$('#snapcommands').submit(); });\n");
         echo("\$('#".$snap_parity_disk[1]."-fix').click(function(){ swal({ title: \"Destructive Operation\", text: \"This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.\", type: \"warning\", showCancelButton: true, confirmButtonText: \"Start Operation\", html: true }, function(){ \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg').val('diskfix'); \$('#diskarg').val('".$snap_parity_disk[1]."'); \$('#snapcommands').submit(); }); });\n");
         echo("\$('#".$snap_parity_disk[1]."-fixmissing').click(function(){ swal({ title: \"Destructive Operation\", text: \"This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.\", type: \"warning\", showCancelButton: true, confirmButtonText: \"Start Operation\", html: true }, function(){ \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg').val('diskfixmissing'); \$('#diskarg').val('".$snap_parity_disk[1]."'); \$('#snapcommands').submit(); }); });\n");
     }
-    foreach ($snap_data_disks as $snap_data_disk) {
+    foreach ($dwsnap_data_disks as $snap_data_disk) {
         echo("\$('#".$snap_data_disk[1]."-check').click(function(){\$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');\$('#arg').val('diskcheck'); \$('#diskarg').val('".$snap_data_disk[1]."');\$('#snapcommands').submit(); });\n");
         echo("\$('#".$snap_data_disk[1]."-fix').click(function(){ swal({ title: \"Destructive Operation\", text: \"This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.\", type: \"warning\", showCancelButton: true, confirmButtonText: \"Start Operation\", html: true }, function(){ \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg').val('diskfix'); \$('#diskarg').val('".$snap_data_disk[1]."'); \$('#snapcommands').submit(); }); });\n");
         echo("\$('#".$snap_data_disk[1]."-fixmissing').click(function(){ swal({ title: \"Destructive Operation\", text: \"This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.\", type: \"warning\", showCancelButton: true, confirmButtonText: \"Start Operation\", html: true }, function(){ \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg').val('diskfixmissing'); \$('#diskarg').val('".$snap_data_disk[1]."'); \$('#snapcommands').submit(); }); });\n");

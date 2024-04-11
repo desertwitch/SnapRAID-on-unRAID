@@ -31,6 +31,13 @@ $dwsnap_lastfinish = trim(file_exists("/var/log/snapraid/lastfinish") ? htmlspec
 $dwsnap_lastsync = trim(file_exists("/boot/config/plugins/dwsnap/config/lastsync") ? htmlspecialchars(file_get_contents("/boot/config/plugins/dwsnap/config/lastsync")) : "-");
 $dwsnap_lastscrub = trim(file_exists("/boot/config/plugins/dwsnap/config/lastscrub") ? htmlspecialchars(file_get_contents("/boot/config/plugins/dwsnap/config/lastscrub")) : "-");
 
+$dwsnap_cfg_content = file_get_contents("/etc/snapraid.conf");
+$dwsnap_parity_re = '/(.*?parity) (\/mnt\/disk.*?)\//m';
+$dwsnap_data_re = '/data (.*?) (\/mnt\/disk.*?)\//m';
+
+preg_match_all($dwsnap_parity_re, $dwsnap_cfg_content, $dwsnap_parity_disks, PREG_SET_ORDER);
+preg_match_all($dwsnap_data_re, $dwsnap_cfg_content, $dwsnap_data_disks, PREG_SET_ORDER);
+
 function dwsnap_time_ago($oldTime) {
     try {
         $timeCalc = strtotime("now") - strtotime($oldTime);

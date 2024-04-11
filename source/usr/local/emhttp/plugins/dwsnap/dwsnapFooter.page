@@ -5,13 +5,28 @@ Link="nav-user"
 <?if($dwsnap_footer == "enable"):?>
 <?
 $snap_footer_html = "";
-if($dwsnap_lastsync !== "-" && $dwsnap_lastscrub !== "-") {
-    $snap_lastsync_ago = dwsnap_time_ago($dwsnap_lastsync);
-    $snap_lastscrub_ago = dwsnap_time_ago($dwsnap_lastscrub);
-    if (strpos($snap_lastsync_ago, "orange-text") !== false || strpos($snap_lastscrub_ago, "orange-text") !== false) {
-        $snap_footer_html = "<span class='snaptip' title='Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'>SnapRAID<i class='fa fa-clock-o orange-text'></i></span>";
+if(!empty($dwsnap_parity_disks) && !empty($dwsnap_data_disks)) {
+    $snap_all_disks_available = true;
+    foreach ($dwsnap_parity_disks as $snap_parity_disk){
+        $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab | grep " . $snap_parity_disk[2] . " | awk '{print $3}'"));
+        if(empty($snap_disk_fs)) { $snap_all_disks_available = false; }
+    }
+    foreach ($dwsnap_data_disks as $snap_data_disk){
+        $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab | grep " . $snap_data_disk[2] . " | awk '{print $3}'") ?? "-");
+        if(empty($snap_disk_fs)) { $snap_all_disks_available = false; }
+    }
+    if($snap_all_disks_available) {
+        if($dwsnap_lastsync !== "-" && $dwsnap_lastscrub !== "-") {
+            $snap_lastsync_ago = dwsnap_time_ago($dwsnap_lastsync);
+            $snap_lastscrub_ago = dwsnap_time_ago($dwsnap_lastscrub);
+            if (strpos($snap_lastsync_ago, "orange-text") !== false || strpos($snap_lastscrub_ago, "orange-text") !== false) {
+                $snap_footer_html = "<span class='snaptip' title='All disks online and mounted / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'>SnapRAID<i class='fa fa-clock-o orange-text'></i></span>";
+            } else {
+                $snap_footer_html = "<span class='snaptip' title='All disks online and mounted / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'>SnapRAID<i class='fa fa-check green-text'></i></span>";
+            }
+        }
     } else {
-        $snap_footer_html = "<span class='snaptip' title='Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'>SnapRAID<i class='fa fa-check green-text'></i></span>";
+        $snap_footer_html = "<span class='snaptip' title='At least one disk is not mounted'>SnapRAID<i class='fa fa-times red-text'></i></span>";
     }
 }
 ?>
