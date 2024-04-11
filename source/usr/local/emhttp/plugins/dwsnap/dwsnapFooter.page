@@ -21,18 +21,18 @@ try {
                 $snap_lastsync_ago = dwsnap_time_ago($dwsnap_lastsync);
                 $snap_lastscrub_ago = dwsnap_time_ago($dwsnap_lastscrub);
                 if (strpos($snap_lastsync_ago, "orange-text") !== false || strpos($snap_lastscrub_ago, "orange-text") !== false) {
-                    $snap_footer_html = "<span class='snaptip' title='All disks online and mounted / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'>SnapRAID<i class='fa fa-clock-o orange-text'></i></span>";
+                    $snap_footer_html = "<span class='snaptip' title='All disks are online and mounted / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'>SnapRAID<i class='fa fa-clock-o orange-text'></i></span>";
                 } else {
-                    $snap_footer_html = "<span class='snaptip' title='All disks online and mounted / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'>SnapRAID<i class='fa fa-check green-text'></i></span>";
+                    $snap_footer_html = "<span class='snaptip' title='All disks are online and mounted / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'>SnapRAID<i class='fa fa-check green-text'></i></span>";
                 }
             } elseif ($dwsnap_lastsync !== "-" && $dwsnap_lastscrub == "-") {
                 $snap_lastsync_ago = dwsnap_time_ago($dwsnap_lastsync);
-                $snap_footer_html = "<span class='snaptip' title='All disks online and mounted / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: Never'>SnapRAID<i class='fa fa-clock-o orange-text'></i></span>";
+                $snap_footer_html = "<span class='snaptip' title='All disks are online and mounted / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: Never'>SnapRAID<i class='fa fa-clock-o orange-text'></i></span>";
             } elseif ($dwsnap_lastsync == "-" && $dwsnap_lastscrub !== "-") {
                 $snap_lastscrub_ago = dwsnap_time_ago($dwsnap_lastscrub);
-                $snap_footer_html = "<span class='snaptip' title='All disks online and mounted / Last Sync: Never / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'>SnapRAID<i class='fa fa-clock-o orange-text'></i></span>";
+                $snap_footer_html = "<span class='snaptip' title='All disks are online and mounted / Last Sync: Never / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'>SnapRAID<i class='fa fa-clock-o orange-text'></i></span>";
             } else {
-                $snap_footer_html = "<span class='snaptip' title='All disks online and mounted / Last Sync: Never / Last Scrub: Never'>SnapRAID<i class='fa fa-clock-o orange-text'></i></span>";
+                $snap_footer_html = "<span class='snaptip' title='All disks are online and mounted / Last Sync: Never / Last Scrub: Never'>SnapRAID<i class='fa fa-clock-o orange-text'></i></span>";
             }
         } else {
             $snap_footer_html = "<span class='snaptip' title='At least one disk is not mounted'>SnapRAID<i class='fa fa-times red-text'></i></span>";
