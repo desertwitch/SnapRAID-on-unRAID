@@ -72,6 +72,7 @@ try {
     float: right;
     margin-right: 24px;
     font-size: 1.1rem;
+    cursor: pointer;
 }
 #snap_footer i {
     margin-left: 5px;
@@ -101,6 +102,9 @@ function getSnapFooter() {
     });
     clearTimeout(timers.getSnapFooter);
     timers.getSnapFooter = setTimeout(getSnapFooter, 3000);
+    $('#snap_footer').click(function() {
+        location = '/Settings/dwsnapOps';
+    });
 }
 $(function()
 {
