@@ -70,8 +70,11 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
 
 <form markdown="0" id="snapcommands" name="snapcommands" method="POST" action="/update.php" target="progressFrame">
     <input type="hidden" id="command" name="#command" value="">
-    <input type="hidden" id="arg" name="#arg[1]" value="">
-    <input type="hidden" id="diskarg" name="#arg[2]" value="">
+    <input type="hidden" id="arg1" name="#arg[1]" value="">
+    <input type="hidden" id="arg2" name="#arg[2]" value="">
+    <input type="hidden" id="arg3" name="#arg[3]" value="">
+    <input type="hidden" id="arg4" name="#arg[4]" value="">
+    <input type="hidden" id="arg5" name="#arg[5]" value="">
 
     <input class="snaprun" type="button" id="snapstatus" value="STATUS">
     <input class="snaprun" type="button" id="snaplist" value="LIST">
@@ -97,6 +100,17 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     <span style="float:right;">
         <input class="snaprun" type="button" id="crontest" value="RUN MAINTENANCE CRONJOB">
     </span><br>
+
+    <strong>Extra Parameters:</strong>
+    <input type="checkbox" id="snapsync-forcezero" value="snapsync-forcezero">(Sync) Force Zero</input>
+    <input type="checkbox" id="snapsync-forceempty" value="snapsync-forceempty">(Sync) Force Empty</input>
+    <input type="checkbox" id="snapsync-forcefull" value="snapsync-forcefull">(Sync) Force Full</input>
+    <input type="checkbox" id="snapcheck-auditonly" value="snapcheck-auditonly">(Check) Audit Only</input>
+    <br><strong>Extra Selectors:</strong>
+    (Check/Fix) <input type="text" id="snapfix-pattern" class="narrow" placeholder="Pattern (See Manual)">
+    (Check/Fix) <input type="text" id="snapfix-diskpattern" class="narrow" placeholder="Disk Name">
+
+    <br><br>
 
     <div><strong>INFORMATION:</strong></div>
     <div>When using SnapRAID on top of Unraid's parity, always attempt to recover drive failures using Unraid's parity first, before using any SnapRAID recovery functions.</div>
@@ -187,32 +201,32 @@ $(function(){
 
     $('#snapstatus').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-        $('#arg').val('status');
+        $('#arg1').val('status');
         $('#snapcommands').submit();
     });
     $('#snaplist').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-        $('#arg').val('list');
+        $('#arg1').val('list');
         $('#snapcommands').submit();
     });
     $('#snapdiff').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-        $('#arg').val('diff');
+        $('#arg1').val('diff');
         $('#snapcommands').submit();
     });
     $('#snapdup').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-        $('#arg').val('dup');
+        $('#arg1').val('dup');
         $('#snapcommands').submit();
     });
     $('#snapscrub').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-        $('#arg').val('scrub');
+        $('#arg1').val('scrub');
         $('#snapcommands').submit();
     });
     $('#snapcheck').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-        $('#arg').val('check');
+        $('#arg1').val('check');
         $('#snapcommands').submit();
     });
 
@@ -274,7 +288,7 @@ $(function(){
             },
             function(){
                 $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-                $('#arg').val('sync');
+                $('#arg1').val('sync');
                 $('#snapcommands').submit();
             });
     });  
@@ -289,7 +303,8 @@ $(function(){
             },
             function(){
                 $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-                $('#arg').val('hashedsync');
+                $('#arg1').val('sync');
+                $('#arg2').val('-h');
                 $('#snapcommands').submit();
             });
     });
@@ -304,7 +319,7 @@ $(function(){
             },
             function(){
                 $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-                $('#arg').val('touch');
+                $('#arg1').val('touch');
                 $('#snapcommands').submit();
             });
     });
@@ -319,7 +334,7 @@ $(function(){
             },
             function(){
                 $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-                $('#arg').val('fix');
+                $('#arg1').val('fix');
                 $('#snapcommands').submit();
             });
     });
@@ -334,7 +349,8 @@ $(function(){
             },
             function(){
                 $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-                $('#arg').val('fixmissing');
+                $('#arg1').val('fix');
+                $('#arg2').val('-m');
                 $('#snapcommands').submit();
             });
     });
@@ -349,7 +365,8 @@ $(function(){
             },
             function(){
                 $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-                $('#arg').val('fixerrors');
+                $('#arg1').val('fix');
+                $('#arg2').val('-e');
                 $('#snapcommands').submit();
             });
     });
@@ -370,14 +387,14 @@ $(function(){
 
     <?
     foreach ($dwsnap_parity_disks as $snap_parity_disk) {
-        echo("\$('#".$snap_parity_disk[1]."-check').click(function(){\$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');\$('#arg').val('diskcheck'); \$('#diskarg').val('".$snap_parity_disk[1]."');\$('#snapcommands').submit(); });\n");
-        echo("\$('#".$snap_parity_disk[1]."-fix').click(function(){ swal({ title: \"Destructive Operation\", text: \"This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.\", type: \"warning\", showCancelButton: true, confirmButtonText: \"Start Operation\", html: true }, function(){ \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg').val('diskfix'); \$('#diskarg').val('".$snap_parity_disk[1]."'); \$('#snapcommands').submit(); }); });\n");
-        echo("\$('#".$snap_parity_disk[1]."-fixmissing').click(function(){ swal({ title: \"Destructive Operation\", text: \"This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.\", type: \"warning\", showCancelButton: true, confirmButtonText: \"Start Operation\", html: true }, function(){ \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg').val('diskfixmissing'); \$('#diskarg').val('".$snap_parity_disk[1]."'); \$('#snapcommands').submit(); }); });\n");
+        echo("\$('#".$snap_parity_disk[1]."-check').click(function(){\$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');\$('#arg1').val('check'); \$('#arg2').val('-d'); \$('#arg3').val('".$snap_parity_disk[1]."');\$('#snapcommands').submit(); });\n");
+        echo("\$('#".$snap_parity_disk[1]."-fix').click(function(){ swal({ title: \"Destructive Operation\", text: \"This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.\", type: \"warning\", showCancelButton: true, confirmButtonText: \"Start Operation\", html: true }, function(){ \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg1').val('fix'); \$('#arg2').val('-d'); \$('#arg3').val('".$snap_parity_disk[1]."'); \$('#snapcommands').submit(); }); });\n");
+        echo("\$('#".$snap_parity_disk[1]."-fixmissing').click(function(){ swal({ title: \"Destructive Operation\", text: \"This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.\", type: \"warning\", showCancelButton: true, confirmButtonText: \"Start Operation\", html: true }, function(){ \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg1').val('fix'); \$('#arg2').val('-d'); \$('#arg3').val('".$snap_parity_disk[1]."'); \$('#arg4').val('-m'); \$('#snapcommands').submit(); }); });\n");
     }
     foreach ($dwsnap_data_disks as $snap_data_disk) {
-        echo("\$('#".$snap_data_disk[1]."-check').click(function(){\$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');\$('#arg').val('diskcheck'); \$('#diskarg').val('".$snap_data_disk[1]."');\$('#snapcommands').submit(); });\n");
-        echo("\$('#".$snap_data_disk[1]."-fix').click(function(){ swal({ title: \"Destructive Operation\", text: \"This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.\", type: \"warning\", showCancelButton: true, confirmButtonText: \"Start Operation\", html: true }, function(){ \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg').val('diskfix'); \$('#diskarg').val('".$snap_data_disk[1]."'); \$('#snapcommands').submit(); }); });\n");
-        echo("\$('#".$snap_data_disk[1]."-fixmissing').click(function(){ swal({ title: \"Destructive Operation\", text: \"This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.\", type: \"warning\", showCancelButton: true, confirmButtonText: \"Start Operation\", html: true }, function(){ \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg').val('diskfixmissing'); \$('#diskarg').val('".$snap_data_disk[1]."'); \$('#snapcommands').submit(); }); });\n");
+        echo("\$('#".$snap_data_disk[1]."-check').click(function(){\$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');\$('#arg1').val('check'); \$('#arg2').val('-d'); \$('#arg3').val('".$snap_data_disk[1]."');\$('#snapcommands').submit(); });\n");
+        echo("\$('#".$snap_data_disk[1]."-fix').click(function(){ swal({ title: \"Destructive Operation\", text: \"This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.\", type: \"warning\", showCancelButton: true, confirmButtonText: \"Start Operation\", html: true }, function(){ \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg1').val('fix'); \$('#arg2').val('-d'); \$('#arg3').val('".$snap_data_disk[1]."'); \$('#snapcommands').submit(); }); });\n");
+        echo("\$('#".$snap_data_disk[1]."-fixmissing').click(function(){ swal({ title: \"Destructive Operation\", text: \"This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.\", type: \"warning\", showCancelButton: true, confirmButtonText: \"Start Operation\", html: true }, function(){ \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg1').val('fix'); \$('#arg2').val('-d'); \$('#arg3').val('".$snap_data_disk[1]."'); \$('#arg4').val('-m'); \$('#snapcommands').submit(); }); });\n");
     }
     ?>
 

@@ -30,121 +30,44 @@ signal_exit_snapraid() {
     echo "$OPTIME" >/var/log/snapraid/lastfinish
     echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
     echo "### ${BIGOP} INTERRUPTED [SIGTERM]: ${OPTIME}" 2>&1 | tee -a /var/log/snapraid/snaplog
-    if [ -n "$2" ]; then
-        cp "/var/log/snapraid/snaplog" "/var/log/snapraid/${1}-${2}-${LOGTIME}.log"
-    else
-        cp "/var/log/snapraid/snaplog" "/var/log/snapraid/${1}-${LOGTIME}.log"
-    fi
+    cp "/var/log/snapraid/snaplog" "/var/log/snapraid/${1}-${LOGTIME}.log"
     exit 1
 }
 
-run_snapraid() {
-    CMD="$1"
-    BIGOP="$(echo "$1" | awk '{print toupper($0)}')"
-    [ -n "$2" ] && BIGOP="$(echo "$1 $2" | awk '{print toupper($0)}')"
-    [ "$CMD" == "fixerrors" ] && CMD="-e fix"
-    [ "$CMD" == "fixmissing" ] && CMD="-m fix"
-    [ "$CMD" == "hashedsync" ] && CMD="-h sync"
-    [ "$CMD" == "diskcheck" ] && CMD="-d ${2} check"
-    [ "$CMD" == "diskfix" ] && CMD="-d ${2} fix"
-    [ "$CMD" == "diskfixmissing" ] && CMD="-d ${2} -m fix"
-    rm -f /var/log/snapraid/lastfinish
-    LOGTIME=$(date +"%Y%m%d-%H%M%S")
-    OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
-    if [ -n "$2" ]; then
-        trap 'signal_exit_snapraid $1 $2' SIGTERM
-    else
-        trap 'signal_exit_snapraid $1' SIGTERM
-    fi
-    echo "$OPTIME" >/var/log/snapraid/laststart
-    echo "### ${BIGOP} STARTED: ${OPTIME}" 2>&1 | tee /var/log/snapraid/snaplog
-    if [ -n "$2" ]; then
-        echo "### $SNAP_BIN -c $SNAP_CONF -l \"/var/log/snapraid/${1}-${2}-${LOGTIME}.raw.log\" ${CMD} >>/var/log/snapraid/snaplog 2>&1" 2>&1 | tee -a /var/log/snapraid/snaplog 
-        echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
-        $SNAP_BIN -c $SNAP_CONF -l "/var/log/snapraid/${1}-${2}-${LOGTIME}.raw.log" $CMD 2>&1 | tee -a /var/log/snapraid/snaplog 
-    else
-        echo "### $SNAP_BIN -c $SNAP_CONF -l \"/var/log/snapraid/${1}-${LOGTIME}.raw.log\" ${CMD} >>/var/log/snapraid/snaplog 2>&1" 2>&1 | tee -a /var/log/snapraid/snaplog 
-        echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
-        if [ "$CMD" == "sync" ] || [ "$CMD" == "-h sync" ]; then
-            $SNAP_BIN -c $SNAP_CONF -l "/var/log/snapraid/${1}-${LOGTIME}.raw.log" $CMD 2>&1 | tee -a /var/log/snapraid/snaplog
-            if [ "${PIPESTATUS[0]}" -eq 0 ]; then
-                OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
-                echo "$OPTIME" > /boot/config/plugins/dwsnap/config/lastsync
-            else
-                OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
-            fi
-        elif [ "$CMD" == "scrub" ]; then
-            $SNAP_BIN -c $SNAP_CONF -l "/var/log/snapraid/${1}-${LOGTIME}.raw.log" $CMD 2>&1 | tee -a /var/log/snapraid/snaplog
-            if [ "${PIPESTATUS[0]}" -eq 0 ]; then
-                OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
-                echo "$OPTIME" > /boot/config/plugins/dwsnap/config/lastscrub
-            else
-                OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
-            fi
-        else
-            $SNAP_BIN -c $SNAP_CONF -l "/var/log/snapraid/${1}-${LOGTIME}.raw.log" $CMD 2>&1 | tee -a /var/log/snapraid/snaplog 
-            OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
-        fi
-    fi
-    echo "$OPTIME" >/var/log/snapraid/lastfinish
-    echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
-    echo "### ${BIGOP} FINISHED: ${OPTIME}" 2>&1 | tee -a /var/log/snapraid/snaplog
-    if [ -n "$2" ]; then
-        cp "/var/log/snapraid/snaplog" "/var/log/snapraid/${1}-${2}-${LOGTIME}.log"
-    else
-        cp "/var/log/snapraid/snaplog" "/var/log/snapraid/${1}-${LOGTIME}.log"
-    fi
-}
+BIGOP="$(echo "$1" | awk '{print toupper($0)}')"
 
-case "$1" in
-    check)
-        run_snapraid check
-        ;;
-    diskcheck)
-        run_snapraid diskcheck "$2"
-        ;; 
-    diff)
-        run_snapraid diff
-        ;;
-    dup)
-        run_snapraid dup
-        ;;
-    fix)
-        run_snapraid fix
-        ;;
-    diskfix)
-        run_snapraid diskfix "$2"
-        ;; 
-    fixerrors) 
-        run_snapraid fixerrors
-        ;;
-    fixmissing)
-        run_snapraid fixmissing
-        ;;
-    diskfixmissing)
-        run_snapraid diskfixmissing "$2"
-        ;; 
-    hashedsync) 
-        run_snapraid hashedsync
-        ;;
-    list)
-        run_snapraid list
-        ;;
-    scrub)
-        run_snapraid scrub
-        ;;
-    status)
-        run_snapraid status
-        ;;
-    sync)
-        run_snapraid sync
-        ;;
-    touch)
-        run_snapraid touch
-        ;;
-    write_config)
-        write_config
-        ;;
-    *)
-    echo "Usage: $0 {check|diff|dup|fix|fixerrors|fixmissing|hashedsync|list|scrub|status|sync|touch}"
-esac
+rm -f /var/log/snapraid/lastfinish
+LOGTIME=$(date +"%Y%m%d-%H%M%S")
+OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+
+trap 'signal_exit_snapraid $1' SIGTERM
+
+echo "$OPTIME" >/var/log/snapraid/laststart
+echo "### ${BIGOP} STARTED: ${OPTIME}" 2>&1 | tee /var/log/snapraid/snaplog
+echo "### $SNAP_BIN -c $SNAP_CONF -l \"/var/log/snapraid/${1}-${LOGTIME}.raw.log\" $* >>/var/log/snapraid/snaplog 2>&1" 2>&1 | tee -a /var/log/snapraid/snaplog 
+echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
+# if [ "$1" == "sync" ]; then
+#     $SNAP_BIN -c $SNAP_CONF -l "/var/log/snapraid/${1}-${LOGTIME}.raw.log" "$@" 2>&1 | tee -a /var/log/snapraid/snaplog
+#     if [ "${PIPESTATUS[0]}" -eq 0 ]; then
+#         OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+#         echo "$OPTIME" > /boot/config/plugins/dwsnap/config/lastsync
+#     else
+#         OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+#     fi
+# elif [ "$1" == "scrub" ]; then
+#     $SNAP_BIN -c $SNAP_CONF -l "/var/log/snapraid/${1}-${LOGTIME}.raw.log" "$@" 2>&1 | tee -a /var/log/snapraid/snaplog
+#     if [ "${PIPESTATUS[0]}" -eq 0 ]; then
+#         OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+#         echo "$OPTIME" > /boot/config/plugins/dwsnap/config/lastscrub
+#     else
+#         OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+#     fi
+# else
+#     $SNAP_BIN -c $SNAP_CONF -l "/var/log/snapraid/${1}-${LOGTIME}.raw.log" "$@" 2>&1 | tee -a /var/log/snapraid/snaplog 
+#     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+# fi
+OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+echo "$OPTIME" >/var/log/snapraid/lastfinish
+echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
+echo "### ${BIGOP} FINISHED: ${OPTIME}" 2>&1 | tee -a /var/log/snapraid/snaplog
+cp "/var/log/snapraid/snaplog" "/var/log/snapraid/${1}-${LOGTIME}.log"

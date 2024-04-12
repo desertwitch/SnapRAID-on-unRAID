@@ -14,11 +14,6 @@
 # included in all copies or substantial portions of the Software.
 #
 BIGOP="$(echo "$1" | awk '{print toupper($0)}')"
-[ -n "$2" ] && BIGOP="$(echo "$1 $2" | awk '{print toupper($0)}')"
 echo "Starting SnapRAID operation: $BIGOP..."
-if [ -n "$2" ]; then
-    nohup /usr/bin/snapraid-runner "$1" "$2" >/dev/null 2>&1 &
-else
-    nohup /usr/bin/snapraid-runner "$1" >/dev/null 2>&1 &
-fi
+nohup /usr/bin/snapraid-runner "$@" >/dev/null 2>&1 &
 sleep 1
