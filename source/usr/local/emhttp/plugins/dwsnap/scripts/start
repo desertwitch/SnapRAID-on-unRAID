@@ -14,8 +14,7 @@
 # included in all copies or substantial portions of the Software.
 #
 params=("$@")
-for i in "${!params[@]}"; do [[ -z ${params[i]} ]] && unset "params[i]"; done
-
+for i in "${!params[@]}"; do [ -z "${params[i]}" ] && unset "params[i]"; done
 BIGOP="$(echo "$1" | awk '{print toupper($0)}')"
 echo "Starting SnapRAID operation: $BIGOP..."
 nohup /usr/bin/snapraid-runner "${params[@]}" >/dev/null 2>&1 &
