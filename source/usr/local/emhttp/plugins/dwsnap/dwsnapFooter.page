@@ -1,7 +1,27 @@
 Menu="Buttons:197"
 Link="nav-user"
 ---
-<?require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';?>
+<?
+/* Copyright Derek Macias (parts of code from NUT package)
+ * Copyright macester (parts of code from NUT package)
+ * Copyright gfjardim (parts of code from NUT package)
+ * Copyright SimonF (parts of code from NUT package)
+ * Copyright desertwitch
+ *
+ * Copyright Dan Landon
+ * Copyright Bergware International
+ * Copyright Lime Technology
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License 2
+ * as published by the Free Software Foundation.
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ */
+require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
+?>
 <?if($dwsnap_footer == "enable"):?>
 <?
 try {

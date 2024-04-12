@@ -3,6 +3,26 @@ Title="SnapRAID Array Configuration"
 Tag="pencil"
 Markdown="false"
 ---
+<?
+/* Copyright Derek Macias (parts of code from NUT package)
+ * Copyright macester (parts of code from NUT package)
+ * Copyright gfjardim (parts of code from NUT package)
+ * Copyright SimonF (parts of code from NUT package)
+ * Copyright desertwitch
+ *
+ * Copyright Dan Landon
+ * Copyright Bergware International
+ * Copyright Lime Technology
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License 2
+ * as published by the Free Software Foundation.
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ */
+?>
 <link type="text/css" rel="stylesheet" href="<?=autov('/webGui/styles/jquery.filetree.css');?>">
 <link type="text/css" rel="stylesheet" href="<?=autov('/plugins/dwsnap/css/codemirror.css');?>">
 <link type="text/css" rel="stylesheet" href="<?=autov('/plugins/dwsnap/css/dracula.css');?>">
