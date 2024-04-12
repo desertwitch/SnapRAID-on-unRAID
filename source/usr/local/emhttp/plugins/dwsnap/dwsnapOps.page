@@ -111,6 +111,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     <label for="snapsync-forcefull">(Sync) Force Full</label>
     <input type="checkbox" id="snapcheck-auditonly" value="snapcheck-auditonly">
     <label for="snapcheck-auditonly">(Check) Audit Only</label>
+    <span style="float:right;margin-right:10px"><a href="https://www.snapraid.it/manual" target="_blank" title="SnapRAID User Manual"><i class="fa fa-file-text-o"></i> User Manual</a> / <a href="https://www.snapraid.it/faq" target="_blank" title="SnapRAID FAQ"><i class="fa fa-question-circle-o"></i> Frequently Asked Questions</a></span>
     <br><strong>Advanced Filters:</strong>
     (Check/Fix) <input type="text" id="snapfix-pattern" class="narrow" placeholder="Path Pattern (See Manual)">
     (Check/Fix) <input type="text" id="snapfix-diskpattern" class="narrow" placeholder="Disk Name">

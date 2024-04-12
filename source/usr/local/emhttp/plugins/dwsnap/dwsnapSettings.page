@@ -25,8 +25,6 @@ Markdown="false"
 require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 ?>
 
-<span style="float:right;margin-right:10px"><a href="https://www.snapraid.it/manual" target="_blank" title="SnapRAID User Manual"><i class="fa fa-file-text-o"></i> <u>User Manual</u></a> / <a href="https://www.snapraid.it/faq" target="_blank" title="SnapRAID FAQ"><i class="fa fa-question-circle-o"></i> <u>Frequently Asked Questions</u></a></span>
-
 <div><strong>WARNING:</strong></div>
 <div>SnapRAID is a non-supported backup utility for advanced users and can - depending on how YOU set it up - wreak havoc on your data.</div>
 <div>It is crucial to make yourself familiar with the documentation before setting up SnapRAID on your system - you are warned only once here.</div>
