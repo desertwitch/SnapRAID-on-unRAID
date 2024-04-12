@@ -36,6 +36,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     height: 400px;
     max-height: 400px;
     overflow: auto;
+    font-size: 1.1rem;
     word-break: normal !important;
     word-wrap: normal !important;
     white-space: pre !important;
