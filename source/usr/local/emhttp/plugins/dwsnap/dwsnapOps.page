@@ -323,6 +323,12 @@ $(function(){
                 $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
                 $('#arg1').val('sync');
                 $('#arg2').val('-h');
+                if($('#snapsync-forcezero').is(':checked')) {
+                    $('#arg3').val('-Z');
+                }
+                if($('#snapsync-forceempty').is(':checked')) {
+                    $('#arg4').val('-E');
+                }
                 $('#snapcommands').submit();
             });
     });
