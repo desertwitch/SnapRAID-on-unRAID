@@ -40,12 +40,13 @@ rm -f /var/log/snapraid/lastfinish
 LOGTIME=$(date +"%Y%m%d-%H%M%S")
 OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
 
-trap 'signal_exit_snapraid $1' SIGTERM
-
 echo "$OPTIME" >/var/log/snapraid/laststart
 echo "### ${BIGOP} STARTED: ${OPTIME}" 2>&1 | tee /var/log/snapraid/snaplog
 echo "### $SNAP_BIN -c $SNAP_CONF -l \"/var/log/snapraid/${1}-${LOGTIME}.raw.log\" $* >>/var/log/snapraid/snaplog 2>&1" 2>&1 | tee -a /var/log/snapraid/snaplog 
 echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
+
+trap 'signal_exit_snapraid $1' SIGTERM
+
 if [ "$1" == "sync" ]; then
     $SNAP_BIN -c $SNAP_CONF -l "/var/log/snapraid/${1}-${LOGTIME}.raw.log" "$@" 2>&1 | tee -a /var/log/snapraid/snaplog
     if [ "${PIPESTATUS[0]}" -eq 0 ]; then
@@ -66,7 +67,7 @@ else
     $SNAP_BIN -c $SNAP_CONF -l "/var/log/snapraid/${1}-${LOGTIME}.raw.log" "$@" 2>&1 | tee -a /var/log/snapraid/snaplog 
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
 fi
-OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+
 echo "$OPTIME" >/var/log/snapraid/lastfinish
 echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
 echo "### ${BIGOP} FINISHED: ${OPTIME}" 2>&1 | tee -a /var/log/snapraid/snaplog

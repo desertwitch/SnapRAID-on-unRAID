@@ -103,10 +103,14 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     </span><br>
 
     <strong>Advanced Parameters:</strong>
-    <input type="checkbox" id="snapsync-forcezero" value="snapsync-forcezero">(Sync) Force Zero</input>
-    <input type="checkbox" id="snapsync-forceempty" value="snapsync-forceempty">(Sync) Force Empty</input>
-    <input type="checkbox" id="snapsync-forcefull" value="snapsync-forcefull">(Sync) Force Full</input>
-    <input type="checkbox" id="snapcheck-auditonly" value="snapcheck-auditonly">(Check) Audit Only</input>
+    <input type="checkbox" id="snapsync-forcezero" value="snapsync-forcezero">
+    <label for="snapsync-forcezero">(Sync) Force Zero</label>
+    <input type="checkbox" id="snapsync-forceempty" value="snapsync-forceempty">
+    <label for="snapsync-forceempty">(Sync) Force Empty</label>
+    <input type="checkbox" id="snapsync-forcefull" value="snapsync-forcefull">
+    <label for="snapsync-forcefull">(Sync) Force Full</label>
+    <input type="checkbox" id="snapcheck-auditonly" value="snapcheck-auditonly">
+    <label for="snapcheck-auditonly">(Check) Audit Only</label>
     <br><strong>Restrictive Filters:</strong>
     (Check/Fix) <input type="text" id="snapfix-pattern" class="narrow" placeholder="Path Pattern (Check Manual)">
     (Check/Fix) <input type="text" id="snapfix-diskpattern" class="narrow" placeholder="Disk Name">
