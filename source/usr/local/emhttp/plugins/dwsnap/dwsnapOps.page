@@ -75,6 +75,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     <input type="hidden" id="arg3" name="#arg[3]" value="">
     <input type="hidden" id="arg4" name="#arg[4]" value="">
     <input type="hidden" id="arg5" name="#arg[5]" value="">
+    <input type="hidden" id="arg6" name="#arg[6]" value="">
 
     <input class="snaprun" type="button" id="snapstatus" value="STATUS">
     <input class="snaprun" type="button" id="snaplist" value="LIST">
@@ -227,6 +228,17 @@ $(function(){
     $('#snapcheck').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
         $('#arg1').val('check');
+        if($('#snapcheck-auditonly').is(':checked')) {
+            $('#arg2').val('-a');
+        }
+        if($('#snapfix-diskpattern').val()) {
+            $('#arg3').val('-d');
+            $('#arg4').val($('#snapfix-diskpattern').val());
+        }
+        if($('#snapfix-pattern').val()) {
+            $('#arg5').val('-f');
+            $('#arg6').val($('#snapfix-pattern').val());
+        }
         $('#snapcommands').submit();
     });
 
@@ -289,6 +301,12 @@ $(function(){
             function(){
                 $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
                 $('#arg1').val('sync');
+                if($('#snapsync-forcezero').is(':checked')) {
+                    $('#arg2').val('-Z');
+                }
+                if($('#snapsync-forceempty').is(':checked')) {
+                    $('#arg3').val('-E');
+                }
                 $('#snapcommands').submit();
             });
     });  
@@ -335,6 +353,14 @@ $(function(){
             function(){
                 $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
                 $('#arg1').val('fix');
+                if($('#snapfix-diskpattern').val()) {
+                    $('#arg2').val('-d');
+                    $('#arg3').val($('#snapfix-diskpattern').val());
+                }
+                if($('#snapfix-pattern').val()) {
+                    $('#arg4').val('-f');
+                    $('#arg5').val($('#snapfix-pattern').val());
+                }
                 $('#snapcommands').submit();
             });
     });
@@ -351,6 +377,14 @@ $(function(){
                 $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
                 $('#arg1').val('fix');
                 $('#arg2').val('-m');
+                if($('#snapfix-diskpattern').val()) {
+                    $('#arg3').val('-d');
+                    $('#arg4').val($('#snapfix-diskpattern').val());
+                }
+                if($('#snapfix-pattern').val()) {
+                    $('#arg5').val('-f');
+                    $('#arg6').val($('#snapfix-pattern').val());
+                }
                 $('#snapcommands').submit();
             });
     });
@@ -367,6 +401,14 @@ $(function(){
                 $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
                 $('#arg1').val('fix');
                 $('#arg2').val('-e');
+                if($('#snapfix-diskpattern').val()) {
+                    $('#arg3').val('-d');
+                    $('#arg4').val($('#snapfix-diskpattern').val());
+                }
+                if($('#snapfix-pattern').val()) {
+                    $('#arg5').val('-f');
+                    $('#arg6').val($('#snapfix-pattern').val());
+                }
                 $('#snapcommands').submit();
             });
     });
