@@ -99,7 +99,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     <input class="snaprun snaphelptip" type="button" id="snapfixerrors" value="FIX ERRORS" title="Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it's reverted to the stored snapshot. The FIX command doesn't differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC. Only files that have blocks marked with silent or input/output errors during previous SYNC and SCRUB operations are processed by this command.">
 
     <span style="float:right;">
-        <input class="snaprun snaphelptip" type="button" id="crontest" value="RUN MAINTENANCE CRONJOB" title="Run the SnapRAID maintenance once.">
+        <input class="snaprun snaphelptip" type="button" id="crontest" value="RUN MAINTENANCE CRONJOB" title="Runs the SnapRAID maintenance now.">
     </span><br>
 
     <strong>Advanced Parameters:</strong>
