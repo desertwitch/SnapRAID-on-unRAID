@@ -77,26 +77,26 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     <input type="hidden" id="arg5" name="#arg[5]" value="">
     <input type="hidden" id="arg6" name="#arg[6]" value="">
 
-    <input class="snaprun" type="button" id="snapstatus" value="STATUS">
-    <input class="snaprun" type="button" id="snaplist" value="LIST">
-    <input class="snaprun" type="button" id="snapdiff" value="DIFF">
-    <input class="snaprun" type="button" id="snapdup" value="DUP">
-    <input class="snaprun" type="button" id="snapscrub" value="SCRUB">
-    <input class="snaprun" type="button" id="snapcheck" value="CHECK">
+    <input class="snaprun snaphelptip" type="button" id="snapstatus" value="STATUS" title="Prints a summary of the state of the disk array. It includes information about the parity fragmentation, how old are the blocks without checking, and all the recorded silent errors encountered while scrubbing. Note that the information presented refers at the latest time you run SYNC. Later modifications are not taken into account.">
+    <input class="snaprun snaphelptip" type="button" id="snaplist" value="LIST" title="Lists all the files contained in the array at the time of the last SYNC.">
+    <input class="snaprun snaphelptip" type="button" id="snapdiff" value="DIFF" title="Lists all the files modified from the last SYNC that need to have their parity data recomputed. This command doesn't check the file data, but only the file time-stamp size and inode.">
+    <input class="snaprun snaphelptip" type="button" id="snapdup" value="DUP" title="Lists all the duplicate files. Two files are assumed equal if their hashes are matching.">
+    <input class="snaprun snaphelptip" type="button" id="snapscrub" value="SCRUB" title="Scrubs the array, checking for silent or input/output errors in data and parity disks. For each command invocation, about the 8% of the array is checked, but nothing that was already scrubbed in the last 10 days.">
+    <input class="snaprun snaphelptip" type="button" id="snapcheck" value="CHECK" title="Verify all the files and the parity data. It works like FIX, but it only simulates a recovery and no change is written in the array. ">
 
     <span style="float:right;">
-        <input class="snaprun" type="button" id="clearoutput" value="CLEAR SCREEN">
-        <input class="snaprun" type="button" id="clearlogs" value="CLEAR ALL LOGS">
-        <input class="snapnotrun" type="button" id="snapstop" value="STOP OPERATION">
-        <input class="snapnotrun" type="button" id="snapkill" value="KILL OPERATION">
+        <input class="snaprun snaphelptip" type="button" id="clearoutput" value="CLEAR SCREEN" title="Clear the output screen of the current/previous array operation.">
+        <input class="snaprun snaphelptip" type="button" id="clearlogs" value="CLEAR ALL LOGS" title="Deletes all SnapRAID log files, including the output screen of the current/previous array operation.">
+        <input class="snapnotrun snaphelptip" type="button" id="snapstop" value="STOP OPERATION" title="Attempts to (gracefully) stop all running SnapRAID instances.">
+        <input class="snapnotrun snaphelptip" type="button" id="snapkill" value="KILL OPERATION" title="Hard-kills all running SnapRAID instances - beware DATA LOSS is possible.">
     </span><br>
 
-    <input class="snaprun" type="button" id="snapsync" value="SYNC">
-    <input class="snaprun" type="button" id="snaphashedsync" value="PREHASHED SYNC">
-    <input class="snaprun" type="button" id="snaptouch" value="TOUCH">
-    <input class="snaprun" type="button" id="snapfix" value="FIX">
-    <input class="snaprun" type="button" id="snapfixmissing" value="FIX MISSING">
-    <input class="snaprun" type="button" id="snapfixerrors" value="FIX ERRORS">
+    <input class="snaprun snaphelptip" type="button" id="snapsync" value="SYNC" title="Updates the parity information. All the modified files in the disk array are read, and the corresponding parity data is updated.">
+    <input class="snaprun snaphelptip" type="button" id="snaphashedsync" value="PREHASHED SYNC" title="Updates the parity information. All the modified files in the disk array are read, and the corresponding parity data is updated. A preliminary hashing phase of all the new data, to have an additional verification before the actual parity computation, is performed.">
+    <input class="snaprun snaphelptip" type="button" id="snaptouch" value="TOUCH" title="Sets arbitrarily the sub-second time-stamp of all the files that have it at zero. This improves the SnapRAID capability to recognize moved and copied files as it makes the time-stamp almost unique, removing possible duplicates.">
+    <input class="snaprun snaphelptip" type="button" id="snapfix" value="FIX" title="Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it's reverted to the stored snapshot. The FIX command doesn't differentiate between errors and intentional modifications. It unconditionally reverts the file state at the last SYNC. If no other option is specified the full array is processed. Use the filter options to select a subset of files or disks to operate on.">
+    <input class="snaprun snaphelptip" type="button" id="snapfixmissing" value="FIX MISSING" title="Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it's reverted to the stored snapshot. The FIX command doesn't differentiate between errors and intentional modifications. It unconditionally reverts the file state at the last SYNC. Only the files missing/deleted from the array are processed.">
+    <input class="snaprun snaphelptip" type="button" id="snapfixerrors" value="FIX ERRORS" title="Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it's reverted to the stored snapshot. The FIX command doesn't differentiate between errors and intentional modifications. It unconditionally reverts the file state at the last SYNC. Only files that have blocks marked with silent or input/output errors during previous SYNC and SCRUB operations are processed.">
 
     <span style="float:right;">
         <input class="snaprun" type="button" id="crontest" value="RUN MAINTENANCE CRONJOB">
@@ -104,13 +104,13 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
 
     <strong>Advanced Parameters:</strong>
     <input type="checkbox" id="snapsync-forcezero" value="snapsync-forcezero">
-    <label for="snapsync-forcezero">(Sync) Force Zero</label>
+    <label for="snapsync-forcezero" title="Forces the insecure operation of syncing a file with zero size that before was not. If SnapRAID detects a such condition, it stops proceeding unless you specify this option." class="snaphelptip">(Sync) Force Zero</label>
     <input type="checkbox" id="snapsync-forceempty" value="snapsync-forceempty">
-    <label for="snapsync-forceempty">(Sync) Force Empty</label>
+    <label for="snapsync-forceempty" title="Forces the insecure operation of syncing a disk with all the original files missing. If SnapRAID detects that all the files originally present in the disk are missing or rewritten, it stops proceeding unless you specify this option." class="snaphelptip">(Sync) Force Empty</label>
     <input type="checkbox" id="snapsync-forcefull" value="snapsync-forcefull">
-    <label for="snapsync-forcefull">(Sync) Force Full</label>
+    <label for="snapsync-forcefull" title="In SYNC forces a full recomputation of the parity. This option can be used when you add a new parity level, or if you reverted back to an old content file using a more recent parity data. Instead of recreating the parity from scratch, this allows to reuse the hashes present in the content file to validate data, and to maintain data protection during the SYNC process using the parity data you have." class="snaphelptip">(Sync) Force Full</label>
     <input type="checkbox" id="snapcheck-auditonly" value="snapcheck-auditonly">
-    <label for="snapcheck-auditonly">(Check) Audit Only</label>
+    <label for="snapcheck-auditonly" title="In CHECK verifies the hash of the files without doing any kind of check on the parity data. If you are interested in checking only the file data this option can speedup a lot the checking process." class="snaphelptip">(Check) Audit Only</label>
     <span style="float:right;margin-right:10px"><a href="https://www.snapraid.it/manual" target="_blank" title="SnapRAID User Manual"><i class="fa fa-file-text-o"></i> User Manual</a> / <a href="https://www.snapraid.it/faq" target="_blank" title="SnapRAID FAQ"><i class="fa fa-question-circle-o"></i> Frequently Asked Questions</a></span>
     <br><strong>Advanced Filters:</strong>
     (Check/Fix) <input type="text" id="snapfix-pattern" class="narrow" placeholder="Path Pattern (See Manual)">
@@ -459,6 +459,9 @@ $(function(){
 
     getSnapStatus()
     getSnapLogs();
+$('.snaphelptip').tooltipster({
+    maxWidth: 300
+});
 
     // dynamix plugin update api
     <?if (function_exists('plugin_update_available') && $version = plugin_update_available('dwsnap')):?>
