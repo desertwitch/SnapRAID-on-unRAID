@@ -21,6 +21,18 @@ CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
 
 [ -e "$CONFIG" ] && source $CONFIG
 
+KNOWNCMDS=("status" "diff" "sync" "scrub" "list" "dup" "up" "down" "touch" "smart" "pool" "check" "fix")
+for KNOWNCMD in "${KNOWNCMDS[@]}"; do
+    if [ "$1" == "$KNOWNCMD" ]; then
+        CMDKNOWN="YES"
+    fi
+done
+if [ ! "$CMDKNOWN" == "YES" ]; then
+    echo "A small helper program to log SnapRAID's output into UNRAID's web interface."
+    echo "Usage: snapraid-runner status|diff|sync|scrub|list|dup|up|down|touch|smart|pool|check|fix [options]"
+    exit 1
+fi
+
 if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1; then
     echo "SnapRAID is already running somewhere, exiting..." | tee >(logger -t "snapraid-runner")
     exit 1
