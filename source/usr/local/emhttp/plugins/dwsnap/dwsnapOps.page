@@ -459,9 +459,10 @@ $(function(){
 
     getSnapStatus()
     getSnapLogs();
-$('.snaphelptip').tooltipster({
-    maxWidth: 300
-});
+    
+    $('.snaphelptip').tooltipster({
+        maxWidth: 300
+    });
 
     // dynamix plugin update api
     <?if (function_exists('plugin_update_available') && $version = plugin_update_available('dwsnap')):?>
