@@ -21,6 +21,11 @@ CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
 
 [ -e "$CONFIG" ] && source $CONFIG
 
+if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1; then
+    echo "SnapRAID is already running somewhere, exiting..." | tee >(logger -t "snapraid-runner")
+    exit 1
+fi
+
 [ "$PRIO" == "idle" ] && SNAP_BIN="ionice -c 3 /usr/bin/snapraid"
 [ "$PRIO" == "besteffort" ] && SNAP_BIN="ionice -c 2 /usr/bin/snapraid"
 [ "$PRIO" == "realtime" ] && SNAP_BIN="ionice -c 1 /usr/bin/snapraid"
