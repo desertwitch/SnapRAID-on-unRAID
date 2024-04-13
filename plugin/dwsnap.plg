@@ -25,9 +25,9 @@
 <!--
 install or upgrade dependency files
 -->
-<FILE Name="&plgPATH;/snapraid-12.3-x86_64-2.txz" Min="6.8.3" Run="upgradepkg --install-new">
-<URL>&pkgURL;/snapraid-12.3-x86_64-2.txz</URL>
-<MD5>0f7ea088dc138ccc568172e2156f5fd2</MD5>
+<FILE Name="&plgPATH;/snapraid-12.3-x86_64-3.txz" Min="6.8.3" Run="upgradepkg --install-new">
+<URL>&pkgURL;/snapraid-12.3-x86_64-3.txz</URL>
+<MD5>417e9f7d9a50d6cc7060ac004329b744</MD5>
 </FILE>
 
 <!--
