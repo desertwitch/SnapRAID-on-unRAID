@@ -17,8 +17,8 @@
  * included in all copies or substantial portions of the Software.
  *
  */
-if(file_exists("/var/log/snapraid/snaplog")) {
-    $snap_log = file_get_contents("/var/log/snapraid/snaplog");
+if(file_exists("/var/lib/snapraid/snaplog")) {
+    $snap_log = file_get_contents("/var/lib/snapraid/snaplog");
     if(!empty($snap_log)) {
         echo("<pre class='snaplog'>".$snap_log."</pre>");
     } else {

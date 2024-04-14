@@ -14,5 +14,5 @@
 # included in all copies or substantial portions of the Software.
 #
 echo "Clearing all existing SnapRAID logfiles..."
-rm -rf /var/log/snapraid/*
+rm -rf /var/lib/snapraid/*
 sleep 1

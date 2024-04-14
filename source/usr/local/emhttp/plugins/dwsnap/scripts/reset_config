@@ -25,7 +25,7 @@ fi
 rm -f /etc/snapraid.conf
 rm -f /boot/config/plugins/dwsnap/dwsnap.cfg
 rm -rf /boot/config/plugins/dwsnap/config
-rm -rf /var/log/snapraid
+rm -rf /var/lib/snapraid
 
 BOOT="/boot/config/plugins/dwsnap"
 DOCROOT="/usr/local/emhttp/plugins/dwsnap"
@@ -34,8 +34,8 @@ if [ ! -d $BOOT/config ]; then
     mkdir -p $BOOT/config
 fi
 
-if [ ! -d /var/log/snapraid ]; then
-    mkdir -p /var/log/snapraid
+if [ ! -d /var/lib/snapraid ]; then
+    mkdir -p /var/lib/snapraid
 fi
 
 cp -f $DOCROOT/default.cfg $BOOT/dwsnap.cfg

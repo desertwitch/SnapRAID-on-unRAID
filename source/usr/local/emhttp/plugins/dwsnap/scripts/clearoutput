@@ -14,7 +14,7 @@
 # included in all copies or substantial portions of the Software.
 #
 echo "Clearing SnapRAID screen..."
-rm -f /var/log/snapraid/snaplog
-rm -f /var/log/snapraid/laststart
-rm -f /var/log/snapraid/lastfinish
+rm -f /var/lib/snapraid/snaplog
+rm -f /var/lib/snapraid/laststart
+rm -f /var/lib/snapraid/lastfinish
 sleep 1
