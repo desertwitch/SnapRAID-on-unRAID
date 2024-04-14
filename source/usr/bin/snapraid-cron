@@ -47,7 +47,6 @@ exit_cron() {
     echo "$OPTIME" >/var/log/snapraid/lastfinish
     echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
     echo "### CRON -- FINISHED: ${OPTIME}" 2>&1 | tee -a /var/log/snapraid/snaplog
-    sync
     cp /var/log/snapraid/snaplog /var/log/snapraid/cron-"${LOGTIME}".log
     [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Finished" -d "The SnapRAID maintenance has finished with success." -i "normal"
 }
@@ -58,7 +57,6 @@ failure_exit_cron() {
     echo "$OPTIME" >/var/log/snapraid/lastfinish
     echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
     echo "### CRON -- FINISHED: ${OPTIME}" 2>&1 | tee -a /var/log/snapraid/snaplog
-    sync
     cp /var/log/snapraid/snaplog /var/log/snapraid/cron-"${LOGTIME}".log
     [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "The SnapRAID maintenance has finished with errors. ${FAILUREMSG}" -i "alert"
     exit 1
@@ -70,7 +68,6 @@ signal_exit_cron() {
     echo "$OPTIME" >/var/log/snapraid/lastfinish
     echo "################################################################" 2>&1 | tee -a /var/log/snapraid/snaplog
     echo "### CRON -- INTERRUPTED [SIGTERM during ${RUNNINGOP}]: ${OPTIME}" 2>&1 | tee -a /var/log/snapraid/snaplog
-    sync
     cp /var/log/snapraid/snaplog /var/log/snapraid/cron-"${LOGTIME}".log
     [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "The SnapRAID maintenance has been interrupted. ${FAILUREMSG}" -i "alert"
     exit 1
