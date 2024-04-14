@@ -31,6 +31,7 @@ Markdown="false"
     .CodeMirror pre.CodeMirror-placeholder { color: #999; }
     .errortext {color: #EF3D47;display: none;}
     .fileTree {color:#486dba;width:305px;max-height:150px;overflow:scroll;position:absolute;z-index:100;display:none;}
+    #editfile { width:500px; }
 </style>
 
 <div><strong>INFORMATION:</strong></div>
