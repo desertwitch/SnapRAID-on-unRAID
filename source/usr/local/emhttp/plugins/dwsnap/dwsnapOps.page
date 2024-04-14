@@ -39,7 +39,9 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     word-break: normal !important;
     word-wrap: normal !important;
     white-space: pre !important;
-    background: transparent url("/plugins/dwsnap/images/screen.png") no-repeat scroll center; 
+    <?if($dwsnap_screenimg == "enable"):?>
+    background: transparent url("/plugins/dwsnap/images/screen.png") no-repeat scroll center;
+    <?endif;?> 
 }
 .snapdisks tr:nth-child(2) > th {
     text-align: center !important;
