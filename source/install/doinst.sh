@@ -24,8 +24,8 @@ if [ ! -d $BOOT/config ]; then
     mkdir -p $BOOT/config
 fi
 
-if [ ! -d /var/lib/snapraid ]; then
-    mkdir -p /var/lib/snapraid
+if [ ! -d /var/lib/snapraid/logs ]; then
+    mkdir -p /var/lib/snapraid/logs
 fi
 
 cp -n $DOCROOT/default.cfg $BOOT/dwsnap.cfg

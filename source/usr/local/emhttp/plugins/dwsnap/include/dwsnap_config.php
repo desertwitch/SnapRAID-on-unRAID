@@ -45,8 +45,8 @@ $dwsnap_restored = trim(isset($dwsnap_cfg['RESTORED']) ? htmlspecialchars($dwsna
 
 $dwsnap_backend = trim(htmlspecialchars(shell_exec("find /var/log/packages/ -type f -iname 'snapraid-*' -printf '%f\n' 2> /dev/null")));
 
-$dwsnap_laststart = trim(file_exists("/var/lib/snapraid/laststart") ? htmlspecialchars(file_get_contents("/var/lib/snapraid/laststart")) : "-");
-$dwsnap_lastfinish = trim(file_exists("/var/lib/snapraid/lastfinish") ? htmlspecialchars(file_get_contents("/var/lib/snapraid/lastfinish")) : "-");
+$dwsnap_laststart = trim(file_exists("/var/lib/snapraid/logs/laststart") ? htmlspecialchars(file_get_contents("/var/lib/snapraid/logs/laststart")) : "-");
+$dwsnap_lastfinish = trim(file_exists("/var/lib/snapraid/logs/lastfinish") ? htmlspecialchars(file_get_contents("/var/lib/snapraid/logs/lastfinish")) : "-");
 $dwsnap_lastsync = trim(file_exists("/boot/config/plugins/dwsnap/config/lastsync") ? htmlspecialchars(file_get_contents("/boot/config/plugins/dwsnap/config/lastsync")) : "-");
 $dwsnap_lastscrub = trim(file_exists("/boot/config/plugins/dwsnap/config/lastscrub") ? htmlspecialchars(file_get_contents("/boot/config/plugins/dwsnap/config/lastscrub")) : "-");
 

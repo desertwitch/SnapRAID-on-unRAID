@@ -22,7 +22,7 @@ Markdown="false"
  * included in all copies or substantial portions of the Software.
  *
  */
-$snap_lastlog = shell_exec("ls -Art /var/lib/snapraid/*.log 2>/dev/null | tail -n 1 2>/dev/null") ?? false;
+$snap_lastlog = shell_exec("ls -Art /var/lib/snapraid/logs/*.log 2>/dev/null | tail -n 1 2>/dev/null") ?? false;
 ?>
 <link type="text/css" rel="stylesheet" href="<?=autov('/webGui/styles/jquery.filetree.css');?>">
 <link type="text/css" rel="stylesheet" href="<?=autov('/plugins/dwsnap/css/codemirror.css');?>">
@@ -37,7 +37,7 @@ $snap_lastlog = shell_exec("ls -Art /var/lib/snapraid/*.log 2>/dev/null | tail -
 <form id="editform2" method="POST">
 
 <img id="editfolder2" style="cursor:pointer;margin-left: 10px;" src="/webGui/images/explore.png" >
-<input id="editfile2" type="text" name="editfile2" value="" readonly="" data-picktop="/var/lib/snapraid/" data-pickcloseonfile="true" data-pickfilter="log" data-pickroot="/var/lib/snapraid/" data-pickfolders="false" required="required" >
+<input id="editfile2" type="text" name="editfile2" value="" readonly="" data-picktop="/var/lib/snapraid/logs/" data-pickcloseonfile="true" data-pickfilter="log" data-pickroot="/var/lib/snapraid/logs/" data-pickfolders="false" required="required" >
 
 <textarea id="editdata2" name="editdata2" placeholder="Select Configuration File"></textarea>
 <input type="hidden" name="commit" value="1" />

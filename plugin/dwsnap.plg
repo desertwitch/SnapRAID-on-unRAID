@@ -65,6 +65,7 @@ removepkg &plgPATH;/*.txz
 rm -f /etc/snapraid.conf
 rm -rf &plgPATH;/*.txz
 rm -rf &emhttp;
+rm -rf /var/lib/snapraid
 
 if [ -f /boot/config/plugins/dynamix/dwsnap-maintenance.cron ]; then
     rm -f /boot/config/plugins/dynamix/dwsnap-maintenance.cron
