@@ -67,7 +67,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     </thead>
 </table>
 
-<span id="logviewer"></span>
+<span id="logviewer"><i class="fa fa-spinner fa-spin"></i> <em>Please wait, retrieving information...</em></span>
 
 <form markdown="0" id="snapcommands" name="snapcommands" method="POST" action="/update.php" target="progressFrame">
     <input type="hidden" id="command" name="#command" value="">
