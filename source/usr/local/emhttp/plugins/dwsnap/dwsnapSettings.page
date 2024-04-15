@@ -74,20 +74,6 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 <p>A warning will be shown if one or more disks are not mounted or if either of the array maintenance operations (sync or scrub) have not been performed in the last 7 days.</p>
 </blockquote>
 
-<dl>
-    <dt>SnapRAID Screen Background Image:</dt>
-    <dd>
-        <select class="snaprun" id="SCREENIMG" name="SCREENIMG" size="1">
-            <?=mk_option($dwsnap_screenimg, "disable", "No");?>
-            <?=mk_option($dwsnap_screenimg, "enable", "Yes");?>
-        </select>
-    </dd>
-</dl>
-
-<blockquote class="inline_help">
-<p>This setting controls if a background image should be shown behind the array operation screen.</p>
-</blockquote>
-
 <hr>
 
 <dl>
