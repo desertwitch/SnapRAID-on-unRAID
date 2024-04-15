@@ -75,7 +75,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 </blockquote>
 
 <dl>
-    <dt>SnapRAID Screen Background Image:</dt>
+    <dt>SnapRAID Background Image:</dt>
     <dd>
         <select class="snaprun" id="SCREENIMG" name="SCREENIMG" size="1">
             <?=mk_option($dwsnap_screenimg, "disable", "No");?>
