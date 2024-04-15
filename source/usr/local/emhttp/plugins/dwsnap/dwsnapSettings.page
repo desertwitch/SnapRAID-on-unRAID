@@ -229,12 +229,22 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
             </dd>
         </dl>
 
+        <blockquote class="inline_help">
+        <p>It is important to set reasonable numbers here, so corruption and large-scale unwanted changes do not make it into the snapshots.</p>
+        <p>Beware that a value of zero means that no change is acceptable (= always exit on changes), a negative value means that any amount of changes are acceptable (= never exit on changes).</p>
+        </blockquote>
+
         <dl>
             <dt>SnapRAID Maintenance - Deleted Files Threshold:</dt>
             <dd>
                 <input id="DELETED" type="text" class="narrow snaprun" name="DELETED" maxlength="30" value="<?=$dwsnap_deleted?>">files
             </dd>
         </dl>
+
+        <blockquote class="inline_help">
+        <p>It is important to set reasonable numbers here, so corruption and large-scale unwanted changes do not make it into the snapshots.</p>
+        <p>Beware that a value of zero means that no change is acceptable (= always exit on changes), a negative value means that any amount of changes are acceptable (= never exit on changes).</p>
+        </blockquote>
 
         <dl>
             <dt>SnapRAID Maintenance - Updated Files Threshold:</dt>
@@ -243,12 +253,22 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
             </dd>
         </dl>
 
+        <blockquote class="inline_help">
+        <p>It is important to set reasonable numbers here, so corruption and large-scale unwanted changes do not make it into the snapshots.</p>
+        <p>Beware that a value of zero means that no change is acceptable (= always exit on changes), a negative value means that any amount of changes are acceptable (= never exit on changes).</p>
+        </blockquote>
+
         <dl>
             <dt>SnapRAID Maintenance - Moved Files Threshold:</dt>
             <dd>
                 <input id="MOVED" type="text" class="narrow snaprun" name="MOVED" maxlength="30" value="<?=$dwsnap_moved?>">files
             </dd>
         </dl>
+
+        <blockquote class="inline_help">
+        <p>It is important to set reasonable numbers here, so corruption and large-scale unwanted changes do not make it into the snapshots.</p>
+        <p>Beware that a value of zero means that no change is acceptable (= always exit on changes), a negative value means that any amount of changes are acceptable (= never exit on changes).</p>
+        </blockquote>
 
         <dl>
             <dt>SnapRAID Maintenance - Copied Files Threshold:</dt>
@@ -257,12 +277,22 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
             </dd>
         </dl>
 
+        <blockquote class="inline_help">
+        <p>It is important to set reasonable numbers here, so corruption and large-scale unwanted changes do not make it into the snapshots.</p>
+        <p>Beware that a value of zero means that no change is acceptable (= always exit on changes), a negative value means that any amount of changes are acceptable (= never exit on changes).</p>
+        </blockquote>
+
         <dl>
             <dt>SnapRAID Maintenance - Restored Files Threshold:</dt>
             <dd>
                 <input id="RESTORED" type="text" class="narrow snaprun" name="RESTORED" maxlength="30" value="<?=$dwsnap_restored?>">files
             </dd>
         </dl>
+
+        <blockquote class="inline_help">
+        <p>It is important to set reasonable numbers here, so corruption and large-scale unwanted changes do not make it into the snapshots.</p>
+        <p>Beware that a value of zero means that no change is acceptable (= always exit on changes), a negative value means that any amount of changes are acceptable (= never exit on changes).</p>
+        </blockquote>
 
     </div>
 
