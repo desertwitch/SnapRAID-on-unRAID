@@ -52,8 +52,8 @@ $dwsnap_lastscrub = trim(file_exists("/boot/config/plugins/dwsnap/config/lastscr
 $dwsnap_lastnodiff = trim(file_exists("/boot/config/plugins/dwsnap/config/lastnodiff") ? htmlspecialchars(file_get_contents("/boot/config/plugins/dwsnap/config/lastnodiff")) : "-");
 
 $dwsnap_cfg_content = file_get_contents("/etc/snapraid.conf");
-$dwsnap_parity_re = '/(.*?parity) (\/mnt\/disk.*?)\//m';
-$dwsnap_data_re = '/data (.*?) (\/mnt\/disk.*?)\//m';
+$dwsnap_parity_re = '/(.*?parity) (\/mnt\/.*?)\//m';
+$dwsnap_data_re = '/data (.*?) (\/mnt\/.*?)\//m';
 
 preg_match_all($dwsnap_parity_re, $dwsnap_cfg_content, $dwsnap_parity_disks, PREG_SET_ORDER);
 preg_match_all($dwsnap_data_re, $dwsnap_cfg_content, $dwsnap_data_disks, PREG_SET_ORDER);
@@ -202,7 +202,7 @@ function dwsnap_getFooterHTML() {
                 $snap_footer_html = "<span class='snaptip' title='At least one disk is not online and/or mounted'>SnapRAID<i class='fa fa-times red-text'></i></span>";
             }
         } else {
-            $snap_footer_html = "<span class='snaptip' title='No parity and/or data disks configured - did you use trailing slashes as required?'>SnapRAID<i class='fa fa-times red-text'></i></span>";
+            $snap_footer_html = "<span class='snaptip' title='No parity and/or data disks are configured'>SnapRAID<i class='fa fa-times red-text'></i></span>";
         }
         return $snap_footer_html;
     } catch (Throwable $e) { // For PHP 7
