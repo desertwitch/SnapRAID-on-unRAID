@@ -66,7 +66,8 @@ trap 'signal_exit_snapraid $1' SIGTERM
 
 if [ "$1" == "sync" ]; then
     $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${1}-${LOGTIME}.raw.log" "$@" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-    if [ "${PIPESTATUS[0]}" -eq 0 ]; then
+    CMDRET="${PIPESTATUS[0]}"
+    if [ "$CMDRET" -eq 0 ]; then
         OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
         echo "$OPTIME" > /boot/config/plugins/dwsnap/config/lastsync
         rm -f /boot/config/plugins/dwsnap/config/syncneeded
@@ -76,7 +77,8 @@ if [ "$1" == "sync" ]; then
     fi
 elif [ "$1" == "scrub" ]; then
     $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${1}-${LOGTIME}.raw.log" "$@" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-    if [ "${PIPESTATUS[0]}" -eq 0 ]; then
+    CMDRET="${PIPESTATUS[0]}"
+    if [ "$CMDRET" -eq 0 ]; then
         OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
         echo "$OPTIME" > /boot/config/plugins/dwsnap/config/lastscrub
     else
@@ -84,11 +86,12 @@ elif [ "$1" == "scrub" ]; then
     fi
 elif [ "$1" == "diff" ]; then
     $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${1}-${LOGTIME}.raw.log" "$@" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-    if [ "${PIPESTATUS[0]}" -eq 0 ]; then
+    CMDRET="${PIPESTATUS[0]}"
+    if [ "$CMDRET" -eq 0 ]; then
         OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
         echo "$OPTIME" >/boot/config/plugins/dwsnap/config/lastnodiff
         rm -f /boot/config/plugins/dwsnap/config/syncneeded
-    elif [ "${PIPESTATUS[0]}" -eq 2 ]; then
+    elif [ "$CMDRET" -eq 2 ]; then
         OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
         touch /boot/config/plugins/dwsnap/config/syncneeded
         rm -f /boot/config/plugins/dwsnap/config/lastnodiff
