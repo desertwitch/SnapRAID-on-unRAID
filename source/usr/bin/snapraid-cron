@@ -109,13 +109,13 @@ if [ "$DIFF" == "enable" ]; then
     echo "### CRON -- Checking for differences..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     
     DIFFS=$($SNAP_BIN -c $SNAP_CONF diff 2>&1 | tee -a /var/lib/snapraid/logs/snaplog ; exit "${PIPESTATUS[0]}")
-    DIFFVAL=$?
-    if [ "$DIFFVAL" -eq 0 ]; then
+    DIFFRET=$?
+    if [ "$DIFFRET" -eq 0 ]; then
         OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
         echo "$OPTIME" >/boot/config/plugins/dwsnap/config/lastnodiff
         rm -f /boot/config/plugins/dwsnap/config/syncneeded
     fi
-    if [ "$DIFFVAL" -eq 2 ]; then
+    if [ "$DIFFRET" -eq 2 ]; then
         touch /boot/config/plugins/dwsnap/config/syncneeded
         rm -f /boot/config/plugins/dwsnap/config/lastnodiff
     fi
