@@ -49,6 +49,7 @@ $dwsnap_laststart = trim(file_exists("/var/lib/snapraid/logs/laststart") ? htmls
 $dwsnap_lastfinish = trim(file_exists("/var/lib/snapraid/logs/lastfinish") ? htmlspecialchars(file_get_contents("/var/lib/snapraid/logs/lastfinish")) : "-");
 $dwsnap_lastsync = trim(file_exists("/boot/config/plugins/dwsnap/config/lastsync") ? htmlspecialchars(file_get_contents("/boot/config/plugins/dwsnap/config/lastsync")) : "-");
 $dwsnap_lastscrub = trim(file_exists("/boot/config/plugins/dwsnap/config/lastscrub") ? htmlspecialchars(file_get_contents("/boot/config/plugins/dwsnap/config/lastscrub")) : "-");
+$dwsnap_lastnodiff = trim(file_exists("/boot/config/plugins/dwsnap/config/lastnodiff") ? htmlspecialchars(file_get_contents("/boot/config/plugins/dwsnap/config/lastnodiff")) : "-");
 
 $dwsnap_cfg_content = file_get_contents("/etc/snapraid.conf");
 $dwsnap_parity_re = '/(.*?parity) (\/mnt\/disk.*?)\//m';

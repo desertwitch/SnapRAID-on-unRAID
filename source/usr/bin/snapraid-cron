@@ -107,7 +107,21 @@ echo "################################################################" 2>&1 | t
 if [ "$DIFF" == "enable" ]; then
     RUNNINGOP="DIFF"
     echo "### CRON -- Checking for differences..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-    DIFFS=$($SNAP_BIN -c $SNAP_CONF diff 2>&1 | tee -a /var/lib/snapraid/logs/snaplog)
+    
+    DIFFS=$($SNAP_BIN -c $SNAP_CONF diff 2>&1 | tee -a /var/lib/snapraid/logs/snaplog ; exit "${PIPESTATUS[0]}")
+    DIFFVAL=$?
+    if [ "$DIFFVAL" -eq 0 ]; then
+        OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+        echo "$OPTIME" >/boot/config/plugins/dwsnap/config/lastnodiff
+        rm -f /boot/config/plugins/dwsnap/config/syncneeded
+    elif [ "$DIFFVAL" -eq 2 ]; then
+        touch /boot/config/plugins/dwsnap/config/syncneeded
+        rm -f /boot/config/plugins/dwsnap/config/lastnodiff
+    else
+        rm -f /boot/config/plugins/dwsnap/config/syncneeded
+        rm -f /boot/config/plugins/dwsnap/config/lastnodiff
+    fi
+    
     EQ_COUNT=$(grep -w '^ \{1,\}[0-9]* equal' <<< "$DIFFS" | sed 's/^ *//g' | cut -d ' ' -f1)
     ADD_COUNT=$(grep -w '^ \{1,\}[0-9]* added' <<< "$DIFFS" | sed 's/^ *//g' | cut -d ' ' -f1)
     DEL_COUNT=$(grep -w '^ \{1,\}[0-9]* removed' <<< "$DIFFS" | sed 's/^ *//g' | cut -d ' ' -f1)
@@ -179,6 +193,8 @@ if [ "$SYNC" == "enable" ]; then
             else
                 OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
                 echo "$OPTIME" > /boot/config/plugins/dwsnap/config/lastsync
+                rm -f /boot/config/plugins/dwsnap/config/syncneeded
+                rm -f /boot/config/plugins/dwsnap/config/lastnodiff
             fi
         else
             echo "### CRON -- Syncing...${FORCEZEROMSG}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
@@ -189,6 +205,8 @@ if [ "$SYNC" == "enable" ]; then
             else
                 OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
                 echo "$OPTIME" > /boot/config/plugins/dwsnap/config/lastsync
+                rm -f /boot/config/plugins/dwsnap/config/syncneeded
+                rm -f /boot/config/plugins/dwsnap/config/lastnodiff
             fi
         fi
         echo "### CRON -- Sync has finished, proceeding..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
