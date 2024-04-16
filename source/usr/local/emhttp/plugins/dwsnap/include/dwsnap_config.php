@@ -202,7 +202,7 @@ function dwsnap_getFooterHTML() {
                 $snap_footer_html = "<span class='snaptip' title='At least one disk is not online and/or mounted'>SnapRAID<i class='fa fa-times red-text'></i></span>";
             }
         } else {
-            $snap_footer_html = "<span class='snaptip' title='No parity and/or disks configured - did you use trailing slashes as required?'>SnapRAID<i class='fa fa-times red-text'></i></span>";
+            $snap_footer_html = "<span class='snaptip' title='No parity and/or data disks configured - did you use trailing slashes as required?'>SnapRAID<i class='fa fa-times red-text'></i></span>";
         }
         return $snap_footer_html;
     } catch (Throwable $e) { // For PHP 7
