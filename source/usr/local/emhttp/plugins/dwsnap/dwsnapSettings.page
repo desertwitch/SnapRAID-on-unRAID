@@ -37,7 +37,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 <dl>
     <dt>SnapRAID Backend:</dt>
     <dd>
-	    <strong><?= isset($dwsnap_backend) && $dwsnap_backend ? $dwsnap_backend : "n/a" ?></strong>
+	    <strong><?=$dwsnap_backend?></strong>
     </dd>
 </dl>
 

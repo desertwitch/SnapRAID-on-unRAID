@@ -45,7 +45,7 @@ $dwsnap_moved = trim(isset($dwsnap_cfg['MOVED']) ? htmlspecialchars($dwsnap_cfg[
 $dwsnap_copied = trim(isset($dwsnap_cfg['COPIED']) ? htmlspecialchars($dwsnap_cfg['COPIED']) : '-1');
 $dwsnap_restored = trim(isset($dwsnap_cfg['RESTORED']) ? htmlspecialchars($dwsnap_cfg['RESTORED']) : '-1');
 
-$dwsnap_backend = trim(htmlspecialchars(shell_exec("find /var/log/packages/ -type f -iname 'snapraid-*' -printf '%f\n' 2> /dev/null")));
+$dwsnap_backend = trim(htmlspecialchars(shell_exec("find /var/log/packages/ -type f -iname 'snapraid-*' -printf '%f\n' 2> /dev/null") ?? "n/a"));
 
 $dwsnap_laststart = trim(file_exists("/var/lib/snapraid/logs/laststart") ? htmlspecialchars(file_get_contents("/var/lib/snapraid/logs/laststart")) : "-");
 $dwsnap_lastfinish = trim(file_exists("/var/lib/snapraid/logs/lastfinish") ? htmlspecialchars(file_get_contents("/var/lib/snapraid/logs/lastfinish")) : "-");
@@ -53,7 +53,7 @@ $dwsnap_lastsync = trim(file_exists("/boot/config/plugins/dwsnap/config/lastsync
 $dwsnap_lastscrub = trim(file_exists("/boot/config/plugins/dwsnap/config/lastscrub") ? htmlspecialchars(file_get_contents("/boot/config/plugins/dwsnap/config/lastscrub")) : "-");
 $dwsnap_lastnodiff = trim(file_exists("/boot/config/plugins/dwsnap/config/lastnodiff") ? htmlspecialchars(file_get_contents("/boot/config/plugins/dwsnap/config/lastnodiff")) : "-");
 
-$dwsnap_cfg_content = file_get_contents("/etc/snapraid.conf");
+$dwsnap_cfg_content = file_get_contents("/etc/snapraid.conf") ?? "n/a";
 $dwsnap_parity_re = '/(.*?parity) (\/mnt\/.*?)\//m';
 $dwsnap_data_re = '/data (.*?) (\/mnt\/.*?)\//m';
 
