@@ -121,6 +121,12 @@ function dwsnap_dom_options($time){
 }
 
 function dwsnap_getFooterHTML() {
+    global $dwsnap_parity_disks;
+    global $dwsnap_data_disks;
+    global $dwsnap_lastsync;
+    global $dwsnap_lastscrub;
+    global $dwsnap_lastnodiff;
+
     try {
         $snap_footer_html = "";
         if(!empty($dwsnap_parity_disks) && !empty($dwsnap_data_disks)) {
