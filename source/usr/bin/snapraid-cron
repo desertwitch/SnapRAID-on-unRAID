@@ -87,7 +87,7 @@ trap signal_exit_cron SIGTERM
 if [ "$TOUCH" == "enable" ]; then
     RUNNINGOP="TOUCH"
     echo "### CRON -- Checking for files to be touched..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-    TIMESTATUS=$($SNAP_BIN -c $SNAP_CONF status 2>&1 | tee -a /var/lib/snapraid/logs/snaplog | grep -E 'You have [1-9][0-9]* files with( a)? zero sub-second timestamp\.' | sed 's/^You have/Found/g')
+    TIMESTATUS=$($SNAP_BIN -c $SNAP_CONF status 2>&1 | tee -a /var/lib/snapraid/logs/snaplog | grep -E 'You have [1-9][0-9]* files with( a)? zero sub-second timestamp\.')
     if [ -n "$TIMESTATUS" ]; then
         echo "### CRON -- Touching detected files..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
         if ! $SNAP_BIN -c $SNAP_CONF touch >>/var/lib/snapraid/logs/snaplog 2>&1; then
