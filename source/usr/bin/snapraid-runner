@@ -97,8 +97,6 @@ elif [ "$1" == "diff" ]; then
         rm -f /boot/config/plugins/dwsnap/config/lastnodiff
     else
         OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
-        rm -f /boot/config/plugins/dwsnap/config/syncneeded
-        rm -f /boot/config/plugins/dwsnap/config/lastnodiff
     fi
 else
     $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${1}-${LOGTIME}.raw.log" "$@" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog 

@@ -114,11 +114,9 @@ if [ "$DIFF" == "enable" ]; then
         OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
         echo "$OPTIME" >/boot/config/plugins/dwsnap/config/lastnodiff
         rm -f /boot/config/plugins/dwsnap/config/syncneeded
-    elif [ "$DIFFVAL" -eq 2 ]; then
+    fi
+    if [ "$DIFFVAL" -eq 2 ]; then
         touch /boot/config/plugins/dwsnap/config/syncneeded
-        rm -f /boot/config/plugins/dwsnap/config/lastnodiff
-    else
-        rm -f /boot/config/plugins/dwsnap/config/syncneeded
         rm -f /boot/config/plugins/dwsnap/config/lastnodiff
     fi
     
