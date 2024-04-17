@@ -56,9 +56,9 @@ exit_cron() {
     echo "### CRON -- FINISHED: ${OPTIME} (${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     cp /var/lib/snapraid/logs/snaplog /var/lib/snapraid/logs/cron-"${LOGTIME}".log
     if [ -z "${SUCCESSOPS[*]}" ]; then
-        [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Finished (0 errors)" -d "The SnapRAID maintenance finished with success, it was running for ${DURATION} ${DURATIONUNIT}. No operations finished without error." -i "normal"
+        [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Finished" -d "The SnapRAID maintenance finished with success, it was running for ${DURATION} ${DURATIONUNIT}. No operations finished without error." -i "normal"
     else
-        [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Finished (0 errors)" -d "The SnapRAID maintenance finished with success, it was running for ${DURATION} ${DURATIONUNIT}. ${SUCCESSOPS[*]} finished without error." -i "normal"
+        [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Finished" -d "The SnapRAID maintenance finished with success, it was running for ${DURATION} ${DURATIONUNIT}. ${SUCCESSOPS[*]} finished without error." -i "normal"
     fi
 }
 
