@@ -20,7 +20,6 @@ SNAP_CONF="/etc/snapraid.conf"
 CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
 
 RUNNINGOP="INIT"
-SUCCESSOPS=()
 
 [ -e "$CONFIG" ] && source $CONFIG
 
@@ -42,25 +41,6 @@ SUBJECT="[${HOST}] SnapRAID"
 [ "$PRIO" == "idle" ] && SNAP_BIN="ionice -c 3 /usr/bin/snapraid"
 [ "$PRIO" == "besteffort" ] && SNAP_BIN="ionice -c 2 /usr/bin/snapraid"
 [ "$PRIO" == "realtime" ] && SNAP_BIN="ionice -c 1 /usr/bin/snapraid"
-
-exit_cron() {
-    RUNNINGOP="FINALIZE"
-    OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
-    MEASURESTOP=$(date +%s)
-    DURATION=$((MEASURESTOP-MEASURESTART))
-    DURATIONUNIT="seconds"
-    [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="minutes"
-    [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hours"
-    echo "$OPTIME" >/var/lib/snapraid/logs/lastfinish
-    echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-    echo "### CRON -- FINISHED: ${OPTIME} (after ${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-    cp /var/lib/snapraid/logs/snaplog /var/lib/snapraid/logs/cron-"${LOGTIME}".log
-    if [ -z "${SUCCESSOPS[*]}" ]; then
-        [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Finished" -d "SnapRAID maintenance finished with success (after ${DURATION} ${DURATIONUNIT}). No operations performed without errors." -i "normal"
-    else
-        [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Finished" -d "SnapRAID maintenance finished with success (after ${DURATION} ${DURATIONUNIT}). ${SUCCESSOPS[*]} performed without errors." -i "normal"
-    fi
-}
 
 failure_exit_cron() {
     RUNNINGOP="FINALIZE"
@@ -101,6 +81,9 @@ signal_exit_cron() {
     fi
     exit 1
 }
+
+RUNNINGOP="START"
+SUCCESSOPS=()
 
 rm -f /var/lib/snapraid/logs/lastfinish
 
@@ -282,4 +265,23 @@ else
     echo "### CRON -- Scrub is disabled, proceeding..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
 fi
 
-exit_cron
+RUNNINGOP="FINALIZE"
+
+OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+MEASURESTOP=$(date +%s)
+DURATION=$((MEASURESTOP-MEASURESTART))
+DURATIONUNIT="seconds"
+[ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="minutes"
+[ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hours"
+
+echo "$OPTIME" >/var/lib/snapraid/logs/lastfinish
+echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+echo "### CRON -- FINISHED: ${OPTIME} (after ${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+
+cp /var/lib/snapraid/logs/snaplog /var/lib/snapraid/logs/cron-"${LOGTIME}".log
+
+if [ -z "${SUCCESSOPS[*]}" ]; then
+    [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Finished" -d "SnapRAID maintenance finished with success (after ${DURATION} ${DURATIONUNIT}). No operations performed without errors." -i "normal"
+else
+    [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Finished" -d "SnapRAID maintenance finished with success (after ${DURATION} ${DURATIONUNIT}). ${SUCCESSOPS[*]} performed without errors." -i "normal"
+fi
