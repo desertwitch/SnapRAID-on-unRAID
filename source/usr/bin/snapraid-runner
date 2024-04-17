@@ -48,9 +48,13 @@ signal_exit_snapraid() {
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     MEASURESTOP=$(date +%s)
     DURATION=$(((MEASURESTOP-MEASURESTART)/60))
+    DURATIONUNIT="seconds"
+    [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="minute(s)"
+    [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hour(s)"
+    [ "$DURATION" -ge 24 ] && DURATION=$((DURATION/24)) && DURATIONUNIT="day(s)"
     echo "$OPTIME" >/var/lib/snapraid/logs/lastfinish
     echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-    echo "### ${BIGOP} INTERRUPTED [SIGTERM]: ${OPTIME} (${DURATION} minutes)" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+    echo "### ${BIGOP} INTERRUPTED [SIGTERM]: ${OPTIME} (${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     cp "/var/lib/snapraid/logs/snaplog" "/var/lib/snapraid/logs/${1}-${LOGTIME}.log"
     exit 1
 }
@@ -109,8 +113,12 @@ fi
 
 MEASURESTOP=$(date +%s)
 DURATION=$(((MEASURESTOP-MEASURESTART)/60))
+DURATIONUNIT="seconds"
+[ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="minute(s)"
+[ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hour(s)"
+[ "$DURATION" -ge 24 ] && DURATION=$((DURATION/24)) && DURATIONUNIT="day(s)"
 
 echo "$OPTIME" >/var/lib/snapraid/logs/lastfinish
 echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-echo "### ${BIGOP} FINISHED: ${OPTIME} (${DURATION} minutes)" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+echo "### ${BIGOP} FINISHED: ${OPTIME} (${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
 cp "/var/lib/snapraid/logs/snaplog" "/var/lib/snapraid/logs/${1}-${LOGTIME}.log"
