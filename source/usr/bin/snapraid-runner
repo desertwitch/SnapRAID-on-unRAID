@@ -19,8 +19,6 @@ SNAP_BIN="/usr/bin/snapraid"
 SNAP_CONF="/etc/snapraid.conf"
 CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
 
-MEASURESTART=$(date +%s)
-
 [ -e "$CONFIG" ] && source $CONFIG
 
 KNOWNCMDS=("status" "diff" "sync" "scrub" "list" "dup" "up" "down" "touch" "smart" "pool" "check" "fix")
@@ -47,8 +45,8 @@ fi
 signal_exit_snapraid() {
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     MEASURESTOP=$(date +%s)
-    DURATION=$(((MEASURESTOP-MEASURESTART)/60))
-    DURATIONUNIT="seconds"
+    DURATION=$((MEASURESTOP-MEASURESTART))
+    DURATIONUNIT="second(s)"
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="minute(s)"
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hour(s)"
     [ "$DURATION" -ge 24 ] && DURATION=$((DURATION/24)) && DURATIONUNIT="day(s)"
@@ -64,6 +62,7 @@ BIGOP="$(echo "$1" | awk '{print toupper($0)}')"
 rm -f /var/lib/snapraid/logs/lastfinish
 LOGTIME=$(date +"%Y%m%d-%H%M%S")
 OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+MEASURESTART=$(date +%s)
 
 echo "$OPTIME" >/var/lib/snapraid/logs/laststart
 echo "### ${BIGOP} STARTED: ${OPTIME}" 2>&1 | tee /var/lib/snapraid/logs/snaplog
@@ -112,8 +111,8 @@ else
 fi
 
 MEASURESTOP=$(date +%s)
-DURATION=$(((MEASURESTOP-MEASURESTART)/60))
-DURATIONUNIT="seconds"
+DURATION=$((MEASURESTOP-MEASURESTART))
+DURATIONUNIT="second(s)"
 [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="minute(s)"
 [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hour(s)"
 [ "$DURATION" -ge 24 ] && DURATION=$((DURATION/24)) && DURATIONUNIT="day(s)"

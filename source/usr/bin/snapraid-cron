@@ -21,7 +21,6 @@ NOTIFY_BIN="/usr/local/emhttp/plugins/dynamix/scripts/notify"
 CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
 
 RUNNINGOP="INIT"
-MEASURESTART=$(date +%s)
 SUCCESSOPS=()
 
 [ -e "$CONFIG" ] && source $CONFIG
@@ -48,7 +47,7 @@ exit_cron() {
     RUNNINGOP="FINALIZING"
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     MEASURESTOP=$(date +%s)
-    DURATION=$(((MEASURESTOP-MEASURESTART)/60))
+    DURATION=$((MEASURESTOP-MEASURESTART))
     DURATIONUNIT="second(s)"
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="minute(s)"
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hour(s)"
@@ -68,8 +67,8 @@ failure_exit_cron() {
     RUNNINGOP="FINALIZING"
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     MEASURESTOP=$(date +%s)
-    DURATION=$(((MEASURESTOP-MEASURESTART)/60))
-    DURATIONUNIT="seconds"
+    DURATION=$((MEASURESTOP-MEASURESTART))
+    DURATIONUNIT="second(s)"
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="minute(s)"
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hour(s)"
     [ "$DURATION" -ge 24 ] && DURATION=$((DURATION/24)) && DURATIONUNIT="day(s)"
@@ -89,8 +88,8 @@ signal_exit_cron() {
     FAILUREMSG="SIGTERM was received during the ${RUNNINGOP} operation."
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     MEASURESTOP=$(date +%s)
-    DURATION=$(((MEASURESTOP-MEASURESTART)/60))
-    DURATIONUNIT="seconds"
+    DURATION=$((MEASURESTOP-MEASURESTART))
+    DURATIONUNIT="second(s)"
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="minute(s)"
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hour(s)"
     [ "$DURATION" -ge 24 ] && DURATION=$((DURATION/24)) && DURATIONUNIT="day(s)"
@@ -109,6 +108,7 @@ signal_exit_cron() {
 rm -f /var/lib/snapraid/logs/lastfinish
 LOGTIME=$(date +"%Y%m%d-%H%M%S")
 OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+MEASURESTART=$(date +%s)
 echo "$OPTIME" >/var/lib/snapraid/logs/laststart
 echo "### CRON -- STARTED: ${OPTIME}" 2>&1 | tee /var/lib/snapraid/logs/snaplog
 echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
