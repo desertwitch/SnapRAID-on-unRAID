@@ -22,6 +22,7 @@ CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
 
 RUNNINGOP="INIT"
 MEASURESTART=$(date +%s)
+SUCCESSOPS=()
 
 [ -e "$CONFIG" ] && source $CONFIG
 
@@ -52,7 +53,11 @@ exit_cron() {
     echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     echo "### CRON -- FINISHED: ${OPTIME} (${DURATION} minutes)" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     cp /var/lib/snapraid/logs/snaplog /var/lib/snapraid/logs/cron-"${LOGTIME}".log
-    [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Finished (0 errors)" -d "The SnapRAID maintenance has finished with success, it has been running for ${DURATION} minutes." -i "normal"
+    if [ -z "${SUCCESSOPS[*]}" ]; then
+        [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Finished (No Errors)" -d "The SnapRAID maintenance has finished with success, it has been running for ${DURATION} minutes. No operations have finished without error." -i "normal"
+    else
+        [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Finished (No Errors)" -d "The SnapRAID maintenance has finished with success, it has been running for ${DURATION} minutes. ${SUCCESSOPS[*]} have finished without error." -i "normal"
+    fi
 }
 
 failure_exit_cron() {
@@ -64,7 +69,11 @@ failure_exit_cron() {
     echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     echo "### CRON -- FINISHED: ${OPTIME} (${DURATION} minutes)" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     cp /var/lib/snapraid/logs/snaplog /var/lib/snapraid/logs/cron-"${LOGTIME}".log
-    [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "The SnapRAID maintenance has finished with errors, it has been running for ${DURATION} minutes. ${FAILUREMSG}" -i "alert"
+    if [ -z "${SUCCESSOPS[*]}" ]; then
+        [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "The SnapRAID maintenance has finished with errors, it has been running for ${DURATION} minutes. No operations have finished without error. ${FAILUREMSG}" -i "alert"
+    else
+        [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "The SnapRAID maintenance has finished with errors, it has been running for ${DURATION} minutes. ${SUCCESSOPS[*]} have finished without error. ${FAILUREMSG}" -i "alert"
+    fi
     exit 1
 }
 
@@ -77,7 +86,11 @@ signal_exit_cron() {
     echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     echo "### CRON -- INTERRUPTED [SIGTERM during ${RUNNINGOP}]: ${OPTIME} (${DURATION} minutes)" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     cp /var/lib/snapraid/logs/snaplog /var/lib/snapraid/logs/cron-"${LOGTIME}".log
-    [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "The SnapRAID maintenance has been interrupted, it has been running for ${DURATION} minutes. ${FAILUREMSG}" -i "alert"
+    if [ -z "${SUCCESSOPS[*]}" ]; then
+        [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "The SnapRAID maintenance has been interrupted, it has been running for ${DURATION} minutes. No operations have finished without error. ${FAILUREMSG}" -i "alert"
+    else
+        [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "The SnapRAID maintenance has been interrupted, it has been running for ${DURATION} minutes. ${SUCCESSOPS[*]} have finished without error. ${FAILUREMSG}" -i "alert"
+    fi
     exit 1
 }
 
@@ -103,6 +116,7 @@ if [ "$TOUCH" == "enable" ]; then
             FAILUREMSG="The touching of detected files has failed - check LOG."
             failure_exit_cron
         fi
+        SUCCESSOPS+=("TOUCH")
     else
         echo "### CRON -- No files to be touched, proceeding..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     fi
@@ -175,6 +189,7 @@ if [ "$DIFF" == "enable" ]; then
         failure_exit_cron
     fi
     echo "### CRON -- No difference thresholds have been exceeded, proceeding..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+    SUCCESSOPS+=("DIFF")
 else
     echo "### CRON -- Checking for differences is disabled, proceeding..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
 fi
@@ -216,6 +231,7 @@ if [ "$SYNC" == "enable" ]; then
             fi
         fi
         echo "### CRON -- Sync has finished, proceeding..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+        SUCCESSOPS+=("SYNC")
     fi
 else
     echo "### CRON -- Sync is disabled, proceeding..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
@@ -237,6 +253,7 @@ if [ "$SCRUB" == "enable" ]; then
         fi
         echo "### CRON -- Scrub New Blocks has finished, proceeding..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
         echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+        SUCCESSOPS+=("SCRUBNEW")
     fi
     RUNNINGOP="SCRUB"
     echo "### CRON -- Scrubbing [${SCRUBPERCENT} % / ${SCRUBAGE} days age]..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
@@ -249,6 +266,7 @@ if [ "$SCRUB" == "enable" ]; then
         echo "$OPTIME" > /boot/config/plugins/dwsnap/config/lastscrub
     fi
     echo "### CRON -- Scrub has finished, proceeding..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+    SUCCESSOPS+=("SCRUB")
 else
     echo "### CRON -- Scrub is disabled, proceeding..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
 fi
