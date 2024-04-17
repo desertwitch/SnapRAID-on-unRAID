@@ -51,7 +51,6 @@ exit_cron() {
     DURATIONUNIT="seconds"
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="minutes"
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hours"
-    [ "$DURATION" -ge 24 ] && DURATION=$((DURATION/24)) && DURATIONUNIT="days"
     echo "$OPTIME" >/var/lib/snapraid/logs/lastfinish
     echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     echo "### CRON -- FINISHED: ${OPTIME} (${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
@@ -71,7 +70,6 @@ failure_exit_cron() {
     DURATIONUNIT="seconds"
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="minutes"
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hours"
-    [ "$DURATION" -ge 24 ] && DURATION=$((DURATION/24)) && DURATIONUNIT="days"
     echo "$OPTIME" >/var/lib/snapraid/logs/lastfinish
     echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     echo "### CRON -- FINISHED: ${OPTIME} (${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
@@ -92,7 +90,6 @@ signal_exit_cron() {
     DURATIONUNIT="seconds"
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="minutes"
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hours"
-    [ "$DURATION" -ge 24 ] && DURATION=$((DURATION/24)) && DURATIONUNIT="days"
     echo "$OPTIME" >/var/lib/snapraid/logs/lastfinish
     echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     echo "### CRON -- INTERRUPTED [SIGTERM during ${RUNNINGOP}]: ${OPTIME} (${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
