@@ -17,7 +17,6 @@
 umask 000
 SNAP_BIN="/usr/bin/snapraid"
 SNAP_CONF="/etc/snapraid.conf"
-NOTIFY_BIN="/usr/local/emhttp/plugins/dynamix/scripts/notify"
 CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
 
 RUNNINGOP="INIT"
@@ -35,6 +34,7 @@ if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-runner >/dev/null 2>&1
     exit 1
 fi
 
+NOTIFY_BIN="/usr/local/emhttp/plugins/dynamix/scripts/notify"
 HOST="$(echo "$HOSTNAME" | awk '{print toupper($0)}')"
 EVENT="SnapRAID Operation"
 SUBJECT="[${HOST}] SnapRAID"
@@ -44,7 +44,7 @@ SUBJECT="[${HOST}] SnapRAID"
 [ "$PRIO" == "realtime" ] && SNAP_BIN="ionice -c 1 /usr/bin/snapraid"
 
 exit_cron() {
-    RUNNINGOP="FINALIZING"
+    RUNNINGOP="FINALIZE"
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     MEASURESTOP=$(date +%s)
     DURATION=$((MEASURESTOP-MEASURESTART))
@@ -63,7 +63,7 @@ exit_cron() {
 }
 
 failure_exit_cron() {
-    RUNNINGOP="FINALIZING"
+    RUNNINGOP="FINALIZE"
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     MEASURESTOP=$(date +%s)
     DURATION=$((MEASURESTOP-MEASURESTART))
@@ -103,9 +103,11 @@ signal_exit_cron() {
 }
 
 rm -f /var/lib/snapraid/logs/lastfinish
+
 LOGTIME=$(date +"%Y%m%d-%H%M%S")
 OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
 MEASURESTART=$(date +%s)
+
 echo "$OPTIME" >/var/lib/snapraid/logs/laststart
 echo "### CRON -- STARTED: ${OPTIME}" 2>&1 | tee /var/lib/snapraid/logs/snaplog
 echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
