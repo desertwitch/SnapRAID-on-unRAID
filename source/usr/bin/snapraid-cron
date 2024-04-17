@@ -83,7 +83,7 @@ failure_exit_cron() {
 }
 
 signal_exit_cron() {
-    FAILUREMSG="SIGTERM was received during the ${RUNNINGOP} operation."
+    FAILUREMSG="SIGTERM was received during ${RUNNINGOP} operation."
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     MEASURESTOP=$(date +%s)
     DURATION=$((MEASURESTOP-MEASURESTART))
