@@ -19,7 +19,9 @@ SNAP_BIN="/usr/bin/snapraid"
 SNAP_CONF="/etc/snapraid.conf"
 NOTIFY_BIN="/usr/local/emhttp/plugins/dynamix/scripts/notify"
 CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
+
 RUNNINGOP="INIT"
+MEASURESTART=$(date +%s)
 
 [ -e "$CONFIG" ] && source $CONFIG
 
@@ -44,32 +46,38 @@ SUBJECT="[${HOST}] SnapRAID"
 exit_cron() {
     RUNNINGOP="FINALIZING"
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+    MEASURESTOP=$(date +%s)
+    DURATION=$(((MEASURESTOP-MEASURESTART)/60))
     echo "$OPTIME" >/var/lib/snapraid/logs/lastfinish
     echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-    echo "### CRON -- FINISHED: ${OPTIME}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+    echo "### CRON -- FINISHED: ${OPTIME} (${DURATION} minutes)" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     cp /var/lib/snapraid/logs/snaplog /var/lib/snapraid/logs/cron-"${LOGTIME}".log
-    [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Finished" -d "The SnapRAID maintenance has finished with success." -i "normal"
+    [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Finished (0 errors)" -d "The SnapRAID maintenance has finished with success, it has been running for ${DURATION} minutes." -i "normal"
 }
 
 failure_exit_cron() {
     RUNNINGOP="FINALIZING"
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+    MEASURESTOP=$(date +%s)
+    DURATION=$(((MEASURESTOP-MEASURESTART)/60))
     echo "$OPTIME" >/var/lib/snapraid/logs/lastfinish
     echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-    echo "### CRON -- FINISHED: ${OPTIME}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+    echo "### CRON -- FINISHED: ${OPTIME} (${DURATION} minutes)" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     cp /var/lib/snapraid/logs/snaplog /var/lib/snapraid/logs/cron-"${LOGTIME}".log
-    [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "The SnapRAID maintenance has finished with errors. ${FAILUREMSG}" -i "alert"
+    [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "The SnapRAID maintenance has finished with errors, it has been running for ${DURATION} minutes. ${FAILUREMSG}" -i "alert"
     exit 1
 }
 
 signal_exit_cron() {
     FAILUREMSG="SIGTERM was received during the ${RUNNINGOP} operation."
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+    MEASURESTOP=$(date +%s)
+    DURATION=$(((MEASURESTOP-MEASURESTART)/60))
     echo "$OPTIME" >/var/lib/snapraid/logs/lastfinish
     echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-    echo "### CRON -- INTERRUPTED [SIGTERM during ${RUNNINGOP}]: ${OPTIME}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+    echo "### CRON -- INTERRUPTED [SIGTERM during ${RUNNINGOP}]: ${OPTIME} (${DURATION} minutes)" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     cp /var/lib/snapraid/logs/snaplog /var/lib/snapraid/logs/cron-"${LOGTIME}".log
-    [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "The SnapRAID maintenance has been interrupted. ${FAILUREMSG}" -i "alert"
+    [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "The SnapRAID maintenance has been interrupted, it has been running for ${DURATION} minutes. ${FAILUREMSG}" -i "alert"
     exit 1
 }
 
