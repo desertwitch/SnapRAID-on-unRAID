@@ -361,7 +361,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         </blockquote>
 
         <dl>
-            <dt>SnapRAID Maintenance - Sync I/O Premature Failure:</dt>
+            <dt>SnapRAID Maintenance - Sync I/O Premature Interrupt:</dt>
             <dd>
                 <input id="SYNCERRORS" type="text" class="narrow snaprun" name="SYNCERRORS" maxlength="30" value="<?=$dwsnap_sync_errors?>">errors
             </dd>
@@ -430,7 +430,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         </blockquote>
 
         <dl>
-            <dt>SnapRAID Maintenance - Scrub I/O Premature Failure:</dt>
+            <dt>SnapRAID Maintenance - Scrub I/O Premature Interrupt:</dt>
             <dd>
                 <input id="SCRUBERRORS" type="text" class="narrow snaprun" name="SCRUBERRORS" maxlength="30" value="<?=$dwsnap_scrub_errors?>">errors
             </dd>
