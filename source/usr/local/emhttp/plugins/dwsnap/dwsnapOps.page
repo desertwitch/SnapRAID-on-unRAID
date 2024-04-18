@@ -140,6 +140,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     <span for="snapscrub-bad" title="Scrub only blocks previously marked as bad." class="snaphelptip">(Scrub) Bad Blocks</span>
     <input type="radio" id="snapscrub-full" name="snapscrub-opts" value="snapscrub-full">
     <span for="snapscrub-full" title="Scrub the whole array." class="snaphelptip">(Scrub) Full</span>
+    <span style="float:right;margin-right:10px;">SnapRAID &copy; 2011-2024 Andrea Mazzoleni - All Rights Reserved</span>
     
     <br><strong>Data Selection Filters:</strong>
     (Check/Fix) <input type="text" id="snapfix-pattern" class="narrow snaphelptip" title="Run a command only on a certain set of data." placeholder="Path Pattern (See Manual)">
