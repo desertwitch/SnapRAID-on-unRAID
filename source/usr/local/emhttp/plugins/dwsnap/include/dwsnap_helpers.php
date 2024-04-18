@@ -29,7 +29,7 @@ function dwsnap_time_ago($oldTime) {
         }else if ($timeCalc >= (60*60*24*30)){
             $timeCalc = "<span class='orange-text'>" . intval($timeCalc/60/60/24/30) . " month ago</span>";
         }else if ($timeCalc >= (60*60*24*2)){
-            if(($timeCalc/60/60/24) > 6) {
+            if(($timeCalc/60/60/24) > 7) {
                 $timeCalc = "<span class='orange-text'>" . intval($timeCalc/60/60/24) . " days ago</span>";
             } else {
                 $timeCalc = "<span class='green-text'>" . intval($timeCalc/60/60/24) . " days ago</span>";
