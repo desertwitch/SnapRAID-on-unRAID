@@ -83,6 +83,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     <input type="hidden" id="arg6" name="#arg[6]" value="">
     <input type="hidden" id="arg7" name="#arg[7]" value="">
     <input type="hidden" id="arg8" name="#arg[8]" value="">
+    <input type="hidden" id="arg9" name="#arg[9]" value="">
 
     <input class="snaprun snaphelptip" type="button" id="snapstatus" value="STATUS" title="Prints a summary of the state of the disk array. It includes information about the parity fragmentation, how long the blocks have not been checked, and all the recorded silent errors encountered while scrubbing. Note that the information presented refers to the last time you ran SYNC. Later modifications are not taken into account.">
     <input class="snaprun snaphelptip" type="button" id="snaplist" value="LIST" title="Lists all the files contained in the array at the time of the last SYNC.">
@@ -119,13 +120,18 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     <input type="checkbox" id="snapcheck-auditonly" value="snapcheck-auditonly">
     <label for="snapcheck-auditonly" title="In CHECK verifies the hash of the files without doing any kind of check on the parity data. If you are interested in checking only the file data this option can speed up a lot the checking process." class="snaphelptip">(Check) Audit Only</label>
     <span style="float:right;margin-right:10px"><a href="https://www.snapraid.it/manual" target="_blank" title="SnapRAID User Manual"><i class="fa fa-file-text-o"></i> User Manual</a> / <a href="https://www.snapraid.it/faq" target="_blank" title="SnapRAID FAQ"><i class="fa fa-question-circle-o"></i> Frequently Asked Questions</a></span>
-    <br><strong>Advanced Filters:</strong>
-    (Check/Fix) <input type="text" id="snapfix-pattern" class="narrow snaphelptip" title="Run a command only on a certain set of data." placeholder="Path Pattern (See Manual)">
-    (Check/Fix) <input type="text" id="snapfix-diskpattern" title="Run a command only on a certain disk." class="narrow snaphelptip" placeholder="Disk Name">
-    <br><strong>Runtime Handling:</strong>
+    <br><strong>Runtime Handling Parameters:</strong>
     <input type="checkbox" id="snap-hideprogress" value="snap-hideprogress">
-    <label for="snap-hideprogress" title="Hide the repetitive progress bar." class="snaphelptip">Hide Progress Bar</label>
-    <span style="margin-left:20px;">(Sync/Scrub) </span><input type="text" id="snapsync-errorlimit" class="narrow snaphelptip" title="Sets a new error limit before stopping execution. By default SnapRAID stops if it encounters more than 100 Input/Output errors, meaning that a disk is likely dying." placeholder="I/O Error Limit">
+    <label for="snap-hideprogress" title="Hides the repetitive progress bar output." class="snaphelptip">(Screen) Hide Progress Output</label>
+    <input type="checkbox" id="snapcheck-forceuuid" value="snapcheck-forceuuid">
+    <label for="snapcheck-forceuuid" title="Forces the insecure operation of syncing, checking and fixing with disks that have changed their UUID. If SnapRAID detects that some disks have changed UUID, it stops proceeding unless you specify this option. This allows to detect when your disks are mounted in the wrong mount points. It's anyway allowed to have a single UUID change with single parity, and more with multiple parity, because it's the normal case of replacing disks after a recovery." class="snaphelptip">(Sync/Check/Fix) Force UUID</label>
+    <input type="checkbox" id="snapfix-forcedevice" value="snapfix-forcedevice">
+    <label for="snapfix-forcedevice" title="Forces the insecure operation of fixing with inaccessible disks, or with disks on the same physical device. Like if you lost two data disks, and you have a spare disk to recover only the first one, and you want to ignore the second inaccessible disk. Or if you want to recover a disk in the free space left in an already used disk, sharing the same physical device. " class="snaphelptip">(Fix) Force Device</label>
+    <br><strong>Advanced Filters:</strong>
+    (Check/Fix) <input type="text" id="snapfix-pattern" class="narrow snaphelptip" title="Runs a command only on a certain set of data." placeholder="Path Pattern (See Manual)">
+    (Check/Fix) <input type="text" id="snapfix-diskpattern" title="Runs a command only on a certain disk." class="narrow snaphelptip" placeholder="Disk Name">
+    <br><strong>Failure Thresholds:</strong>
+    (Sync/Scrub) <input type="text" id="snapsync-errorlimit" class="narrow snaphelptip" title="Sets a new error limit before stopping execution. By default SnapRAID stops if it encounters more than 100 Input/Output errors, meaning that a disk is likely dying." placeholder="I/O Error Limit">
     <br><br>
 
     <div><strong>INFORMATION:</strong></div>
@@ -266,8 +272,11 @@ $(function(){
             $('#arg5').val('-f');
             $('#arg6').val($('#snapfix-pattern').val());
         }
+        if($('#snapcheck-forceuuid').is(':checked')) {
+            $('#arg7').val('-U');
+        }
         if($('#snap-hideprogress').is(':checked')) {
-            $('#arg7').val('-q');
+            $('#arg8').val('-q');
         }
         $('#snapcommands').submit();
     });
@@ -344,8 +353,11 @@ $(function(){
                     $('#arg5').val('-L');
                     $('#arg6').val($('#snapsync-errorlimit').val());
                 }
+                if($('#snapcheck-forceuuid').is(':checked')) {
+                    $('#arg7').val('-U');
+                }
                 if($('#snap-hideprogress').is(':checked')) {
-                    $('#arg7').val('-q');
+                    $('#arg8').val('-q');
                 }
                 $('#snapcommands').submit();
             });
@@ -376,8 +388,11 @@ $(function(){
                     $('#arg6').val('-L');
                     $('#arg7').val($('#snapsync-errorlimit').val());
                 }
+                if($('#snapcheck-forceuuid').is(':checked')) {
+                    $('#arg8').val('-U');
+                }
                 if($('#snap-hideprogress').is(':checked')) {
-                    $('#arg8').val('-q');
+                    $('#arg9').val('-q');
                 }
                 $('#snapcommands').submit();
             });
@@ -417,8 +432,11 @@ $(function(){
                     $('#arg4').val('-f');
                     $('#arg5').val($('#snapfix-pattern').val());
                 }
+                if($('#snapcheck-forceuuid').is(':checked')) {
+                    $('#arg6').val('-U');
+                }
                 if($('#snap-hideprogress').is(':checked')) {
-                    $('#arg6').val('-q');
+                    $('#arg7').val('-q');
                 }
                 $('#snapcommands').submit();
             });
@@ -444,8 +462,11 @@ $(function(){
                     $('#arg5').val('-f');
                     $('#arg6').val($('#snapfix-pattern').val());
                 }
+                if($('#snapcheck-forceuuid').is(':checked')) {
+                    $('#arg7').val('-U');
+                }
                 if($('#snap-hideprogress').is(':checked')) {
-                    $('#arg7').val('-q');
+                    $('#arg8').val('-q');
                 }
                 $('#snapcommands').submit();
             });
@@ -471,8 +492,11 @@ $(function(){
                     $('#arg5').val('-f');
                     $('#arg6').val($('#snapfix-pattern').val());
                 }
+                if($('#snapcheck-forceuuid').is(':checked')) {
+                    $('#arg7').val('-U');
+                }
                 if($('#snap-hideprogress').is(':checked')) {
-                    $('#arg7').val('-q');
+                    $('#arg8').val('-q');
                 }
                 $('#snapcommands').submit();
             });
