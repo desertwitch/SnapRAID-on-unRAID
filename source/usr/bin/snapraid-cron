@@ -53,7 +53,7 @@ failure_exit_cron() {
     echo "$OPTIME" >/var/lib/snapraid/logs/lastfinish
     echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     echo "### CRON -- FINISHED: ${OPTIME} (after ${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-    cp /var/lib/snapraid/logs/snaplog /var/lib/snapraid/logs/cron-"${LOGTIME}".log
+    cp /var/lib/snapraid/logs/snaplog "/var/lib/snapraid/logs/cron-${LOGTIME}.log"
     if [ -z "${SUCCESSOPS[*]}" ]; then
         [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "SnapRAID maintenance finished with errors (after ${DURATION} ${DURATIONUNIT}). No operations performed without errors. ${FAILUREMSG}" -i "alert"
     else
@@ -73,7 +73,7 @@ signal_exit_cron() {
     echo "$OPTIME" >/var/lib/snapraid/logs/lastfinish
     echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     echo "### CRON -- INTERRUPTED [SIGTERM during ${RUNNINGOP}]: ${OPTIME} (after ${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-    cp /var/lib/snapraid/logs/snaplog /var/lib/snapraid/logs/cron-"${LOGTIME}".log
+    cp /var/lib/snapraid/logs/snaplog "/var/lib/snapraid/logs/cron-${LOGTIME}.log"
     if [ -z "${SUCCESSOPS[*]}" ]; then
         [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Interrupted" -d "SnapRAID maintenance was interrupted (after ${DURATION} ${DURATIONUNIT}). No operations performed without errors. ${FAILUREMSG}" -i "alert"
     else
@@ -290,7 +290,7 @@ echo "$OPTIME" >/var/lib/snapraid/logs/lastfinish
 echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
 echo "### CRON -- FINISHED: ${OPTIME} (after ${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
 
-cp /var/lib/snapraid/logs/snaplog /var/lib/snapraid/logs/cron-"${LOGTIME}".log
+cp /var/lib/snapraid/logs/snaplog "/var/lib/snapraid/logs/cron-${LOGTIME}.log"
 
 if [ -z "${SUCCESSOPS[*]}" ]; then
     [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Finished" -d "SnapRAID maintenance finished with success (after ${DURATION} ${DURATIONUNIT}). No operations performed without errors." -i "normal"
