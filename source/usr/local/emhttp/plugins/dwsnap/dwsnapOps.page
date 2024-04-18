@@ -147,7 +147,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
                 <th colspan="10"><strong>ARRAY OVERVIEW WITH INDIVIDUAL DISKS</strong> <span style="text-transform: none;float:right;"><?=$snap_syncneeded_html?><span style="margin-left:10px;"><strong>Last Sync:</strong> <?=$snap_lastsync_html?></span><span style="margin-left:10px;"><strong>Last Scrub:</strong> <?=$snap_lastscrub_html?></span></span></th>
             </tr>
             <tr>
-                 <th><strong>Disk Type</strong></th><th><strong>Disk Name</strong></th><th><strong>Mountpoint</strong></th><th><strong>Mounted</strong></th><th><strong>FileSystem</strong></th><th><strong>Total Space</strong></th><th><strong>Used Space</strong></th><th><strong>Free Space</strong></th><th><strong>Utilization</strong></th><th><strong>Disk-Specific Operations</strong><br><span style="font-size:x-small;"><em>Parameters Selected From Above Apply</em></span></th>
+                 <th><strong>Disk Type</strong></th><th><strong>Disk Name</strong></th><th><strong>Mountpoint</strong></th><th><strong>Mounted</strong></th><th><strong>FileSystem</strong></th><th><strong>Total Space</strong></th><th><strong>Used Space</strong></th><th><strong>Free Space</strong></th><th><strong>Utilization</strong></th><th><strong>Disk-Specific Operations</strong><br><span style="font-size:x-small;"><em>Options Selected From Above Apply</em></span></th>
             </tr>
         </thead>
         <tbody>
