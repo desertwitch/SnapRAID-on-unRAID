@@ -344,6 +344,19 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <p>This allows to easily detect when after a system crash, some accessed files were truncated.</p>
         <p>This, however, can also be a normal possible condition in Linux with e.g. the ext3/ext4 file-systems.</p>
         </blockquote>
+
+        <dl>
+            <dt>SnapRAID Maintenance - Sync Instant Failure Threshold:</dt>
+            <dd>
+                <input id="SYNCERRORS" type="text" class="narrow snaprun" name="SYNCERRORS" maxlength="30" value="<?=$dwsnap_sync_errors?>">errors
+            </dd>
+        </dl>
+
+        <blockquote class="inline_help">
+        <p>SnapRAID maintenance will never proceed <u>to the next step</u> when the previously running individual operation experienced even just one error.</p>
+        <p>However, SnapRAID by default allows up to 100 I/O errors to actually try finish such a (failing) individual operation instead of interrupting it prematurely.</p>
+        <p>I/O errors usually signify a failing disk - this setting modifies the threshold at which SnapRAID will interrupt prematurely an individual (failing) operation.</p>
+        </blockquote>
     </div>
 
     <dl>
@@ -399,6 +412,19 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <p>By default newly synced blocks are not instantly scrubbed due to being at lower risk for data corruption.</p>
         <p>When enabled an additional scrub operation is performed scrubbing also any newly synced blocks, in addition to the older blocks to be scrubbed.</p>
         <p>Be advised that when enabled and no scrubs have been performed on the array yet (ever), this will result in the whole array being scrubbed (as all blocks will be considered new).</p> 
+        </blockquote>
+
+        <dl>
+            <dt>SnapRAID Maintenance - Scrub Instant Failure Threshold:</dt>
+            <dd>
+                <input id="SCRUBERRORS" type="text" class="narrow snaprun" name="SCRUBERRORS" maxlength="30" value="<?=$dwsnap_scrub_errors?>">errors
+            </dd>
+        </dl>
+
+        <blockquote class="inline_help">
+        <p>SnapRAID maintenance will never proceed <u>to the next step</u> when the previously running individual operation experienced even just one error.</p>
+        <p>However, SnapRAID by default allows up to 100 I/O errors to actually try finish such a (failing) individual operation instead of interrupting it prematurely.</p>
+        <p>I/O errors usually signify a failing disk - this setting modifies the threshold at which SnapRAID will interrupt prematurely an individual (failing) operation.</p>
         </blockquote>
     </div>
 </div>
