@@ -81,6 +81,8 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     <input type="hidden" id="arg4" name="#arg[4]" value="">
     <input type="hidden" id="arg5" name="#arg[5]" value="">
     <input type="hidden" id="arg6" name="#arg[6]" value="">
+    <input type="hidden" id="arg7" name="#arg[7]" value="">
+    <input type="hidden" id="arg8" name="#arg[8]" value="">
 
     <input class="snaprun snaphelptip" type="button" id="snapstatus" value="STATUS" title="Prints a summary of the state of the disk array. It includes information about the parity fragmentation, how long the blocks have not been checked, and all the recorded silent errors encountered while scrubbing. Note that the information presented refers to the last time you ran SYNC. Later modifications are not taken into account.">
     <input class="snaprun snaphelptip" type="button" id="snaplist" value="LIST" title="Lists all the files contained in the array at the time of the last SYNC.">
@@ -120,7 +122,10 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     <br><strong>Advanced Filters:</strong>
     (Check/Fix) <input type="text" id="snapfix-pattern" class="narrow snaphelptip" title="Run a command only on a certain set of data." placeholder="Path Pattern (See Manual)">
     (Check/Fix) <input type="text" id="snapfix-diskpattern" title="Run a command only on a certain disk." class="narrow snaphelptip" placeholder="Disk Name">
-
+    <br><strong>Runtime Handling:</strong>
+    <input type="checkbox" id="snap-hideprogress" value="snap-hideprogress">
+    <label for="snap-hideprogress" title="Hide the repetitive progress bar." class="snaphelptip">Hide Progress Bar</label>
+    <span style="margin-left:20px;">(Sync/Scrub) </span><input type="text" id="snapsync-errorlimit" class="narrow snaphelptip" title="Sets a new error limit before stopping execution. By default SnapRAID stops if it encounters more than 100 Input/Output errors, meaning that a disk is likely dying." placeholder="I/O Error Limit">
     <br><br>
 
     <div><strong>INFORMATION:</strong></div>
@@ -238,6 +243,13 @@ $(function(){
     $('#snapscrub').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
         $('#arg1').val('scrub');
+        if($('#snapsync-errorlimit').val()) {
+            $('#arg2').val('-L');
+            $('#arg3').val($('#snapsync-errorlimit').val());
+        }
+        if($('#snap-hideprogress').is(':checked')) {
+            $('#arg4').val('-q');
+        }
         $('#snapcommands').submit();
     });
     $('#snapcheck').click(function(){
@@ -253,6 +265,9 @@ $(function(){
         if($('#snapfix-pattern').val()) {
             $('#arg5').val('-f');
             $('#arg6').val($('#snapfix-pattern').val());
+        }
+        if($('#snap-hideprogress').is(':checked')) {
+            $('#arg7').val('-q');
         }
         $('#snapcommands').submit();
     });
@@ -325,6 +340,13 @@ $(function(){
                 if($('#snapsync-forcefull').is(':checked')) {
                     $('#arg4').val('-F');
                 }
+                if($('#snapsync-errorlimit').val()) {
+                    $('#arg5').val('-L');
+                    $('#arg6').val($('#snapsync-errorlimit').val());
+                }
+                if($('#snap-hideprogress').is(':checked')) {
+                    $('#arg7').val('-q');
+                }
                 $('#snapcommands').submit();
             });
     });  
@@ -349,6 +371,13 @@ $(function(){
                 }
                 if($('#snapsync-forcefull').is(':checked')) {
                     $('#arg5').val('-F');
+                }
+                if($('#snapsync-errorlimit').val()) {
+                    $('#arg6').val('-L');
+                    $('#arg7').val($('#snapsync-errorlimit').val());
+                }
+                if($('#snap-hideprogress').is(':checked')) {
+                    $('#arg8').val('-q');
                 }
                 $('#snapcommands').submit();
             });
@@ -388,6 +417,9 @@ $(function(){
                     $('#arg4').val('-f');
                     $('#arg5').val($('#snapfix-pattern').val());
                 }
+                if($('#snap-hideprogress').is(':checked')) {
+                    $('#arg6').val('-q');
+                }
                 $('#snapcommands').submit();
             });
     });
@@ -412,6 +444,9 @@ $(function(){
                     $('#arg5').val('-f');
                     $('#arg6').val($('#snapfix-pattern').val());
                 }
+                if($('#snap-hideprogress').is(':checked')) {
+                    $('#arg7').val('-q');
+                }
                 $('#snapcommands').submit();
             });
     });
@@ -435,6 +470,9 @@ $(function(){
                 if($('#snapfix-pattern').val()) {
                     $('#arg5').val('-f');
                     $('#arg6').val($('#snapfix-pattern').val());
+                }
+                if($('#snap-hideprogress').is(':checked')) {
+                    $('#arg7').val('-q');
                 }
                 $('#snapcommands').submit();
             });
