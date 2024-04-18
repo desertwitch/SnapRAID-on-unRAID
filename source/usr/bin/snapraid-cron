@@ -75,9 +75,9 @@ signal_exit_cron() {
     echo "### CRON -- INTERRUPTED [SIGTERM during ${RUNNINGOP}]: ${OPTIME} (after ${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     cp /var/lib/snapraid/logs/snaplog /var/lib/snapraid/logs/cron-"${LOGTIME}".log
     if [ -z "${SUCCESSOPS[*]}" ]; then
-        [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "SnapRAID maintenance was interrupted (after ${DURATION} ${DURATIONUNIT}). No operations performed without errors. ${FAILUREMSG}" -i "alert"
+        [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Interrupted" -d "SnapRAID maintenance was interrupted (after ${DURATION} ${DURATIONUNIT}). No operations performed without errors. ${FAILUREMSG}" -i "alert"
     else
-        [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "SnapRAID maintenance was interrupted (after ${DURATION} ${DURATIONUNIT}). ${SUCCESSOPS[*]} performed without errors. ${FAILUREMSG}" -i "alert"
+        [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Interrupted" -d "SnapRAID maintenance was interrupted (after ${DURATION} ${DURATIONUNIT}). ${SUCCESSOPS[*]} performed without errors. ${FAILUREMSG}" -i "alert"
     fi
     exit 1
 }
