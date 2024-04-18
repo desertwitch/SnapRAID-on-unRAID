@@ -120,6 +120,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     <input type="checkbox" id="snapcheck-auditonly" value="snapcheck-auditonly">
     <label for="snapcheck-auditonly" title="In CHECK verifies the hash of the files without doing any kind of check on the parity data. If you are interested in checking only the file data this option can speed up a lot the checking process." class="snaphelptip">(Check) Audit Only</label>
     <span style="float:right;margin-right:10px"><a href="https://www.snapraid.it/manual" target="_blank" title="SnapRAID User Manual"><i class="fa fa-file-text-o"></i> User Manual</a> / <a href="https://www.snapraid.it/faq" target="_blank" title="SnapRAID FAQ"><i class="fa fa-question-circle-o"></i> Frequently Asked Questions</a></span>
+    
     <br><strong>Runtime Handling Parameters:</strong>
     <input type="checkbox" id="snap-hideprogress" value="snap-hideprogress">
     <label for="snap-hideprogress" title="Hides any repetitive progress output." class="snaphelptip">(Screen) Hide Progress Output</label>
@@ -127,11 +128,26 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     <label for="snapcheck-forceuuid" title="Forces the insecure operation of syncing, checking and fixing with disks that have changed their UUID. If SnapRAID detects that some disks have changed UUID, it stops proceeding unless you specify this option. This allows to detect when your disks are mounted in the wrong mount points. It's anyway allowed to have a single UUID change with single parity, and more with multiple parity, because it's the normal case of replacing disks after a recovery." class="snaphelptip">(Sync/Check/Fix) Force UUID</label>
     <input type="checkbox" id="snapfix-forcedevice" value="snapfix-forcedevice">
     <label for="snapfix-forcedevice" title="Forces the insecure operation of fixing with inaccessible disks, or with disks on the same physical device. For example if you lost two data disks, and you have a spare disk to recover only the first one, and you want to ignore the second inaccessible disk. Alternatively if you want to recover a disk in the free space left on an already used disk, meaning on the same physical device. " class="snaphelptip">(Fix) Force Device</label>
-    <br><strong>Advanced Filters:</strong>
+    <span style="float:right;margin-right:10px;">Please always read and understand the manual before acting!</span>
+    
+    <br><strong>Scrub Selectors:</strong>
+    <input type="radio" id="snapscrub-plan" name="snapscrub-opts" value="snapscrub-plan">
+    (Scrub) <input type="text" id="snapscrub-age" class="snaphelptip" style="margin-right:0px;width:60px;" title="Scrub blocks not scrubbed for (x) days." placeholder="days">
+    (Scrub) <input type="text" id="snapscrub-percent" class="snaphelptip" style="margin-right:0px;width:60px;" title="Scrub (x) percent of selected blocks." placeholder="percent">
+    <input type="radio" id="snapscrub-new" name="snapscrub-opts" value="snapscrub-new">
+    <span for="snapscrub-new" title="Scrub only blocks not yet scrubbed." class="snaphelptip">(Scrub) New Blocks</span>
+    <input type="radio" id="snapscrub-bad" name="snapscrub-opts"  value="snapscrub-bad">
+    <span for="snapscrub-bad" title="Scrub only blocks previously marked as bad." class="snaphelptip">(Scrub) Bad Blocks</span>
+    <input type="radio" id="snapscrub-full" name="snapscrub-opts" value="snapscrub-full">
+    <span for="snapscrub-full" title="Scrub the whole array." class="snaphelptip">(Scrub) Full</span>
+    
+    <br><strong>Data Range Filters:</strong>
     (Check/Fix) <input type="text" id="snapfix-pattern" class="narrow snaphelptip" title="Run a command only on a certain set of data." placeholder="Path Pattern (See Manual)">
     (Check/Fix) <input type="text" id="snapfix-diskpattern" title="Run a command only on a certain disk." class="narrow snaphelptip" placeholder="Disk Name">
+    
     <br><strong>Failure Thresholds:</strong>
     (Sync/Scrub) <input type="text" id="snapsync-errorlimit" class="narrow snaphelptip" title="Sets a new error limit before stopping execution. By default SnapRAID stops if it encounters more than 100 Input/Output errors, meaning that a disk is likely dying." placeholder="I/O Error Limit">
+
     <br><br>
 
     <div><strong>INFORMATION:</strong></div>
@@ -249,12 +265,34 @@ $(function(){
     $('#snapscrub').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
         $('#arg1').val('scrub');
+        if($('#snapscrub-bad').is(':checked')) {
+            $('#arg2').val('-p');
+            $('#arg3').val('bad');
+        }
+        else if($('#snapscrub-new').is(':checked')) {
+            $('#arg2').val('-p');
+            $('#arg3').val('new');
+        }
+        else if($('#snapscrub-full').is(':checked')) {
+            $('#arg2').val('-p');
+            $('#arg3').val('full');
+        }
+        else if($('#snapscrub-plan').is(':checked')) {
+           if($('#snapscrub-percent').val()) {
+                $('#arg2').val('-p');
+                $('#arg3').val($('#snapscrub-percent').val());
+            }
+            if($('#snapscrub-age').val()) {
+                $('#arg4').val('-o');
+                $('#arg5').val($('#snapscrub-age').val());
+            }
+        }
         if($('#snapsync-errorlimit').val()) {
-            $('#arg2').val('-L');
-            $('#arg3').val($('#snapsync-errorlimit').val());
+            $('#arg6').val('-L');
+            $('#arg7').val($('#snapsync-errorlimit').val());
         }
         if($('#snap-hideprogress').is(':checked')) {
-            $('#arg4').val('-q');
+            $('#arg8').val('-q');
         }
         $('#snapcommands').submit();
     });
