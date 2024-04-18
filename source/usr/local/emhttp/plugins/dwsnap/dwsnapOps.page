@@ -435,8 +435,11 @@ $(function(){
                 if($('#snapcheck-forceuuid').is(':checked')) {
                     $('#arg6').val('-U');
                 }
+                if($('#snapfix-forcedevice').is(':checked')) {
+                    $('#arg7').val('-D');
+                }
                 if($('#snap-hideprogress').is(':checked')) {
-                    $('#arg7').val('-q');
+                    $('#arg8').val('-q');
                 }
                 $('#snapcommands').submit();
             });
@@ -465,8 +468,11 @@ $(function(){
                 if($('#snapcheck-forceuuid').is(':checked')) {
                     $('#arg7').val('-U');
                 }
+                if($('#snapfix-forcedevice').is(':checked')) {
+                    $('#arg8').val('-D');
+                }
                 if($('#snap-hideprogress').is(':checked')) {
-                    $('#arg8').val('-q');
+                    $('#arg9').val('-q');
                 }
                 $('#snapcommands').submit();
             });
@@ -495,8 +501,11 @@ $(function(){
                 if($('#snapcheck-forceuuid').is(':checked')) {
                     $('#arg7').val('-U');
                 }
+                if($('#snapfix-forcedevice').is(':checked')) {
+                    $('#arg8').val('-D');
+                }
                 if($('#snap-hideprogress').is(':checked')) {
-                    $('#arg8').val('-q');
+                    $('#arg9').val('-q');
                 }
                 $('#snapcommands').submit();
             });
