@@ -199,9 +199,13 @@ if [ "$SYNC" == "enable" ]; then
             FORCEZEROARG="-Z"
             FORCEZEROMSG=" (w/ Force Zero)"
         fi
+        if [ -n "$SYNCERRORS" ] && [[ $SYNCERRORS =~ ^[0-9]+$ ]] && [ "$SYNCERRORS" != "100" ]; then
+            SYNCERRORARG="-L ${SYNCERRORS}"
+            SYNCERRORMSG=" (w/ IO Error Limit: $SYNCERRORS)"
+        fi
         if [ "$PREHASH" == "enable" ]; then
-            echo "### CRON -- Prehashed Syncing...${FORCEZEROMSG}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-            if ! $SNAP_BIN -c $SNAP_CONF -h $FORCEZEROARG sync >>/var/lib/snapraid/logs/snaplog 2>&1; then
+            echo "### CRON -- Prehashed Syncing...${FORCEZEROMSG}${SYNCERRORMSG}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+            if ! $SNAP_BIN -c $SNAP_CONF -h $FORCEZEROARG $SYNCERRORARG sync >>/var/lib/snapraid/logs/snaplog 2>&1; then
                 echo "### CRON -- Prehashed Sync has failed, exiting..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
                 FAILUREMSG="The prehashed sync has failed - check LOG."
                 failure_exit_cron
@@ -212,8 +216,8 @@ if [ "$SYNC" == "enable" ]; then
                 rm -f /boot/config/plugins/dwsnap/config/lastnodiff
             fi
         else
-            echo "### CRON -- Syncing...${FORCEZEROMSG}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-            if ! $SNAP_BIN -c $SNAP_CONF $FORCEZEROARG sync >>/var/lib/snapraid/logs/snaplog 2>&1; then
+            echo "### CRON -- Syncing...${FORCEZEROMSG}${SYNCERRORMSG}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+            if ! $SNAP_BIN -c $SNAP_CONF $FORCEZEROARG $SYNCERRORARG sync >>/var/lib/snapraid/logs/snaplog 2>&1; then
                 echo "### CRON -- Sync has failed, exiting..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
                 FAILUREMSG="The sync has failed - check LOG."
                 failure_exit_cron
@@ -234,10 +238,14 @@ fi
 echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
 
 if [ "$SCRUB" == "enable" ]; then
+    if [ -n "$SCRUBERRORS" ] && [[ $SCRUBERRORS =~ ^[0-9]+$ ]] && [ "$SCRUBERRORS" != "100" ]; then
+        SCRUBERRORARG="-L ${SCRUBERRORS}"
+        SCRUBERRORMSG=" (w/ IO Error Limit: $SCRUBERRORS)"
+    fi
     if [ "$SCRUBNEW" == "enable" ]; then
         RUNNINGOP="SCRUBNEW"
-        echo "### CRON -- Scrubbing New Blocks..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-        if ! $SNAP_BIN -c $SNAP_CONF -p new scrub >>/var/lib/snapraid/logs/snaplog 2>&1; then
+        echo "### CRON -- Scrubbing New Blocks...${SCRUBERRORMSG}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+        if ! $SNAP_BIN -c $SNAP_CONF -p new $SCRUBERRORARG scrub >>/var/lib/snapraid/logs/snaplog 2>&1; then
                 echo "### CRON -- Scrub New Blocks has failed, exiting..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
                 FAILUREMSG="The new block scrub has failed - check LOG."
                 failure_exit_cron
@@ -250,8 +258,8 @@ if [ "$SCRUB" == "enable" ]; then
         SUCCESSOPS+=("SCRUBNEW")
     fi
     RUNNINGOP="SCRUB"
-    echo "### CRON -- Scrubbing [${SCRUBPERCENT} % / ${SCRUBAGE} days age]..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-    if ! $SNAP_BIN -c $SNAP_CONF -p "$SCRUBPERCENT" -o "$SCRUBAGE" scrub >>/var/lib/snapraid/logs/snaplog 2>&1; then
+    echo "### CRON -- Scrubbing [${SCRUBPERCENT} % / ${SCRUBAGE} days age]...${SCRUBERRORMSG}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+    if ! $SNAP_BIN -c $SNAP_CONF -p "$SCRUBPERCENT" -o "$SCRUBAGE" $SCRUBERRORARG scrub >>/var/lib/snapraid/logs/snaplog 2>&1; then
             echo "### CRON -- Scrub has failed, exiting..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
             FAILUREMSG="The scrub has failed - check LOG."
             failure_exit_cron
