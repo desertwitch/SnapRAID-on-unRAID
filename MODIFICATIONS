@@ -1,0 +1,102 @@
+diff -ur snapraid-12.3/cmdline/check.c snapraid-12.3-patched/cmdline/check.c
+--- snapraid-12.3/cmdline/check.c	2023-12-09 12:06:28.000000000 +0100
++++ snapraid-12.3-patched/cmdline/check.c	2024-04-11 19:54:45.000000000 +0200
+@@ -1514,7 +1514,7 @@
+ 
+ 				/* create it */
+ 				/* O_NOFOLLOW: do not follow links to ensure to open the real file */
+-				f = open(path, O_WRONLY | O_CREAT | O_TRUNC | O_BINARY | O_NOFOLLOW, 0600);
++				f = open(path, O_WRONLY | O_CREAT | O_TRUNC | O_BINARY | O_NOFOLLOW, 0666);
+ 				if (f == -1) {
+ 					/* LCOV_EXCL_START */
+ 					log_fatal("Error creating empty file '%s'. %s.\n", path, strerror(errno));
+@@ -1780,7 +1780,7 @@
+ 				}
+ 
+ 				/* create it */
+-				ret = mkdir(path, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
++				ret = mkdir(path, S_IRWXU | S_IRWXG | S_IRWXO);
+ 				if (ret != 0) {
+ 					/* LCOV_EXCL_START */
+ 					log_fatal("Error creating dir '%s'. %s.\n", path, strerror(errno));
+diff -ur snapraid-12.3/cmdline/handle.c snapraid-12.3-patched/cmdline/handle.c
+--- snapraid-12.3/cmdline/handle.c	2016-09-28 18:48:11.000000000 +0200
++++ snapraid-12.3-patched/cmdline/handle.c	2024-04-11 19:04:53.000000000 +0200
+@@ -73,7 +73,7 @@
+ 			handle->f = open(handle->path, flags | O_RDWR);
+ 		} else {
+ 			/* create it */
+-			handle->f = open(handle->path, flags | O_RDWR | O_CREAT, 0600);
++			handle->f = open(handle->path, flags | O_RDWR | O_CREAT, 0666);
+ 			if (handle->f != -1) {
+ 				/* mark it as created if really done */
+ 				handle->created = 1;
+diff -ur snapraid-12.3/cmdline/mktest.c snapraid-12.3-patched/cmdline/mktest.c
+--- snapraid-12.3/cmdline/mktest.c	2021-09-27 21:45:20.000000000 +0200
++++ snapraid-12.3-patched/cmdline/mktest.c	2024-04-11 19:05:42.000000000 +0200
+@@ -168,7 +168,7 @@
+ 	/* and a file filled with 0 */
+ 	rndnz_range(data, size);
+ 
+-	f = open(path, O_WRONLY | O_CREAT | O_TRUNC | O_BINARY | O_NOFOLLOW, 0600);
++	f = open(path, O_WRONLY | O_CREAT | O_TRUNC | O_BINARY | O_NOFOLLOW, 0666);
+ 	if (f < 0) {
+ 		/* LCOV_EXCL_START */
+ 		log_fatal("Error creating file %s\n", path);
+diff -ur snapraid-12.3/cmdline/parity.c snapraid-12.3-patched/cmdline/parity.c
+--- snapraid-12.3/cmdline/parity.c	2023-12-09 15:34:51.000000000 +0100
++++ snapraid-12.3-patched/cmdline/parity.c	2024-04-11 19:05:08.000000000 +0200
+@@ -197,7 +197,7 @@
+ 
+ 		/* opening in sequential mode in Windows */
+ 		flags = O_RDWR | O_CREAT | O_BINARY | advise_flags(&split->advise);
+-		split->f = open(split->path, flags, 0600);
++		split->f = open(split->path, flags, 0666);
+ 		if (split->f == -1) {
+ 			/* LCOV_EXCL_START */
+ 			log_fatal("Error opening parity file '%s'. %s.\n", split->path, strerror(errno));
+@@ -394,7 +394,7 @@
+ 		data_off_t spaceholder_size = 256 * 1024 * 1024;
+ 		int spaceholder_f;
+ 
+-		spaceholder_f = open(spaceholder_path, O_RDWR | O_CREAT | O_TRUNC | O_BINARY, 0600);
++		spaceholder_f = open(spaceholder_path, O_RDWR | O_CREAT | O_TRUNC | O_BINARY, 0666);
+ 		if (spaceholder_f == -1) {
+ 			log_fatal("Failed to create space holder file '%s'.\n", spaceholder_path);
+ 			return -1;
+diff -ur snapraid-12.3/cmdline/stream.c snapraid-12.3-patched/cmdline/stream.c
+--- snapraid-12.3/cmdline/stream.c	2021-05-24 12:18:28.000000000 +0200
++++ snapraid-12.3-patched/cmdline/stream.c	2024-04-11 19:05:20.000000000 +0200
+@@ -113,7 +113,7 @@
+ 	pathcpy(s->handle[i].path, sizeof(s->handle[i].path), file);
+ 
+ 	/* O_EXCL to be resilient ensure to always create a new file and not use a stale link to the original file */
+-	f = open(file, O_WRONLY | O_CREAT | O_EXCL | O_BINARY | O_SEQUENTIAL, 0600);
++	f = open(file, O_WRONLY | O_CREAT | O_EXCL | O_BINARY | O_SEQUENTIAL, 0666);
+ 	if (f == -1) {
+ 		/* LCOV_EXCL_START */
+ 		return -1;
+diff -ur snapraid-12.3/cmdline/support.c snapraid-12.3-patched/cmdline/support.c
+--- snapraid-12.3/cmdline/support.c	2023-12-09 11:14:26.000000000 +0100
++++ snapraid-12.3-patched/cmdline/support.c	2024-04-11 19:53:40.000000000 +0200
+@@ -856,7 +856,7 @@
+ 	}
+ 
+ 	/* create it */
+-	if (mkdir(dir, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH) != 0) {
++	if (mkdir(dir, S_IRWXU | S_IRWXG | S_IRWXO) != 0) {
+ 		/* LCOV_EXCL_START */
+ 		log_fatal("Error creating directory '%s'. %s.\n", dir, strerror(errno));
+ 		return -1;
+diff -ur snapraid-12.3/cmdline/util.c snapraid-12.3-patched/cmdline/util.c
+--- snapraid-12.3/cmdline/util.c	2024-01-03 20:15:42.000000000 +0100
++++ snapraid-12.3-patched/cmdline/util.c	2024-04-11 19:05:54.000000000 +0200
+@@ -635,7 +635,7 @@
+ {
+ 	int f;
+ 
+-	f = open(file, O_CREAT | O_TRUNC | O_WRONLY, 0600);
++	f = open(file, O_CREAT | O_TRUNC | O_WRONLY, 0666);
+ 	if (f == -1) {
+ 		/* LCOV_EXCL_START */
+ 		return -1;
