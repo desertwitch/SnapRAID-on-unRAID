@@ -18,7 +18,7 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
-###2024.04.05
+###2024.04.19
 - release note: welcome to the first version of the experimental SnapRAID package.
 </CHANGES>
 
@@ -44,7 +44,9 @@ run the post-installation scripts
 <FILE Run="/bin/bash">
 <INLINE> 
 echo ""
-/usr/local/emhttp/plugins/dwsnap/scripts/write_config
+if [ -x /usr/local/emhttp/plugins/dwsnap/scripts/write_config ]; then
+    /usr/local/emhttp/plugins/dwsnap/scripts/write_config
+fi
 echo ""
 echo "-------------------------------------------------------------"
 echo " SnapRAID on UNRAID (&version;) has been installed."
