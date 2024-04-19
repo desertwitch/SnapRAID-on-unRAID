@@ -28,6 +28,10 @@ if [ ! -d /var/lib/snapraid/logs ]; then
     mkdir -p /var/lib/snapraid/logs
 fi
 
+if [ ! -f /var/lib/snapraid/logs/snaplog ] && [ -f $BOOT/config/snaplog ]; then
+    mv $BOOT/config/snaplog /var/lib/snapraid/logs/snaplog
+fi
+
 cp -n $DOCROOT/default.cfg $BOOT/dwsnap.cfg
 cp -n $DOCROOT/defaults/snapraid.conf $BOOT/config/snapraid.conf
 
