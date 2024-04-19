@@ -21,6 +21,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_helpers.php';
 
 $dwsnap_cfg  = parse_ini_file("/boot/config/plugins/dwsnap/dwsnap.cfg");
 $dwsnap_prio = trim(isset($dwsnap_cfg['PRIO']) ? htmlspecialchars($dwsnap_cfg['PRIO']) : 'disable');
+$dwsnap_nostoparray = trim(isset($dwsnap_cfg['NOSTOPARRAY']) ? htmlspecialchars($dwsnap_cfg['NOSTOPARRAY']) : 'disable');
 $dwsnap_footer = trim(isset($dwsnap_cfg['FOOTER']) ? htmlspecialchars($dwsnap_cfg['FOOTER']) : 'disable');
 $dwsnap_screenimg = trim(isset($dwsnap_cfg['SCREENIMG']) ? htmlspecialchars($dwsnap_cfg['SCREENIMG']) : 'enable');
 $dwsnap_cron = trim(isset($dwsnap_cfg['CRON']) ? htmlspecialchars($dwsnap_cfg['CRON']) : 'disable');
