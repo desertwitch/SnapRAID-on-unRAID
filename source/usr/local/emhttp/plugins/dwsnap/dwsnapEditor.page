@@ -45,6 +45,9 @@ Markdown="false"
 <br>
 <details>
 <summary><strong>Example Array Configuration on Unraid:</strong></summary>
+<br><em><div>While SnapRAID supports a number of <a href="https://www.snapraid.it/faq#fs">various filesystems</a>, it is recommended to use it on XFS-formatted drives.</div>
+<div>Using it on ZFS or BTRFS drives (particularly when Copy-on-Write is enabled) should be considered more experimental and may not yield only advantages.</div>
+</em>
 <pre style="font-size:x-small;">
 parity /mnt/disk1/snapraid.parity
 content /mnt/cache/snapraid.content
