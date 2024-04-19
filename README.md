@@ -6,6 +6,6 @@ This project is in active development, experimental and not recommended to be us
 
 So far testing with XFS filesystems has had promising results and shown no interference with Unraid's parity mechanisms.
 
-This project continues to be licensed under GPL2, GPL3 and/or MIT (where applicable, see respective source code files).
+This project continues to be licensed under GPL2, GPL3 and/or MIT (where applicable, see files).
 
-SnapRAID binaries are compiled from source code © 2011-2024 Andrea Mazzoleni (https://github.com/amadvance/snapraid)
+SnapRAID binaries compiled from source © 2011-2024 Andrea Mazzoleni (https://github.com/amadvance/snapraid)
