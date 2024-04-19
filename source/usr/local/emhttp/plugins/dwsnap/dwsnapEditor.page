@@ -37,11 +37,11 @@ Markdown="false"
 <div><strong>INFORMATION:</strong></div>
 <div>Always use the disk mountpoints <strong>/mnt/disk<em><sup>[number]</sup></em><span style="color:red;">/</span></strong> when refering to drives in the array configuration, never physical drive locations otherwhere on the system.</div>
 <div>When planning your SnapRAID array, please do consider that it will perform best with many large files which rarely change (e.g. a media library) as opposed to many often changing small files.</div>
-<div>Parity has minor overhead, so best not fill data drives to the very last byte, reasonable '<em>Minimum free space</em>' values are usually automatically set on user shares (so this will not affect most users).</div>
+<div>Parity has minor overhead, so best not fill data drives to the very last byte - when using on top of Unraid parity, reasonable '<em>Minimum free space</em>' values are usually automatically set on user shares.</div>
 <br>
 <div>You cannot use your Unraid parity drive as SnapRAID parity drive due to SnapRAID operating on a file level as opposed to Unraid's parity operating on a block level.</div>
-<div>That means in order to use SnapRAID you will need to sacrifice one Unraid data drive with at least the size of the largest to be protected data drive (same rules as on Unraid).</div>
-<div>Normally you will access all your protected data as you usually would through Unraid's user shares, the data of all protected disks will remain pooled as if SnapRAID was not there.</div>
+<div>That means in order to use SnapRAID you will need to sacrifice one (Unraid) data drive with at least the size of the largest to be protected data drive (same rules as on Unraid).</div>
+<div>When using on top of Unraid parity, you will access all your protected data as you usually would through Unraid's user shares, the data of all protected disks will remain pooled as before.</div>
 <br>
 <details>
 <summary><strong>Example Array Configuration on Unraid:</strong></summary>
@@ -60,8 +60,8 @@ data d3 /mnt/disk3/
 data d4 /mnt/disk4/
 data d5 /mnt/disk5/
 </pre>
-<em><div>Disk 1 is a regular Unraid data drive that is being sacrificed as SnapRAID parity drive.</div>
-<div>Disk 2-5 are regular Unraid data drives with media that should be protected in the SnapRAID array.</div>
+<em><div>Disk 1 is a regular (Unraid) data drive that is being sacrificed as SnapRAID parity drive.</div>
+<div>Disk 2-5 are regular (Unraid) data drives with media that should be protected in the SnapRAID array.</div>
 <br>
 <div>The content files (which act as the file and hash catalogues) are put on the cache (for fast accessing) and also on all to be protected data drives.</div>
 <div>The content files take up little space and are put on as many drives as possible (excluding the parity drive) to never be lost or corruptible during a drive failure.</div>
