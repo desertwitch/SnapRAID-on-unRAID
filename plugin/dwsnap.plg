@@ -65,7 +65,6 @@ killall snapraid
 removepkg &plgPATH;/*.txz
 
 rm -f /etc/snapraid.conf
-rm -f /boot/config/plugins/dwsnap/config/snaplog
 rm -rf &plgPATH;/*.txz
 rm -rf &emhttp;
 rm -rf /var/lib/snapraid
@@ -75,6 +74,10 @@ if [ -f /boot/config/plugins/dynamix/dwsnap-maintenance.cron ]; then
     sleep 1
     update_cron
     sleep 1
+fi
+
+if [ -f /boot/config/plugins/dwsnap/config/snaplog ]; then
+    rm -f /boot/config/plugins/dwsnap/config/snaplog
 fi
 
 echo ""

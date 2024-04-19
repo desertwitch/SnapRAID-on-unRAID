@@ -17,13 +17,76 @@
 CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
 [ -e "$CONFIG" ] && source $CONFIG
 
-echo "Checking for still running SnapRAID instances..." | logger -t "snapraid-plugin"
-
 if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 || pgrep -x snapraid-runner >/dev/null 2>&1; then
     if [ "$NOSTOPARRAY" == "enable" ]; then
         echo "WARNING: Not stopping running SnapRAID instances (as configured by the user)..." | logger -t "snapraid-plugin"
-    else
-        echo "Handing running SnapRAID instances over to shutdown routine..." | logger -t "snapraid-plugin"
-        [ -x /usr/local/emhttp/plugins/dwsnap/scripts/shutdown ] && /usr/local/emhttp/plugins/dwsnap/scripts/shutdown
+    else 
+        echo "Now attempting to stop running SnapRAID instance..." | logger -t "snapraid-plugin"
+        killall snapraid-runner
+        killall snapraid-cron
+        killall snapraid
+        sleep 5
+        
+        if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 || pgrep -x snapraid-runner >/dev/null 2>&1; then
+            if pgrep -x snapraid >/dev/null 2>&1; then
+                echo "WARNING: Shutting down hanging 'snapraid' instance..." | logger -t "snapraid-plugin"
+                TIMER=0
+                while killall snapraid 2>/dev/null; do
+                    sleep 1
+                    killall snapraid-runner
+                    killall snapraid-cron
+                    killall snapraid
+                    TIMER=$((TIMER+1))
+                    if [ $TIMER -ge 10 ]; then
+                        echo "ERROR: Hard-killing hanging 'snapraid' instance..." | logger -t "snapraid-plugin"
+                        killall -9 snapraid-runner
+                        killall -9 snapraid-cron
+                        killall -9 snapraid
+                        sleep 1
+                        break
+                    fi
+                done
+            fi
+
+            if pgrep -x snapraid-runner >/dev/null 2>&1; then
+                echo "WARNING: Shutting down hanging 'snapraid-runner' instance..." | logger -t "snapraid-plugin"
+                TIMER=0
+                while killall snapraid-runner 2>/dev/null; do
+                    sleep 1
+                    killall snapraid-runner
+                    killall snapraid-cron
+                    killall snapraid
+                    TIMER=$((TIMER+1))
+                    if [ $TIMER -ge 5 ]; then
+                        echo "ERROR: Hard-killing hanging 'snapraid-runner' instance..." | logger -t "snapraid-plugin"
+                        killall -9 snapraid-runner
+                        killall -9 snapraid-cron
+                        killall -9 snapraid
+                        sleep 1
+                        break
+                    fi
+                done
+            fi
+
+            if pgrep -x snapraid-cron >/dev/null 2>&1; then
+                echo "WARNING: Shutting down hanging 'snapraid-cron' instance..." | logger -t "snapraid-plugin"
+                TIMER=0
+                while killall snapraid-cron 2>/dev/null; do
+                    sleep 1
+                    killall snapraid-runner
+                    killall snapraid-cron
+                    killall snapraid
+                    TIMER=$((TIMER+1))
+                    if [ $TIMER -ge 5 ]; then
+                        echo "ERROR: Hard-killing hanging 'snapraid-cron' instance..." | logger -t "snapraid-plugin"
+                        killall -9 snapraid-runner
+                        killall -9 snapraid-cron
+                        killall -9 snapraid
+                        sleep 1
+                        break
+                    fi
+                done
+            fi
+        fi
     fi
 fi
