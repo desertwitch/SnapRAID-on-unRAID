@@ -90,7 +90,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 </blockquote>
 
 <dl>
-    <dt>SnapRAID Disable Array Shutdown Safeguards:</dt>
+    <dt>SnapRAID Prevent Array Shutdown:</dt>
     <dd>
         <select class="snaprun" id="NOSTOPARRAY" name="NOSTOPARRAY" size="1">
             <?=mk_option($dwsnap_nostoparray, "disable", "No");?>
