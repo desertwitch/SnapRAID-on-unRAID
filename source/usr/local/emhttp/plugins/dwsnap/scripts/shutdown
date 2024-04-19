@@ -17,7 +17,7 @@ WASRUNNING="NO"
 
 if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 || pgrep -x snapraid-runner >/dev/null 2>&1; then
     WASRUNNING="YES"
-    echo "Now attempting to stop running SnapRAID instance..." | logger -t "snapraid-shutdown"
+    echo "Now attempting to stop running SnapRAID instance..." | tee >(logger -t "snapraid-shutdown")
     killall snapraid-runner
     killall snapraid-cron
     killall snapraid
@@ -28,7 +28,7 @@ if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 |
     WASRUNNING="YES"
     if pgrep -x snapraid >/dev/null 2>&1; then
         WASRUNNING="YES"
-        echo "WARNING: Shutting down hanging 'snapraid' instance..." | logger -t "snapraid-shutdown"
+        echo "WARNING: Shutting down hanging 'snapraid' instance..." | tee >(logger -t "snapraid-shutdown")
         TIMER=0
         while killall snapraid 2>/dev/null; do
             sleep 1
@@ -37,7 +37,7 @@ if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 |
             killall snapraid
             TIMER=$((TIMER+1))
             if [ $TIMER -ge 10 ]; then
-                echo "ERROR: Hard-killing hanging 'snapraid' instance..." | logger -t "snapraid-shutdown"
+                echo "ERROR: Hard-killing hanging 'snapraid' instance..." | tee >(logger -t "snapraid-shutdown")
                 killall -9 snapraid-runner
                 killall -9 snapraid-cron
                 killall -9 snapraid
@@ -49,7 +49,7 @@ if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 |
 
     if pgrep -x snapraid-runner >/dev/null 2>&1; then
         WASRUNNING="YES"
-        echo "WARNING: Shutting down hanging 'snapraid-runner' instance..." | logger -t "snapraid-shutdown"
+        echo "WARNING: Shutting down hanging 'snapraid-runner' instance..." | tee >(logger -t "snapraid-shutdown")
         TIMER=0
         while killall snapraid-runner 2>/dev/null; do
             sleep 1
@@ -58,7 +58,7 @@ if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 |
             killall snapraid
             TIMER=$((TIMER+1))
             if [ $TIMER -ge 5 ]; then
-                echo "ERROR: Hard-killing hanging 'snapraid-runner' instance..." | logger -t "snapraid-shutdown"
+                echo "ERROR: Hard-killing hanging 'snapraid-runner' instance..." | tee >(logger -t "snapraid-shutdown")
                 killall -9 snapraid-runner
                 killall -9 snapraid-cron
                 killall -9 snapraid
@@ -70,7 +70,7 @@ if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 |
 
     if pgrep -x snapraid-cron >/dev/null 2>&1; then
         WASRUNNING="YES"
-        echo "WARNING: Shutting down hanging 'snapraid-cron' instance..." | logger -t "snapraid-shutdown"
+        echo "WARNING: Shutting down hanging 'snapraid-cron' instance..." | tee >(logger -t "snapraid-shutdown")
         TIMER=0
         while killall snapraid-cron 2>/dev/null; do
             sleep 1
@@ -79,7 +79,7 @@ if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 |
             killall snapraid
             TIMER=$((TIMER+1))
             if [ $TIMER -ge 5 ]; then
-                echo "ERROR: Hard-killing hanging 'snapraid-cron' instance..." | logger -t "snapraid-shutdown"
+                echo "ERROR: Hard-killing hanging 'snapraid-cron' instance..." | tee >(logger -t "snapraid-shutdown")
                 killall -9 snapraid-runner
                 killall -9 snapraid-cron
                 killall -9 snapraid
@@ -90,14 +90,17 @@ if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 |
     fi
 fi
 
-if [ "$WASRUNNING" == "YES" ]; then
-    if [ -f /var/lib/snapraid/logs/snaplog ]; then
-        echo "Backing up SNAPLOG to USB drive..." | logger -t "snapraid-shutdown"
-        cp -f /var/lib/snapraid/logs/snaplog /boot/config/plugins/dwsnap/config/snaplog
-        echo "This operation output was saved because it seems to have been running when the system shutdown." >> /boot/config/plugins/dwsnap/config/snaplog
-    fi
-else
-    if [ -f /boot/config/plugins/dwsnap/config/snaplog ]; then
-        rm -f /boot/config/plugins/dwsnap/config/snaplog
+if [ "$1" != "nobackup" ]; then
+    if [ "$WASRUNNING" == "YES" ]; then
+        if [ -f /var/lib/snapraid/logs/snaplog ]; then
+            echo "Backing up SNAPLOG to USB drive..." | tee >(logger -t "snapraid-shutdown")
+            cp -f /var/lib/snapraid/logs/snaplog /boot/config/plugins/dwsnap/config/snaplog
+            echo "This operation output was saved because it seems to have been running when the system shutdown." >> /boot/config/plugins/dwsnap/config/snaplog
+        fi
+    else
+        if [ -f /boot/config/plugins/dwsnap/config/snaplog ]; then
+            echo "Removing outdated SNAPLOG from USB drive..." | tee >(logger -t "snapraid-shutdown")
+            rm -f /boot/config/plugins/dwsnap/config/snaplog
+        fi
     fi
 fi

@@ -23,6 +23,20 @@
 </CHANGES>
 
 <!--
+stop already running instances before doing anything
+-->
+<FILE Run="/bin/bash">
+<INLINE>
+echo "Making sure all running SnapRAID instances are stopped (before install/upgrade)..."
+if [ -x /usr/local/emhttp/plugins/dwsnap/scripts/shutdown ]; then
+    /usr/local/emhttp/plugins/dwsnap/scripts/shutdown nobackup
+fi
+echo ""
+exit 0
+</INLINE>
+</FILE>
+
+<!--
 install or upgrade dependency files
 -->
 <FILE Name="&plgPATH;/snapraid-12.3-x86_64-3.txz" Min="6.8.3" Run="upgradepkg --install-new">
@@ -61,7 +75,11 @@ definition for uninstallation of the plugin
 -->
 <FILE Run="/bin/bash" Method="remove">
 <INLINE>
-killall snapraid
+echo "Making sure all running SnapRAID instances are stopped (before uninstall)..."
+if [ -x /usr/local/emhttp/plugins/dwsnap/scripts/shutdown ]; then
+    /usr/local/emhttp/plugins/dwsnap/scripts/shutdown nobackup
+fi
+
 removepkg &plgPATH;/*.txz
 
 rm -f /etc/snapraid.conf
