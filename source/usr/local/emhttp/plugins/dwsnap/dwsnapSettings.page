@@ -101,7 +101,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 
 <blockquote class="inline_help">
 <p>This setting controls if running SnapRAID operations should be kept running when the Unraid array itself is stopping (manually triggered or due to server shutdown).</p>
-<p><strong>In almost all cases this setting needs to remain <u>disabled</u> in order to prevent data loss</strong> due to a kept running SnapRAID operation hard-stopping when the Unraid array is unmounting drives.</p>
+<p><strong>In almost all cases this setting needs to remain <u>disabled</u> in order to prevent data loss</strong> due to a kept running SnapRAID operation hard-stopping when the Unraid array is unmounting its drives.</p>
 <p>The only scenario where this setting can be enabled is if all configured parity and data disks (and any content locations) are not part of the Unraid array, but otherwise directly mounted by the user.</p>
 <p>Regardless of this setting during a system shutdown SnapRAID will always attempt to gracefully stop any running array operations before at very last resorting to hard-killing any hanging operations.</p>
 </blockquote>
