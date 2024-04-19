@@ -1,0 +1,21 @@
+#!/bin/bash
+#
+# Copyright Derek Macias (parts of code from NUT package)
+# Copyright macester (parts of code from NUT package)
+# Copyright gfjardim (parts of code from NUT package)
+# Copyright SimonF (parts of code from NUT package)
+# Copyright desertwitch
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License 2
+# as published by the Free Software Foundation.
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+PKGTIME="$(date '+%Y%m%d%H%M%S' 2>/dev/null)"
+PKGNAME="snapraid-logs-${PKGTIME}.zip"
+
+(cd /var/lib/snapraid/logs && zip -r "/tmp/${PKGNAME}" . 2>&1)
+
+[ -f "/tmp/${PKGNAME}" ] && echo "DONE:/tmp/${PKGNAME}" 2>&1
