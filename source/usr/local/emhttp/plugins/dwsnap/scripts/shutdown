@@ -92,5 +92,7 @@ fi
 
 if [ "$WASRUNNING" == "YES" ] && [ -f /var/lib/snapraid/logs/snaplog ]; then
     cp -f /var/lib/snapraid/logs/snaplog /boot/config/plugins/dwsnap/config/snaplog
-    echo "!!! THIS OPERATION WAS RUNNING WHEN A SERVER SHUTDOWN WAS INITIATED !!!" >> /boot/config/plugins/dwsnap/config/snaplog
+    echo "This operation file was backed up possibly being the last log file before system shutdown." >> /boot/config/plugins/dwsnap/config/snaplog
+else
+    [ -f /boot/config/plugins/dwsnap/config/snaplog ] && rm -f /boot/config/plugins/dwsnap/config/snaplog
 fi
