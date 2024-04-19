@@ -94,7 +94,7 @@ if [ "$WASRUNNING" == "YES" ]; then
     if [ -f /var/lib/snapraid/logs/snaplog ]; then
         echo "Backing up SNAPLOG to USB drive..." | logger -t "snapraid-shutdown"
         cp -f /var/lib/snapraid/logs/snaplog /boot/config/plugins/dwsnap/config/snaplog
-        echo "This operation file was backed up possibly being the last log file before a system shutdown." >> /boot/config/plugins/dwsnap/config/snaplog
+        echo "This operation output was saved because it seems to have been running when the system shutdown." >> /boot/config/plugins/dwsnap/config/snaplog
     fi
 else
     if [ -f /boot/config/plugins/dwsnap/config/snaplog ]; then
