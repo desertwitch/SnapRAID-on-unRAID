@@ -90,4 +90,7 @@ if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 |
     fi
 fi
 
-[ "$WASRUNNING" == "YES" ] && cp -f /var/lib/snapraid/logs/snaplog /boot/config/plugins/dwsnap/config/snaplog
+if [ "$WASRUNNING" == "YES" ] && [ -f /var/lib/snapraid/logs/snaplog ]; then
+    cp -f /var/lib/snapraid/logs/snaplog /boot/config/plugins/dwsnap/config/snaplog
+    echo "!!! THIS OPERATION WAS RUNNING WHEN A SERVER SHUTDOWN WAS INITIATED !!!" >> /boot/config/plugins/dwsnap/config/snaplog
+fi
