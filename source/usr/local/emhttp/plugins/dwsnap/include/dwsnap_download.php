@@ -27,6 +27,7 @@ if(!empty($debug_result)) {
 			header("Content-Length: " . filesize($debugFile));
 			header("Connection: close");
 			readfile($debugFile);
+			unlink($debugFile);
 			exit;
 		} else {
 			echo("ERROR: The log package generation script has failed - bash backend returned filename, PHP could not find file.");
