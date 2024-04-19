@@ -19,7 +19,7 @@
 <CHANGES>
 ## SnapRAID on UNRAID
 ###2024.04.19
-- release note: welcome to the first version of the experimental SnapRAID package.
+- release note: welcome to the first version of the SnapRAID package.
 </CHANGES>
 
 <!--
@@ -81,10 +81,10 @@ if [ -x /usr/local/emhttp/plugins/dwsnap/scripts/shutdown ]; then
 fi
 
 removepkg &plgPATH;/*.txz
-
-rm -f /etc/snapraid.conf
 rm -rf &plgPATH;/*.txz
 rm -rf &emhttp;
+
+rm -f /etc/snapraid.conf
 rm -rf /var/lib/snapraid
 
 if [ -f /boot/config/plugins/dynamix/dwsnap-maintenance.cron ]; then
