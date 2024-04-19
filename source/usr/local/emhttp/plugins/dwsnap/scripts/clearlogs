@@ -15,4 +15,5 @@
 #
 echo "Clearing all existing SnapRAID logfiles..."
 rm -rf /var/lib/snapraid/logs/*
+rm -f /boot/config/plugins/dwsnap/config/snaplog
 sleep 1

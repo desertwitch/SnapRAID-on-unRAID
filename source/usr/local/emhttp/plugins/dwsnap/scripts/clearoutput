@@ -17,4 +17,5 @@ echo "Clearing SnapRAID screen..."
 rm -f /var/lib/snapraid/logs/snaplog
 rm -f /var/lib/snapraid/logs/laststart
 rm -f /var/lib/snapraid/logs/lastfinish
+rm -f /boot/config/plugins/dwsnap/config/snaplog
 sleep 1
