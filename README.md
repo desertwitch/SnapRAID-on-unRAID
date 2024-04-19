@@ -9,4 +9,4 @@ _Proof of Concept Project: SnapRAID on top of UNRAID, the best of two worlds?_
 
 <sub>This project continues to be licensed under GPL2, GPL3 and/or MIT (where applicable, see respective source code files).</sub>
 
-<sub>SnapRAID binaries are compiled from source code © 2011-2024 Andrea Mazzoleni (https://github.com/amadvance/snapraid)</sub>
+<sub>SnapRAID binaries are compiled from source code: https://github.com/amadvance/snapraid (© 2011-2024 Andrea Mazzoleni)</sub>
