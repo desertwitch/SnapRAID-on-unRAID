@@ -18,7 +18,7 @@ CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
 [ -e "$CONFIG" ] && source $CONFIG
 
 if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 || pgrep -x snapraid-runner >/dev/null 2>&1; then
-    if [ "$NOSTOPARRAY" == "enable" ]; then
+    if [ "$STOPARRAY" != "enable" ]; then
         echo "WARNING: Not stopping running SnapRAID instances (as configured by the user)..." | logger -t "snapraid-plugin"
     else 
         echo "Now attempting to stop running SnapRAID instance..." | logger -t "snapraid-plugin"
