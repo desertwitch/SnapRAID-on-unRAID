@@ -17,7 +17,9 @@
 CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
 [ -e "$CONFIG" ] && source $CONFIG
 
-if [ "$NOSTOPARRAY" != "enable" ]; then
+if [ "$NOSTOPARRAY" == "enable" ]; then
+    echo "WARNING: Not stopping any running SnapRAID instances (as user configured)..." | logger -t "snapraid-plugin"
+else
     if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 || pgrep -x snapraid-runner >/dev/null 2>&1; then
         echo "Now attempting to stop any running SnapRAID services..." | logger -t "snapraid-plugin"
         killall snapraid-runner
@@ -28,7 +30,7 @@ if [ "$NOSTOPARRAY" != "enable" ]; then
 
     if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 || pgrep -x snapraid-runner >/dev/null 2>&1; then
         if pgrep -x snapraid >/dev/null 2>&1; then
-            echo "Shutting down hanging 'snapraid' instance..." | logger -t "snapraid"
+            echo "WARNING: Shutting down hanging 'snapraid' instance..." | logger -t "snapraid"
             TIMER=0
             while killall snapraid 2>/dev/null; do
                 sleep 1
@@ -37,7 +39,7 @@ if [ "$NOSTOPARRAY" != "enable" ]; then
                 killall snapraid
                 TIMER=$((TIMER+1))
                 if [ $TIMER -ge 10 ]; then
-                    echo "Hard-killing hanging 'snapraid' instance..." | logger -t "snapraid-plugin"
+                    echo "ERROR: Hard-killing hanging 'snapraid' instance..." | logger -t "snapraid-plugin"
                     killall -9 snapraid-runner
                     killall -9 snapraid-cron
                     killall -9 snapraid
@@ -48,7 +50,7 @@ if [ "$NOSTOPARRAY" != "enable" ]; then
         fi
 
         if pgrep -x snapraid-runner >/dev/null 2>&1; then
-            echo "Shutting down hanging 'snapraid-runner' instance..." | logger -t "snapraid-plugin"
+            echo "WARNING: Shutting down hanging 'snapraid-runner' instance..." | logger -t "snapraid-plugin"
             TIMER=0
             while killall snapraid-runner 2>/dev/null; do
                 sleep 1
@@ -57,7 +59,7 @@ if [ "$NOSTOPARRAY" != "enable" ]; then
                 killall snapraid
                 TIMER=$((TIMER+1))
                 if [ $TIMER -ge 5 ]; then
-                    echo "Hard-killing hanging 'snapraid-runner' instance..." | logger -t "snapraid-plugin"
+                    echo "ERROR: Hard-killing hanging 'snapraid-runner' instance..." | logger -t "snapraid-plugin"
                     killall -9 snapraid-runner
                     killall -9 snapraid-cron
                     killall -9 snapraid
@@ -68,7 +70,7 @@ if [ "$NOSTOPARRAY" != "enable" ]; then
         fi
 
         if pgrep -x snapraid-cron >/dev/null 2>&1; then
-            echo "Shutting down hanging 'snapraid-cron' instance..." | logger -t "snapraid-plugin"
+            echo "WARNING: Shutting down hanging 'snapraid-cron' instance..." | logger -t "snapraid-plugin"
             TIMER=0
             while killall snapraid-cron 2>/dev/null; do
                 sleep 1
@@ -77,7 +79,7 @@ if [ "$NOSTOPARRAY" != "enable" ]; then
                 killall snapraid
                 TIMER=$((TIMER+1))
                 if [ $TIMER -ge 5 ]; then
-                    echo "Hard-killing hanging 'snapraid-cron' instance..." | logger -t "snapraid-plugin"
+                    echo "ERROR: Hard-killing hanging 'snapraid-cron' instance..." | logger -t "snapraid-plugin"
                     killall -9 snapraid-runner
                     killall -9 snapraid-cron
                     killall -9 snapraid
