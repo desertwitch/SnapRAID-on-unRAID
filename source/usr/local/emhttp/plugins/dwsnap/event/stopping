@@ -23,7 +23,7 @@ if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 |
     if [ "$NOSTOPARRAY" == "enable" ]; then
         echo "WARNING: Not stopping running SnapRAID instances (as configured by the user)..." | logger -t "snapraid-plugin"
     else
-        echo "Handing running SnapRAID instances over to SnapRAID shutdown routine..." | logger -t "snapraid-plugin"
+        echo "Handing running SnapRAID instances over to shutdown routine..." | logger -t "snapraid-plugin"
         [ -x /usr/local/emhttp/plugins/dwsnap/scripts/shutdown ] && /usr/local/emhttp/plugins/dwsnap/scripts/shutdown
     fi
 fi
