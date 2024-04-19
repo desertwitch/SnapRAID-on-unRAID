@@ -1,0 +1,84 @@
+#!/bin/bash
+#
+# Copyright Derek Macias (parts of code from NUT package)
+# Copyright macester (parts of code from NUT package)
+# Copyright gfjardim (parts of code from NUT package)
+# Copyright SimonF (parts of code from NUT package)
+# Copyright desertwitch
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License 2
+# as published by the Free Software Foundation.
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 || pgrep -x snapraid-runner >/dev/null 2>&1; then
+    echo "Now attempting to stop any running services..." | logger -t "snapraid-plugin"
+    killall snapraid-runner
+    killall snapraid-cron
+    killall snapraid
+    sleep 2
+fi
+
+if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 || pgrep -x snapraid-runner >/dev/null 2>&1; then
+    if pgrep -x snapraid >/dev/null 2>&1; then
+        echo "Shutting down hanging 'snapraid' service..." | logger -t "snapraid"
+        TIMER=0
+        while killall snapraid 2>/dev/null; do
+            sleep 1
+            killall snapraid-runner
+            killall snapraid-cron
+            killall snapraid
+            TIMER=$((TIMER+1))
+            if [ $TIMER -ge 10 ]; then
+                echo "Hard-killing hanging 'snapraid' service..." | logger -t "snapraid-plugin"
+                killall -9 snapraid-runner
+                killall -9 snapraid-cron
+                killall -9 snapraid
+                sleep 1
+                break
+            fi
+        done
+    fi
+
+    if pgrep -x snapraid-runner >/dev/null 2>&1; then
+        echo "Shutting down hanging 'snapraid-runner' service..." | logger -t "snapraid-plugin"
+        TIMER=0
+        while killall snapraid-runner 2>/dev/null; do
+            sleep 1
+            killall snapraid-runner
+            killall snapraid-cron
+            killall snapraid
+            TIMER=$((TIMER+1))
+            if [ $TIMER -ge 5 ]; then
+                echo "Hard-killing hanging 'snapraid-runner' service..." | logger -t "snapraid-plugin"
+                killall -9 snapraid-runner
+                killall -9 snapraid-cron
+                killall -9 snapraid
+                sleep 1
+                break
+            fi
+        done
+    fi
+
+    if pgrep -x snapraid-cron >/dev/null 2>&1; then
+        echo "Shutting down hanging 'snapraid-cron' service..." | logger -t "snapraid-plugin"
+        TIMER=0
+        while killall snapraid-cron 2>/dev/null; do
+            sleep 1
+            killall snapraid-runner
+            killall snapraid-cron
+            killall snapraid
+            TIMER=$((TIMER+1))
+            if [ $TIMER -ge 5 ]; then
+                echo "Hard-killing hanging 'snapraid-cron' service..." | logger -t "snapraid-plugin"
+                killall -9 snapraid-runner
+                killall -9 snapraid-cron
+                killall -9 snapraid
+                sleep 1
+                break
+            fi
+        done
+    fi
+fi
