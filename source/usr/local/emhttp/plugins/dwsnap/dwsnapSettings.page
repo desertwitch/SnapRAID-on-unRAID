@@ -95,7 +95,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <select class="snaprun" id="NOSTOPARRAY" name="NOSTOPARRAY" size="1">
             <?=mk_option($dwsnap_nostoparray, "disable", "No");?>
             <?=mk_option($dwsnap_nostoparray, "enable", "Yes");?>
-        </select>
+        </select><i class="fa fa-exclamation-triangle snaphelptip" title="Keep this setting disabled unless having read and fully understood the help description."></i>
     </dd>
 </dl>
 
