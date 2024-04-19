@@ -29,7 +29,7 @@ if [ ! -d /var/lib/snapraid/logs ]; then
 fi
 
 if [ ! -f /var/lib/snapraid/logs/snaplog ] && [ -f $BOOT/config/snaplog ]; then
-    mv $BOOT/config/snaplog /var/lib/snapraid/logs/snaplog
+    mv -f $BOOT/config/snaplog /var/lib/snapraid/logs/snaplog
 fi
 
 cp -n $DOCROOT/default.cfg $BOOT/dwsnap.cfg
