@@ -140,11 +140,11 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     (Scrub) <input type="text" id="snapscrub-age" class="snaphelptip" style="margin-right:0px;width:60px;" title="Scrub blocks not scrubbed for (x) days." placeholder="days">
     (Scrub) <input type="text" id="snapscrub-percent" class="snaphelptip" style="margin-right:0px;width:60px;" title="Scrub (x) percent of the array." placeholder="percent">
     <input type="radio" id="snapscrub-new" name="snapscrub-opts" value="snapscrub-new">
-    <span for="snapscrub-new" title="Scrub only blocks not yet scrubbed." class="snaphelptip">(Scrub) New Blocks</span>
+    <span title="Scrub only blocks not yet scrubbed." class="snaphelptip">(Scrub) New Blocks</span>
     <input type="radio" id="snapscrub-bad" name="snapscrub-opts"  value="snapscrub-bad">
-    <span for="snapscrub-bad" title="Scrub only blocks previously marked as bad." class="snaphelptip">(Scrub) Bad Blocks</span>
+    <span title="Scrub only blocks previously marked as bad." class="snaphelptip">(Scrub) Bad Blocks</span>
     <input type="radio" id="snapscrub-full" name="snapscrub-opts" value="snapscrub-full">
-    <span for="snapscrub-full" title="Scrub the whole array." class="snaphelptip">(Scrub) Full</span>
+    <span title="Scrub the whole array." class="snaphelptip">(Scrub) Full</span>
     <span style="float:right;margin-right:10px;">SnapRAID &copy; 2011-2024 Andrea Mazzoleni - All Rights Reserved</span>
     
     <br><strong>Screen Settings:</strong>
