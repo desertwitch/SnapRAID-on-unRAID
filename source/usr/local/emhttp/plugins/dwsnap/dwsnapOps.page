@@ -145,7 +145,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
         <br><strong>Screen Settings:</strong>
         <input type="checkbox" id="snap-hideprogress" value="snap-hideprogress">
         <label for="snap-hideprogress" title="Hides any repetitive progress output." class="snaphelptip">Hide Progress Output</label>
-        <span style="margin-left:10px">Interrupt Thresholds:</span>
+        <span style="margin-left:10px"><strong>Interrupt Thresholds:</strong></span>
         (Sync/Scrub) <input type="text" id="snapsync-errorlimit" class="narrow snaphelptip" title="Sets a new error limit before stopping execution. By default SnapRAID stops if it encounters more than 100 Input/Output errors, meaning that a disk is likely dying." placeholder="I/O Error Limit">
         <span style="float:right;margin-right:10px;">SnapRAID &copy; 2011-2024 Andrea Mazzoleni - All Rights Reserved</span>
         
