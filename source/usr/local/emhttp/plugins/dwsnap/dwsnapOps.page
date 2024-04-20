@@ -314,6 +314,9 @@ $(function(){
     $('#snapdiff').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
         $('#arg1').val('diff');
+        if($('#snapcheck-forceuuid').is(':checked')) {
+            $('#arg2').val('-U');
+        }
         $('#snapcommands').submit();
     });
     $('#snapdup').click(function(){
