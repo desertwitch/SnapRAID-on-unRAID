@@ -60,7 +60,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     font-size: 1.1rem;
 }
 #snapopts input[type="text"] {
-    padding: 2px;
+    padding: 1px;
 }
 </style>
 
