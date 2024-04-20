@@ -84,6 +84,11 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     <input type="hidden" id="arg7" name="#arg[7]" value="">
     <input type="hidden" id="arg8" name="#arg[8]" value="">
     <input type="hidden" id="arg9" name="#arg[9]" value="">
+    <input type="hidden" id="arg10" name="#arg[10]" value="">
+    <input type="hidden" id="arg11" name="#arg[11]" value="">
+    <input type="hidden" id="arg12" name="#arg[12]" value="">
+    <input type="hidden" id="arg13" name="#arg[13]" value="">
+    <input type="hidden" id="arg14" name="#arg[14]" value="">
 
     <input class="snaprun snaphelptip" type="button" id="snapstatus" value="STATUS" title="Prints a summary of the state of the disk array. It includes information about the parity fragmentation, how long the blocks have not been checked, and all the recorded silent errors encountered while scrubbing. Note that the information presented refers to the last time you ran SYNC. Later modifications to the array data are not taken into account.">
     <input class="snaprun snaphelptip" type="button" id="snaplist" value="LIST" title="Lists all the files contained in the array at the time of the last SYNC.">
@@ -145,7 +150,16 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     <br><strong>Data Selection Filters:</strong>
     (Check/Fix) <input type="text" id="snapfix-pattern" class="narrow snaphelptip" title="Run a command only on a certain set of data." placeholder="Path Pattern (See Manual)">
     (Check/Fix) <input type="text" id="snapfix-diskpattern" title="Run a command only on a certain disk." class="narrow snaphelptip" placeholder="Disk Name">
-    
+    <span style="float:right;margin-right:10px;text-align:right;font-size:x-small;"><fieldset style="border: 1px black solid;">
+        <legend><strong>Dangerous Settings for Expert Users</strong></legend>
+        <input type="checkbox" id="snapsync-forcerealloc" value="snapsync-forcerealloc">
+        <label for="snapsync-forcerealloc" title="In SYNC forces a full reallocation of files and rebuild of the parity. This option can be used to completely reallocate all the files removing the fragmentation, but reusing the hashes present in the content file to validate data. WARNING! This option is for experts only, and it's highly recommended to not use it. You DO NOT have data protection during the SYNC operation." class="snaphelptip">(Sync) Force Realloc</label>
+        <input type="checkbox" id="snapsync-forcenocopy" value="forcenocopy">
+        <label for="forcenocopy" title="In SYNC, CHECK and FIX disables the copy detection heuristic. Without this option SnapRAID assumes that files with same attributes, like name, size and time-stamp are copies with the same data. This allows to identify copied or moved files from one disk to another, and to reuse the already computed hash information to detect silent errors or to recover missing files. This behavior, in some rare cases, may result in false positives, or in a slow process due the many hash verification, and this option allows to resolve them." class="snaphelptip">(Sync/Check/Fix) Force Nocopy</label>
+        <br>(Check/Fix) <input type="text" id="snapfix-blkstart" class="snaphelptip" style="margin-right:0px;width:80px;" title="Starts the processing from the specified block number. It could be useful to retry to check or fix some specific block, in case of a damaged disk. It's present mainly for advanced manual recovering." placeholder="Block Start">
+        (Check/Fix) <input type="text" id="snapfix-blkcount" class="snaphelptip" style="margin-right:0px;width:80px;" title="Processes only the specified number of blocks. It's present mainly for advanced manual recovering." placeholder="Block Count">
+    </fieldset></span>
+
     <br><strong>Premature Interrupt Thresholds:</strong>
     (Sync/Scrub) <input type="text" id="snapsync-errorlimit" class="narrow snaphelptip" title="Sets a new error limit before stopping execution. By default SnapRAID stops if it encounters more than 100 Input/Output errors, meaning that a disk is likely dying." placeholder="I/O Error Limit">
 
@@ -314,8 +328,19 @@ $(function(){
         if($('#snapcheck-forceuuid').is(':checked')) {
             $('#arg7').val('-U');
         }
+        if($('#snapsync-forcenocopy').is(':checked')) {
+            $('#arg8').val('-N');
+        }
+        if($('#snapfix-blkstart').val()) {
+            $('#arg9').val('-S');
+            $('#arg10').val($('#snapfix-blkstart').val());
+        }
+        if($('#snapfix-blkcount').val()) {
+            $('#arg11').val('-B');
+            $('#arg12').val($('#snapfix-blkcount').val());
+        }
         if($('#snap-hideprogress').is(':checked')) {
-            $('#arg8').val('-q');
+            $('#arg13').val('-q');
         }
         $('#snapcommands').submit();
     });
@@ -388,15 +413,21 @@ $(function(){
                 if($('#snapsync-forcefull').is(':checked')) {
                     $('#arg4').val('-F');
                 }
+                if($('#snapsync-forcerealloc').is(':checked')) {
+                    $('#arg5').val('-R');
+                }
                 if($('#snapsync-errorlimit').val()) {
-                    $('#arg5').val('-L');
-                    $('#arg6').val($('#snapsync-errorlimit').val());
+                    $('#arg6').val('-L');
+                    $('#arg7').val($('#snapsync-errorlimit').val());
                 }
                 if($('#snapcheck-forceuuid').is(':checked')) {
-                    $('#arg7').val('-U');
+                    $('#arg8').val('-U');
+                }
+                if($('#snapsync-forcenocopy').is(':checked')) {
+                    $('#arg9').val('-N');
                 }
                 if($('#snap-hideprogress').is(':checked')) {
-                    $('#arg8').val('-q');
+                    $('#arg10').val('-q');
                 }
                 $('#snapcommands').submit();
             });
@@ -423,15 +454,21 @@ $(function(){
                 if($('#snapsync-forcefull').is(':checked')) {
                     $('#arg5').val('-F');
                 }
+                if($('#snapsync-forcerealloc').is(':checked')) {
+                    $('#arg6').val('-R');
+                }
                 if($('#snapsync-errorlimit').val()) {
-                    $('#arg6').val('-L');
-                    $('#arg7').val($('#snapsync-errorlimit').val());
+                    $('#arg7').val('-L');
+                    $('#arg8').val($('#snapsync-errorlimit').val());
                 }
                 if($('#snapcheck-forceuuid').is(':checked')) {
-                    $('#arg8').val('-U');
+                    $('#arg9').val('-U');
+                }
+                if($('#snapsync-forcenocopy').is(':checked')) {
+                    $('#arg10').val('-N');
                 }
                 if($('#snap-hideprogress').is(':checked')) {
-                    $('#arg9').val('-q');
+                    $('#arg11').val('-q');
                 }
                 $('#snapcommands').submit();
             });
@@ -477,8 +514,19 @@ $(function(){
                 if($('#snapfix-forcedevice').is(':checked')) {
                     $('#arg7').val('-D');
                 }
+                if($('#snapsync-forcenocopy').is(':checked')) {
+                    $('#arg8').val('-N');
+                }
+                if($('#snapfix-blkstart').val()) {
+                    $('#arg9').val('-S');
+                    $('#arg10').val($('#snapfix-blkstart').val());
+                }
+                if($('#snapfix-blkcount').val()) {
+                    $('#arg11').val('-B');
+                    $('#arg12').val($('#snapfix-blkcount').val());
+                }
                 if($('#snap-hideprogress').is(':checked')) {
-                    $('#arg8').val('-q');
+                    $('#arg13').val('-q');
                 }
                 $('#snapcommands').submit();
             });
@@ -510,8 +558,19 @@ $(function(){
                 if($('#snapfix-forcedevice').is(':checked')) {
                     $('#arg8').val('-D');
                 }
+                if($('#snapsync-forcenocopy').is(':checked')) {
+                    $('#arg9').val('-N');
+                }
+                if($('#snapfix-blkstart').val()) {
+                    $('#arg10').val('-S');
+                    $('#arg11').val($('#snapfix-blkstart').val());
+                }
+                if($('#snapfix-blkcount').val()) {
+                    $('#arg12').val('-B');
+                    $('#arg13').val($('#snapfix-blkcount').val());
+                }
                 if($('#snap-hideprogress').is(':checked')) {
-                    $('#arg9').val('-q');
+                    $('#arg14').val('-q');
                 }
                 $('#snapcommands').submit();
             });
@@ -543,8 +602,19 @@ $(function(){
                 if($('#snapfix-forcedevice').is(':checked')) {
                     $('#arg8').val('-D');
                 }
+                if($('#snapsync-forcenocopy').is(':checked')) {
+                    $('#arg9').val('-N');
+                }
+                if($('#snapfix-blkstart').val()) {
+                    $('#arg10').val('-S');
+                    $('#arg11').val($('#snapfix-blkstart').val());
+                }
+                if($('#snapfix-blkcount').val()) {
+                    $('#arg12').val('-B');
+                    $('#arg13').val($('#snapfix-blkcount').val());
+                }
                 if($('#snap-hideprogress').is(':checked')) {
-                    $('#arg9').val('-q');
+                    $('#arg14').val('-q');
                 }
                 $('#snapcommands').submit();
             });
@@ -567,14 +637,14 @@ $(function(){
     <?
     if(!empty($dwsnap_parity_disks) || !empty($dwsnap_data_disks)) {
         foreach ($dwsnap_parity_disks as $snap_parity_disk) {
-            echo("\$('#".$snap_parity_disk[1]."-check').click(function(){\$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg1').val('check'); \$('#arg2').val('-d'); \$('#arg3').val('".$snap_parity_disk[1]."'); if(\$('#snapcheck-auditonly').is(':checked')) { \$('#arg4').val('-a'); } if(\$('#snapfix-pattern').val()) { \$('#arg5').val('-f'); \$('#arg6').val(\$('#snapfix-pattern').val()); } if(\$('#snapcheck-forceuuid').is(':checked')) { \$('#arg7').val('-U'); } if(\$('#snap-hideprogress').is(':checked')) { \$('#arg8').val('-q'); } \$('#snapcommands').submit(); });\n");
-            echo("\$('#".$snap_parity_disk[1]."-fix').click(function(){ swal({ title: \"Destructive Operation\", text: \"This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.<br><br>Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it's reverted to the stored snapshot. This command doesn't differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC.<br><br>This command only processes the selected disk.\", type: \"warning\", showCancelButton: true, confirmButtonText: \"Start Operation\", html: true }, function(){ \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg1').val('fix'); \$('#arg2').val('-d'); \$('#arg3').val('".$snap_parity_disk[1]."');  if(\$('#snapfix-pattern').val()) { \$('#arg4').val('-f'); \$('#arg5').val(\$('#snapfix-pattern').val()); } if(\$('#snapcheck-forceuuid').is(':checked')) { \$('#arg6').val('-U'); } if(\$('#snapfix-forcedevice').is(':checked')) { \$('#arg7').val('-D'); } if(\$('#snap-hideprogress').is(':checked')) { \$('#arg8').val('-q'); } \$('#snapcommands').submit(); }); });\n");
-            echo("\$('#".$snap_parity_disk[1]."-fixmissing').click(function(){ swal({ title: \"Destructive Operation\", text: \"This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.<br><br>Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it's reverted to the stored snapshot. This command doesn't differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC.<br><br>Only processes missing or deleted files on the selected disk.\", type: \"warning\", showCancelButton: true, confirmButtonText: \"Start Operation\", html: true }, function(){ \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg1').val('fix'); \$('#arg2').val('-m'); \$('#arg3').val('-d'); \$('#arg4').val('".$snap_parity_disk[1]."');  if(\$('#snapfix-pattern').val()) { \$('#arg5').val('-f'); \$('#arg6').val(\$('#snapfix-pattern').val()); } if(\$('#snapcheck-forceuuid').is(':checked')) { \$('#arg7').val('-U'); } if(\$('#snapfix-forcedevice').is(':checked')) { \$('#arg8').val('-D'); } if(\$('#snap-hideprogress').is(':checked')) { \$('#arg9').val('-q'); } \$('#snapcommands').submit(); }); });\n");
+            echo("\$('#".$snap_parity_disk[1]."-check').click(function(){\$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg1').val('check'); \$('#arg2').val('-d'); \$('#arg3').val('".$snap_parity_disk[1]."'); if(\$('#snapcheck-auditonly').is(':checked')) { \$('#arg4').val('-a'); } if(\$('#snapfix-pattern').val()) { \$('#arg5').val('-f'); \$('#arg6').val(\$('#snapfix-pattern').val()); } if(\$('#snapcheck-forceuuid').is(':checked')) { \$('#arg7').val('-U'); } if(\$('#snapsync-forcenocopy').is(':checked')) { \$('#arg8').val('-N'); } if(\$('#snapfix-blkstart').val()) { \$('#arg9').val('-S'); \$('#arg10').val(\$('#snapfix-blkstart').val()); } if(\$('#snapfix-blkcount').val()) { \$('#arg11').val('-B'); \$('#arg12').val(\$('#snapfix-blkcount').val()); } if(\$('#snap-hideprogress').is(':checked')) { \$('#arg13').val('-q'); } \$('#snapcommands').submit(); });\n");
+            echo("\$('#".$snap_parity_disk[1]."-fix').click(function(){ swal({ title: \"Destructive Operation\", text: \"This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.<br><br>Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it's reverted to the stored snapshot. This command doesn't differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC.<br><br>This command only processes the selected disk.\", type: \"warning\", showCancelButton: true, confirmButtonText: \"Start Operation\", html: true }, function(){ \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg1').val('fix'); \$('#arg2').val('-d'); \$('#arg3').val('".$snap_parity_disk[1]."');  if(\$('#snapfix-pattern').val()) { \$('#arg4').val('-f'); \$('#arg5').val(\$('#snapfix-pattern').val()); } if(\$('#snapcheck-forceuuid').is(':checked')) { \$('#arg6').val('-U'); } if(\$('#snapfix-forcedevice').is(':checked')) { \$('#arg7').val('-D'); } if(\$('#snapsync-forcenocopy').is(':checked')) { \$('#arg8').val('-N'); } if(\$('#snapfix-blkstart').val()) { \$('#arg9').val('-S'); \$('#arg10').val(\$('#snapfix-blkstart').val()); } if(\$('#snapfix-blkcount').val()) { \$('#arg11').val('-B'); \$('#arg12').val(\$('#snapfix-blkcount').val()); } if(\$('#snap-hideprogress').is(':checked')) { \$('#arg13').val('-q'); } \$('#snapcommands').submit(); }); });\n");
+            echo("\$('#".$snap_parity_disk[1]."-fixmissing').click(function(){ swal({ title: \"Destructive Operation\", text: \"This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.<br><br>Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it's reverted to the stored snapshot. This command doesn't differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC.<br><br>Only processes missing or deleted files on the selected disk.\", type: \"warning\", showCancelButton: true, confirmButtonText: \"Start Operation\", html: true }, function(){ \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg1').val('fix'); \$('#arg2').val('-m'); \$('#arg3').val('-d'); \$('#arg4').val('".$snap_parity_disk[1]."');  if(\$('#snapfix-pattern').val()) { \$('#arg5').val('-f'); \$('#arg6').val(\$('#snapfix-pattern').val()); } if(\$('#snapcheck-forceuuid').is(':checked')) { \$('#arg7').val('-U'); } if(\$('#snapfix-forcedevice').is(':checked')) { \$('#arg8').val('-D'); } if(\$('#snapsync-forcenocopy').is(':checked')) { \$('#arg9').val('-N'); } if(\$('#snapfix-blkstart').val()) { \$('#arg10').val('-S'); \$('#arg11').val(\$('#snapfix-blkstart').val()); } if(\$('#snapfix-blkcount').val()) { \$('#arg12').val('-B'); \$('#arg13').val(\$('#snapfix-blkcount').val()); } if(\$('#snap-hideprogress').is(':checked')) { \$('#arg14').val('-q'); } \$('#snapcommands').submit(); }); });\n");
         }
         foreach ($dwsnap_data_disks as $snap_data_disk) {
-            echo("\$('#".$snap_data_disk[1]."-check').click(function(){\$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg1').val('check'); \$('#arg2').val('-d'); \$('#arg3').val('".$snap_data_disk[1]."'); if(\$('#snapcheck-auditonly').is(':checked')) { \$('#arg4').val('-a'); } if(\$('#snapfix-pattern').val()) { \$('#arg5').val('-f'); \$('#arg6').val(\$('#snapfix-pattern').val()); } if(\$('#snapcheck-forceuuid').is(':checked')) { \$('#arg7').val('-U'); } if(\$('#snap-hideprogress').is(':checked')) { \$('#arg8').val('-q'); } \$('#snapcommands').submit(); });\n");
-            echo("\$('#".$snap_data_disk[1]."-fix').click(function(){ swal({ title: \"Destructive Operation\", text: \"This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.<br><br>Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it's reverted to the stored snapshot. This command doesn't differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC.<br><br>This command only processes the selected disk.\", type: \"warning\", showCancelButton: true, confirmButtonText: \"Start Operation\", html: true }, function(){ \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg1').val('fix'); \$('#arg2').val('-d'); \$('#arg3').val('".$snap_data_disk[1]."');  if(\$('#snapfix-pattern').val()) { \$('#arg4').val('-f'); \$('#arg5').val(\$('#snapfix-pattern').val()); } if(\$('#snapcheck-forceuuid').is(':checked')) { \$('#arg6').val('-U'); } if(\$('#snapfix-forcedevice').is(':checked')) { \$('#arg7').val('-D'); } if(\$('#snap-hideprogress').is(':checked')) { \$('#arg8').val('-q'); } \$('#snapcommands').submit(); }); });\n");
-            echo("\$('#".$snap_data_disk[1]."-fixmissing').click(function(){ swal({ title: \"Destructive Operation\", text: \"This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.<br><br>Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it's reverted to the stored snapshot. This command doesn't differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC.<br><br>Only processes missing or deleted files on the selected disk.\", type: \"warning\", showCancelButton: true, confirmButtonText: \"Start Operation\", html: true }, function(){ \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg1').val('fix'); \$('#arg2').val('-m'); \$('#arg3').val('-d'); \$('#arg4').val('".$snap_data_disk[1]."');  if(\$('#snapfix-pattern').val()) { \$('#arg5').val('-f'); \$('#arg6').val(\$('#snapfix-pattern').val()); } if(\$('#snapcheck-forceuuid').is(':checked')) { \$('#arg7').val('-U'); } if(\$('#snapfix-forcedevice').is(':checked')) { \$('#arg8').val('-D'); } if(\$('#snap-hideprogress').is(':checked')) { \$('#arg9').val('-q'); } \$('#snapcommands').submit(); }); });\n");
+            echo("\$('#".$snap_data_disk[1]."-check').click(function(){\$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg1').val('check'); \$('#arg2').val('-d'); \$('#arg3').val('".$snap_data_disk[1]."'); if(\$('#snapcheck-auditonly').is(':checked')) { \$('#arg4').val('-a'); } if(\$('#snapfix-pattern').val()) { \$('#arg5').val('-f'); \$('#arg6').val(\$('#snapfix-pattern').val()); } if(\$('#snapcheck-forceuuid').is(':checked')) { \$('#arg7').val('-U'); } if(\$('#snapsync-forcenocopy').is(':checked')) { \$('#arg8').val('-N'); } if(\$('#snapfix-blkstart').val()) { \$('#arg9').val('-S'); \$('#arg10').val(\$('#snapfix-blkstart').val()); } if(\$('#snapfix-blkcount').val()) { \$('#arg11').val('-B'); \$('#arg12').val(\$('#snapfix-blkcount').val()); } if(\$('#snap-hideprogress').is(':checked')) { \$('#arg13').val('-q'); } \$('#snapcommands').submit(); });\n");
+            echo("\$('#".$snap_data_disk[1]."-fix').click(function(){ swal({ title: \"Destructive Operation\", text: \"This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.<br><br>Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it's reverted to the stored snapshot. This command doesn't differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC.<br><br>This command only processes the selected disk.\", type: \"warning\", showCancelButton: true, confirmButtonText: \"Start Operation\", html: true }, function(){ \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg1').val('fix'); \$('#arg2').val('-d'); \$('#arg3').val('".$snap_data_disk[1]."');  if(\$('#snapfix-pattern').val()) { \$('#arg4').val('-f'); \$('#arg5').val(\$('#snapfix-pattern').val()); } if(\$('#snapcheck-forceuuid').is(':checked')) { \$('#arg6').val('-U'); } if(\$('#snapfix-forcedevice').is(':checked')) { \$('#arg7').val('-D'); } if(\$('#snapsync-forcenocopy').is(':checked')) { \$('#arg8').val('-N'); } if(\$('#snapfix-blkstart').val()) { \$('#arg9').val('-S'); \$('#arg10').val(\$('#snapfix-blkstart').val()); } if(\$('#snapfix-blkcount').val()) { \$('#arg11').val('-B'); \$('#arg12').val(\$('#snapfix-blkcount').val()); } if(\$('#snap-hideprogress').is(':checked')) { \$('#arg13').val('-q'); } \$('#snapcommands').submit(); }); });\n");
+            echo("\$('#".$snap_data_disk[1]."-fixmissing').click(function(){ swal({ title: \"Destructive Operation\", text: \"This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.<br><br>Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it's reverted to the stored snapshot. This command doesn't differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC.<br><br>Only processes missing or deleted files on the selected disk.\", type: \"warning\", showCancelButton: true, confirmButtonText: \"Start Operation\", html: true }, function(){ \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start'); \$('#arg1').val('fix'); \$('#arg2').val('-m'); \$('#arg3').val('-d'); \$('#arg4').val('".$snap_data_disk[1]."');  if(\$('#snapfix-pattern').val()) { \$('#arg5').val('-f'); \$('#arg6').val(\$('#snapfix-pattern').val()); } if(\$('#snapcheck-forceuuid').is(':checked')) { \$('#arg7').val('-U'); } if(\$('#snapfix-forcedevice').is(':checked')) { \$('#arg8').val('-D'); } if(\$('#snapsync-forcenocopy').is(':checked')) { \$('#arg9').val('-N'); } if(\$('#snapfix-blkstart').val()) { \$('#arg10').val('-S'); \$('#arg11').val(\$('#snapfix-blkstart').val()); } if(\$('#snapfix-blkcount').val()) { \$('#arg12').val('-B'); \$('#arg13').val(\$('#snapfix-blkcount').val()); } if(\$('#snap-hideprogress').is(':checked')) { \$('#arg14').val('-q'); } \$('#snapcommands').submit(); }); });\n");
         }
     }
     ?>
