@@ -59,9 +59,6 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     font-family: bitstream;
     font-size: 1.1rem;
 }
-#snapopts input[type="text"] {
-    padding: 1px;
-}
 </style>
 
 <table class="tablesorter shift" autofocus>
@@ -140,15 +137,14 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
         <span title="Scrub only blocks previously marked as bad." class="snaphelptip">(Scrub) Bad Blocks</span>
         <input type="radio" id="snapscrub-full" name="snapscrub-opts" value="snapscrub-full">
         <span title="Scrub the whole array." class="snaphelptip">(Scrub) Full</span>
-        <span style="float:right;margin-right:10px;">Please always read and understand the manual before acting!</span>
+        <span style="float:right;margin-right:10px;">SnapRAID &copy; 2011-2024 Andrea Mazzoleni - All Rights Reserved</span>
         
         <br><strong>Screen Settings:</strong>
         <input type="checkbox" id="snap-hideprogress" value="snap-hideprogress">
         <label for="snap-hideprogress" title="Hides any repetitive progress output." class="snaphelptip">Hide Progress Output</label>
         <span style="margin-left:10px"><strong>Interrupt Thresholds:</strong></span>
         (Sync/Scrub) <input type="text" id="snapsync-errorlimit" class="narrow snaphelptip" title="Sets a new error limit before stopping execution. By default SnapRAID stops if it encounters more than 100 Input/Output errors, meaning that a disk is likely dying." placeholder="I/O Error Limit">
-        <span style="float:right;margin-right:10px;">SnapRAID &copy; 2011-2024 Andrea Mazzoleni - All Rights Reserved</span>
-        
+
         <br><strong>Data Subset Selection Filters:</strong>
         (Check/Fix) <input type="text" id="snapfix-pattern" class="narrow snaphelptip" title="Run a command only on a certain set of data." placeholder="Path Pattern (See Manual)">
         (Check/Fix) <input type="text" id="snapfix-diskpattern" title="Run a command only on a certain disk." class="narrow snaphelptip" placeholder="Disk Name">
