@@ -33,9 +33,6 @@ if($dwsnap_lastsync !== "-") { $snap_lastsync_html = $dwsnap_lastsync . " (<stro
 if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<strong>" . dwsnap_time_ago($dwsnap_lastscrub) . "</strong>)"; } else { $snap_lastscrub_html = "<span class='orange-text'><strong>Never</strong></span>"; }
 ?>
 
-<link type="text/css" rel="stylesheet" href="<?=autov('/plugins/dwsnap/css/sweetalert2.css');?>">
-<script src="<?=autov('/plugins/dwsnap/js/sweetalert2.js');?>"></script>
-
 <style type="text/css">
 .snaplog {
     height: 400px;
