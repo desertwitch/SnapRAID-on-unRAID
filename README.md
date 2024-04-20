@@ -1,6 +1,6 @@
 SnapRAID on UNRAID
 ================
-_Proof of Concept Project: SnapRAID on top of UNRAID, the best of two worlds?_
+_An experimental plugin for advanced users installing SnapRAID onto UNRAID systems for the best of both worlds._
 
 
 <sub>This project is in active development and considered experimental.</sub>
