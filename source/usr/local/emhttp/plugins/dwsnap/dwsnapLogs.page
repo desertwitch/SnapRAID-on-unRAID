@@ -39,7 +39,7 @@ $snap_lastlog = shell_exec("ls -Art /var/lib/snapraid/logs/*.log 2>/dev/null | t
 
 <img id="editfolder2" style="cursor:pointer;margin-left: 10px;" src="/webGui/images/explore.png" >
 <input id="editfile2" type="text" name="editfile2" value="" readonly="" data-picktop="/var/lib/snapraid/logs/" data-pickcloseonfile="true" data-pickfilter="log" data-pickroot="/var/lib/snapraid/logs/" data-pickfolders="true" required="required" >
-<span style="float:right;margin-right:10px;"><i class="fa fa-download"></i> <a href="/plugins/dwsnap/include/dwsnap_download.php">Download Log Package (.zip)</a></span>
+<span style="float:right;margin-right:10px;"><i class="fa fa-download"></i> <a href="/plugins/dwsnap/include/dwsnap_download.php" class="snaphelptip" title="Downloads a ZIP with all SnapRAID log files">Download Log Package (.zip)</a></span>
 <textarea id="editdata2" name="editdata2" placeholder="Select Configuration File"></textarea>
 <input type="hidden" name="commit" value="1" />
 
