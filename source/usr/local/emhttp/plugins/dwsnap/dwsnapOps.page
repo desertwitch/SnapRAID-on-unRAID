@@ -683,7 +683,7 @@ $(function(){
     if(!empty($dwsnap_parity_disks) || !empty($dwsnap_data_disks)) {
         foreach ($dwsnap_parity_disks as $snap_parity_disk) {
             echo <<<END
-            ('#$snap_parity_disk[1]-check').click(function() {
+            \$('#$snap_parity_disk[1]-check').click(function() {
                 \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
                 \$('#arg1').val('check');
                 \$('#arg2').val('-d');
@@ -799,7 +799,7 @@ END;
         }
         foreach ($dwsnap_data_disks as $snap_data_disk) {
             echo <<<END
-            ('#$snap_data_disk[1]-check').click(function() {
+            \$('#$snap_data_disk[1]-check').click(function() {
                 \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
                 \$('#arg1').val('check');
                 \$('#arg2').val('-d');
