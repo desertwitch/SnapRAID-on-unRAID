@@ -59,7 +59,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     font-family: bitstream;
     font-size: 1.1rem;
 }
-#snapparams input[type="text"] {
+#snapopts input[type="text"] {
     padding: 2px;
 }
 </style>
@@ -118,7 +118,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
         <input class="snaprun snaphelptip" type="button" id="crontest" value="RUN MAINTENANCE CRONJOB" title="Runs the SnapRAID maintenance now.">
     </span><br>
 
-    <div id="snapparams"> 
+    <div id="snapopts"> 
         <strong>Advanced Parameters:</strong>
         <input type="checkbox" id="snapcheck-auditonly" value="snapcheck-auditonly">
         <label for="snapcheck-auditonly" title="In CHECK verifies the hash of the files without doing any kind of check on the parity data. If you are interested in checking only the file data this option can speed up a lot the checking process." class="snaphelptip">(Check) Audit Only</label>
