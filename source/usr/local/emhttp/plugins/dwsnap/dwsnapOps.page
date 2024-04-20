@@ -460,15 +460,15 @@ $(function(){
                 if($('#snapsync-forcerealloc').is(':checked')) {
                     $('#arg5').val('-R');
                 }
-                if($('#snapsync-errorlimit').val()) {
-                    $('#arg6').val('-L');
-                    $('#arg7').val($('#snapsync-errorlimit').val());
-                }
                 if($('#snapcheck-forceuuid').is(':checked')) {
-                    $('#arg8').val('-U');
+                    $('#arg6').val('-U');
                 }
                 if($('#snapsync-forcenocopy').is(':checked')) {
-                    $('#arg9').val('-N');
+                    $('#arg7').val('-N');
+                }
+                if($('#snapsync-errorlimit').val()) {
+                    $('#arg8').val('-L');
+                    $('#arg9').val($('#snapsync-errorlimit').val());
                 }
                 if($('#snap-hideprogress').is(':checked')) {
                     $('#arg10').val('-q');
@@ -501,15 +501,15 @@ $(function(){
                 if($('#snapsync-forcerealloc').is(':checked')) {
                     $('#arg6').val('-R');
                 }
-                if($('#snapsync-errorlimit').val()) {
-                    $('#arg7').val('-L');
-                    $('#arg8').val($('#snapsync-errorlimit').val());
-                }
                 if($('#snapcheck-forceuuid').is(':checked')) {
-                    $('#arg9').val('-U');
+                    $('#arg7').val('-U');
                 }
                 if($('#snapsync-forcenocopy').is(':checked')) {
-                    $('#arg10').val('-N');
+                    $('#arg8').val('-N');
+                }
+                if($('#snapsync-errorlimit').val()) {
+                    $('#arg9').val('-L');
+                    $('#arg10').val($('#snapsync-errorlimit').val());
                 }
                 if($('#snap-hideprogress').is(':checked')) {
                     $('#arg11').val('-q');
