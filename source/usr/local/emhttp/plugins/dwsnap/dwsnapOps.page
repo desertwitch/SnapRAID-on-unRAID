@@ -59,6 +59,9 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     font-family: bitstream;
     font-size: 1.1rem;
 }
+#snapparams input[type="text"] {
+    padding: 2px;
+}
 </style>
 
 <table class="tablesorter shift" autofocus>
@@ -115,61 +118,57 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
         <input class="snaprun snaphelptip" type="button" id="crontest" value="RUN MAINTENANCE CRONJOB" title="Runs the SnapRAID maintenance now.">
     </span><br>
 
-    <strong>Advanced Parameters:</strong>
-    <input type="checkbox" id="snapcheck-auditonly" value="snapcheck-auditonly">
-    <label for="snapcheck-auditonly" title="In CHECK verifies the hash of the files without doing any kind of check on the parity data. If you are interested in checking only the file data this option can speed up a lot the checking process." class="snaphelptip">(Check) Audit Only</label>
-    <input type="checkbox" id="snapsync-forcefull" value="snapsync-forcefull">
-    <label for="snapsync-forcefull" title="In SYNC forces a full recomputation of the parity. This option can be used when you add a new parity level, or if you reverted back to an old content file using a more recent parity data. Instead of recreating the parity from scratch, this allows to reuse the hashes present in the content file to validate data, and to maintain data protection during the SYNC process using the parity data you have." class="snaphelptip">(Sync) Force Full</label>
-    <input type="checkbox" id="snapsync-forcezero" value="snapsync-forcezero">
-    <label for="snapsync-forcezero" title="Forces the insecure operation of syncing a file with zero size that before was not. If SnapRAID detects a such condition, it stops proceeding unless you specify this option." class="snaphelptip">(Sync) Force Zero</label>
-    <input type="checkbox" id="snapsync-forceempty" value="snapsync-forceempty">
-    <label for="snapsync-forceempty" title="Forces the insecure operation of syncing a disk with all the files missing. If SnapRAID detects that all the files originally present in the disk are missing or rewritten, it stops proceeding unless you specify this option." class="snaphelptip">(Sync) Force Empty</label>
-    <span style="float:right;margin-right:10px">
-    <a href="https://www.snapraid.it/manual" target="_blank" title="SnapRAID User Manual"><i class="fa fa-file-text-o"></i> User Manual</a> / <a href="https://www.snapraid.it/faq" target="_blank" title="SnapRAID FAQ"><i class="fa fa-question-circle-o"></i> Frequently Asked Questions</a></span>
-    <br>Please always read and understand the manual before acting!
-    <br>SnapRAID &copy; 2011-2024 Andrea Mazzoleni - All Rights Reserved
-    </fieldset>
-    </span>
-    
-    <br><strong>Scrub Selectors:</strong>
-    <input type="radio" id="snapscrub-plan" name="snapscrub-opts" value="snapscrub-plan">
-    (Scrub) <input type="text" id="snapscrub-age" class="snaphelptip" style="margin-right:0px;width:60px;" title="Scrub blocks not scrubbed for (x) days." placeholder="days">
-    (Scrub) <input type="text" id="snapscrub-percent" class="snaphelptip" style="margin-right:0px;width:60px;" title="Scrub (x) percent of the array." placeholder="percent">
-    <input type="radio" id="snapscrub-new" name="snapscrub-opts" value="snapscrub-new">
-    <span title="Scrub only blocks not yet scrubbed." class="snaphelptip">(Scrub) New Blocks</span>
-    <input type="radio" id="snapscrub-bad" name="snapscrub-opts"  value="snapscrub-bad">
-    <span title="Scrub only blocks previously marked as bad." class="snaphelptip">(Scrub) Bad Blocks</span>
-    <input type="radio" id="snapscrub-full" name="snapscrub-opts" value="snapscrub-full">
-    <span title="Scrub the whole array." class="snaphelptip">(Scrub) Full</span>
-    
-    <br><strong>Screen Settings:</strong>
-    <input type="checkbox" id="snap-hideprogress" value="snap-hideprogress">
-    <label for="snap-hideprogress" title="Hides any repetitive progress output." class="snaphelptip">Hide Progress Output</label>
-    <span style="margin-left:10px"><strong>Interrupt Thresholds:</strong></span>
-    (Sync/Scrub) <input type="text" id="snapsync-errorlimit" class="narrow snaphelptip" title="Sets a new error limit before stopping execution. By default SnapRAID stops if it encounters more than 100 Input/Output errors, meaning that a disk is likely dying." placeholder="I/O Error Limit">
-    
-    <br><strong>Data Subset Selection Filters:</strong>
-    (Check/Fix) <input type="text" id="snapfix-pattern" class="narrow snaphelptip" title="Run a command only on a certain set of data." placeholder="Path Pattern (See Manual)">
-    (Check/Fix) <input type="text" id="snapfix-diskpattern" title="Run a command only on a certain disk." class="narrow snaphelptip" placeholder="Disk Name">
+    <div id="snapparams"> 
+        <strong>Advanced Parameters:</strong>
+        <input type="checkbox" id="snapcheck-auditonly" value="snapcheck-auditonly">
+        <label for="snapcheck-auditonly" title="In CHECK verifies the hash of the files without doing any kind of check on the parity data. If you are interested in checking only the file data this option can speed up a lot the checking process." class="snaphelptip">(Check) Audit Only</label>
+        <input type="checkbox" id="snapsync-forcefull" value="snapsync-forcefull">
+        <label for="snapsync-forcefull" title="In SYNC forces a full recomputation of the parity. This option can be used when you add a new parity level, or if you reverted back to an old content file using a more recent parity data. Instead of recreating the parity from scratch, this allows to reuse the hashes present in the content file to validate data, and to maintain data protection during the SYNC process using the parity data you have." class="snaphelptip">(Sync) Force Full</label>
+        <input type="checkbox" id="snapsync-forcezero" value="snapsync-forcezero">
+        <label for="snapsync-forcezero" title="Forces the insecure operation of syncing a file with zero size that before was not. If SnapRAID detects a such condition, it stops proceeding unless you specify this option." class="snaphelptip">(Sync) Force Zero</label>
+        <input type="checkbox" id="snapsync-forceempty" value="snapsync-forceempty">
+        <label for="snapsync-forceempty" title="Forces the insecure operation of syncing a disk with all the files missing. If SnapRAID detects that all the files originally present in the disk are missing or rewritten, it stops proceeding unless you specify this option." class="snaphelptip">(Sync) Force Empty</label>
+        <span style="float:right;margin-right:10px"><a href="https://www.snapraid.it/manual" target="_blank" title="SnapRAID User Manual"><i class="fa fa-file-text-o"></i> User Manual</a> / <a href="https://www.snapraid.it/faq" target="_blank" title="SnapRAID FAQ"><i class="fa fa-question-circle-o"></i> Frequently Asked Questions</a></span>
+        
+        <br><strong>Scrub Selectors:</strong>
+        <input type="radio" id="snapscrub-plan" name="snapscrub-opts" value="snapscrub-plan">
+        (Scrub) <input type="text" id="snapscrub-age" class="snaphelptip" style="margin-right:0px;width:60px;" title="Scrub blocks not scrubbed for (x) days." placeholder="days">
+        (Scrub) <input type="text" id="snapscrub-percent" class="snaphelptip" style="margin-right:0px;width:60px;" title="Scrub (x) percent of the array." placeholder="percent">
+        <input type="radio" id="snapscrub-new" name="snapscrub-opts" value="snapscrub-new">
+        <span title="Scrub only blocks not yet scrubbed." class="snaphelptip">(Scrub) New Blocks</span>
+        <input type="radio" id="snapscrub-bad" name="snapscrub-opts"  value="snapscrub-bad">
+        <span title="Scrub only blocks previously marked as bad." class="snaphelptip">(Scrub) Bad Blocks</span>
+        <input type="radio" id="snapscrub-full" name="snapscrub-opts" value="snapscrub-full">
+        <span title="Scrub the whole array." class="snaphelptip">(Scrub) Full</span>
+        <span style="float:right;margin-right:10px;">Please always read and understand the manual before acting!</span>
+        
+        <br><strong>Screen Settings:</strong>
+        <input type="checkbox" id="snap-hideprogress" value="snap-hideprogress">
+        <label for="snap-hideprogress" title="Hides any repetitive progress output." class="snaphelptip">Hide Progress Output</label>
+        <span style="margin-left:10px">Interrupt Thresholds:</span>
+        (Sync/Scrub) <input type="text" id="snapsync-errorlimit" class="narrow snaphelptip" title="Sets a new error limit before stopping execution. By default SnapRAID stops if it encounters more than 100 Input/Output errors, meaning that a disk is likely dying." placeholder="I/O Error Limit">
+        <span style="float:right;margin-right:10px;">SnapRAID &copy; 2011-2024 Andrea Mazzoleni - All Rights Reserved</span>
+        
+        <br><strong>Data Subset Selection Filters:</strong>
+        (Check/Fix) <input type="text" id="snapfix-pattern" class="narrow snaphelptip" title="Run a command only on a certain set of data." placeholder="Path Pattern (See Manual)">
+        (Check/Fix) <input type="text" id="snapfix-diskpattern" title="Run a command only on a certain disk." class="narrow snaphelptip" placeholder="Disk Name">
 
-    <br><strong>Recovery Parameters for Experts:</strong>
-    <input type="checkbox" id="snapsync-forcerealloc" value="snapsync-forcerealloc">
-    <label for="snapsync-forcerealloc" title="In SYNC forces a full reallocation of files and rebuild of the parity. This option can be used to completely reallocate all the files removing the fragmentation, but reusing the hashes present in the content file to validate data. This option is for experts only, and it's highly recommended to not use it. You DO NOT have data protection during the SYNC operation." class="snaphelptip">(Sync) Force Realloc</label>
-    <span style="margin-left:10px;">
-    (Check/Fix) <input type="text" id="snapfix-blkstart" class="snaphelptip" style="margin-right:0px;width:100px;" title="Starts the processing from the specified block number. It could be useful to retry to check or fix some specific block, in case of a damaged disk. It's present mainly for advanced manual recovering." placeholder="Block Start">
-    (Check/Fix) <input type="text" id="snapfix-blkcount" class="snaphelptip" style="margin-right:0px;width:100px;" title="Processes only the specified number of blocks. It's present mainly for advanced manual recovering." placeholder="Block Count">
-    </span>
+        <br><strong>Recovery Parameters for Experts:</strong>
+        <input type="checkbox" id="snapsync-forcerealloc" value="snapsync-forcerealloc">
+        <label for="snapsync-forcerealloc" title="In SYNC forces a full reallocation of files and rebuild of the parity. This option can be used to completely reallocate all the files removing the fragmentation, but reusing the hashes present in the content file to validate data. This option is for experts only, and it's highly recommended to not use it. You DO NOT have data protection during the SYNC operation." class="snaphelptip">(Sync) Force Realloc</label>
+        <span style="margin-left:10px;">
+        (Check/Fix) <input type="text" id="snapfix-blkstart" class="snaphelptip" style="margin-right:0px;width:100px;" title="Starts the processing from the specified block number. It could be useful to retry to check or fix some specific block, in case of a damaged disk. It's present mainly for advanced manual recovering." placeholder="Block Start">
+        (Check/Fix) <input type="text" id="snapfix-blkcount" class="snaphelptip" style="margin-right:0px;width:100px;" title="Processes only the specified number of blocks. It's present mainly for advanced manual recovering." placeholder="Block Count">
+        </span>
 
-   <br><strong>Operational Safety Overrides:</strong>
-    <input type="checkbox" id="snapsync-forcenocopy" value="forcenocopy">
-    <label for="forcenocopy" title="In SYNC, CHECK and FIX disables the copy detection heuristic. Without this option SnapRAID assumes that files with same attributes, like name, size and time-stamp are copies with the same data. This allows to identify copied or moved files from one disk to another, and to reuse the already computed hash information to detect silent errors or to recover missing files. This, in some rare cases, may result in false positives or in a slow process due the many hash verifications, which this option resolves." class="snaphelptip">(Sync/Check/Fix) Force Nocopy</label>
-    <input type="checkbox" id="snapcheck-forceuuid" value="snapcheck-forceuuid">
-    <label for="snapcheck-forceuuid" title="Forces the insecure operation of syncing, checking and fixing with disks that have changed their UUID. If SnapRAID detects that some disks have changed UUID, it stops proceeding unless you specify this option. This allows to detect when your disks are mounted in the wrong mount points. It's anyway allowed to have a single UUID change with single parity, and more with multiple parity, because it's a normal situation when replacing disks as part of a recovery." class="snaphelptip">(Sync/Check/Fix) Force UUID</label>
-    <input type="checkbox" id="snapfix-forcedevice" value="snapfix-forcedevice">
-    <label for="snapfix-forcedevice" title="Forces the insecure operation of fixing with inaccessible disks, or with disks on the same physical device. For example if you lost two data disks, and you have a spare disk to recover only the first one, and you want to ignore the second inaccessible disk. Alternatively if you want to recover a disk in the free space left on an already used disk, meaning on the same physical device. " class="snaphelptip">(Fix) Force Device</label>
-    
-
-    <br><br>
+        <br><strong>Operational Safety Overrides:</strong>
+        <input type="checkbox" id="snapsync-forcenocopy" value="forcenocopy">
+        <label for="forcenocopy" title="In SYNC, CHECK and FIX disables the copy detection heuristic. Without this option SnapRAID assumes that files with same attributes, like name, size and time-stamp are copies with the same data. This allows to identify copied or moved files from one disk to another, and to reuse the already computed hash information to detect silent errors or to recover missing files. This, in some rare cases, may result in false positives or in a slow process due the many hash verifications, which this option resolves." class="snaphelptip">(Sync/Check/Fix) Force Nocopy</label>
+        <input type="checkbox" id="snapcheck-forceuuid" value="snapcheck-forceuuid">
+        <label for="snapcheck-forceuuid" title="Forces the insecure operation of syncing, checking and fixing with disks that have changed their UUID. If SnapRAID detects that some disks have changed UUID, it stops proceeding unless you specify this option. This allows to detect when your disks are mounted in the wrong mount points. It's anyway allowed to have a single UUID change with single parity, and more with multiple parity, because it's a normal situation when replacing disks as part of a recovery." class="snaphelptip">(Sync/Check/Fix) Force UUID</label>
+        <input type="checkbox" id="snapfix-forcedevice" value="snapfix-forcedevice">
+        <label for="snapfix-forcedevice" title="Forces the insecure operation of fixing with inaccessible disks, or with disks on the same physical device. For example if you lost two data disks, and you have a spare disk to recover only the first one, and you want to ignore the second inaccessible disk. Alternatively if you want to recover a disk in the free space left on an already used disk, meaning on the same physical device. " class="snaphelptip">(Fix) Force Device</label>    
+    </div><br>
 
     <div><strong>INFORMATION:</strong></div>
     <div>When using SnapRAID on top of Unraid's parity, always attempt to recover drive failures using Unraid's parity first, before using any SnapRAID recovery functions.</div>
