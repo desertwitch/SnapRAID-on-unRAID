@@ -1,3 +1,3 @@
 **SnapRAID on UNRAID**
 
-An experimental plugin installing SnapRAID onto UNRAID systems as part of a proof-of-concept project.
+An experimental plugin for advanced users installing SnapRAID onto UNRAID systems.
