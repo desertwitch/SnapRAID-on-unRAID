@@ -133,7 +133,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     <br><strong>Scrub Selectors:</strong>
     <input type="radio" id="snapscrub-plan" name="snapscrub-opts" value="snapscrub-plan">
     (Scrub) <input type="text" id="snapscrub-age" class="snaphelptip" style="margin-right:0px;width:60px;" title="Scrub blocks not scrubbed for (x) days." placeholder="days">
-    (Scrub) <input type="text" id="snapscrub-percent" class="snaphelptip" style="margin-right:0px;width:60px;" title="Scrub (x) percent of selected blocks." placeholder="percent">
+    (Scrub) <input type="text" id="snapscrub-percent" class="snaphelptip" style="margin-right:0px;width:60px;" title="Scrub (x) percent of the array." placeholder="percent">
     <input type="radio" id="snapscrub-new" name="snapscrub-opts" value="snapscrub-new">
     <span for="snapscrub-new" title="Scrub only blocks not yet scrubbed." class="snaphelptip">(Scrub) New Blocks</span>
     <input type="radio" id="snapscrub-bad" name="snapscrub-opts"  value="snapscrub-bad">
