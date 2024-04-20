@@ -3,7 +3,7 @@ SnapRAID on UNRAID
 _Proof of Concept Project: SnapRAID on top of UNRAID, the best of two worlds?_
 
 
-<sub>This project is in active development, experimental and not recommended to be used on production machines.</sub>
+<sub>This project is in active development and considered experimental.</sub>
 
 <sub>So far testing with XFS filesystems has had promising results and shown no interference with Unraid's parity mechanisms.</sub>
 
