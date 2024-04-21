@@ -198,9 +198,10 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
                     $snap_disk_used = trim(htmlspecialchars(shell_exec("df -h | grep " . $snap_parity_disk[2] . " | awk '{print $3}'") ?? "-"));
                     $snap_disk_total = trim(htmlspecialchars(shell_exec("df -h | grep " . $snap_parity_disk[2] . " | awk '{print $2}'") ?? "-"));
                     $snap_disk_status = ($snap_disk_fs !== "-") ? "<i class='fa fa-check green-text'></i>" : "<i class='fa fa-times red-text'></i>"; 
+                    $snap_parity_level = strtoupper($snap_parity_disk[1]);
                     echo <<<END
                     <tr>
-                    <td class="snapdisktype">PARITY</td>
+                    <td class="snapdisktype">$snap_parity_level</td>
                     <td>$snap_parity_disk[1]</td>
                     <td>
                         <a class="view" href="/Shares/Browse?dir=$snap_parity_disk[2]/" target="_blank">
