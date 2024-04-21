@@ -68,6 +68,8 @@ signal_exit_snapraid() {
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="minutes"
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hours"
 
+    [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} ${BIGOP} Interrupted" -d "SnapRAID operation ${BIGOP} was interrupted (after ${DURATION} ${DURATIONUNIT})." -i "alert"
+
     echo "$OPTIME" >/var/lib/snapraid/logs/lastfinish
     echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     echo "### ${BIGOP} INTERRUPTED [SIGTERM]: ${OPTIME} (after ${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
