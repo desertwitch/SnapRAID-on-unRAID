@@ -307,7 +307,7 @@ function confirmCommandAndSubmit() {
     });
     swal({
         title: "This is the last confirmation!",
-        text: "Are you absolutely certain that this is the operation you want to run?<br>Please refer to the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> again if you are not 100% sure.<br><pre>" + snapCmd + "</pre>There will be no more confirmations after this message.",
+        text: "Are you absolutely certain that this is the operation you want to run?<br>Please refer to the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> again if you are not 100% sure.<br><pre>" + snapCmd + "</pre>Be advised there will be no more confirmations after this message.",
         type: "warning",
         showCancelButton: true,
         confirmButtonText: "Start Operation",
