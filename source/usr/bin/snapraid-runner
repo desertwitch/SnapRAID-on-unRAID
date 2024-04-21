@@ -27,8 +27,8 @@ HOST="$(echo "$HOSTNAME" | awk '{print toupper($0)}')"
 EVENT="SnapRAID Operation"
 SUBJECT="[${HOST}] SnapRAID"
 
-if [ "${CMD[0]}" -eq 0 ] || [ "${CMD[0]}" -eq 1 ]; then
-    if [ "${CMD[0]}" -eq 1 ]; then
+if [ "${CMD[0]}" == "0" ] || [ "${CMD[0]}" == "1" ]; then
+    if [ "${CMD[0]}" == "1" ]; then
         NOTIFYDONE="YES"
     fi
 else
