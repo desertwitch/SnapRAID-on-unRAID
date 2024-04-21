@@ -119,7 +119,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     <div id="snapopts"> 
         <strong>Notifications:</strong>
         <input type="checkbox" id="snap-notifyme" value="snap-notifyme">
-        <label for="snap-notifyme" title="Sends a notification when the manually started array operation finishes (using Unraid's system-wide notification settings)." class="snaphelptip">Send Notification When Array Operation Completes</label>
+        <label for="snap-notifyme" title="Sends a notification when the manually started array operation finishes (using Unraid's system-wide notification settings)." class="snaphelptip">Array Operation Complete</label>
         <span style="float:right;margin-right:10px"><a href="https://www.snapraid.it/manual" target="_blank" title="SnapRAID User Manual"><i class="fa fa-file-text-o"></i> User Manual</a> / <a href="https://www.snapraid.it/faq" target="_blank" title="SnapRAID FAQ"><i class="fa fa-question-circle-o"></i> Frequently Asked Questions</a></span>
         
         <br><strong>Advanced Parameters:</strong>
