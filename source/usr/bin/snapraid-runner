@@ -89,60 +89,78 @@ trap 'signal_exit_snapraid $1' SIGTERM
 if [ "${CMD[1]}" == "sync" ]; then
     $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${1}-${LOGTIME}.raw.log" "${CMD[@]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     CMDRET="${PIPESTATUS[0]}"
+    
+    OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+    MEASURESTOP=$(date +%s)
+    DURATION=$((MEASURESTOP-MEASURESTART))
+    DURATIONUNIT="seconds"
+    [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="minutes"
+    [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hours"
+
     if [ "$CMDRET" -eq 0 ]; then
-        OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
         echo "$OPTIME" > /boot/config/plugins/dwsnap/config/lastsync
         rm -f /boot/config/plugins/dwsnap/config/syncneeded
         rm -f /boot/config/plugins/dwsnap/config/lastnodiff
-        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} ${BIGOP} Finished" -d "SnapRAID operation ${BIGOP} finished with success." -i "normal"
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} ${BIGOP} Finished" -d "SnapRAID operation ${BIGOP} finished with success (after ${DURATION} ${DURATIONUNIT})." -i "normal"
     else
-        OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
-        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} ${BIGOP} Failure" -d "SnapRAID operation ${BIGOP} finished with errors." -i "alert"
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} ${BIGOP} Failure" -d "SnapRAID operation ${BIGOP} finished with errors (after ${DURATION} ${DURATIONUNIT})." -i "alert"
     fi
 elif [ "${CMD[1]}" == "scrub" ]; then
     $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${1}-${LOGTIME}.raw.log" "${CMD[@]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     CMDRET="${PIPESTATUS[0]}"
+    
+    OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+    MEASURESTOP=$(date +%s)
+    DURATION=$((MEASURESTOP-MEASURESTART))
+    DURATIONUNIT="seconds"
+    [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="minutes"
+    [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hours"
+
     if [ "$CMDRET" -eq 0 ]; then
-        OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
         echo "$OPTIME" > /boot/config/plugins/dwsnap/config/lastscrub
-        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} ${BIGOP} Finished" -d "SnapRAID operation ${BIGOP} finished with success." -i "normal"
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} ${BIGOP} Finished" -d "SnapRAID operation ${BIGOP} finished with success (after ${DURATION} ${DURATIONUNIT})." -i "normal"
     else
-        OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
-        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} ${BIGOP} Failure" -d "SnapRAID operation ${BIGOP} finished with errors." -i "alert"
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} ${BIGOP} Failure" -d "SnapRAID operation ${BIGOP} finished with errors (after ${DURATION} ${DURATIONUNIT})." -i "alert"
     fi
 elif [ "${CMD[1]}" == "diff" ]; then
     $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${1}-${LOGTIME}.raw.log" "${CMD[@]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     CMDRET="${PIPESTATUS[0]}"
+    
+    OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+    MEASURESTOP=$(date +%s)
+    DURATION=$((MEASURESTOP-MEASURESTART))
+    DURATIONUNIT="seconds"
+    [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="minutes"
+    [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hours"
+
     if [ "$CMDRET" -eq 0 ]; then
-        OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
         echo "$OPTIME" >/boot/config/plugins/dwsnap/config/lastnodiff
         rm -f /boot/config/plugins/dwsnap/config/syncneeded
-        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} ${BIGOP} Finished" -d "SnapRAID operation ${BIGOP} finished with success." -i "normal"
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} ${BIGOP} Finished" -d "SnapRAID operation ${BIGOP} finished with success (after ${DURATION} ${DURATIONUNIT})." -i "normal"
     elif [ "$CMDRET" -eq 2 ]; then
-        OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
         touch /boot/config/plugins/dwsnap/config/syncneeded
         rm -f /boot/config/plugins/dwsnap/config/lastnodiff
-        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} ${BIGOP} Warnings" -d "SnapRAID operation ${BIGOP} finished with warnings. Data differences were found (not in sync)." -i "warning"
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} ${BIGOP} Warnings" -d "SnapRAID operation ${BIGOP} finished with warnings (after ${DURATION} ${DURATIONUNIT}). Data differences were found (not in sync)." -i "warning"
     else
-        OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
-        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} ${BIGOP} Failure" -d "SnapRAID operation ${BIGOP} finished with errors." -i "alert"
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} ${BIGOP} Failure" -d "SnapRAID operation ${BIGOP} finished with errors (after ${DURATION} ${DURATIONUNIT})." -i "alert"
     fi
 else
     $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${1}-${LOGTIME}.raw.log" "${CMD[@]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     CMDRET="${PIPESTATUS[0]}"
-    if [ "$CMDRET" -eq 0 ]; then
-        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} ${BIGOP} Finished" -d "SnapRAID operation ${BIGOP} finished with success." -i "normal"
-    else
-        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} ${BIGOP} Failure" -d "SnapRAID operation ${BIGOP} finished with errors." -i "alert"
-    fi
+    
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
-fi
+    MEASURESTOP=$(date +%s)
+    DURATION=$((MEASURESTOP-MEASURESTART))
+    DURATIONUNIT="seconds"
+    [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="minutes"
+    [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hours"
 
-MEASURESTOP=$(date +%s)
-DURATION=$((MEASURESTOP-MEASURESTART))
-DURATIONUNIT="seconds"
-[ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="minutes"
-[ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hours"
+    if [ "$CMDRET" -eq 0 ]; then
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} ${BIGOP} Finished" -d "SnapRAID operation ${BIGOP} finished with success (after ${DURATION} ${DURATIONUNIT})." -i "normal"
+    else
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} ${BIGOP} Failure" -d "SnapRAID operation ${BIGOP} finished with errors (after ${DURATION} ${DURATIONUNIT})." -i "alert"
+    fi
+fi
 
 echo "$OPTIME" >/var/lib/snapraid/logs/lastfinish
 echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
