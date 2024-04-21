@@ -298,6 +298,25 @@ function toggleSnapLogs() {
         getSnapLogs();
     }
 }
+function confirmCommandAndSubmit() {
+    var snapCmd = "snapraid ";
+    $('[id^="arg"]').each(function() {
+        if($(this).val()) {
+            snapCmd += $(this).val() + " ";
+        }
+    });
+    swal({
+        title: "Operation Command",
+        text: "Are you absolutely certain that this is the operation you want to run?<br>Please refer to the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> again if you are not 100% sure.<br><pre>" + snapCmd + "</pre>There will be no more confirmations after this message.",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Start Operation",
+        html: true
+        },
+        function(){
+            $('#snapcommands').submit();
+        });
+}
 $(function(){
     $('#logcontrol').click(toggleSnapLogs);
 
@@ -356,7 +375,7 @@ $(function(){
         if($('#snap-hideprogress').is(':checked')) {
             $('#arg8').val('-q');
         }
-        $('#snapcommands').submit();
+        confirmCommandAndSubmit();
     });
     $('#snapcheck').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
@@ -389,7 +408,7 @@ $(function(){
         if($('#snap-hideprogress').is(':checked')) {
             $('#arg13').val('-q');
         }
-        $('#snapcommands').submit();
+        confirmCommandAndSubmit();
     });
 
     $('#clearoutput').click(function(){
@@ -446,6 +465,7 @@ $(function(){
             type: "warning",
             showCancelButton: true,
             confirmButtonText: "Start Operation",
+            closeOnConfirm: false,
             html: true
             },
             function(){
@@ -476,7 +496,7 @@ $(function(){
                 if($('#snap-hideprogress').is(':checked')) {
                     $('#arg10').val('-q');
                 }
-                $('#snapcommands').submit();
+                confirmCommandAndSubmit();
             });
     });  
     $('#snaphashedsync').click(function(){
@@ -486,6 +506,7 @@ $(function(){
             type: "warning",
             showCancelButton: true,
             confirmButtonText: "Start Operation",
+            closeOnConfirm: false,
             html: true
             },
             function(){
@@ -517,7 +538,7 @@ $(function(){
                 if($('#snap-hideprogress').is(':checked')) {
                     $('#arg11').val('-q');
                 }
-                $('#snapcommands').submit();
+                confirmCommandAndSubmit();
             });
     });
     $('#snaptouch').click(function(){
@@ -527,12 +548,13 @@ $(function(){
             type: "warning",
             showCancelButton: true,
             confirmButtonText: "Start Operation",
+            closeOnConfirm: false,
             html: true
             },
             function(){
                 $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
                 $('#arg1').val('touch');
-                $('#snapcommands').submit();
+                confirmCommandAndSubmit();
             });
     });
     $('#snapfix').click(function(){
@@ -542,6 +564,7 @@ $(function(){
             type: "warning",
             showCancelButton: true,
             confirmButtonText: "Start Operation",
+            closeOnConfirm: false,
             html: true
             },
             function(){
@@ -575,7 +598,7 @@ $(function(){
                 if($('#snap-hideprogress').is(':checked')) {
                     $('#arg13').val('-q');
                 }
-                $('#snapcommands').submit();
+                confirmCommandAndSubmit();
             });
     });
     $('#snapfixmissing').click(function(){
@@ -585,6 +608,7 @@ $(function(){
             type: "warning",
             showCancelButton: true,
             confirmButtonText: "Start Operation",
+            closeOnConfirm: false,
             html: true
             },
             function(){
@@ -619,7 +643,7 @@ $(function(){
                 if($('#snap-hideprogress').is(':checked')) {
                     $('#arg14').val('-q');
                 }
-                $('#snapcommands').submit();
+                confirmCommandAndSubmit();
             });
     });
     $('#snapfixerrors').click(function(){
@@ -629,6 +653,7 @@ $(function(){
             type: "warning",
             showCancelButton: true,
             confirmButtonText: "Start Operation",
+            closeOnConfirm: false,
             html: true
             },
             function(){
@@ -663,7 +688,7 @@ $(function(){
                 if($('#snap-hideprogress').is(':checked')) {
                     $('#arg14').val('-q');
                 }
-                $('#snapcommands').submit();
+                confirmCommandAndSubmit();
             });
     });
     $('#crontest').click(function(){
@@ -714,7 +739,7 @@ $(function(){
                 if (\$('#snap-hideprogress').is(':checked')) {
                     \$('#arg13').val('-q');
                 }
-                \$('#snapcommands').submit();
+                confirmCommandAndSubmit();
             });
             \$('#$snap_parity_disk[1]-fix').click(function() {
                 swal({
@@ -723,6 +748,7 @@ $(function(){
                     type: "warning",
                     showCancelButton: true,
                     confirmButtonText: "Start Operation",
+                    closeOnConfirm: false,
                     html: true
                 }, function() {
                     \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
@@ -753,7 +779,7 @@ $(function(){
                     if (\$('#snap-hideprogress').is(':checked')) {
                         \$('#arg13').val('-q');
                     }
-                    \$('#snapcommands').submit();
+                    confirmCommandAndSubmit();
                 });
             });
             \$('#$snap_parity_disk[1]-fixmissing').click(function() {
@@ -763,6 +789,7 @@ $(function(){
                     type: "warning",
                     showCancelButton: true,
                     confirmButtonText: "Start Operation",
+                    closeOnConfirm: false,
                     html: true
                 }, function() {
                     \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
@@ -794,7 +821,7 @@ $(function(){
                     if (\$('#snap-hideprogress').is(':checked')) {
                         \$('#arg14').val('-q');
                     }
-                    \$('#snapcommands').submit();
+                    confirmCommandAndSubmit();
                 });
             });
 END;
@@ -830,7 +857,7 @@ END;
                 if (\$('#snap-hideprogress').is(':checked')) {
                     \$('#arg13').val('-q');
                 }
-                \$('#snapcommands').submit();
+                confirmCommandAndSubmit();
             });
             \$('#$snap_data_disk[1]-fix').click(function() {
                 swal({
@@ -839,6 +866,7 @@ END;
                     type: "warning",
                     showCancelButton: true,
                     confirmButtonText: "Start Operation",
+                    closeOnConfirm: false,
                     html: true
                 }, function() {
                     \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
@@ -869,7 +897,7 @@ END;
                     if (\$('#snap-hideprogress').is(':checked')) {
                         \$('#arg13').val('-q');
                     }
-                    \$('#snapcommands').submit();
+                    confirmCommandAndSubmit();
                 });
             });
             \$('#$snap_data_disk[1]-fixmissing').click(function() {
@@ -879,6 +907,7 @@ END;
                     type: "warning",
                     showCancelButton: true,
                     confirmButtonText: "Start Operation",
+                    closeOnConfirm: false,
                     html: true
                 }, function() {
                     \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
@@ -910,7 +939,7 @@ END;
                     if (\$('#snap-hideprogress').is(':checked')) {
                         \$('#arg14').val('-q');
                     }
-                    \$('#snapcommands').submit();
+                    confirmCommandAndSubmit();
                 });
             });
 END;
