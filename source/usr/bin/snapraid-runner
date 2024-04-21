@@ -71,7 +71,7 @@ signal_exit_snapraid() {
     echo "$OPTIME" >/var/lib/snapraid/logs/lastfinish
     echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     echo "### ${BIGOP} INTERRUPTED [SIGTERM]: ${OPTIME} (after ${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-    cp "/var/lib/snapraid/logs/snaplog" "/var/lib/snapraid/logs/${1}-${LOGTIME}.log"
+    cp "/var/lib/snapraid/logs/snaplog" "/var/lib/snapraid/logs/${CMD[1]}-${LOGTIME}.log"
     
     exit 1
 }
@@ -88,10 +88,10 @@ echo "### ${BIGOP} STARTED: ${OPTIME}" 2>&1 | tee /var/lib/snapraid/logs/snaplog
 echo "### RUNNING: ${SNAP_BIN} -c ${SNAP_CONF} ${CMD[*]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog 
 echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
 
-trap 'signal_exit_snapraid $1' SIGTERM
+trap signal_exit_snapraid SIGTERM
 
 if [ "${CMD[1]}" == "sync" ]; then
-    $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${1}-${LOGTIME}.raw.log" "${CMD[@]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+    $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${CMD[1]}-${LOGTIME}.raw.log" "${CMD[@]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     CMDRET="${PIPESTATUS[0]}"
     
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
@@ -110,7 +110,7 @@ if [ "${CMD[1]}" == "sync" ]; then
         [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} ${BIGOP} Failure" -d "SnapRAID operation ${BIGOP} finished with errors (after ${DURATION} ${DURATIONUNIT})." -i "alert"
     fi
 elif [ "${CMD[1]}" == "scrub" ]; then
-    $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${1}-${LOGTIME}.raw.log" "${CMD[@]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+    $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${CMD[1]}-${LOGTIME}.raw.log" "${CMD[@]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     CMDRET="${PIPESTATUS[0]}"
     
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
@@ -127,7 +127,7 @@ elif [ "${CMD[1]}" == "scrub" ]; then
         [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} ${BIGOP} Failure" -d "SnapRAID operation ${BIGOP} finished with errors (after ${DURATION} ${DURATIONUNIT})." -i "alert"
     fi
 elif [ "${CMD[1]}" == "diff" ]; then
-    $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${1}-${LOGTIME}.raw.log" "${CMD[@]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+    $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${CMD[1]}-${LOGTIME}.raw.log" "${CMD[@]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     CMDRET="${PIPESTATUS[0]}"
     
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
@@ -149,7 +149,7 @@ elif [ "${CMD[1]}" == "diff" ]; then
         [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} ${BIGOP} Failure" -d "SnapRAID operation ${BIGOP} finished with errors (after ${DURATION} ${DURATIONUNIT})." -i "alert"
     fi
 else
-    $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${1}-${LOGTIME}.raw.log" "${CMD[@]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+    $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${CMD[1]}-${LOGTIME}.raw.log" "${CMD[@]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     CMDRET="${PIPESTATUS[0]}"
     
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
@@ -169,4 +169,4 @@ fi
 echo "$OPTIME" >/var/lib/snapraid/logs/lastfinish
 echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
 echo "### ${BIGOP} FINISHED: ${OPTIME} (after ${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-cp "/var/lib/snapraid/logs/snaplog" "/var/lib/snapraid/logs/${1}-${LOGTIME}.log"
+cp "/var/lib/snapraid/logs/snaplog" "/var/lib/snapraid/logs/${CMD[1]}-${LOGTIME}.log"
