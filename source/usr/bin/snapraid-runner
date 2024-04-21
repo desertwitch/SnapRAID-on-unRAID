@@ -34,6 +34,7 @@ if [ "${CMD[0]}" == "0" ] || [ "${CMD[0]}" == "1" ]; then
 else
     echo "A small helper program to log SnapRAID's output into UNRAID's web interface."
     echo "Usage: snapraid-runner 0|1 status|diff|sync|scrub|list|dup|up|down|touch|smart|pool|check|fix [options]"
+    echo "-- 0|1: send notifications once operation completes (0:no/1:yes)"
     exit 1
 fi
 
@@ -46,6 +47,7 @@ done
 if [ ! "$CMDKNOWN" == "YES" ]; then
     echo "A small helper program to log SnapRAID's output into UNRAID's web interface."
     echo "Usage: snapraid-runner 0|1 status|diff|sync|scrub|list|dup|up|down|touch|smart|pool|check|fix [options]"
+    echo "-- 0|1: send notifications once operation completes (0:no/1:yes)"
     exit 1
 fi
 
