@@ -65,7 +65,7 @@ MEASURESTART=$(date +%s)
 
 echo "$OPTIME" >/var/lib/snapraid/logs/laststart
 echo "### ${BIGOP} STARTED: ${OPTIME}" 2>&1 | tee /var/lib/snapraid/logs/snaplog
-echo "### $SNAP_BIN -c $SNAP_CONF -l \"/var/lib/snapraid/logs/${1}-${LOGTIME}.raw.log\" $* >>/var/lib/snapraid/logs/snaplog 2>&1" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog 
+echo "### COMMAND: snapraid $*" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog 
 echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
 
 trap 'signal_exit_snapraid $1' SIGTERM
