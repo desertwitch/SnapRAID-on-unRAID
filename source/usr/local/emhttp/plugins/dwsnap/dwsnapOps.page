@@ -89,6 +89,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     <input type="hidden" id="arg12" name="#arg[12]" value="">
     <input type="hidden" id="arg13" name="#arg[13]" value="">
     <input type="hidden" id="arg14" name="#arg[14]" value="">
+    <input type="hidden" id="arg15" name="#arg[15]" value="">
 
     <input class="snaprun snaphelptip" type="button" id="snapstatus" value="STATUS" title="Prints a summary of the state of the disk array. It includes information about the parity fragmentation, how long the blocks have not been checked, and all the recorded silent errors encountered while scrubbing. Note that the information presented refers to the last time you ran SYNC. Later modifications to the array data are not taken into account.">
     <input class="snaprun snaphelptip" type="button" id="snaplist" value="LIST" title="Lists all the files contained in the array at the time of the last SYNC.">
@@ -116,7 +117,12 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     </span><br>
 
     <div id="snapopts"> 
-        <strong>Advanced Parameters:</strong>
+        <strong>Notifications:</strong>
+        <input type="checkbox" id="snap-notifyme" value="snap-notifyme">
+        <label for="snap-notifyme" title="Sends a notification when the manually started array operation finishes (using Unraid's system-wide notification settings)." class="snaphelptip">Send Notification When Array Operation Completes</label>
+        <span style="float:right;margin-right:10px"><a href="https://www.snapraid.it/manual" target="_blank" title="SnapRAID User Manual"><i class="fa fa-file-text-o"></i> User Manual</a> / <a href="https://www.snapraid.it/faq" target="_blank" title="SnapRAID FAQ"><i class="fa fa-question-circle-o"></i> Frequently Asked Questions</a></span>
+        
+        <br><strong>Advanced Parameters:</strong>
         <input type="checkbox" id="snapcheck-auditonly" value="snapcheck-auditonly">
         <label for="snapcheck-auditonly" title="In CHECK verifies the hash of the files without doing any kind of check on the parity data. If you are interested in checking only the file data this option can speed up a lot the checking process." class="snaphelptip">(Check) Audit Only</label>
         <input type="checkbox" id="snapsync-forcefull" value="snapsync-forcefull">
@@ -125,8 +131,8 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
         <label for="snapsync-forcezero" title="Forces the insecure operation of syncing a file with zero size that before was not. If SnapRAID detects a such condition, it stops proceeding unless you specify this option." class="snaphelptip">(Sync) Force Zero</label>
         <input type="checkbox" id="snapsync-forceempty" value="snapsync-forceempty">
         <label for="snapsync-forceempty" title="Forces the insecure operation of syncing a disk with all the files missing. If SnapRAID detects that all the files originally present in the disk are missing or rewritten, it stops proceeding unless you specify this option." class="snaphelptip">(Sync) Force Empty</label>
-        <span style="float:right;margin-right:10px"><a href="https://www.snapraid.it/manual" target="_blank" title="SnapRAID User Manual"><i class="fa fa-file-text-o"></i> User Manual</a> / <a href="https://www.snapraid.it/faq" target="_blank" title="SnapRAID FAQ"><i class="fa fa-question-circle-o"></i> Frequently Asked Questions</a></span>
-        
+        <span style="float:right;margin-right:10px;">Please always read and understand the manual before acting!</span>
+       
         <br><strong>Scrub Selectors:</strong>
         <input type="radio" id="snapscrub-plan" name="snapscrub-opts" value="snapscrub-plan">
         (Scrub) <input type="text" id="snapscrub-age" class="snaphelptip" style="margin-right:0px;width:60px;" title="Scrub blocks not scrubbed for (x) days." placeholder="days">
@@ -137,15 +143,14 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
         <span title="Scrub only blocks previously marked as bad." class="snaphelptip">(Scrub) Bad Blocks</span>
         <input type="radio" id="snapscrub-full" name="snapscrub-opts" value="snapscrub-full">
         <span title="Scrub the whole array." class="snaphelptip">(Scrub) Full</span>
-        <span style="float:right;margin-right:10px;">Please always read and understand the manual before acting!</span>
-        
+        <span style="float:right;margin-right:10px;font-size:1.1rem;">SnapRAID &copy; 2011-2024 Andrea Mazzoleni - All Rights Reserved</span>
+            
         <br><strong>Screen Settings:</strong>
         <input type="checkbox" id="snap-hideprogress" value="snap-hideprogress">
         <label for="snap-hideprogress" title="Hides any repetitive progress output." class="snaphelptip">Hide Progress Output</label>
         <span style="margin-left:10px"><strong>Interrupt Thresholds:</strong></span>
         (Sync/Scrub) <input type="text" id="snapsync-errorlimit" class="narrow snaphelptip" title="Sets a new error limit before stopping execution. By default SnapRAID stops if it encounters more than 100 Input/Output errors, meaning that a disk is likely dying." placeholder="I/O Error Limit">
-        <span style="float:right;margin-right:10px;font-size:1.1rem;">SnapRAID &copy; 2011-2024 Andrea Mazzoleni - All Rights Reserved</span>
-        
+ 
         <br><strong>Data Subset Selection Filters:</strong>
         (Check/Fix) <input type="text" id="snapfix-pattern" class="narrow snaphelptip" title="Run a command only on a certain set of data." placeholder="Path Pattern (See Manual)">
         (Check/Fix) <input type="text" id="snapfix-diskpattern" title="Run a command only on a certain disk." class="narrow snaphelptip" placeholder="Disk Name">
@@ -300,7 +305,7 @@ function toggleSnapLogs() {
 }
 function confirmCommandAndSubmit() {
     var snapCmd = "snapraid ";
-    $('[id^="arg"]').each(function() {
+    $('[id^="arg"]:not(:first)').each(function() {
         if($(this).val()) {
             snapCmd += $(this).val() + " ";
         }
@@ -322,91 +327,121 @@ $(function(){
 
     $('#snapstatus').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-        $('#arg1').val('status');
+        if($('#snap-notifyme').is(':checked')) {
+            $('#arg1').val('1');
+        } else {
+            $('#arg1').val('0');
+        }
+        $('#arg2').val('status');
         $('#snapcommands').submit();
     });
     $('#snaplist').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-        $('#arg1').val('list');
+        if($('#snap-notifyme').is(':checked')) {
+            $('#arg1').val('1');
+        } else {
+            $('#arg1').val('0');
+        }
+        $('#arg2').val('list');
         $('#snapcommands').submit();
     });
     $('#snapdiff').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-        $('#arg1').val('diff');
+        if($('#snap-notifyme').is(':checked')) {
+            $('#arg1').val('1');
+        } else {
+            $('#arg1').val('0');
+        }
+        $('#arg2').val('diff');
         if($('#snapcheck-forceuuid').is(':checked')) {
-            $('#arg2').val('-U');
+            $('#arg3').val('-U');
         }
         $('#snapcommands').submit();
     });
     $('#snapdup').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-        $('#arg1').val('dup');
+        if($('#snap-notifyme').is(':checked')) {
+            $('#arg1').val('1');
+        } else {
+            $('#arg1').val('0');
+        }
+        $('#arg2').val('dup');
         $('#snapcommands').submit();
     });
     $('#snapscrub').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-        $('#arg1').val('scrub');
+        if($('#snap-notifyme').is(':checked')) {
+            $('#arg1').val('1');
+        } else {
+            $('#arg1').val('0');
+        }
+        $('#arg2').val('scrub');
         if($('#snapscrub-bad').is(':checked')) {
-            $('#arg2').val('-p');
-            $('#arg3').val('bad');
+            $('#arg3').val('-p');
+            $('#arg4').val('bad');
         }
         else if($('#snapscrub-new').is(':checked')) {
-            $('#arg2').val('-p');
-            $('#arg3').val('new');
+            $('#arg3').val('-p');
+            $('#arg4').val('new');
         }
         else if($('#snapscrub-full').is(':checked')) {
-            $('#arg2').val('-p');
-            $('#arg3').val('full');
+            $('#arg3').val('-p');
+            $('#arg4').val('full');
         }
         else if($('#snapscrub-plan').is(':checked')) {
            if($('#snapscrub-percent').val()) {
-                $('#arg2').val('-p');
-                $('#arg3').val($('#snapscrub-percent').val());
+                $('#arg3').val('-p');
+                $('#arg4').val($('#snapscrub-percent').val());
             }
             if($('#snapscrub-age').val()) {
-                $('#arg4').val('-o');
-                $('#arg5').val($('#snapscrub-age').val());
+                $('#arg5').val('-o');
+                $('#arg6').val($('#snapscrub-age').val());
             }
         }
         if($('#snapsync-errorlimit').val()) {
-            $('#arg6').val('-L');
-            $('#arg7').val($('#snapsync-errorlimit').val());
+            $('#arg7').val('-L');
+            $('#arg8').val($('#snapsync-errorlimit').val());
         }
         if($('#snap-hideprogress').is(':checked')) {
-            $('#arg8').val('-q');
+            $('#arg9').val('-q');
         }
         confirmCommandAndSubmit();
     });
     $('#snapcheck').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-        $('#arg1').val('check');
+        if($('#snap-notifyme').is(':checked')) {
+            $('#arg1').val('1');
+        } else {
+            $('#arg1').val('0');
+        }
+        $('#arg2').val('check');
         if($('#snapcheck-auditonly').is(':checked')) {
-            $('#arg2').val('-a');
+            $('#arg3').val('-a');
         }
         if($('#snapfix-diskpattern').val()) {
-            $('#arg3').val('-d');
-            $('#arg4').val($('#snapfix-diskpattern').val());
+            $('#arg4').val('-d');
+            $('#arg5').val($('#snapfix-diskpattern').val());
         }
         if($('#snapfix-pattern').val()) {
-            $('#arg5').val('-f');
-            $('#arg6').val($('#snapfix-pattern').val());
+            $('#arg6').val('-f');
+            $('#arg7').val($('#snapfix-pattern').val());
         }
         if($('#snapcheck-forceuuid').is(':checked')) {
-            $('#arg7').val('-U');
+            $('#arg8').val('-U');
         }
         if($('#snapsync-forcenocopy').is(':checked')) {
-            $('#arg8').val('-N');
+            $('#arg9').val('-N');
         }
         if($('#snapfix-blkstart').val()) {
-            $('#arg9').val('-S');
-            $('#arg10').val($('#snapfix-blkstart').val());
+            $('#arg10').val('-S');
+            $('#arg11').val($('#snapfix-blkstart').val());
         }
         if($('#snapfix-blkcount').val()) {
-            $('#arg11').val('-B');
-            $('#arg12').val($('#snapfix-blkcount').val());
+            $('#arg12').val('-B');
+            $('#arg13').val($('#snapfix-blkcount').val());
         }
         if($('#snap-hideprogress').is(':checked')) {
-            $('#arg13').val('-q');
+            $('#arg14').val('-q');
         }
         confirmCommandAndSubmit();
     });
@@ -470,49 +505,12 @@ $(function(){
             },
             function(){
                 $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-                $('#arg1').val('sync');
-                if($('#snapsync-forcezero').is(':checked')) {
-                    $('#arg2').val('-Z');
+                if($('#snap-notifyme').is(':checked')) {
+                    $('#arg1').val('1');
+                } else {
+                    $('#arg1').val('0');
                 }
-                if($('#snapsync-forceempty').is(':checked')) {
-                    $('#arg3').val('-E');
-                }
-                if($('#snapsync-forcefull').is(':checked')) {
-                    $('#arg4').val('-F');
-                }
-                if($('#snapsync-forcerealloc').is(':checked')) {
-                    $('#arg5').val('-R');
-                }
-                if($('#snapcheck-forceuuid').is(':checked')) {
-                    $('#arg6').val('-U');
-                }
-                if($('#snapsync-forcenocopy').is(':checked')) {
-                    $('#arg7').val('-N');
-                }
-                if($('#snapsync-errorlimit').val()) {
-                    $('#arg8').val('-L');
-                    $('#arg9').val($('#snapsync-errorlimit').val());
-                }
-                if($('#snap-hideprogress').is(':checked')) {
-                    $('#arg10').val('-q');
-                }
-                confirmCommandAndSubmit();
-            });
-    });  
-    $('#snaphashedsync').click(function(){
-        swal({
-            title: "Destructive Operation",
-            text: "This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.<br><br>Updates the parity information. All the modified files in the disk array are read, and the corresponding parity data is updated.<br><br>Takes a snapshot, the base for all recoveries.<br><br>A preliminary hashing phase of all the new data, to have an additional verification before the actual parity computation, is performed.",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Start Operation",
-            closeOnConfirm: false,
-            html: true
-            },
-            function(){
-                $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-                $('#arg1').val('sync');
-                $('#arg2').val('-h');
+                $('#arg2').val('sync');
                 if($('#snapsync-forcezero').is(':checked')) {
                     $('#arg3').val('-Z');
                 }
@@ -540,6 +538,53 @@ $(function(){
                 }
                 confirmCommandAndSubmit();
             });
+    });  
+    $('#snaphashedsync').click(function(){
+        swal({
+            title: "Destructive Operation",
+            text: "This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.<br><br>Updates the parity information. All the modified files in the disk array are read, and the corresponding parity data is updated.<br><br>Takes a snapshot, the base for all recoveries.<br><br>A preliminary hashing phase of all the new data, to have an additional verification before the actual parity computation, is performed.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Start Operation",
+            closeOnConfirm: false,
+            html: true
+            },
+            function(){
+                $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
+                if($('#snap-notifyme').is(':checked')) {
+                    $('#arg1').val('1');
+                } else {
+                    $('#arg1').val('0');
+                }
+                $('#arg2').val('sync');
+                $('#arg3').val('-h');
+                if($('#snapsync-forcezero').is(':checked')) {
+                    $('#arg4').val('-Z');
+                }
+                if($('#snapsync-forceempty').is(':checked')) {
+                    $('#arg5').val('-E');
+                }
+                if($('#snapsync-forcefull').is(':checked')) {
+                    $('#arg6').val('-F');
+                }
+                if($('#snapsync-forcerealloc').is(':checked')) {
+                    $('#arg7').val('-R');
+                }
+                if($('#snapcheck-forceuuid').is(':checked')) {
+                    $('#arg8').val('-U');
+                }
+                if($('#snapsync-forcenocopy').is(':checked')) {
+                    $('#arg9').val('-N');
+                }
+                if($('#snapsync-errorlimit').val()) {
+                    $('#arg10').val('-L');
+                    $('#arg11').val($('#snapsync-errorlimit').val());
+                }
+                if($('#snap-hideprogress').is(':checked')) {
+                    $('#arg12').val('-q');
+                }
+                confirmCommandAndSubmit();
+            });
     });
     $('#snaptouch').click(function(){
         swal({
@@ -553,7 +598,12 @@ $(function(){
             },
             function(){
                 $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-                $('#arg1').val('touch');
+                if($('#snap-notifyme').is(':checked')) {
+                    $('#arg1').val('1');
+                } else {
+                    $('#arg1').val('0');
+                }
+                $('#arg2').val('touch');
                 confirmCommandAndSubmit();
             });
     });
@@ -569,34 +619,39 @@ $(function(){
             },
             function(){
                 $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-                $('#arg1').val('fix');
+                if($('#snap-notifyme').is(':checked')) {
+                    $('#arg1').val('1');
+                } else {
+                    $('#arg1').val('0');
+                }
+                $('#arg2').val('fix');
                 if($('#snapfix-diskpattern').val()) {
-                    $('#arg2').val('-d');
-                    $('#arg3').val($('#snapfix-diskpattern').val());
+                    $('#arg3').val('-d');
+                    $('#arg4').val($('#snapfix-diskpattern').val());
                 }
                 if($('#snapfix-pattern').val()) {
-                    $('#arg4').val('-f');
-                    $('#arg5').val($('#snapfix-pattern').val());
+                    $('#arg5').val('-f');
+                    $('#arg6').val($('#snapfix-pattern').val());
                 }
                 if($('#snapcheck-forceuuid').is(':checked')) {
-                    $('#arg6').val('-U');
+                    $('#arg7').val('-U');
                 }
                 if($('#snapfix-forcedevice').is(':checked')) {
-                    $('#arg7').val('-D');
+                    $('#arg8').val('-D');
                 }
                 if($('#snapsync-forcenocopy').is(':checked')) {
-                    $('#arg8').val('-N');
+                    $('#arg9').val('-N');
                 }
                 if($('#snapfix-blkstart').val()) {
-                    $('#arg9').val('-S');
-                    $('#arg10').val($('#snapfix-blkstart').val());
+                    $('#arg10').val('-S');
+                    $('#arg11').val($('#snapfix-blkstart').val());
                 }
                 if($('#snapfix-blkcount').val()) {
-                    $('#arg11').val('-B');
-                    $('#arg12').val($('#snapfix-blkcount').val());
+                    $('#arg12').val('-B');
+                    $('#arg13').val($('#snapfix-blkcount').val());
                 }
                 if($('#snap-hideprogress').is(':checked')) {
-                    $('#arg13').val('-q');
+                    $('#arg14').val('-q');
                 }
                 confirmCommandAndSubmit();
             });
@@ -613,35 +668,40 @@ $(function(){
             },
             function(){
                 $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-                $('#arg1').val('fix');
-                $('#arg2').val('-m');
+                if($('#snap-notifyme').is(':checked')) {
+                    $('#arg1').val('1');
+                } else {
+                    $('#arg1').val('0');
+                }
+                $('#arg2').val('fix');
+                $('#arg3').val('-m');
                 if($('#snapfix-diskpattern').val()) {
-                    $('#arg3').val('-d');
-                    $('#arg4').val($('#snapfix-diskpattern').val());
+                    $('#arg4').val('-d');
+                    $('#arg5').val($('#snapfix-diskpattern').val());
                 }
                 if($('#snapfix-pattern').val()) {
-                    $('#arg5').val('-f');
-                    $('#arg6').val($('#snapfix-pattern').val());
+                    $('#arg6').val('-f');
+                    $('#arg7').val($('#snapfix-pattern').val());
                 }
                 if($('#snapcheck-forceuuid').is(':checked')) {
-                    $('#arg7').val('-U');
+                    $('#arg8').val('-U');
                 }
                 if($('#snapfix-forcedevice').is(':checked')) {
-                    $('#arg8').val('-D');
+                    $('#arg9').val('-D');
                 }
                 if($('#snapsync-forcenocopy').is(':checked')) {
-                    $('#arg9').val('-N');
+                    $('#arg10').val('-N');
                 }
                 if($('#snapfix-blkstart').val()) {
-                    $('#arg10').val('-S');
-                    $('#arg11').val($('#snapfix-blkstart').val());
+                    $('#arg11').val('-S');
+                    $('#arg12').val($('#snapfix-blkstart').val());
                 }
                 if($('#snapfix-blkcount').val()) {
-                    $('#arg12').val('-B');
-                    $('#arg13').val($('#snapfix-blkcount').val());
+                    $('#arg13').val('-B');
+                    $('#arg14').val($('#snapfix-blkcount').val());
                 }
                 if($('#snap-hideprogress').is(':checked')) {
-                    $('#arg14').val('-q');
+                    $('#arg15').val('-q');
                 }
                 confirmCommandAndSubmit();
             });
@@ -658,35 +718,40 @@ $(function(){
             },
             function(){
                 $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-                $('#arg1').val('fix');
-                $('#arg2').val('-e');
+                if($('#snap-notifyme').is(':checked')) {
+                    $('#arg1').val('1');
+                } else {
+                    $('#arg1').val('0');
+                }
+                $('#arg2').val('fix');
+                $('#arg3').val('-e');
                 if($('#snapfix-diskpattern').val()) {
-                    $('#arg3').val('-d');
-                    $('#arg4').val($('#snapfix-diskpattern').val());
+                    $('#arg4').val('-d');
+                    $('#arg5').val($('#snapfix-diskpattern').val());
                 }
                 if($('#snapfix-pattern').val()) {
-                    $('#arg5').val('-f');
-                    $('#arg6').val($('#snapfix-pattern').val());
+                    $('#arg6').val('-f');
+                    $('#arg7').val($('#snapfix-pattern').val());
                 }
                 if($('#snapcheck-forceuuid').is(':checked')) {
-                    $('#arg7').val('-U');
+                    $('#arg8').val('-U');
                 }
                 if($('#snapfix-forcedevice').is(':checked')) {
-                    $('#arg8').val('-D');
+                    $('#arg9').val('-D');
                 }
                 if($('#snapsync-forcenocopy').is(':checked')) {
-                    $('#arg9').val('-N');
+                    $('#arg10').val('-N');
                 }
                 if($('#snapfix-blkstart').val()) {
-                    $('#arg10').val('-S');
-                    $('#arg11').val($('#snapfix-blkstart').val());
+                    $('#arg11').val('-S');
+                    $('#arg12').val($('#snapfix-blkstart').val());
                 }
                 if($('#snapfix-blkcount').val()) {
-                    $('#arg12').val('-B');
-                    $('#arg13').val($('#snapfix-blkcount').val());
+                    $('#arg13').val('-B');
+                    $('#arg14').val($('#snapfix-blkcount').val());
                 }
                 if($('#snap-hideprogress').is(':checked')) {
-                    $('#arg14').val('-q');
+                    $('#arg15').val('-q');
                 }
                 confirmCommandAndSubmit();
             });
@@ -712,32 +777,37 @@ $(function(){
             echo <<<END
             \$('#$snap_parity_disk[1]-check').click(function() {
                 \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-                \$('#arg1').val('check');
-                \$('#arg2').val('-d');
-                \$('#arg3').val('$snap_parity_disk[1]');
+                if(\$('#snap-notifyme').is(':checked')) {
+                    \$('#arg1').val('1');
+                } else {
+                    \$('#arg1').val('0');
+                }
+                \$('#arg2').val('check');
+                \$('#arg3').val('-d');
+                \$('#arg4').val('$snap_parity_disk[1]');
                 if (\$('#snapcheck-auditonly').is(':checked')) {
-                    \$('#arg4').val('-a');
+                    \$('#arg5').val('-a');
                 }
                 if (\$('#snapfix-pattern').val()) {
-                    \$('#arg5').val('-f');
-                    \$('#arg6').val(\$('#snapfix-pattern').val());
+                    \$('#arg6').val('-f');
+                    \$('#arg7').val(\$('#snapfix-pattern').val());
                 }
                 if (\$('#snapcheck-forceuuid').is(':checked')) {
-                    \$('#arg7').val('-U');
+                    \$('#arg8').val('-U');
                 }
                 if (\$('#snapsync-forcenocopy').is(':checked')) {
-                    \$('#arg8').val('-N');
+                    \$('#arg9').val('-N');
                 }
                 if (\$('#snapfix-blkstart').val()) {
-                    \$('#arg9').val('-S');
-                    \$('#arg10').val(\$('#snapfix-blkstart').val());
+                    \$('#arg10').val('-S');
+                    \$('#arg11').val(\$('#snapfix-blkstart').val());
                 }
                 if (\$('#snapfix-blkcount').val()) {
-                    \$('#arg11').val('-B');
-                    \$('#arg12').val(\$('#snapfix-blkcount').val());
+                    \$('#arg12').val('-B');
+                    \$('#arg13').val(\$('#snapfix-blkcount').val());
                 }
                 if (\$('#snap-hideprogress').is(':checked')) {
-                    \$('#arg13').val('-q');
+                    \$('#arg14').val('-q');
                 }
                 confirmCommandAndSubmit();
             });
@@ -752,49 +822,12 @@ $(function(){
                     html: true
                 }, function() {
                     \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-                    \$('#arg1').val('fix');
-                    \$('#arg2').val('-d');
-                    \$('#arg3').val('$snap_parity_disk[1]');
-                    if (\$('#snapfix-pattern').val()) {
-                        \$('#arg4').val('-f');
-                        \$('#arg5').val(\$('#snapfix-pattern').val());
+                    if(\$('#snap-notifyme').is(':checked')) {
+                        \$('#arg1').val('1');
+                    } else {
+                        \$('#arg1').val('0');
                     }
-                    if (\$('#snapcheck-forceuuid').is(':checked')) {
-                        \$('#arg6').val('-U');
-                    }
-                    if (\$('#snapfix-forcedevice').is(':checked')) {
-                        \$('#arg7').val('-D');
-                    }
-                    if (\$('#snapsync-forcenocopy').is(':checked')) {
-                        \$('#arg8').val('-N');
-                    }
-                    if (\$('#snapfix-blkstart').val()) {
-                        \$('#arg9').val('-S');
-                        \$('#arg10').val(\$('#snapfix-blkstart').val());
-                    }
-                    if (\$('#snapfix-blkcount').val()) {
-                        \$('#arg11').val('-B');
-                        \$('#arg12').val(\$('#snapfix-blkcount').val());
-                    }
-                    if (\$('#snap-hideprogress').is(':checked')) {
-                        \$('#arg13').val('-q');
-                    }
-                    confirmCommandAndSubmit();
-                });
-            });
-            \$('#$snap_parity_disk[1]-fixmissing').click(function() {
-                swal({
-                    title: "Destructive Operation",
-                    text: "This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.<br><br>Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it's reverted to the stored snapshot. This command doesn't differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC.<br><br>Only processes missing or deleted files on the selected disk.",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "Start Operation",
-                    closeOnConfirm: false,
-                    html: true
-                }, function() {
-                    \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-                    \$('#arg1').val('fix');
-                    \$('#arg2').val('-m');
+                    \$('#arg2').val('fix');
                     \$('#arg3').val('-d');
                     \$('#arg4').val('$snap_parity_disk[1]');
                     if (\$('#snapfix-pattern').val()) {
@@ -824,38 +857,90 @@ $(function(){
                     confirmCommandAndSubmit();
                 });
             });
+            \$('#$snap_parity_disk[1]-fixmissing').click(function() {
+                swal({
+                    title: "Destructive Operation",
+                    text: "This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.<br><br>Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it's reverted to the stored snapshot. This command doesn't differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC.<br><br>Only processes missing or deleted files on the selected disk.",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Start Operation",
+                    closeOnConfirm: false,
+                    html: true
+                }, function() {
+                    \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
+                    if(\$('#snap-notifyme').is(':checked')) {
+                        \$('#arg1').val('1');
+                    } else {
+                        \$('#arg1').val('0');
+                    }
+                    \$('#arg2').val('fix');
+                    \$('#arg3').val('-m');
+                    \$('#arg4').val('-d');
+                    \$('#arg5').val('$snap_parity_disk[1]');
+                    if (\$('#snapfix-pattern').val()) {
+                        \$('#arg6').val('-f');
+                        \$('#arg7').val(\$('#snapfix-pattern').val());
+                    }
+                    if (\$('#snapcheck-forceuuid').is(':checked')) {
+                        \$('#arg8').val('-U');
+                    }
+                    if (\$('#snapfix-forcedevice').is(':checked')) {
+                        \$('#arg9').val('-D');
+                    }
+                    if (\$('#snapsync-forcenocopy').is(':checked')) {
+                        \$('#arg10').val('-N');
+                    }
+                    if (\$('#snapfix-blkstart').val()) {
+                        \$('#arg11').val('-S');
+                        \$('#arg12').val(\$('#snapfix-blkstart').val());
+                    }
+                    if (\$('#snapfix-blkcount').val()) {
+                        \$('#arg13').val('-B');
+                        \$('#arg14').val(\$('#snapfix-blkcount').val());
+                    }
+                    if (\$('#snap-hideprogress').is(':checked')) {
+                        \$('#arg15').val('-q');
+                    }
+                    confirmCommandAndSubmit();
+                });
+            });
 END;
         }
         foreach ($dwsnap_data_disks as $snap_data_disk) {
             echo <<<END
             \$('#$snap_data_disk[1]-check').click(function() {
                 \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-                \$('#arg1').val('check');
-                \$('#arg2').val('-d');
-                \$('#arg3').val('$snap_data_disk[1]');
+                if(\$('#snap-notifyme').is(':checked')) {
+                    \$('#arg1').val('1');
+                } else {
+                    \$('#arg1').val('0');
+                }
+                \$('#arg2').val('check');
+                \$('#arg3').val('-d');
+                \$('#arg4').val('$snap_data_disk[1]');
                 if (\$('#snapcheck-auditonly').is(':checked')) {
-                    \$('#arg4').val('-a');
+                    \$('#arg5').val('-a');
                 }
                 if (\$('#snapfix-pattern').val()) {
-                    \$('#arg5').val('-f');
-                    \$('#arg6').val(\$('#snapfix-pattern').val());
+                    \$('#arg6').val('-f');
+                    \$('#arg7').val(\$('#snapfix-pattern').val());
                 }
                 if (\$('#snapcheck-forceuuid').is(':checked')) {
-                    \$('#arg7').val('-U');
+                    \$('#arg8').val('-U');
                 }
                 if (\$('#snapsync-forcenocopy').is(':checked')) {
-                    \$('#arg8').val('-N');
+                    \$('#arg9').val('-N');
                 }
                 if (\$('#snapfix-blkstart').val()) {
-                    \$('#arg9').val('-S');
-                    \$('#arg10').val(\$('#snapfix-blkstart').val());
+                    \$('#arg10').val('-S');
+                    \$('#arg11').val(\$('#snapfix-blkstart').val());
                 }
                 if (\$('#snapfix-blkcount').val()) {
-                    \$('#arg11').val('-B');
-                    \$('#arg12').val(\$('#snapfix-blkcount').val());
+                    \$('#arg12').val('-B');
+                    \$('#arg13').val(\$('#snapfix-blkcount').val());
                 }
                 if (\$('#snap-hideprogress').is(':checked')) {
-                    \$('#arg13').val('-q');
+                    \$('#arg14').val('-q');
                 }
                 confirmCommandAndSubmit();
             });
@@ -870,49 +955,12 @@ END;
                     html: true
                 }, function() {
                     \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-                    \$('#arg1').val('fix');
-                    \$('#arg2').val('-d');
-                    \$('#arg3').val('$snap_data_disk[1]');
-                    if (\$('#snapfix-pattern').val()) {
-                        \$('#arg4').val('-f');
-                        \$('#arg5').val(\$('#snapfix-pattern').val());
+                    if(\$('#snap-notifyme').is(':checked')) {
+                        \$('#arg1').val('1');
+                    } else {
+                        \$('#arg1').val('0');
                     }
-                    if (\$('#snapcheck-forceuuid').is(':checked')) {
-                        \$('#arg6').val('-U');
-                    }
-                    if (\$('#snapfix-forcedevice').is(':checked')) {
-                        \$('#arg7').val('-D');
-                    }
-                    if (\$('#snapsync-forcenocopy').is(':checked')) {
-                        \$('#arg8').val('-N');
-                    }
-                    if (\$('#snapfix-blkstart').val()) {
-                        \$('#arg9').val('-S');
-                        \$('#arg10').val(\$('#snapfix-blkstart').val());
-                    }
-                    if (\$('#snapfix-blkcount').val()) {
-                        \$('#arg11').val('-B');
-                        \$('#arg12').val(\$('#snapfix-blkcount').val());
-                    }
-                    if (\$('#snap-hideprogress').is(':checked')) {
-                        \$('#arg13').val('-q');
-                    }
-                    confirmCommandAndSubmit();
-                });
-            });
-            \$('#$snap_data_disk[1]-fixmissing').click(function() {
-                swal({
-                    title: "Destructive Operation",
-                    text: "This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.<br><br>Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it's reverted to the stored snapshot. This command doesn't differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC.<br><br>Only processes missing or deleted files on the selected disk.",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "Start Operation",
-                    closeOnConfirm: false,
-                    html: true
-                }, function() {
-                    \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
-                    \$('#arg1').val('fix');
-                    \$('#arg2').val('-m');
+                    \$('#arg2').val('fix');
                     \$('#arg3').val('-d');
                     \$('#arg4').val('$snap_data_disk[1]');
                     if (\$('#snapfix-pattern').val()) {
@@ -938,6 +986,53 @@ END;
                     }
                     if (\$('#snap-hideprogress').is(':checked')) {
                         \$('#arg14').val('-q');
+                    }
+                    confirmCommandAndSubmit();
+                });
+            });
+            \$('#$snap_data_disk[1]-fixmissing').click(function() {
+                swal({
+                    title: "Destructive Operation",
+                    text: "This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.<br><br>Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it's reverted to the stored snapshot. This command doesn't differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC.<br><br>Only processes missing or deleted files on the selected disk.",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Start Operation",
+                    closeOnConfirm: false,
+                    html: true
+                }, function() {
+                    \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
+                    if(\$('#snap-notifyme').is(':checked')) {
+                        \$('#arg1').val('1');
+                    } else {
+                        \$('#arg1').val('0');
+                    }
+                    \$('#arg2').val('fix');
+                    \$('#arg3').val('-m');
+                    \$('#arg4').val('-d');
+                    \$('#arg5').val('$snap_data_disk[1]');
+                    if (\$('#snapfix-pattern').val()) {
+                        \$('#arg6').val('-f');
+                        \$('#arg7').val(\$('#snapfix-pattern').val());
+                    }
+                    if (\$('#snapcheck-forceuuid').is(':checked')) {
+                        \$('#arg8').val('-U');
+                    }
+                    if (\$('#snapfix-forcedevice').is(':checked')) {
+                        \$('#arg9').val('-D');
+                    }
+                    if (\$('#snapsync-forcenocopy').is(':checked')) {
+                        \$('#arg10').val('-N');
+                    }
+                    if (\$('#snapfix-blkstart').val()) {
+                        \$('#arg11').val('-S');
+                        \$('#arg12').val(\$('#snapfix-blkstart').val());
+                    }
+                    if (\$('#snapfix-blkcount').val()) {
+                        \$('#arg13').val('-B');
+                        \$('#arg14').val(\$('#snapfix-blkcount').val());
+                    }
+                    if (\$('#snap-hideprogress').is(':checked')) {
+                        \$('#arg15').val('-q');
                     }
                     confirmCommandAndSubmit();
                 });

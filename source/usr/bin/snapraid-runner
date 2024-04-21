@@ -18,18 +18,34 @@ umask 000
 SNAP_BIN="/usr/bin/snapraid"
 SNAP_CONF="/etc/snapraid.conf"
 CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
+CMD=("$@")
 
 [ -e "$CONFIG" ] && source $CONFIG
 
+NOTIFY_BIN="/usr/local/emhttp/plugins/dynamix/scripts/notify"
+HOST="$(echo "$HOSTNAME" | awk '{print toupper($0)}')"
+EVENT="SnapRAID Operation"
+SUBJECT="[${HOST}] SnapRAID"
+
+if [ "${CMD[0]}" -eq 0 ] || [ "${CMD[0]}" -eq 1 ]; then
+    if [ "${CMD[0]}" -eq 1 ]; then
+        NOTIFYDONE="YES"
+    fi
+else
+    echo "A small helper program to log SnapRAID's output into UNRAID's web interface."
+    echo "Usage: snapraid-runner 0|1 status|diff|sync|scrub|list|dup|up|down|touch|smart|pool|check|fix [options]"
+    exit 1
+fi
+
 KNOWNCMDS=("status" "diff" "sync" "scrub" "list" "dup" "up" "down" "touch" "smart" "pool" "check" "fix")
 for KNOWNCMD in "${KNOWNCMDS[@]}"; do
-    if [ "$1" == "$KNOWNCMD" ]; then
+    if [ "${CMD[1]}" == "$KNOWNCMD" ]; then
         CMDKNOWN="YES"
     fi
 done
 if [ ! "$CMDKNOWN" == "YES" ]; then
     echo "A small helper program to log SnapRAID's output into UNRAID's web interface."
-    echo "Usage: snapraid-runner status|diff|sync|scrub|list|dup|up|down|touch|smart|pool|check|fix [options]"
+    echo "Usage: snapraid-runner 0|1 status|diff|sync|scrub|list|dup|up|down|touch|smart|pool|check|fix [options]"
     exit 1
 fi
 
@@ -56,7 +72,7 @@ signal_exit_snapraid() {
     exit 1
 }
 
-BIGOP="$(echo "$1" | awk '{print toupper($0)}')"
+BIGOP="$(echo "${CMD[1]}" | awk '{print toupper($0)}')"
 
 rm -f /var/lib/snapraid/logs/lastfinish
 LOGTIME=$(date +"%Y%m%d-%H%M%S")
@@ -65,47 +81,60 @@ MEASURESTART=$(date +%s)
 
 echo "$OPTIME" >/var/lib/snapraid/logs/laststart
 echo "### ${BIGOP} STARTED: ${OPTIME}" 2>&1 | tee /var/lib/snapraid/logs/snaplog
-echo "### RUNNING: ${SNAP_BIN} -c ${SNAP_CONF} $*" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog 
+echo "### RUNNING: ${SNAP_BIN} -c ${SNAP_CONF} ${CMD[*]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog 
 echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
 
 trap 'signal_exit_snapraid $1' SIGTERM
 
-if [ "$1" == "sync" ]; then
-    $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${1}-${LOGTIME}.raw.log" "$@" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+if [ "${CMD[1]}" == "sync" ]; then
+    $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${1}-${LOGTIME}.raw.log" "${CMD[@]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     CMDRET="${PIPESTATUS[0]}"
     if [ "$CMDRET" -eq 0 ]; then
         OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
         echo "$OPTIME" > /boot/config/plugins/dwsnap/config/lastsync
         rm -f /boot/config/plugins/dwsnap/config/syncneeded
         rm -f /boot/config/plugins/dwsnap/config/lastnodiff
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} ${BIGOP} Finished" -d "SnapRAID operation ${BIGOP} finished with success." -i "normal"
     else
         OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} ${BIGOP} Failure" -d "SnapRAID operation ${BIGOP} finished with errors." -i "alert"
     fi
-elif [ "$1" == "scrub" ]; then
-    $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${1}-${LOGTIME}.raw.log" "$@" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+elif [ "${CMD[1]}" == "scrub" ]; then
+    $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${1}-${LOGTIME}.raw.log" "${CMD[@]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     CMDRET="${PIPESTATUS[0]}"
     if [ "$CMDRET" -eq 0 ]; then
         OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
         echo "$OPTIME" > /boot/config/plugins/dwsnap/config/lastscrub
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} ${BIGOP} Finished" -d "SnapRAID operation ${BIGOP} finished with success." -i "normal"
     else
         OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} ${BIGOP} Failure" -d "SnapRAID operation ${BIGOP} finished with errors." -i "alert"
     fi
-elif [ "$1" == "diff" ]; then
-    $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${1}-${LOGTIME}.raw.log" "$@" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+elif [ "${CMD[1]}" == "diff" ]; then
+    $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${1}-${LOGTIME}.raw.log" "${CMD[@]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     CMDRET="${PIPESTATUS[0]}"
     if [ "$CMDRET" -eq 0 ]; then
         OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
         echo "$OPTIME" >/boot/config/plugins/dwsnap/config/lastnodiff
         rm -f /boot/config/plugins/dwsnap/config/syncneeded
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} ${BIGOP} Finished" -d "SnapRAID operation ${BIGOP} finished with success." -i "normal"
     elif [ "$CMDRET" -eq 2 ]; then
         OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
         touch /boot/config/plugins/dwsnap/config/syncneeded
         rm -f /boot/config/plugins/dwsnap/config/lastnodiff
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} ${BIGOP} Warnings" -d "SnapRAID operation ${BIGOP} finished with warnings. Data differences were found (not in sync)." -i "warning"
     else
         OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} ${BIGOP} Failure" -d "SnapRAID operation ${BIGOP} finished with errors." -i "alert"
     fi
 else
-    $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${1}-${LOGTIME}.raw.log" "$@" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog 
+    $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${1}-${LOGTIME}.raw.log" "${CMD[@]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+    CMDRET="${PIPESTATUS[0]}"
+    if [ "$CMDRET" -eq 0 ]; then
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} ${BIGOP} Finished" -d "SnapRAID operation ${BIGOP} finished with success." -i "normal"
+    else
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} ${BIGOP} Failure" -d "SnapRAID operation ${BIGOP} finished with errors." -i "alert"
+    fi
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
 fi
 
