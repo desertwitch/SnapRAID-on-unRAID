@@ -318,8 +318,14 @@ function confirmCommandAndSubmit() {
         confirmButtonText: "Start Operation",
         html: true
         },
-        function(){
-            $('#snapcommands').submit();
+        function(isConfirmed){
+            if(isConfirmed) {
+                $('#snapcommands').submit();
+            } else {
+                $('[id^="arg"]').each(function() {
+                    $(this).val("");
+                });  
+            }
         });
 }
 $(function(){
