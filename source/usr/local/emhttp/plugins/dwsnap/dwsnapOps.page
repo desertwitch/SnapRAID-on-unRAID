@@ -2,7 +2,7 @@ Menu="OtherSettings"
 Type="xmenu"
 Title="SnapRAID"
 Icon="scissors"
-Tag="cubes"
+Tag="scissors"
 Markdown="false"
 ---
 <?
