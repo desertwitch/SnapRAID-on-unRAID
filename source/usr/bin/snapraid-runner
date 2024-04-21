@@ -67,10 +67,12 @@ signal_exit_snapraid() {
     DURATIONUNIT="seconds"
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="minutes"
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hours"
+
     echo "$OPTIME" >/var/lib/snapraid/logs/lastfinish
     echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     echo "### ${BIGOP} INTERRUPTED [SIGTERM]: ${OPTIME} (after ${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     cp "/var/lib/snapraid/logs/snaplog" "/var/lib/snapraid/logs/${1}-${LOGTIME}.log"
+    
     exit 1
 }
 
