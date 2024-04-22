@@ -147,7 +147,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
             
         <br><strong>Screen Settings:</strong>
         <input type="radio" id="snap-verbose" name="snap-verbosity" value="snap-verbose">
-        <span title="Shows more information on the output screen." class="snaphelptip">Verbose</span>
+        <span title="Prints more information on the screen." class="snaphelptip">Verbose</span>
         <input type="radio" id="snap-hideprogress" name="snap-verbosity" value="snap-hideprogress">
         <span title="Hides any repetitive progress output." class="snaphelptip">Hide Progress Output</span>
         <span style="margin-left:10px"><strong>Interrupt Thresholds:</strong></span>
