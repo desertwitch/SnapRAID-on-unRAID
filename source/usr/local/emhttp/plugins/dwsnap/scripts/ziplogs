@@ -18,5 +18,5 @@ PKGTIME="$(date '+%Y%m%d%H%M%S' 2>/dev/null)"
 PKGNAME="snapraid-logs-${PKGTIME}.zip"
 
 rm -f /tmp/snapraid-logs-*.zip
-(cd /var/lib/snapraid/logs && zip -r "/tmp/${PKGNAME}" . 2>&1)
+(cd /var/lib/snapraid/logs && zip -R "/tmp/${PKGNAME}" '*.log' 2>&1)
 [ -f "/tmp/${PKGNAME}" ] && echo "DONE:/tmp/${PKGNAME}" 2>&1
