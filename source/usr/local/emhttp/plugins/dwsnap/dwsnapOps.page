@@ -151,18 +151,18 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
         <input type="radio" id="snap-verbose" name="snap-verbosity" value="snap-verbose">
         <span title="Shows more information on the output screen." class="snaphelptip">Verbose</span>
         <span style="margin-left:10px"><strong>Interrupt Thresholds:</strong></span>
-        (Sync/Scrub) <input type="text" id="snapsync-errorlimit" class="narrow snaphelptip" title="Sets a new error limit before stopping execution. By default SnapRAID stops if it encounters more than 100 Input/Output errors, meaning that a disk is likely dying." placeholder="I/O Error Limit">
+        (Sync/Scrub) <input type="text" id="snapsync-errorlimit" class="snaphelptip" style="width:140px;" title="Sets a new error limit before stopping execution. By default SnapRAID stops if it encounters more than 100 Input/Output errors, meaning that a disk is likely dying." placeholder="I/O Error Limit">
  
         <br><strong>Data Subset Selection Filters:</strong>
-        (Check/Fix) <input type="text" id="snapfix-pattern" class="narrow snaphelptip" title="Run a command only on a certain set of data." placeholder="Path Pattern (See Manual)">
+        (Check/Fix) <input type="text" id="snapfix-pattern" class="snaphelptip" style="width:205px;" title="Run a command only on a certain set of data." placeholder="Path Pattern (See Manual)">
         (Check/Fix) <input type="text" id="snapfix-diskpattern" title="Run a command only on a certain disk." class="narrow snaphelptip" placeholder="Disk Name">
 
         <br><strong>Recovery Parameters for Experts:</strong>
         <input type="checkbox" id="snapsync-forcerealloc" value="snapsync-forcerealloc">
         <label for="snapsync-forcerealloc" title="In SYNC forces a full reallocation of files and rebuild of the parity. This option can be used to completely reallocate all the files removing the fragmentation, but reusing the hashes present in the content file to validate data. This option is for experts only, and it's highly recommended to not use it. You DO NOT have data protection during the SYNC operation." class="snaphelptip">(Sync) Force Realloc</label>
         <span style="margin-left:10px;">
-        (Check/Fix) <input type="text" id="snapfix-blkstart" class="snaphelptip" style="margin-right:0px;width:100px;" title="Starts the processing from the specified block number. It could be useful to retry to check or fix some specific block, in case of a damaged disk. It's present mainly for advanced manual recovering." placeholder="Block Start">
-        (Check/Fix) <input type="text" id="snapfix-blkcount" class="snaphelptip" style="margin-right:0px;width:100px;" title="Processes only the specified number of blocks. It's present mainly for advanced manual recovering." placeholder="Block Count">
+        (Check/Fix) <input type="text" id="snapfix-blkstart" class="snaphelptip" style="margin-right:0px;width:110px;" title="Starts the processing from the specified block number. It could be useful to retry to check or fix some specific block, in case of a damaged disk. It's present mainly for advanced manual recovering." placeholder="Block Start">
+        (Check/Fix) <input type="text" id="snapfix-blkcount" class="snaphelptip" style="margin-right:0px;width:110px;" title="Processes only the specified number of blocks. It's present mainly for advanced manual recovering." placeholder="Block Count">
         </span>
 
         <br><strong>Operational Safety Overrides:</strong>
