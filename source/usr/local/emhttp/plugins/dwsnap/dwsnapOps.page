@@ -146,8 +146,10 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
         <span style="float:right;margin-right:10px;font-size:1.1rem;">SnapRAID &copy; 2011-2024 Andrea Mazzoleni - All Rights Reserved</span>
             
         <br><strong>Screen Settings:</strong>
-        <input type="checkbox" id="snap-hideprogress" value="snap-hideprogress">
-        <label for="snap-hideprogress" title="Hides any repetitive progress output." class="snaphelptip">Hide Progress Output</label>
+        <input type="radio" id="snap-hideprogress" name="snap-verbosity" value="snap-hideprogress">
+        <span title="Hides any repetitive progress output." class="snaphelptip">Hide Progress Output</span>
+        <input type="radio" id="snap-verbose" name="snap-verbosity" value="snap-verbose">
+        <span title="Shows more information on the output screen." class="snaphelptip">Verbose</span>
         <span style="margin-left:10px"><strong>Interrupt Thresholds:</strong></span>
         (Sync/Scrub) <input type="text" id="snapsync-errorlimit" class="narrow snaphelptip" title="Sets a new error limit before stopping execution. By default SnapRAID stops if it encounters more than 100 Input/Output errors, meaning that a disk is likely dying." placeholder="I/O Error Limit">
  
@@ -411,6 +413,8 @@ $(function(){
         }
         if($('#snap-hideprogress').is(':checked')) {
             $('#arg9').val('-q');
+        } else if ($('#snap-verbose').is(':checked')) {
+            $('#arg9').val('-v');
         }
         confirmCommandAndSubmit();
     });
@@ -449,6 +453,8 @@ $(function(){
         }
         if($('#snap-hideprogress').is(':checked')) {
             $('#arg14').val('-q');
+        } else if ($('#snap-verbose').is(':checked')) {
+            $('#arg14').val('-v');
         }
         confirmCommandAndSubmit();
     });
@@ -542,6 +548,8 @@ $(function(){
                 }
                 if($('#snap-hideprogress').is(':checked')) {
                     $('#arg11').val('-q');
+                } else if ($('#snap-verbose').is(':checked')) {
+                    $('#arg11').val('-v');
                 }
                 confirmCommandAndSubmit();
             });
@@ -589,6 +597,8 @@ $(function(){
                 }
                 if($('#snap-hideprogress').is(':checked')) {
                     $('#arg12').val('-q');
+                } else if ($('#snap-verbose').is(':checked')) {
+                    $('#arg12').val('-v');
                 }
                 confirmCommandAndSubmit();
             });
@@ -659,6 +669,8 @@ $(function(){
                 }
                 if($('#snap-hideprogress').is(':checked')) {
                     $('#arg14').val('-q');
+                } else if ($('#snap-verbose').is(':checked')) {
+                    $('#arg14').val('-v');
                 }
                 confirmCommandAndSubmit();
             });
@@ -709,6 +721,8 @@ $(function(){
                 }
                 if($('#snap-hideprogress').is(':checked')) {
                     $('#arg15').val('-q');
+                } else if ($('#snap-verbose').is(':checked')) {
+                    $('#arg15').val('-v');
                 }
                 confirmCommandAndSubmit();
             });
@@ -759,6 +773,8 @@ $(function(){
                 }
                 if($('#snap-hideprogress').is(':checked')) {
                     $('#arg15').val('-q');
+                } else if ($('#snap-verbose').is(':checked')) {
+                    $('#arg15').val('-v');
                 }
                 confirmCommandAndSubmit();
             });
@@ -815,6 +831,8 @@ $(function(){
                 }
                 if (\$('#snap-hideprogress').is(':checked')) {
                     \$('#arg14').val('-q');
+                } else if (\$('#snap-verbose').is(':checked')) {
+                    \$('#arg14').val('-v');
                 }
                 confirmCommandAndSubmit();
             });
@@ -860,6 +878,8 @@ $(function(){
                     }
                     if (\$('#snap-hideprogress').is(':checked')) {
                         \$('#arg14').val('-q');
+                    } else if (\$('#snap-verbose').is(':checked')) {
+                        \$('#arg14').val('-v');
                     }
                     confirmCommandAndSubmit();
                 });
@@ -907,6 +927,8 @@ $(function(){
                     }
                     if (\$('#snap-hideprogress').is(':checked')) {
                         \$('#arg15').val('-q');
+                    } else if (\$('#snap-verbose').is(':checked')) {
+                        \$('#arg15').val('-v');
                     }
                     confirmCommandAndSubmit();
                 });
@@ -948,6 +970,8 @@ END;
                 }
                 if (\$('#snap-hideprogress').is(':checked')) {
                     \$('#arg14').val('-q');
+                } else if (\$('#snap-verbose').is(':checked')) {
+                    \$('#arg14').val('-v');
                 }
                 confirmCommandAndSubmit();
             });
@@ -993,6 +1017,8 @@ END;
                     }
                     if (\$('#snap-hideprogress').is(':checked')) {
                         \$('#arg14').val('-q');
+                    } else if (\$('#snap-verbose').is(':checked')) {
+                        \$('#arg14').val('-v');
                     }
                     confirmCommandAndSubmit();
                 });
@@ -1040,6 +1066,8 @@ END;
                     }
                     if (\$('#snap-hideprogress').is(':checked')) {
                         \$('#arg15').val('-q');
+                    } else if (\$('#snap-verbose').is(':checked')) {
+                        \$('#arg15').val('-v');
                     }
                     confirmCommandAndSubmit();
                 });
