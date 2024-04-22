@@ -18,6 +18,11 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2024.04.22
+- new: show different levels of parity accordingly in GUI array overview table
+- new: show and confirm actual command line before running any destructive operation on array
+- new: added additional parameters to GUI for advanced recovery options and safeguard overrides
+- new: added a notification setting to GUI to be notified of completion of manual array operations
 ###2024.04.20
 - release note: welcome to the first version of the SnapRAID package.
 </CHANGES>
