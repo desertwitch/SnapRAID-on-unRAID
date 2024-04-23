@@ -181,7 +181,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     <?
         $snap_syncneeded_html = "";
         if(file_exists("/boot/config/plugins/dwsnap/config/syncneeded")) {
-            $snap_syncneeded_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='Differences between the last sync (snapshot) state and the data present in the array were found. If these changes were intentional, a SYNC operation is required for any changes to also be protected in case of disk failure. If these changes were not intentional, a FIX operation can help revert the array data back to the last sync (snapshot) state.'><i class='fa fa-exclamation-triangle'></i> <strong>Data Differences (Not in Sync)</strong></span>";
+            $snap_syncneeded_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='Differences between the last sync (snapshot) state and the data present in the array were found. If these changes were intentional, a SYNC operation is required for any such changes to also be protected in case of disk failure. If these changes were not intentional, a FIX operation can help revert the array data back to the last sync (snapshot) state.'><i class='fa fa-exclamation-triangle'></i> <strong>Data Differences (Not in Sync)</strong></span>";
         }
 
         $snap_all_disks_mounted = true;
