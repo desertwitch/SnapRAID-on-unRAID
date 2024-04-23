@@ -133,7 +133,7 @@ $(function(){
             var Title = 'Configuration ';
 
             if(data.success)
-                swal({title: Title+'Saved', text: data.saved, timer: 3500, showConfirmButton: false, type:'success' },
+                swal({title: Title+'Saved', text: data.saved, timer: 2000, showConfirmButton: false, type:'success' },
                 function(){
                    location = '/Settings/dwsnapOps'; 
                 });
