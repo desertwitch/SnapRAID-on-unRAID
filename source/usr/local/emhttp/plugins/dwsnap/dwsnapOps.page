@@ -189,14 +189,14 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
 
             $snap_all_disks_mounted = true;
             foreach ($dwsnap_parity_disks as $snap_parity_disk) {
-                $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab | grep " . $snap_parity_disk[2] . " | awk '{print $3}'") ?? "-");
+                $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab 2>/dev/null | grep " . $snap_parity_disk[2] . " 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-");
                 if($snap_disk_fs == "-") { $snap_all_disks_mounted = false; }
             }
             foreach ($dwsnap_data_disks as $snap_data_disk) {
-                $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab | grep " . $snap_data_disk[2] . " | awk '{print $3}'") ?? "-");
+                $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab 2>/dev/null | grep " . $snap_data_disk[2] . " 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-");
                 if($snap_disk_fs == "-") { $snap_all_disks_mounted = false; }
             }
-            
+
             if(!$snap_all_disks_mounted) {
                 $snap_unmounted_disks_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='At least one configured disk is not online and/or mounted, please check both your configuration and the actual disks for issues.'><i class='fa fa-exclamation-triangle'></i> <strong>Missing Disk(s)</strong></span>";
             }
@@ -215,11 +215,11 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
             <?
             if(!empty($dwsnap_parity_disks) || !empty($dwsnap_data_disks)) {
                 foreach ($dwsnap_parity_disks as $snap_parity_disk){
-                    $snap_disk_fs = trim(htmlspecialchars(shell_exec("cat /etc/mtab | grep " . $snap_parity_disk[2] . " | awk '{print $3}'") ?? "-"));
-                    $snap_disk_util = trim(htmlspecialchars(shell_exec("df -h | grep " . $snap_parity_disk[2] . " | awk '{print $5}'") ?? "-"));
-                    $snap_disk_free = trim(htmlspecialchars(shell_exec("df -h | grep " . $snap_parity_disk[2] . " | awk '{print $4}'") ?? "-"));
-                    $snap_disk_used = trim(htmlspecialchars(shell_exec("df -h | grep " . $snap_parity_disk[2] . " | awk '{print $3}'") ?? "-"));
-                    $snap_disk_total = trim(htmlspecialchars(shell_exec("df -h | grep " . $snap_parity_disk[2] . " | awk '{print $2}'") ?? "-"));
+                    $snap_disk_fs = trim(htmlspecialchars(shell_exec("cat /etc/mtab 2>/dev/null | grep " . $snap_parity_disk[2] . " 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
+                    $snap_disk_util = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep " . $snap_parity_disk[2] . " 2>/dev/null | awk '{print $5}' 2>/dev/null") ?? "-"));
+                    $snap_disk_free = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep " . $snap_parity_disk[2] . " 2>/dev/null | awk '{print $4}' 2>/dev/null") ?? "-"));
+                    $snap_disk_used = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep " . $snap_parity_disk[2] . " 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
+                    $snap_disk_total = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep " . $snap_parity_disk[2] . " 2>/dev/null | awk '{print $2}' 2>/dev/null") ?? "-"));
                     $snap_disk_status = ($snap_disk_fs !== "-") ? "<i class='fa fa-check green-text'></i>" : "<i class='fa fa-times red-text'></i>"; 
                     $snap_parity_level = strtoupper($snap_parity_disk[1]);
                     echo <<<END
@@ -246,11 +246,11 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
 END;
                 }
                 foreach ($dwsnap_data_disks as $snap_data_disk){
-                    $snap_disk_fs = trim(htmlspecialchars(shell_exec("cat /etc/mtab | grep " . $snap_data_disk[2] . " | awk '{print $3}'") ?? "-"));
-                    $snap_disk_util = trim(htmlspecialchars(shell_exec("df -h | grep " . $snap_data_disk[2] . " | awk '{print $5}'") ?? "-"));
-                    $snap_disk_free = trim(htmlspecialchars(shell_exec("df -h | grep " . $snap_data_disk[2] . " | awk '{print $4}'") ?? "-"));
-                    $snap_disk_used = trim(htmlspecialchars(shell_exec("df -h | grep " . $snap_data_disk[2] . " | awk '{print $3}'") ?? "-"));
-                    $snap_disk_total = trim(htmlspecialchars(shell_exec("df -h | grep " . $snap_data_disk[2] . " | awk '{print $2}'") ?? "-"));
+                    $snap_disk_fs = trim(htmlspecialchars(shell_exec("cat /etc/mtab 2>/dev/null | grep " . $snap_data_disk[2] . " 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
+                    $snap_disk_util = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep " . $snap_data_disk[2] . " 2>/dev/null | awk '{print $5}' 2>/dev/null") ?? "-"));
+                    $snap_disk_free = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep " . $snap_data_disk[2] . " 2>/dev/null | awk '{print $4}' 2>/dev/null") ?? "-"));
+                    $snap_disk_used = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep " . $snap_data_disk[2] . " 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
+                    $snap_disk_total = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep " . $snap_data_disk[2] . " 2>/dev/null | awk '{print $2}' 2>/dev/null") ?? "-"));
                     $snap_disk_status = ($snap_disk_fs !== "-") ? "<i class='fa fa-check green-text'></i>" : "<i class='fa fa-times red-text'></i>"; 
                     echo <<<END
                     <tr>

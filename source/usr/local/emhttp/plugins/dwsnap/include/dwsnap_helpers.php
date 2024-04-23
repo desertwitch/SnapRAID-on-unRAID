@@ -91,11 +91,11 @@ function dwsnap_getFooterHTML() {
         if(!empty($dwsnap_parity_disks) && !empty($dwsnap_data_disks)) {
             $snap_all_disks_available = true;
             foreach ($dwsnap_parity_disks as $snap_parity_disk){
-                $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab | grep " . $snap_parity_disk[2] . " | awk '{print $3}'") ?? "-");
+                $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab 2>/dev/null | grep " . $snap_parity_disk[2] . " 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-");
                 if($snap_disk_fs == "-") { $snap_all_disks_available = false; }
             }
             foreach ($dwsnap_data_disks as $snap_data_disk){
-                $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab | grep " . $snap_data_disk[2] . " | awk '{print $3}'") ?? "-");
+                $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab 2>/dev/null | grep " . $snap_data_disk[2] . " 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-");
                 if($snap_disk_fs == "-") { $snap_all_disks_available = false; }
             }
             if($snap_all_disks_available) {
