@@ -108,10 +108,10 @@ if [ "$TOUCH" == "enable" ]; then
     echo "### CRON -- Checking for files to be touched..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     TIMESTATUS=$($SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/cron-${LOGTIME}/01a-status-${LOGTIME}.log" status 2>&1 | tee -a /var/lib/snapraid/logs/snaplog | grep -E 'You have [1-9][0-9]* files with( a)? zero sub-second timestamp\.')
     if [ -n "$TIMESTATUS" ]; then
-        echo "### CRON -- Touching detected files..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+        echo "### CRON -- Touching selected files..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
         if ! $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/cron-${LOGTIME}/01b-touch-${LOGTIME}.log" $QUIETARG touch >>/var/lib/snapraid/logs/snaplog 2>&1; then
-            echo "### CRON -- Touching detected files has failed... exiting" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-            FAILUREMSG="The touching of detected files has failed - check LOG."
+            echo "### CRON -- Touching selected files has failed... exiting" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+            FAILUREMSG="The touching of selected files has failed - check LOG."
             failure_exit_cron
         fi
         echo "### CRON -- Touch has finished, proceeding..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog    
