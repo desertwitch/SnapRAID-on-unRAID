@@ -143,7 +143,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
         <span title="Scrub only blocks previously marked as bad." class="snaphelptip">(Scrub) Bad Blocks</span>
         <input type="radio" id="snapscrub-full" name="snapscrub-opts" value="snapscrub-full">
         <span title="Scrub the whole array." class="snaphelptip">(Scrub) Full</span>
-        <span style="float:right;margin-right:10px;font-size:1.1rem;">SnapRAID &copy; 2011-2024 Andrea Mazzoleni - All Rights Reserved</span>
+        <span style="float:right;margin-right:10px;">SnapRAID &copy; 2011-2024 Andrea Mazzoleni - All Rights Reserved</span>
             
         <br><strong>Screen Settings:</strong>
         <input type="radio" id="snap-verbose" name="snap-verbosity" value="snap-verbose">
