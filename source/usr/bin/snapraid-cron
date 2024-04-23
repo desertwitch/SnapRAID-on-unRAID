@@ -114,6 +114,7 @@ if [ "$TOUCH" == "enable" ]; then
             FAILUREMSG="The touching of detected files has failed - check LOG."
             failure_exit_cron
         fi
+        echo "### CRON -- Touch has finished, proceeding..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog    
     else
         echo "### CRON -- No files to be touched, proceeding..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     fi
@@ -219,6 +220,7 @@ if [ "$SYNC" == "enable" ]; then
                 rm -f /boot/config/plugins/dwsnap/config/syncneeded
                 rm -f /boot/config/plugins/dwsnap/config/lastnodiff
             fi
+            echo "### CRON -- Prehashed Sync has finished, proceeding..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
         else
             echo "### CRON -- Syncing...${FORCEZEROMSG}${SYNCERRORMSG}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
             if ! $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/cron-${LOGTIME}/03-sync-${LOGTIME}.log" $QUIETARG $FORCEZEROARG $SYNCERRORARG sync >>/var/lib/snapraid/logs/snaplog 2>&1; then
@@ -231,8 +233,8 @@ if [ "$SYNC" == "enable" ]; then
                 rm -f /boot/config/plugins/dwsnap/config/syncneeded
                 rm -f /boot/config/plugins/dwsnap/config/lastnodiff
             fi
+            echo "### CRON -- Sync has finished, proceeding..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
         fi
-        echo "### CRON -- Sync has finished, proceeding..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     fi
     SUCCESSOPS+=("SYNC")
 else
