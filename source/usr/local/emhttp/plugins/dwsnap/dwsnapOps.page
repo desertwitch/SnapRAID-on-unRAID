@@ -27,8 +27,6 @@ Markdown="false"
 require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 $snap_lastsync_html = "-";
 $snap_lastscrub_html = "-";
-$snap_syncneeded_html = "";
-if(file_exists("/boot/config/plugins/dwsnap/config/syncneeded")) { $snap_syncneeded_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='Differences between the last sync (snapshot) state and the data currently present in the array were found. If these changes were intentional, a SYNC operation is required for any changes to also be protected in case of disk failure. If these changes were not intentional, a FIX operation can help revert the array data back to the last sync (snapshot) state.'><i class='fa fa-exclamation-triangle'></i> <strong>Data Differences (Not in Sync)</strong></span>"; }
 if($dwsnap_lastsync !== "-") { $snap_lastsync_html = $dwsnap_lastsync . " (<strong>" . dwsnap_time_ago($dwsnap_lastsync) . "</strong>)"; } else { $snap_lastsync_html = "<span class='orange-text'><strong>Never</strong></span>"; }
 if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<strong>" . dwsnap_time_ago($dwsnap_lastscrub) . "</strong>)"; } else { $snap_lastscrub_html = "<span class='orange-text'><strong>Never</strong></span>"; }
 ?>
@@ -180,11 +178,31 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     <div>A failing drive may write bogus data before Unraid disables it (if at all), and SnapRAID may fill that gap to recover from corruption using a sync state from before that.</div>
     
     <br>
+    <?
+        $snap_syncneeded_html = "";
+        if(file_exists("/boot/config/plugins/dwsnap/config/syncneeded")) {
+            $snap_syncneeded_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='Differences between the last sync (snapshot) state and the data currently present in the array were found. If these changes were intentional, a SYNC operation is required for any changes to also be protected in case of disk failure. If these changes were not intentional, a FIX operation can help revert the array data back to the last sync (snapshot) state.'><i class='fa fa-exclamation-triangle'></i> <strong>Data Differences (Not in Sync)</strong></span>";
+        }
 
+        $snap_all_disks_mounted = true;
+        foreach ($dwsnap_parity_disks as $snap_parity_disk) {
+            $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab | grep " . $snap_parity_disk[2] . " | awk '{print $3}'") ?? "-");
+            if($snap_disk_fs == "-") { $snap_all_disks_mounted = false; }
+        }
+        foreach ($dwsnap_data_disks as $snap_data_disk) {
+            $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab | grep " . $snap_data_disk[2] . " | awk '{print $3}'") ?? "-");
+            if($snap_disk_fs == "-") { $snap_all_disks_mounted = false; }
+        }
+        
+        $snap_unmounted_disks_html = "";
+        if(!$snap_all_disks_mounted) {
+            $snap_unmounted_disks_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='At least one configured disk is not online and/or mounted, please check both your configuration and the actual disks for issues.'><i class='fa fa-exclamation-triangle'></i> <strong>Missing Disk(s)</strong></span>";
+        }
+    ?>
     <table class="tablesorter snapdisks">
         <thead>
             <tr>
-                <th colspan="10"><strong>ARRAY OVERVIEW WITH INDIVIDUAL DISKS</strong> <span style="text-transform: none;float:right;"><?=$snap_syncneeded_html?><span style="margin-left:10px;"><strong>Last Sync:</strong> <?=$snap_lastsync_html?></span><span style="margin-left:10px;"><strong>Last Scrub:</strong> <?=$snap_lastscrub_html?></span></span></th>
+                <th colspan="10"><strong>ARRAY OVERVIEW WITH INDIVIDUAL DISKS</strong> <span style="text-transform: none;float:right;"><?=$snap_unmounted_disks_html?><?=$snap_syncneeded_html?><span style="margin-left:10px;"><strong>Last Sync:</strong> <?=$snap_lastsync_html?></span><span style="margin-left:10px;"><strong>Last Scrub:</strong> <?=$snap_lastscrub_html?></span></span></th>
             </tr>
             <tr>
                  <th><strong>Disk Type</strong></th><th><strong>Disk Name</strong></th><th><strong>Mountpoint</strong></th><th><strong>Mounted</strong></th><th><strong>FileSystem</strong></th><th><strong>Total Space</strong></th><th><strong>Used Space</strong></th><th><strong>Free Space</strong></th><th><strong>Utilization</strong></th><th><strong>Disk-Specific Operations</strong><br><span style="font-size:x-small;"><em>Options Selected From Above Apply</em></span></th>
