@@ -25,8 +25,8 @@ Markdown="false"
 $snap_lastlog = shell_exec("ls -Art /var/lib/snapraid/logs/*.log 2>/dev/null | tail -n 1 2>/dev/null") ?? false;
 ?>
 <link type="text/css" rel="stylesheet" href="<?=autov('/webGui/styles/jquery.filetree.css');?>">
-<link type="text/css" rel="stylesheet" href="<?=autov('/plugins/dwsnap/css/codemirror.css');?>">
-<link type="text/css" rel="stylesheet" href="<?=autov('/plugins/dwsnap/css/dracula.css');?>">
+<link type="text/css" rel="stylesheet" href="<?=autov('/plugins/dwsnap/css/codemirror.min.css');?>">
+<link type="text/css" rel="stylesheet" href="<?=autov('/plugins/dwsnap/css/dracula.min.css');?>">
 <style type="text/css">
     .CodeMirror { border: 1px solid #eee; cursor: text; margin-top: 15px; margin-bottom: 10px; }
     .CodeMirror pre.CodeMirror-placeholder { color: #999; }
@@ -46,9 +46,9 @@ $snap_lastlog = shell_exec("ls -Art /var/lib/snapraid/logs/*.log 2>/dev/null | t
 </form>
 
 <script src="<?=autov('/webGui/javascript/jquery.filetree.js');?>"></script>
-<script src="<?=autov('/plugins/dwsnap/js/codemirror.js');?>"></script>
-<script src="<?=autov('/plugins/dwsnap/js/autorefresh.js');?>"></script>
-<script src="<?=autov('/plugins/dwsnap/js/properties.js');?>"></script>
+<script src="<?=autov('/plugins/dwsnap/js/codemirror.min.js');?>"></script>
+<script src="<?=autov('/plugins/dwsnap/js/autorefresh.min.js');?>"></script>
+<script src="<?=autov('/plugins/dwsnap/js/properties.min.js');?>"></script>
 
 <script type="text/javascript">
 $(function(){
