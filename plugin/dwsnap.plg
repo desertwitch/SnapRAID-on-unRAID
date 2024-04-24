@@ -18,6 +18,13 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2024.04.24
+- new: clarified logs written by maintenance script some more
+- new: include only .log files when downloading log package from GUI
+- new: now automatically reload GUI when array configuration was changed
+- new: also inform user how long operation was running in case of interruption
+- new: show warning in GUI when one or more of the disks are missing or unmounted
+- new: minified js and css dependencies to reduce overall loading times and package size
 ###2024.04.22
 - new: show different levels of parity accordingly in GUI array overview table
 - new: show and confirm actual command line before running any destructive operation on array
