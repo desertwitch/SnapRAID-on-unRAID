@@ -4,7 +4,7 @@ _An experimental plugin for advanced users installing SnapRAID onto UNRAID syste
 
 This project is in active development and considered experimental.
 
-This project continues to be licensed under GPL2, GPL3 and/or MIT (where applicable, see respective source code files).
+Licensed under GPL2, GPL3 and/or MIT (where applicable, see respective source code files).
 
 SnapRAID: https://github.com/amadvance/snapraid (© 2011-2024 Andrea Mazzoleni)
 
