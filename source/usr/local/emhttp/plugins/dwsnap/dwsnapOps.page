@@ -39,6 +39,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     word-break: normal !important;
     word-wrap: normal !important;
     white-space: pre !important;
+    font-size: 1.1rem;
     <?if($dwsnap_screenimg == "enable"):?>
     background: transparent url("<?=($display["theme"] == 'white' || $display["theme"] == 'azure') ? "/plugins/dwsnap/images/screen.png" : "/plugins/dwsnap/images/screen-alt.png";?>") no-repeat scroll center;
     <?endif;?> 
