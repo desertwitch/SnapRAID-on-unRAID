@@ -15,7 +15,7 @@ _An example could be comparing rarely changing media against earlier snapshot to
 
 - Parity has minor space overhead, works best on large and rarely changing files (such as a media library).
 - Not possible to use Unraid parity drive as SnapRAID parity drive (as SnapRAID operates on a file-level).
-- A data drive at least the size of the largest to be protected drive (in the SnapRAID array) is needed for parity.
+- A data drive at least the size of largest to be protected drive (in the SnapRAID array) is needed for parity.
 - Most of my testing was on XFS filesystems, so other filesystems should be considered more experimental.
 - ... for more see: https://www.snapraid.it/manual
 
