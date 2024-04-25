@@ -1,8 +1,6 @@
 SnapRAID on UNRAID
 ================
-_An experimental plugin for advanced users installing SnapRAID onto UNRAID systems._
-
-This project is in active development and considered experimental.
+_An actively developed plugin for advanced users installing SnapRAID onto UNRAID systems._
 
 Licensed under GPL2, GPL3 and/or MIT (where applicable, see respective source code files).
 
