@@ -17,7 +17,7 @@ _An example could be comparing rarely changing media against earlier snapshot to
 - Not possible to use Unraid parity drive as SnapRAID parity drive (as SnapRAID operates on the file-level).
 - A data drive at least size of the largest to be protected drive (in the SnapRAID array) is needed for parity.
 - Most of my testing was on XFS filesystems, so other filesystems should be considered more experimental.
-- ... for more see: https://www.snapraid.it/manual
+- ... for more information see: https://www.snapraid.it/manual
 
 #### Install from URL
 https://raw.githubusercontent.com/desertwitch/SnapRAID-on-unRAID/main/plugin/dwsnap.plg
