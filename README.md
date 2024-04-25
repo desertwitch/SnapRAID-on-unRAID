@@ -2,6 +2,23 @@ SnapRAID on UNRAID
 ================
 _An actively developed plugin for advanced users installing SnapRAID onto UNRAID systems._
 
+#### Possible Use-Cases:
+
+- Non real-time (snapshot) parity, corruption detection/repair and undelete for unassigned / non-array drives.
+<br>_An example could be the parity protection of a custom-mounted, mergerFS-pooled array of drives outside of Unraid's._
+
+- Non real-time (snapshot) corruption detection/repair and undelete for array drives, on top of Unraid parity.
+<br>_An example could be comparing rarely changing media against the earlier snapshot to detect and fix unwanted changes._
+
+
+#### Known Limitations:
+
+- Parity has minor space overhead, works best on large and rarely changing files (such as a media library).
+- It is not possible to use your Unraid parity drive as SnapRAID parity drive (as SnapRAID operates on a file-level).
+- A data drive at least the size of the largest to be protected drive in the planned SnapRAID array is needed for parity.
+- Most of my testing has been done on XFS filesystems, so other filesystems should be considered more experimental.
+- ... for more see: https://www.snapraid.it/manual
+
 #### Install from URL
 https://raw.githubusercontent.com/desertwitch/SnapRAID-on-unRAID/main/plugin/dwsnap.plg
 
