@@ -60,10 +60,10 @@ data d3 /mnt/disk3/
 data d4 /mnt/disk4/
 data d5 /mnt/disk5/
 </pre>
-<em><div>Disk 1 is a regular (Unraid) data drive that is being sacrificed as SnapRAID parity drive.</div>
-<div>Disk 2-5 are regular (Unraid) data drives with media that should be protected in the SnapRAID array.</div>
+<em><div>Disk 1 is an unassigned or Unraid array data drive that is being sacrificed as SnapRAID parity drive.</div>
+<div>Disk 2-5 are unassigned or Unraid array data drives with media that should be protected in the SnapRAID array.</div>
 <br>
-<div>The content files (which act as the file and hash catalogues) are put on the cache (for fast accessing) and also on all to be protected data drives.</div>
+<div>The content files (which act as the file and hash catalogues) are put on e.g. the cache (for fast accessing) and also on all to be protected data drives.</div>
 <div>The content files take up little space and are put on as many drives as possible (excluding the parity drive) to never be lost or corruptible during a drive failure.</div>
 <br>
 <div>For only partially protecting data (SnapRAID does large, rarely changing files best) like certain folders you can use include/exclude patterns (check the manual about this).</div>
