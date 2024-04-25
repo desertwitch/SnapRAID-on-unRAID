@@ -7,7 +7,7 @@ _An actively developed plugin for advanced users installing SnapRAID onto UNRAID
 - Non real-time (snapshot) parity, corruption detection/repair and undelete for unassigned / non-array drives.
 _An example could be the parity protection of a custom-mounted, mergerFS-pooled array of drives outside of Unraid's._
 
-- Non real-time (snapshot) corruption detection/repair and undelete for array drives, on top of Unraid parity.
+- Non real-time (snapshot) corruption detection/repair and undelete for array drives (on top of Unraid parity).
 _An example could be comparing rarely changing media against earlier snapshot to detect and fix unwanted changes._
 
 
