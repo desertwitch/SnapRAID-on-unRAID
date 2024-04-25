@@ -35,7 +35,7 @@ Markdown="false"
 </style>
 
 <div><strong>INFORMATION:</strong></div>
-<div>Always use the disk mountpoints e.g. <strong>/mnt/disk<em><sup>[number]</sup></em><span style="color:red;">/</span></strong> when refering to drives in the array configuration, never physical drive locations otherwhere on the system.</div>
+<div>Always use the disk mountpoints e.g. <strong>/mnt/disk<em><sup>[number]</sup></em><span style="color:red;">/</span></strong> when refering to drives in the array configuration, never user share or physical drive locations otherwhere on the system.</div>
 <div>When planning your SnapRAID array, please do consider that it will perform best with many large files which rarely change (e.g. a media library) as opposed to many often changing small files.</div>
 <div>Parity has minor overhead, so best not fill data drives to the very last byte - when using on top of Unraid parity, reasonable '<em>Minimum free space</em>' values are usually automatically set on user shares.</div>
 <br>
