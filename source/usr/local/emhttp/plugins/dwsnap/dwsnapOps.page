@@ -346,9 +346,10 @@ function confirmCommandAndSubmit() {
             if(isConfirmed) {
                 $('#snapcommands').submit();
             } else {
+                $('#command').val(""); 
                 $('[id^="arg"]').each(function() {
                     $(this).val("");
-                });  
+                });
             }
         });
 }
