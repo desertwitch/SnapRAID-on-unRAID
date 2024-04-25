@@ -40,7 +40,7 @@ Markdown="false"
 <div>Parity has minor overhead, so best not fill data drives to the very last byte - when using on top of Unraid parity, reasonable '<em>Minimum free space</em>' values are usually automatically set on user shares.</div>
 <br>
 <div>You cannot use your Unraid parity drive as SnapRAID parity drive due to SnapRAID operating on a file level as opposed to Unraid's parity operating on a block level.</div>
-<div>That means in order to use SnapRAID you will need to sacrifice one (Unraid) data drive with at least the size of the largest to be protected data drive (same rules as on Unraid).</div>
+<div>That means in order to use SnapRAID you will need to sacrifice one regular data drive with at least the size of the largest to be protected data drive (same rules as on Unraid).</div>
 <div>When using on top of Unraid parity, you will access all your protected data as you usually would through Unraid's user shares, the data of all protected disks will remain pooled as before.</div>
 <br>
 <details>
