@@ -37,7 +37,7 @@ $snap_lastlog = shell_exec("ls -Art /var/lib/snapraid/logs/*.log 2>/dev/null | t
 
 <div><strong>INFORMATION:</strong></div>
 <div>For speed and space preservation reasons logs are kept in RAM and are generally not preserved over a system reboot (unless an array operation was running at the time).</div>
-<div>However, they can be downloaded as ZIP package at any time within the GUI or a periodic script be set up copying them from <em>/var/lib/snapraid/logs/</em> to a location of your choice.</div>
+<div>However, they can be downloaded as ZIP package at any time within the GUI or a periodic script be set up copying them from <em><strong>/var/lib/snapraid/logs/</strong></em> to a location of your choice.</div>
 <br>
 
 <form id="editform2" method="POST">
