@@ -15,7 +15,7 @@
 #
 echo "Recreating RAM disk..."
 
-umount /var/lib/snapraid | logger -t "snapraid-ramdisk"
+umount /var/lib/snapraid 2>&1 | logger -t "snapraid-ramdisk"
 sleep 1
 
 rm -rf /var/lib/snapraid 2>&1 | logger -t "snapraid-ramdisk"
