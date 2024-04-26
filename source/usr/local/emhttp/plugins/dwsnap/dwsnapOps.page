@@ -1099,10 +1099,17 @@ END;
     }
     ?>
 
+    getSnapStatus()
+    getSnapLogs();
+    
+    $('.snaphelptip').tooltipster({
+        maxWidth: 300
+    });
+
     if ($.cookie('dwsnapwarning')===undefined) {
         swal({
             title: "Plugin Disclaimer",
-            text: "Be advised that this plugin is in active development and targeted towards advanced users with solid understanding of Linux systems.<br><br>If you do not know what a mount point is, are not comfortable with using a command line or unable to come up yourself with solutions for any self-induced OS-related problems, please do not use this plugin.<br><br>Understand that no software is perfect and that software of this nature in particular <u>should only ever be used on backed up data</u> and in combination with a solid backup strategy. Parity is not a backup.",
+            text: "Be advised that this plugin is in active development and targeted towards advanced users with solid understanding of Linux systems.<br><br>If you do not know what a mount point is, are not comfortable with using a command line or unable to come up yourself with solutions for any self-induced OS-related problems, please do not use this plugin.<br><br>Understand that no software is perfect and that software of this nature in particular <u>should only ever be used on backed up data</u> and in combination with a solid backup strategy. Parity is not a backup.<br><br>While the software has been tested with the utmost diligence, the software authors cannot be held responsible for any data loss.",
             type: "error",
             confirmButtonText: "Proceed",
             showCancelButton: true,
@@ -1117,13 +1124,6 @@ END;
                 }
             });
     }
-
-    getSnapStatus()
-    getSnapLogs();
-    
-    $('.snaphelptip').tooltipster({
-        maxWidth: 300
-    });
 
     // dynamix plugin update api
     <?if (function_exists('plugin_update_available') && $version = plugin_update_available('dwsnap')):?>
