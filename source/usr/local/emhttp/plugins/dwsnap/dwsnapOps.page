@@ -280,9 +280,6 @@ END;
                 echo("<tr><td colspan='10'><em>There are no disks configured</em></td></tr>");
             }
             ?>
-            <tr>
-                <th colspan="10"><strong>LOG INFORMATION STORAGE</strong></th>
-            </tr>
             <?
                 $snap_disk_fs = trim(htmlspecialchars(shell_exec("cat /etc/mtab 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
                 $snap_disk_util = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $5}' 2>/dev/null") ?? "-"));
@@ -291,14 +288,10 @@ END;
                 $snap_disk_total = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $2}' 2>/dev/null") ?? "-"));
                 $snap_disk_status = ($snap_disk_fs !== "-") ? "<i class='fa fa-check green-text'></i>" : "<i class='fa fa-times red-text'></i>"; 
                 echo <<<END
-                <tr>
-                <td class="snapdisktype">LOGS</td>
-                <td>$snap_parity_disk[1]</td>
-                <td>
-                    <a class="view" href="/Shares/Browse?dir=/var/lib/snapraid/" target="_blank">
-                    <i class="icon-u-tab" title="Browse /var/lib/snapraid/"></i>
-                    </a>/var/lib/snapraid
-                </td>
+                <tr style="border: 1px solid black;">
+                <td class="snapdisktype">RAM</td>
+                <td>-</td>
+                <td>/var/lib/snapraid</td>
                 <td>$snap_disk_status</td>
                 <td>$snap_disk_fs</td>
                 <td>$snap_disk_total</td>
