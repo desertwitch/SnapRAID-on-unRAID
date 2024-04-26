@@ -31,9 +31,10 @@ if ! mountpoint -q /var/lib/snapraid; then
     if ! mount -t tmpfs -o size=30% tmpfs /var/lib/snapraid; then
         echo "[error] Failed to create a RAM disk for SnapRAID... falling back to a regular folder!" | logger -t "snapraid-installer"
     fi
-    chown root:root /var/lib/snapraid
-    chmod 755 /var/lib/snapraid
 fi
+
+chown root:root /var/lib/snapraid
+chmod 755 /var/lib/snapraid
 
 if [ ! -d /var/lib/snapraid/logs ]; then
     mkdir -p /var/lib/snapraid/logs
