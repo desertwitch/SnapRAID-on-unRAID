@@ -288,7 +288,7 @@ END;
             $snap_disk_status = ($snap_disk_fs !== "-") ? "<i class='fa fa-check green-text'></i>" : "<i class='fa fa-times red-text'></i>"; 
             echo <<<END
             <tr style="border: 1px solid;">
-            <td class="snapdisktype">RAM</td>
+            <td class="snapdisktype"><span class="snaphelptip" title="This disk is located only in RAM and used for all SnapRAID operational output. The total space only displays the maximum possible RAM usage, the RAM itself is not reserved.">RAM<sup>?</sup></span></td>
             <td>-</td>
             <td>/var/lib/snapraid</td>
             <td>$snap_disk_status</td>
