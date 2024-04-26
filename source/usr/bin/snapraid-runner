@@ -90,7 +90,7 @@ echo "### ${BIGOP} STARTED: ${OPTIME}" 2>&1 | tee /var/lib/snapraid/logs/snaplog
 echo "### RUNNING: ${SNAP_BIN} -c ${SNAP_CONF} ${CMD[*]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog 
 echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
 
-trap signal_exit_snapraid SIGTERM
+trap signal_exit_snapraid SIGTERM SIGINT 
 
 if [ "${CMD[1]}" == "sync" ]; then
     $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${CMD[1]}-${LOGTIME}.raw.log" "${CMD[@]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog

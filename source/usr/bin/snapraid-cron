@@ -97,7 +97,7 @@ echo "$OPTIME" >/var/lib/snapraid/logs/laststart
 echo "### CRON -- STARTED: ${OPTIME}" 2>&1 | tee /var/lib/snapraid/logs/snaplog
 echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
 
-trap signal_exit_cron SIGTERM
+trap signal_exit_cron SIGTERM SIGINT
 
 [ "$STARTNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Started" -d "The SnapRAID maintenance has started." -i "warning"
 
