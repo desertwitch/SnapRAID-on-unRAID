@@ -102,7 +102,9 @@ rm -f /etc/snapraid.conf
 
 if mountpoint -q /var/lib/snapraid; then 
     umount -l /var/lib/snapraid
+    sleep 1
 fi
+
 rm -rf /var/lib/snapraid
 
 if [ -f /boot/config/plugins/dynamix/dwsnap-maintenance.cron ]; then
