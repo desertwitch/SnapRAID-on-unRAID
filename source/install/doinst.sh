@@ -25,10 +25,12 @@ if [ ! -d $BOOT/config ]; then
     mkdir -p $BOOT/config
 fi
 
-if ! mountpoint -q /var/lib/snapraid 2>/dev/null; then 
+if ! mountpoint -q /var/lib/snapraid; then 
     rm -rf /var/lib/snapraid
     mkdir -p /var/lib/snapraid
-    mount -t tmpfs -o size=30% tmpfs /var/lib/snapraid
+    if ! mount -t tmpfs -o size=30% tmpfs /var/lib/snapraid; then
+        echo "(ERROR) Failed to create a RAM disk for SnapRAID... falling back to a regular folder!" | logger -t "snapraid-installer"
+    fi
 fi
 
 if [ ! -d /var/lib/snapraid/logs ]; then
