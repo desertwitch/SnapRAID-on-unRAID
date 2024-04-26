@@ -63,7 +63,5 @@ $dwsnap_data_re = '/data (.*?) (\/mnt\/.*?)\//m';
 
 preg_match_all($dwsnap_parity_re, $dwsnap_cfg_content, $dwsnap_parity_disks, PREG_SET_ORDER);
 preg_match_all($dwsnap_data_re, $dwsnap_cfg_content, $dwsnap_data_disks, PREG_SET_ORDER);
-$dwsnap_parity_disks = array_map('trim', $dwsnap_parity_disks);
-$dwsnap_data_disks = array_map('trim', $dwsnap_data_disks);
 
 ?>
