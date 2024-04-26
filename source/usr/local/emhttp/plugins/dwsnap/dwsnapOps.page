@@ -524,20 +524,6 @@ $(function(){
                 $('#snapcommands').submit();
             });
     });
-    $('#clearlogs2').click(function(){
-        swal({
-            title: "Are you sure?",
-            text: "This action will delete any stored SnapRAID logfiles.",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Clear All Logs",
-            html: true
-            },
-            function(){
-                $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/clearlogs');
-                $('#snapcommands').submit();
-            });
-    });
     $('#fixramdisk').click(function(){
         swal({
             title: "Are you sure?",
@@ -549,6 +535,20 @@ $(function(){
             },
             function(){
                 $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/fixramdisk');
+                $('#snapcommands').submit();
+            });
+    });
+    $('#clearlogs2').click(function(){
+        swal({
+            title: "Are you sure?",
+            text: "This action will delete any stored SnapRAID logfiles.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Clear All Logs",
+            html: true
+            },
+            function(){
+                $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/clearlogs');
                 $('#snapcommands').submit();
             });
     });
