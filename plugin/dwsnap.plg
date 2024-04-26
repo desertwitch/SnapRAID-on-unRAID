@@ -18,6 +18,8 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2024.04.27
+- fix: allocate RAM disk for operational output to prevent filling up rootfs
 ###2024.04.26
 - new: improved both documentation and interruption signal handling
 ###2024.04.24
