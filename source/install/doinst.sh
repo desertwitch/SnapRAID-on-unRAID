@@ -25,6 +25,12 @@ if [ ! -d $BOOT/config ]; then
     mkdir -p $BOOT/config
 fi
 
+if ! mountpoint -q /var/lib/snapraid 2>/dev/null; then 
+    rm -rf /var/lib/snapraid
+    mkdir -p /var/lib/snapraid
+    mount -t tmpfs -o size=30% tmpfs /var/lib/snapraid
+fi
+
 if [ ! -d /var/lib/snapraid/logs ]; then
     mkdir -p /var/lib/snapraid/logs
 fi

@@ -98,7 +98,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
 
     <span style="float:right;">
         <input class="snaprun snaphelptip" type="button" id="clearoutput" value="CLEAR SCREEN" title="Clears the output screen of the current/previous array operation.">
-        <input class="snaprun snaphelptip" type="button" id="clearlogs" value="CLEAR ALL LOGS" title="Deletes all SnapRAID log files, also including the output screen of the current/previous array operation.">
+        <input class="snaprun snaphelptip snapclearlogs" type="button" id="clearlogs" value="CLEAR ALL LOGS" title="Deletes all SnapRAID log files, also including the output screen of the current/previous array operation.">
         <input class="snapnotrun snaphelptip" type="button" id="snapstop" value="STOP OPERATION" title="Attempts to (gracefully) stop all running SnapRAID instances.">
         <input class="snapnotrun snaphelptip" type="button" id="snapkill" value="KILL OPERATION" title="After a last attempt of (gracefully) stopping all running SnapRAID instances, this action hard-kills all still running SnapRAID instances with SIGKILL, beware that DATA CORRUPTION is very possible with this action.">
     </span><br>
@@ -280,6 +280,37 @@ END;
                 echo("<tr><td colspan='10'><em>There are no disks configured</em></td></tr>");
             }
             ?>
+            <tr>
+                <th colspan="10"><strong>LOG INFORMATION STORAGE</strong></th>
+            </tr>
+            <?
+                $snap_disk_fs = trim(htmlspecialchars(shell_exec("cat /etc/mtab 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
+                $snap_disk_util = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $5}' 2>/dev/null") ?? "-"));
+                $snap_disk_free = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $4}' 2>/dev/null") ?? "-"));
+                $snap_disk_used = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
+                $snap_disk_total = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $2}' 2>/dev/null") ?? "-"));
+                $snap_disk_status = ($snap_disk_fs !== "-") ? "<i class='fa fa-check green-text'></i>" : "<i class='fa fa-times red-text'></i>"; 
+                echo <<<END
+                <tr>
+                <td class="snapdisktype">LOGS</td>
+                <td>$snap_parity_disk[1]</td>
+                <td>
+                    <a class="view" href="/Shares/Browse?dir=/var/lib/snapraid/" target="_blank">
+                    <i class="icon-u-tab" title="Browse /var/lib/snapraid/"></i>
+                    </a>/var/lib/snapraid
+                </td>
+                <td>$snap_disk_status</td>
+                <td>$snap_disk_fs</td>
+                <td>$snap_disk_total</td>
+                <td>$snap_disk_used</td>
+                <td>$snap_disk_free</td>
+                <td>$snap_disk_util</td>
+                <td>
+                    <input class="snaprun snaphelptip snapclearlogs" type="button" id="clearlogs2" value="CLEAR ALL LOGS" title="Deletes all SnapRAID log files, also including the output screen of the current/previous array operation.">
+                </td>
+                </tr>
+END;
+        ?>
         </tbody>
     </table>
 </form> 
@@ -485,7 +516,7 @@ $(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/clearoutput');
         $('#snapcommands').submit();
     });
-    $('#clearlogs').click(function(){
+    $('.snapclearlogs').click(function(){
         swal({
             title: "Are you sure?",
             text: "This action will delete any stored SnapRAID logfiles.",
