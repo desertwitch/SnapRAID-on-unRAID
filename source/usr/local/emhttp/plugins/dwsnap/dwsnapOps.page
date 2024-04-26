@@ -299,6 +299,7 @@ END;
                 <td>$snap_disk_free</td>
                 <td>$snap_disk_util</td>
                 <td>
+                    <input class="snaprun snaphelptip" type="button" id="fixramdisk" value="RECREATE DISK" title="Deletes all SnapRAID log files and fixes any problems with the RAM disk that is used by SnapRAID.">
                     <input class="snaprun snaphelptip snapclearlogs" type="button" id="clearlogs2" value="CLEAR ALL LOGS" title="Deletes all SnapRAID log files, also including the output screen of the current/previous array operation.">
                 </td>
                 </tr>
@@ -520,6 +521,20 @@ $(function(){
             },
             function(){
                 $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/clearlogs');
+                $('#snapcommands').submit();
+            });
+    });
+    $('#fixramdisk').click(function(){
+        swal({
+            title: "Are you sure?",
+            text: "The RAM disk will be recreated on the system.<br>Be advised this action will delete any stored SnapRAID logfiles.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Recreate Disk",
+            html: true
+            },
+            function(){
+                $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/fixramdisk');
                 $('#snapcommands').submit();
             });
     });
