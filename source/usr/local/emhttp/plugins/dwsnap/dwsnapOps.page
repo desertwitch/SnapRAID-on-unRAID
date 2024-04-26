@@ -98,7 +98,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
 
     <span style="float:right;">
         <input class="snaprun snaphelptip" type="button" id="clearoutput" value="CLEAR SCREEN" title="Clears the output screen of the current/previous array operation.">
-        <input class="snaprun snaphelptip snapclearlogs" type="button" id="clearlogs" value="CLEAR ALL LOGS" title="Deletes all SnapRAID log files, also including the output screen of the current/previous array operation.">
+        <input class="snaprun snaphelptip" type="button" id="clearlogs" value="CLEAR ALL LOGS" title="Deletes all SnapRAID log files, also including the output screen of the current/previous array operation.">
         <input class="snapnotrun snaphelptip" type="button" id="snapstop" value="STOP OPERATION" title="Attempts to (gracefully) stop all running SnapRAID instances.">
         <input class="snapnotrun snaphelptip" type="button" id="snapkill" value="KILL OPERATION" title="After a last attempt of (gracefully) stopping all running SnapRAID instances, this action hard-kills all still running SnapRAID instances with SIGKILL, beware that DATA CORRUPTION is very possible with this action.">
     </span><br>
@@ -299,8 +299,8 @@ END;
                 <td>$snap_disk_free</td>
                 <td>$snap_disk_util</td>
                 <td>
-                    <input class="snaprun snaphelptip" type="button" id="fixramdisk" value="RECREATE DISK" title="Deletes all SnapRAID log files and fixes any problems with the RAM disk that is used by SnapRAID.">
-                    <input class="snaprun snaphelptip snapclearlogs" type="button" id="clearlogs2" value="CLEAR ALL LOGS" title="Deletes all SnapRAID log files, also including the output screen of the current/previous array operation.">
+                    <input class="snaprun snaphelptip" type="button" id="fixramdisk" value="RECREATE DISK" title="Recreates and fixes any issues with the RAM disk that is used for all SnapRAID operational output - beware that all logs are deleted in the process of recreating the RAM disk.">
+                    <input class="snaprun snaphelptip" type="button" id="clearlogs2" value="CLEAR ALL LOGS" title="Deletes all SnapRAID log files, also including the output screen of the current/previous array operation.">
                 </td>
                 </tr>
 END;
@@ -510,7 +510,21 @@ $(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/clearoutput');
         $('#snapcommands').submit();
     });
-    $('.snapclearlogs').click(function(){
+    $('#clearlogs').click(function(){
+        swal({
+            title: "Are you sure?",
+            text: "This action will delete any stored SnapRAID logfiles.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Clear All Logs",
+            html: true
+            },
+            function(){
+                $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/clearlogs');
+                $('#snapcommands').submit();
+            });
+    });
+    $('#clearlogs2').click(function(){
         swal({
             title: "Are you sure?",
             text: "This action will delete any stored SnapRAID logfiles.",
@@ -527,7 +541,7 @@ $(function(){
     $('#fixramdisk').click(function(){
         swal({
             title: "Are you sure?",
-            text: "The RAM disk will be recreated on the system.<br>Be advised this action will delete any stored SnapRAID logfiles.",
+            text: "SnapRAID's RAM disk will be recreated on the system.<br>This action will also delete any stored SnapRAID logfiles.",
             type: "warning",
             showCancelButton: true,
             confirmButtonText: "Recreate Disk",
