@@ -277,7 +277,7 @@ END;
                 }
             }
             else {
-                echo("<tr><td colspan='10'><em>There are no disks configured</em></td></tr>");
+                echo("<tr><td colspan='10'><em>There are no array disks configured</em></td></tr>");
             }
             ?>
             <?
