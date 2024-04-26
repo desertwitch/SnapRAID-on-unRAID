@@ -279,30 +279,29 @@ END;
             else {
                 echo("<tr><td colspan='10'><em>There are no array disks configured</em></td></tr>");
             }
-            ?>
-            <?
-                $snap_disk_fs = trim(htmlspecialchars(shell_exec("cat /etc/mtab 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
-                $snap_disk_util = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $5}' 2>/dev/null") ?? "-"));
-                $snap_disk_free = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $4}' 2>/dev/null") ?? "-"));
-                $snap_disk_used = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
-                $snap_disk_total = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $2}' 2>/dev/null") ?? "-"));
-                $snap_disk_status = ($snap_disk_fs !== "-") ? "<i class='fa fa-check green-text'></i>" : "<i class='fa fa-times red-text'></i>"; 
-                echo <<<END
-                <tr style="border: 1px solid black;">
-                <td class="snapdisktype">RAM</td>
-                <td>-</td>
-                <td>/var/lib/snapraid</td>
-                <td>$snap_disk_status</td>
-                <td>$snap_disk_fs</td>
-                <td>$snap_disk_total</td>
-                <td>$snap_disk_used</td>
-                <td>$snap_disk_free</td>
-                <td>$snap_disk_util</td>
-                <td>
-                    <input class="snaprun snaphelptip" type="button" id="fixramdisk" value="RECREATE DISK" title="Recreates and fixes any issues with the RAM disk that is used for all SnapRAID operational output - beware that all logs are deleted in the process of recreating the RAM disk.">
-                    <input class="snaprun snaphelptip" type="button" id="clearlogs2" value="CLEAR ALL LOGS" title="Deletes all SnapRAID log files, also including the output screen of the current/previous array operation.">
-                </td>
-                </tr>
+
+            $snap_disk_fs = trim(htmlspecialchars(shell_exec("cat /etc/mtab 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
+            $snap_disk_util = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $5}' 2>/dev/null") ?? "-"));
+            $snap_disk_free = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $4}' 2>/dev/null") ?? "-"));
+            $snap_disk_used = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
+            $snap_disk_total = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $2}' 2>/dev/null") ?? "-"));
+            $snap_disk_status = ($snap_disk_fs !== "-") ? "<i class='fa fa-check green-text'></i>" : "<i class='fa fa-times red-text'></i>"; 
+            echo <<<END
+            <tr style="border: 1px solid;">
+            <td class="snapdisktype">RAM</td>
+            <td>-</td>
+            <td>/var/lib/snapraid</td>
+            <td>$snap_disk_status</td>
+            <td>$snap_disk_fs</td>
+            <td>$snap_disk_total</td>
+            <td>$snap_disk_used</td>
+            <td>$snap_disk_free</td>
+            <td>$snap_disk_util</td>
+            <td>
+                <input class="snaprun snaphelptip" type="button" id="fixramdisk" value="RECREATE DISK" title="Recreates and fixes any issues with the RAM disk that is used for all SnapRAID operational output - beware that all logs are deleted in the process of recreating the RAM disk.">
+                <input class="snaprun snaphelptip" type="button" id="clearlogs2" value="CLEAR ALL LOGS" title="Deletes all SnapRAID log files, also including the output screen of the current/previous array operation.">
+            </td>
+            </tr>
 END;
         ?>
         </tbody>
