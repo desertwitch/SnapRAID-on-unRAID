@@ -18,6 +18,8 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2024.04.26
+- new: improved both documentation and interruption signal handling
 ###2024.04.24
 - new: clarified logs written by maintenance script some more
 - new: include only .log files when downloading log package from GUI
