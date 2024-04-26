@@ -17,6 +17,7 @@ BOOT="/boot/config/plugins/dwsnap"
 DOCROOT="/usr/local/emhttp/plugins/dwsnap"
 
 chmod +0755 $DOCROOT/scripts/*
+chmod +0755 $DOCROOT/event/*
 chmod +0755 /usr/bin/snapraid-cron
 chmod +0755 /usr/bin/snapraid-runner
 
