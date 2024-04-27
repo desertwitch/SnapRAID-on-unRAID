@@ -94,7 +94,7 @@ echo "### RUNNING: ${SNAP_BIN} -c ${SNAP_CONF} ${CMD[*]:1}" 2>&1 | tee -a /var/l
 if mountpoint -q /var/lib/snapraid; then 
     RAMUTIL=$(df --output=pcent /var/lib/snapraid | tr -dc '0-9')
     if [ "$RAMUTIL" -gt 90 ]; then
-        RAMWARNING=" WARNING: RAM disk usage above 90% - clear your log files to avoid future problems!"
+        RAMWARNING=" RAM disk utilization above 90% - clear your log files to avoid future problems!"
         echo "###${RAMWARNING}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     fi
 fi
