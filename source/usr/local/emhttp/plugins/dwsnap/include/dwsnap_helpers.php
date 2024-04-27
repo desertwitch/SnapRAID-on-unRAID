@@ -88,7 +88,7 @@ function dwsnap_getFooterHTML() {
 
     try {
         $snap_footer_html = "";
-        $snap_ramdisk_util = rtrim(trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $5}' 2>/dev/null") ?? "-")), "%");
+        $snap_ramdisk_util = trim(htmlspecialchars(shell_exec("df --output=pcent /var/lib/snapraid 2>/dev/null | tr -dc '0-9' 2>/dev/null") ?? "-"));
         if(!empty($dwsnap_parity_disks) && !empty($dwsnap_data_disks)) {
             $snap_all_disks_available = true;
             foreach ($dwsnap_parity_disks as $snap_parity_disk){

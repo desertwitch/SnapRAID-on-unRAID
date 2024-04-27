@@ -100,13 +100,11 @@ mkdir -p "/var/lib/snapraid/logs/cron-${LOGTIME}"
 echo "$OPTIME" >/var/lib/snapraid/logs/laststart
 echo "### CRON -- STARTED: ${OPTIME}" 2>&1 | tee /var/lib/snapraid/logs/snaplog
 
-if mountpoint -q /var/lib/snapraid; then 
-    RAMUTIL=$(df --output=pcent /var/lib/snapraid | tr -dc '0-9')
-    if [ "$RAMUTIL" -gt 90 ]; then
-        RAMWARNING=" RAM disk utilization above 90% - clear the log files to avoid future problems!"
-        RAMWARNINGSHORT=" RAM disk utilization above 90%."
-        echo "### CRON --${RAMWARNING}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-    fi
+RAMUTIL=$(df --output=pcent /var/lib/snapraid | tr -dc '0-9')
+if [ "$RAMUTIL" -gt 90 ]; then
+    RAMWARNING=" RAM disk utilization above 90% - clear the log files to avoid future problems!"
+    RAMWARNINGSHORT=" RAM disk utilization above 90%."
+    echo "### CRON --${RAMWARNING}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
 fi
 
 echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog

@@ -181,9 +181,12 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     <?
         $snap_syncneeded_html = "";
         $snap_unmounted_disks_html = "";
+        $snap_highram_html = "";
 
-        $snap_disk_util = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $5}' 2>/dev/null") ?? "-"));
-        $snap_highram_html = (rtrim($snap_disk_util, "%") < 90) ? "" : "<span class='snaphelptip' style='margin-left:10px;color:red;' title='Your RAM disk utilization is above 90%, please clear the SnapRAID log files to ensure the continued operation of SnapRAID.'><i class='fa fa-exclamation-triangle'></i> <strong>RAM Disk Utilization</strong></span>";
+        $snap_disk_util = trim(htmlspecialchars(shell_exec("df --output=pcent /var/lib/snapraid 2>/dev/null | tr -dc '0-9' 2>/dev/null") ?? "-"));
+        if($snap_disk_util !== "-") {
+            $snap_highram_html = ($snap_disk_util < 90) ? "" : "<span class='snaphelptip' style='margin-left:10px;color:red;' title='Your RAM disk utilization is above 90%, please clear the SnapRAID log files to ensure the continued operation of SnapRAID.'><i class='fa fa-exclamation-triangle'></i> <strong>RAM Disk Utilization</strong></span>";
+        }
 
         if(!empty($dwsnap_parity_disks) || !empty($dwsnap_data_disks)) {
             if(file_exists("/boot/config/plugins/dwsnap/config/syncneeded")) {
@@ -284,13 +287,16 @@ END;
             }
 
             $snap_disk_fs = trim(htmlspecialchars(shell_exec("cat /etc/mtab 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
-            $snap_disk_util = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $5}' 2>/dev/null") ?? "-"));
+            $snap_disk_util = trim(htmlspecialchars(shell_exec("df --output=pcent /var/lib/snapraid 2>/dev/null | tr -dc '0-9' 2>/dev/null") ?? "-"));
             $snap_disk_free = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $4}' 2>/dev/null") ?? "-"));
             $snap_disk_used = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
             $snap_disk_total = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $2}' 2>/dev/null") ?? "-"));
             $snap_disk_status = ($snap_disk_fs !== "-") ? "<i class='fa fa-check green-text'></i>" : "<i class='fa fa-times red-text'></i>"; 
-            $snap_disk_util = (rtrim($snap_disk_util, "%") < 90) ? "$snap_disk_util" : "<span class='red-text snaphelptip' title='Your RAM disk utilization is above 90%, please clear the SnapRAID log files to ensure the continued operation of SnapRAID.'>$snap_disk_util</span>";
             
+            if($snap_disk_util !== "-") {
+                $snap_disk_util = ($snap_disk_util < 90) ? "{$snap_disk_util}%" : "<span class='red-text snaphelptip' title='Your RAM disk utilization is above 90%, please clear the SnapRAID log files to ensure the continued operation of SnapRAID.'>{$snap_disk_util}%</span>";
+            }
+
             echo <<<END
             <tr style="border: 1px solid;">
             <td class="snapdisktype"><span class="snaphelptip" title="This disk is located only in RAM and used for all SnapRAID operational output. The total space only displays the maximum possible RAM usage, the RAM itself is not reserved.">RAM</span></td>
