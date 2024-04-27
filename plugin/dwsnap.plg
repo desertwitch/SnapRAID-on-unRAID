@@ -103,6 +103,7 @@ rm -rf &emhttp;
 rm -f /etc/snapraid.conf
 
 if mountpoint -q /var/lib/snapraid; then 
+    rm -rf /var/lib/snapraid/*
     umount -l /var/lib/snapraid
     sleep 1
 fi
