@@ -21,6 +21,8 @@ CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
 
 RUNNINGOP="INIT"
 
+[ ! -d /var/lib/snapraid/logs ] && mkdir -p /var/lib/snapraid/logs
+
 [ -e "$CONFIG" ] && source $CONFIG
 
 if [ "$CRON" != "hourly" ] && [ "$CRON" != "daily" ] && [ "$CRON" != "weekly" ] && [ "$CRON" != "monthly" ]; then

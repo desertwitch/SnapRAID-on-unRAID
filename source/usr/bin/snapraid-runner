@@ -20,6 +20,8 @@ SNAP_CONF="/etc/snapraid.conf"
 CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
 CMD=("$@")
 
+[ ! -d /var/lib/snapraid/logs ] && mkdir -p /var/lib/snapraid/logs
+
 [ -e "$CONFIG" ] && source $CONFIG
 
 NOTIFY_BIN="/usr/local/emhttp/plugins/dynamix/scripts/notify"
