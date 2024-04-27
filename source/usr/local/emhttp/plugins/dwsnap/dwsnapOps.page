@@ -187,7 +187,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
 
         $snap_disk_fs = trim(htmlspecialchars(shell_exec("cat /etc/mtab 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
         if($snap_disk_fs == "-") {
-            $snap_missingram_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='SnapRAID was not able to create a RAM disk for its operational output. It is now running on the rootfs with unlimited RAM, which is the fallback method and not recommended for safe operation. Please recreate the RAM disk manually on this page to avoid any future system instabilities due to excessive RAM usage.'><i class='fa fa-exclamation-triangle'></i> <strong>Missing RAM Disk</strong></span>";
+            $snap_missingram_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='SnapRAID was not able to create a RAM disk for its operational output. It is now running on the rootfs (/) with unlimited RAM, which is the fallback method and not recommended for safe operation. Please recreate the RAM disk manually on this page to avoid future system instabilities due to excessive RAM usage. The disk utilization currently shown for the RAM disk is that of the rootfs (/).'><i class='fa fa-exclamation-triangle'></i> <strong>Missing RAM Disk</strong></span>";
         }
 
         $snap_disk_util = trim(htmlspecialchars(shell_exec("df --output=pcent /var/lib/snapraid 2>/dev/null | tr -dc '0-9' 2>/dev/null") ?? "-"));
