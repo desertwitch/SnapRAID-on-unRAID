@@ -286,6 +286,8 @@ END;
             $snap_disk_used = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
             $snap_disk_total = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $2}' 2>/dev/null") ?? "-"));
             $snap_disk_status = ($snap_disk_fs !== "-") ? "<i class='fa fa-check green-text'></i>" : "<i class='fa fa-times red-text'></i>"; 
+            $snap_disk_util = (rtrim($snap_disk_util, "%") < 90) ? "$snap_disk_util" : "<span class='red-text snaphelptip' title='Your RAM disk utilization is above 90%, please clear your SnapRAID log files to ensure continous operation of SnapRAID.'>$snap_disk_util</span>";
+            
             echo <<<END
             <tr style="border: 1px solid;">
             <td class="snapdisktype"><span class="snaphelptip" title="This disk is located only in RAM and used for all SnapRAID operational output. The total space only displays the maximum possible RAM usage, the RAM itself is not reserved.">RAM</span></td>
