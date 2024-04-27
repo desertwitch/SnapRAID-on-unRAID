@@ -101,8 +101,8 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 
 <blockquote class="inline_help">
 <p>This setting controls if running SnapRAID operations should also be stopped when the Unraid array itself is stopping, regardless if triggered manually or as part of a system shutdown.</p>
-<p><strong>Keep this setting enabled if one or more of the disks configured with SnapRAID are also used in the Unraid array, as it will prevent data corruption and hard exits when Unraid is unmounting array drives.</strong></p>
-<p>If all data, parity and content files are exclusively on drives that are not part of the Unraid array, this setting can be disabled in order to not interrupt running SnapRAID operations when the Unraid array is stopping.</p>
+<p><strong>Keep this setting enabled if one or more of the disks configured with SnapRAID are also used in the Unraid array, as it will prevent data corruption and hard exits when Unraid is unmounting array disks.</strong></p>
+<p>If all data, parity and content files are exclusively on disks that are not part of the Unraid array, this setting can be disabled in order to not interrupt running SnapRAID operations when the Unraid array is stopping.</p>
 <p>Regardless of this setting during a system shutdown SnapRAID will always attempt to gracefully stop any running array operations before, as a last resort, hard-killing any non-responsive and hanging array operations.</p>
 </blockquote>
 

@@ -4,18 +4,18 @@ _An actively developed plugin for advanced users installing SnapRAID onto UNRAID
 
 #### Possible Use-Cases:
 
-- Non real-time (snapshot) parity, corruption detection/repair and undelete for unassigned / non-array drives.
-_An example could be the parity protection of a custom-mounted, mergerFS-pooled array of drives outside of Unraid's._
+- Non real-time (snapshot) parity, corruption detection/repair and undelete for unassigned / non-array disks.
+_An example could be the parity protection of a custom-mounted, mergerFS-pooled array of disks outside of Unraid's._
 
-- Non real-time (snapshot) corruption detection/repair and undelete for array drives (on top of Unraid parity).
+- Non real-time (snapshot) corruption detection/repair and undelete for array disks (on top of Unraid parity).
 _An example could be comparing rarely changing media against earlier snapshot to detect and fix unwanted changes._
 
 
 #### Known Limitations:
 
 - Parity has minor space overhead, works best on large and rarely changing files (such as a media library).
-- Not possible to use Unraid parity drive as SnapRAID parity drive (as SnapRAID operates on the file-level).
-- A data drive at least size of the largest to be protected drive (in the SnapRAID array) is needed for parity.
+- Not possible to use Unraid parity disk as SnapRAID parity disk (as SnapRAID operates on the file-level).
+- A data disk at least size of the largest to be protected disk (in the SnapRAID array) is needed for parity.
 - Most of my testing was on XFS filesystems, so other filesystems should be considered more experimental.
 - ... for more information see: https://www.snapraid.it/manual
 
