@@ -15,13 +15,11 @@
 #
 echo "Recreating RAM disk..."
 
-umount -l /var/lib/snapraid 2>&1 | logger -t "snapraid-ramdisk"
-sleep 5
+rm -rf /var/lib/snapraid/* 2>&1 | logger -t "snapraid-ramdisk"
+sleep 1
 
-if mountpoint -q /var/lib/snapraid; then 
-    echo "[error] Failed to unmount RAM disk (target busy?)... please retry again later!" | logger -t "snapraid-ramdisk"
-    exit 1
-fi
+umount -l /var/lib/snapraid 2>&1 | logger -t "snapraid-ramdisk"
+sleep 1
 
 rm -rf /var/lib/snapraid 2>&1 | logger -t "snapraid-ramdisk"
 mkdir -p /var/lib/snapraid 2>&1 | logger -t "snapraid-ramdisk"
