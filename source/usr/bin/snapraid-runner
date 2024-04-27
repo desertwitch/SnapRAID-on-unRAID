@@ -68,7 +68,7 @@ signal_exit_snapraid() {
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="minutes"
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hours"
 
-    [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} ${BIGOP} Interrupted" -d "SnapRAID operation ${BIGOP} was interrupted (after ${DURATION} ${DURATIONUNIT}).${RAMWARNING}" -i "alert"
+    [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} ${BIGOP} Interrupted" -d "SnapRAID operation ${BIGOP} was interrupted (after ${DURATION} ${DURATIONUNIT}).${RAMWARNINGSHORT}" -i "alert"
 
     echo "$OPTIME" >/var/lib/snapraid/logs/lastfinish
     echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
@@ -95,6 +95,7 @@ if mountpoint -q /var/lib/snapraid; then
     RAMUTIL=$(df --output=pcent /var/lib/snapraid | tr -dc '0-9')
     if [ "$RAMUTIL" -gt 90 ]; then
         RAMWARNING=" RAM disk utilization above 90% - clear the log files to avoid future problems!"
+        RAMWARNINGSHORT=" RAM disk utilization above 90%."
         echo "###${RAMWARNING}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     fi
 fi
@@ -118,9 +119,9 @@ if [ "${CMD[1]}" == "sync" ]; then
         echo "$OPTIME" > /boot/config/plugins/dwsnap/config/lastsync
         rm -f /boot/config/plugins/dwsnap/config/syncneeded
         rm -f /boot/config/plugins/dwsnap/config/lastnodiff
-        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} ${BIGOP} Finished" -d "SnapRAID operation ${BIGOP} finished with success (after ${DURATION} ${DURATIONUNIT}).${RAMWARNING}" -i "normal"
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} ${BIGOP} Finished" -d "SnapRAID operation ${BIGOP} finished with success (after ${DURATION} ${DURATIONUNIT}).${RAMWARNINGSHORT}" -i "normal"
     else
-        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} ${BIGOP} Failure" -d "SnapRAID operation ${BIGOP} finished with errors (after ${DURATION} ${DURATIONUNIT}).${RAMWARNING}" -i "alert"
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} ${BIGOP} Failure" -d "SnapRAID operation ${BIGOP} finished with errors (after ${DURATION} ${DURATIONUNIT}).${RAMWARNINGSHORT}" -i "alert"
     fi
 elif [ "${CMD[1]}" == "scrub" ]; then
     $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${CMD[1]}-${LOGTIME}.raw.log" "${CMD[@]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
@@ -135,9 +136,9 @@ elif [ "${CMD[1]}" == "scrub" ]; then
 
     if [ "$CMDRET" -eq 0 ]; then
         echo "$OPTIME" > /boot/config/plugins/dwsnap/config/lastscrub
-        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} ${BIGOP} Finished" -d "SnapRAID operation ${BIGOP} finished with success (after ${DURATION} ${DURATIONUNIT}).${RAMWARNING}" -i "normal"
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} ${BIGOP} Finished" -d "SnapRAID operation ${BIGOP} finished with success (after ${DURATION} ${DURATIONUNIT}).${RAMWARNINGSHORT}" -i "normal"
     else
-        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} ${BIGOP} Failure" -d "SnapRAID operation ${BIGOP} finished with errors (after ${DURATION} ${DURATIONUNIT}).${RAMWARNING}" -i "alert"
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} ${BIGOP} Failure" -d "SnapRAID operation ${BIGOP} finished with errors (after ${DURATION} ${DURATIONUNIT}).${RAMWARNINGSHORT}" -i "alert"
     fi
 elif [ "${CMD[1]}" == "diff" ]; then
     $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${CMD[1]}-${LOGTIME}.raw.log" "${CMD[@]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
@@ -153,13 +154,13 @@ elif [ "${CMD[1]}" == "diff" ]; then
     if [ "$CMDRET" -eq 0 ]; then
         echo "$OPTIME" >/boot/config/plugins/dwsnap/config/lastnodiff
         rm -f /boot/config/plugins/dwsnap/config/syncneeded
-        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} ${BIGOP} Finished" -d "SnapRAID operation ${BIGOP} finished with success (after ${DURATION} ${DURATIONUNIT}).${RAMWARNING}" -i "normal"
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} ${BIGOP} Finished" -d "SnapRAID operation ${BIGOP} finished with success (after ${DURATION} ${DURATIONUNIT}).${RAMWARNINGSHORT}" -i "normal"
     elif [ "$CMDRET" -eq 2 ]; then
         touch /boot/config/plugins/dwsnap/config/syncneeded
         rm -f /boot/config/plugins/dwsnap/config/lastnodiff
-        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} ${BIGOP} Warnings" -d "SnapRAID operation ${BIGOP} finished with warnings (after ${DURATION} ${DURATIONUNIT}). Data differences were found (not in sync).${RAMWARNING}" -i "warning"
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} ${BIGOP} Warnings" -d "SnapRAID operation ${BIGOP} finished with warnings (after ${DURATION} ${DURATIONUNIT}). Data differences were found (not in sync).${RAMWARNINGSHORT}" -i "warning"
     else
-        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} ${BIGOP} Failure" -d "SnapRAID operation ${BIGOP} finished with errors (after ${DURATION} ${DURATIONUNIT}).${RAMWARNING}" -i "alert"
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} ${BIGOP} Failure" -d "SnapRAID operation ${BIGOP} finished with errors (after ${DURATION} ${DURATIONUNIT}).${RAMWARNINGSHORT}" -i "alert"
     fi
 else
     $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/${CMD[1]}-${LOGTIME}.raw.log" "${CMD[@]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
@@ -173,9 +174,9 @@ else
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hours"
 
     if [ "$CMDRET" -eq 0 ]; then
-        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} ${BIGOP} Finished" -d "SnapRAID operation ${BIGOP} finished with success (after ${DURATION} ${DURATIONUNIT}).${RAMWARNING}" -i "normal"
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} ${BIGOP} Finished" -d "SnapRAID operation ${BIGOP} finished with success (after ${DURATION} ${DURATIONUNIT}).${RAMWARNINGSHORT}" -i "normal"
     else
-        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} ${BIGOP} Failure" -d "SnapRAID operation ${BIGOP} finished with errors (after ${DURATION} ${DURATIONUNIT}).${RAMWARNING}" -i "alert"
+        [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} ${BIGOP} Failure" -d "SnapRAID operation ${BIGOP} finished with errors (after ${DURATION} ${DURATIONUNIT}).${RAMWARNINGSHORT}" -i "alert"
     fi
 fi
 
