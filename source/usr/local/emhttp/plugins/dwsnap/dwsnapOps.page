@@ -181,7 +181,6 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     <?
         $snap_syncneeded_html = "";
         $snap_unmounted_disks_html = "";
-
         $snap_missingram_html = "";
         $snap_highram_html = "";
 
