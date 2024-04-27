@@ -73,7 +73,7 @@ signal_exit_snapraid() {
     echo "$OPTIME" >/var/lib/snapraid/logs/lastfinish
     echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     echo "### ${BIGOP} INTERRUPTED [SIGTERM]: ${OPTIME} (after ${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-    [ -n "$RAMWARNING" ] && echo "###${RAMWARNING}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+    [ -n "$RAMWARNING" ] && echo "### --${RAMWARNING}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
 
     cp "/var/lib/snapraid/logs/snaplog" "/var/lib/snapraid/logs/${CMD[1]}-${LOGTIME}.log"
     
@@ -96,7 +96,7 @@ if mountpoint -q /var/lib/snapraid; then
     if [ "$RAMUTIL" -gt 90 ]; then
         RAMWARNING=" RAM disk utilization above 90% - clear the log files to avoid future problems!"
         RAMWARNINGSHORT=" RAM disk utilization above 90%."
-        echo "###${RAMWARNING}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+        echo "### --${RAMWARNING}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     fi
 fi
 
@@ -183,6 +183,6 @@ fi
 echo "$OPTIME" >/var/lib/snapraid/logs/lastfinish
 echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
 echo "### ${BIGOP} FINISHED: ${OPTIME} (after ${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-[ -n "$RAMWARNING" ] && echo "###${RAMWARNING}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+[ -n "$RAMWARNING" ] && echo "### --${RAMWARNING}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
 
 cp "/var/lib/snapraid/logs/snaplog" "/var/lib/snapraid/logs/${CMD[1]}-${LOGTIME}.log"
