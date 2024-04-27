@@ -182,6 +182,9 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
         $snap_syncneeded_html = "";
         $snap_unmounted_disks_html = "";
 
+        $snap_disk_util = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $5}' 2>/dev/null") ?? "-"));
+        $snap_highram_html = (rtrim($snap_disk_util, "%") < 90) ? "" : "<span class='snaphelptip' style='margin-left:10px;color:red;' title='Your RAM disk utilization is above 90%, please clear the SnapRAID log files to ensure the continued operation of SnapRAID.'><i class='fa fa-exclamation-triangle'></i> <strong>RAM Disk Utilization</strong></span>";
+
         if(!empty($dwsnap_parity_disks) || !empty($dwsnap_data_disks)) {
             if(file_exists("/boot/config/plugins/dwsnap/config/syncneeded")) {
                 $snap_syncneeded_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='Differences between the last sync (snapshot) state and the data present in the array were found. If these changes were intentional, a SYNC operation is required for any such changes to also be protected in case of disk failure. If these changes were not intentional, a FIX operation can help revert the array data back to the last sync (snapshot) state.'><i class='fa fa-exclamation-triangle'></i> <strong>Data Differences (Not in Sync)</strong></span>";
@@ -205,7 +208,7 @@ if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<s
     <table class="tablesorter snapdisks">
         <thead>
             <tr>
-                <th colspan="10"><strong>ARRAY OVERVIEW WITH INDIVIDUAL DISKS</strong> <span style="text-transform: none;float:right;"><?=$snap_unmounted_disks_html?><?=$snap_syncneeded_html?><span style="margin-left:10px;"><strong>Last Sync:</strong> <?=$snap_lastsync_html?></span><span style="margin-left:10px;"><strong>Last Scrub:</strong> <?=$snap_lastscrub_html?></span></span></th>
+                <th colspan="10"><strong>ARRAY OVERVIEW WITH INDIVIDUAL DISKS</strong> <span style="text-transform: none;float:right;"><?=$snap_highram_html?><?=$snap_unmounted_disks_html?><?=$snap_syncneeded_html?><span style="margin-left:10px;"><strong>Last Sync:</strong> <?=$snap_lastsync_html?></span><span style="margin-left:10px;"><strong>Last Scrub:</strong> <?=$snap_lastscrub_html?></span></span></th>
             </tr>
             <tr>
                  <th><strong>Disk Type</strong></th><th><strong>Disk Name</strong></th><th><strong>Mountpoint</strong></th><th><strong>Mounted</strong></th><th><strong>FileSystem</strong></th><th><strong>Total Space</strong></th><th><strong>Used Space</strong></th><th><strong>Free Space</strong></th><th><strong>Utilization</strong></th><th><strong>Disk-Specific Operations</strong><br><span style="font-size:x-small;"><em>Options Selected From Above Apply</em></span></th>
@@ -286,7 +289,7 @@ END;
             $snap_disk_used = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
             $snap_disk_total = trim(htmlspecialchars(shell_exec("df -h 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $2}' 2>/dev/null") ?? "-"));
             $snap_disk_status = ($snap_disk_fs !== "-") ? "<i class='fa fa-check green-text'></i>" : "<i class='fa fa-times red-text'></i>"; 
-            $snap_disk_util = (rtrim($snap_disk_util, "%") < 90) ? "$snap_disk_util" : "<span class='red-text snaphelptip' title='Your RAM disk utilization is above 90%, please clear your SnapRAID log files to ensure continous operation of SnapRAID.'>$snap_disk_util</span>";
+            $snap_disk_util = (rtrim($snap_disk_util, "%") < 90) ? "$snap_disk_util" : "<span class='red-text snaphelptip' title='Your RAM disk utilization is above 90%, please clear the SnapRAID log files to ensure the continued operation of SnapRAID.'>$snap_disk_util</span>";
             
             echo <<<END
             <tr style="border: 1px solid;">
