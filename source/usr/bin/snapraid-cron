@@ -26,12 +26,12 @@ RUNNINGOP="INIT"
 [ -e "$CONFIG" ] && source $CONFIG
 
 if [ "$CRON" != "hourly" ] && [ "$CRON" != "daily" ] && [ "$CRON" != "weekly" ] && [ "$CRON" != "monthly" ]; then
-    echo "### SnapRAID maintenance not enabled in settings, exiting..." | tee >(logger -t "snapraid-cron")
+    echo "### SnapRAID maintenance not enabled in settings, exiting..." | logger -t "snapraid-cron"
     exit 1
 fi
 
 if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-runner >/dev/null 2>&1; then
-    echo "SnapRAID is already running somewhere, exiting..." | tee >(logger -t "snapraid-cron")
+    echo "SnapRAID is already running somewhere, exiting..." | logger -t "snapraid-cron"
     exit 1
 fi
 
