@@ -54,7 +54,7 @@ if [ ! "$CMDKNOWN" == "YES" ]; then
 fi
 
 if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1; then
-    echo "SnapRAID is already running somewhere, exiting..." | logger -t "snapraid-runner"
+    echo "SnapRAID is already running somewhere, exiting..." | logger -s -t "snapraid-runner"
     exit 1
 fi
 
