@@ -30,4 +30,7 @@ This plugin is currently not listed on Community Applications.
 #### License
 Plugin licensed under GPL2, GPL3 and/or MIT (where applicable, see respective source code files).
 
-SnapRAID © 2011-2024 Andrea Mazzoleni (https://github.com/amadvance/snapraid)
+#### Credits
+- SnapRAID © 2011-2024 Andrea Mazzoleni (https://github.com/amadvance/snapraid)
+- SnapRAID AIO Script © Oliver Cervera (https://github.com/auanasgheps/snapraid-aio-script)
+
