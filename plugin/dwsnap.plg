@@ -19,7 +19,7 @@
 <CHANGES>
 ## SnapRAID on UNRAID
 ###2024.04.29
-- new: minor changes in preparation for release to community applications
+- new: minor changes in preparation of release to community applications
 ###2024.04.27
 - fix: allocate RAM disk for operational output to prevent filling up rootfs
 - fix: added some additional safeguards and documentation for when problems occur
