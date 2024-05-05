@@ -201,7 +201,23 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
     </dl>
 
     <blockquote class="inline_help">
-    <p>When enabled you will receive notifications when the array maintenance finishes.</p>
+    <p>When enabled you will receive notifications when the array maintenance finishes (regardless of success or failure).</p>
+    <p>The notifications will be delivered according to Unraid's system-wide notification settings.</p>
+    </blockquote>
+
+    <dl>
+        <dt>SnapRAID Maintenance - Failure Notifications:</dt>
+        <dd>
+            <select class="snaprun" id="ERRORNOTIFY" name="ERRORNOTIFY" size="1">
+                <?=mk_option($dwsnap_errornotify, "disable", "No");?>
+                <?=mk_option($dwsnap_errornotify, "enable", "Yes");?>
+            </select>
+        </dd>
+    </dl>
+
+    <blockquote class="inline_help">
+    <p>When enabled you will receive notifications when the array maintenance encounters any failures (errors).</p>
+    <p>This setting can be used when <em>Finished Notifications</em> are disabled and you still want to be notified (only) of any array maintenance failures (errors).</p>
     <p>The notifications will be delivered according to Unraid's system-wide notification settings.</p>
     </blockquote>
 
