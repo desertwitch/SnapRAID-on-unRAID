@@ -62,6 +62,7 @@ fi
 [ "$PRIO" == "besteffort" ] && SNAP_BIN="ionice -c 2 /usr/bin/snapraid"
 [ "$PRIO" == "realtime" ] && SNAP_BIN="ionice -c 1 /usr/bin/snapraid"
 
+# shellcheck disable=SC2317
 signal_exit_snapraid() {
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     MEASURESTOP=$(date +%s)
@@ -186,3 +187,5 @@ echo "### ${BIGOP} FINISHED: ${OPTIME} (after ${DURATION} ${DURATIONUNIT})" 2>&1
 [ -n "$RAMWARNING" ] && echo "###${RAMWARNING}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
 
 cp "/var/lib/snapraid/logs/snaplog" "/var/lib/snapraid/logs/${CMD[1]}-${LOGTIME}.log"
+
+exit 0

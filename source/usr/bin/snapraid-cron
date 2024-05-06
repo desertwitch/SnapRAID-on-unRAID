@@ -69,6 +69,7 @@ failure_exit_cron() {
     exit 1
 }
 
+# shellcheck disable=SC2317
 signal_exit_cron() {
     FAILUREMSG="SIGTERM was received during ${RUNNINGOP}."
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
@@ -320,3 +321,5 @@ if [ -z "${SUCCESSOPS[*]}" ]; then
 else
     [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Finished" -d "SnapRAID maintenance finished with success (after ${DURATION} ${DURATIONUNIT}). ${SUCCESSOPS[*]} performed without errors.${RAMWARNINGSHORT}" -i "normal"
 fi
+
+exit 0
