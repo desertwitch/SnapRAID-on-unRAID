@@ -341,6 +341,9 @@ function getSnapStatus() {
     $.get('/plugins/dwsnap/include/dwsnap_status.php',function(data) {
         if (data) { 
             if(data === "RUNNING:YES") {
+                if($('#snapstatusicon').is(":hidden")) {
+                    location = '/Settings/dwsnapOps';
+                }
                 $('#snapstatusicon').show();
                 $('.snaprun').prop('disabled', true);
                 $('.snapnotrun').prop('disabled', false);
