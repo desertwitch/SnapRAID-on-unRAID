@@ -18,9 +18,10 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
-###2024.05.05
+###2024.05.06
 - new: add setting to only be notified in case of maintenance failures
 - fix: also output specific errors to stdout for directly callable helpers
+- fix: helpers no longer exiting with erroneous return code despite overall success
 ###2024.04.29
 - new: minor changes in preparation of release to community applications
 ###2024.04.27
