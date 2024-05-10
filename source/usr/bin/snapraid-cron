@@ -27,7 +27,7 @@ logger -t "snapraid-cron" "started"
 [ -e "$CONFIG" ] && source $CONFIG
 
 if [ "$CRON" != "hourly" ] && [ "$CRON" != "daily" ] && [ "$CRON" != "weekly" ] && [ "$CRON" != "monthly" ]; then
-    echo "### SnapRAID maintenance not enabled in settings, exiting..." | logger -s -t "snapraid-cron"
+    echo "SnapRAID maintenance not enabled in settings, exiting..." | logger -s -t "snapraid-cron"
     exit 1
 fi
 
