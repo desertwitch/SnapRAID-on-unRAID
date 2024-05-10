@@ -18,6 +18,9 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2024.05.10
+- new: setting for user configurable hard-kill timeout on array or system shutdown
+- new: improvements to handling interruptions and premature exits in critical situations
 ###2024.05.06
 - new: add setting to only be notified in case of maintenance failures
 - fix: also output specific errors to stdout for directly callable helpers
