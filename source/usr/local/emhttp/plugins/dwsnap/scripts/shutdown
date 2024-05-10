@@ -37,7 +37,7 @@ if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 |
     WASRUNNING="YES"
     if pgrep -x snapraid >/dev/null 2>&1; then
         WASRUNNING="YES"
-        echo "WARNING: Shutting down hanging 'snapraid' instance..." | logger -t "snapraid-shutdown"
+        echo "WARNING: Still shutting down a 'snapraid' instance..." | logger -t "snapraid-shutdown"
         TIMER=0
         while killall snapraid 2>/dev/null; do
             sleep 1
@@ -59,7 +59,7 @@ if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 |
 
     if pgrep -x snapraid-runner >/dev/null 2>&1; then
         WASRUNNING="YES"
-        echo "WARNING: Shutting down hanging 'snapraid-runner' instance..." | logger -t "snapraid-shutdown"
+        echo "WARNING: Still shutting down a 'snapraid-runner' instance..." | logger -t "snapraid-shutdown"
         TIMER=0
         while killall snapraid-runner 2>/dev/null; do
             sleep 1
@@ -81,7 +81,7 @@ if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 |
 
     if pgrep -x snapraid-cron >/dev/null 2>&1; then
         WASRUNNING="YES"
-        echo "WARNING: Shutting down hanging 'snapraid-cron' instance..." | logger -t "snapraid-shutdown"
+        echo "WARNING: Still shutting down a 'snapraid-cron' instance..." | logger -t "snapraid-shutdown"
         TIMER=0
         while killall snapraid-cron 2>/dev/null; do
             sleep 1
