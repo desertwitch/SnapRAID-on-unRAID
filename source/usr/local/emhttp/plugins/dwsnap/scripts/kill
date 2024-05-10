@@ -18,7 +18,9 @@ killall snapraid-runner
 killall snapraid-cron
 killall snapraid
 sleep 5
-killall -s9 snapraid
-killall -s9 snapraid-runner
-killall -s9 snapraid-cron
+if killall -9 snapraid >/dev/null 2>&1; then
+    sleep 5
+fi
+killall -9 snapraid-runner
+killall -9 snapraid-cron
 sleep 1

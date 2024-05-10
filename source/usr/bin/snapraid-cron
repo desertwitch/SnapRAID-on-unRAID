@@ -20,6 +20,7 @@ SNAP_CONF="/etc/snapraid.conf"
 CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
 
 RUNNINGOP="INIT"
+logger -t "snapraid-cron" "started"
 
 [ ! -d /var/lib/snapraid/logs ] && mkdir -p /var/lib/snapraid/logs
 
@@ -66,6 +67,7 @@ failure_exit_cron() {
             $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "SnapRAID maintenance finished with errors (after ${DURATION} ${DURATIONUNIT}). ${SUCCESSOPS[*]} performed without errors. ${FAILUREMSG}${RAMWARNINGSHORT}" -i "alert"
         fi
     fi
+    logger -t "snapraid-cron" "finished with errors (exit code: 1)"
     exit 1
 }
 
@@ -92,6 +94,7 @@ signal_exit_cron() {
             $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Interrupted" -d "SnapRAID maintenance was interrupted during ${RUNNINGOP} (after ${DURATION} ${DURATIONUNIT}). ${SUCCESSOPS[*]} performed without errors. ${FAILUREMSG}${RAMWARNINGSHORT}" -i "alert"
         fi
     fi
+    logger -t "snapraid-cron" "interrupted (exit code: 1)"
     exit 1
 }
 
@@ -322,4 +325,5 @@ else
     [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Finished" -d "SnapRAID maintenance finished with success (after ${DURATION} ${DURATIONUNIT}). ${SUCCESSOPS[*]} performed without errors.${RAMWARNINGSHORT}" -i "normal"
 fi
 
+logger -t "snapraid-cron" "finished"
 exit 0

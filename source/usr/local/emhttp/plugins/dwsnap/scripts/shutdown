@@ -13,6 +13,14 @@
 # The above copyright notice and this permission notice shall be
 # included in all copies or substantial portions of the Software.
 #
+
+CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
+[ -e "$CONFIG" ] && source $CONFIG
+
+if [ -z "$KILLTIME" ] || [[ ! $KILLTIME =~ ^[0-9]+$ ]]; then
+    KILLTIME="30"
+fi
+
 WASRUNNING="NO"
 
 if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 || pgrep -x snapraid-runner >/dev/null 2>&1; then
@@ -36,12 +44,13 @@ if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 |
             killall snapraid-cron
             killall snapraid
             TIMER=$((TIMER+1))
-            if [ $TIMER -ge 10 ]; then
-                echo "ERROR: Hard-killing hanging 'snapraid' instance..." | logger -t "snapraid-shutdown"
+            if [ $TIMER -ge "$KILLTIME" ]; then
+                echo "ERROR: Hard-killing hanging 'snapraid' instance after ${KILLTIME} seconds..." | logger -t "snapraid-shutdown"
+                if killall -9 snapraid >/dev/null 2>&1; then
+                    sleep 5
+                fi
                 killall -9 snapraid-runner
                 killall -9 snapraid-cron
-                killall -9 snapraid
-                sleep 1
                 break
             fi
         done
@@ -57,12 +66,13 @@ if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 |
             killall snapraid-cron
             killall snapraid
             TIMER=$((TIMER+1))
-            if [ $TIMER -ge 5 ]; then
-                echo "ERROR: Hard-killing hanging 'snapraid-runner' instance..." | logger -t "snapraid-shutdown"
+            if [ $TIMER -ge "$KILLTIME" ]; then
+                echo "ERROR: Hard-killing hanging 'snapraid-runner' instance after ${KILLTIME} seconds..." | logger -t "snapraid-shutdown"
+                if killall -9 snapraid >/dev/null 2>&1; then
+                    sleep 5
+                fi
                 killall -9 snapraid-runner
                 killall -9 snapraid-cron
-                killall -9 snapraid
-                sleep 1
                 break
             fi
         done
@@ -78,12 +88,13 @@ if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 |
             killall snapraid-cron
             killall snapraid
             TIMER=$((TIMER+1))
-            if [ $TIMER -ge 5 ]; then
-                echo "ERROR: Hard-killing hanging 'snapraid-cron' instance..." | logger -t "snapraid-shutdown"
+            if [ $TIMER -ge "$KILLTIME" ]; then
+                echo "ERROR: Hard-killing hanging 'snapraid-cron' instance after ${KILLTIME} seconds..." | logger -t "snapraid-shutdown"
+                if killall -9 snapraid >/dev/null 2>&1; then
+                    sleep 5
+                fi
                 killall -9 snapraid-runner
                 killall -9 snapraid-cron
-                killall -9 snapraid
-                sleep 1
                 break
             fi
         done
