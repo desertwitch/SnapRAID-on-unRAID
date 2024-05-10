@@ -25,6 +25,7 @@ WASRUNNING="NO"
 
 if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 || pgrep -x snapraid-runner >/dev/null 2>&1; then
     WASRUNNING="YES"
+    echo "Now attempting to stop running SnapRAID instance..."
     echo "Now attempting to stop running SnapRAID instance..." | logger -t "snapraid-shutdown"
     killall snapraid-runner
     killall snapraid-cron
