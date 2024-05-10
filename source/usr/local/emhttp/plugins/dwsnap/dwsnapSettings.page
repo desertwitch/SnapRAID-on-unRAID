@@ -116,8 +116,8 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 <blockquote class="inline_help">
 <p>This setting controls after what time any still running, not-exiting SnapRAID operations should eventually be hard-killed with SIGKILL when the server shuts down.</p>
 <p>If <strong><em>Synchronize Array Shutdowns</em></strong> is enabled, this is also the timeout used for any still running, not-exiting SnapRAID operations when the Unraid array is being stopped.</p>
-<p>Be advised that setting too short timeouts may result in data corruption (SnapRAID not being able to gracefully finish up), and too long timeouts may delay array/system shutdown unecessarily (when using a UPS: consider battery runtime!).</p>
-<p>While the SnapRAID plugin is programmed to always honor any such configured timeouts, the system may or may not deem it necessary to kill still running processes anyhow - the plugin has no further control over such system behavior (mostly limited to critical situations).</p>
+<p><strong>Setting too short timeouts may result in data corruption</strong> (SnapRAID not being able to gracefully finish up), too long timeouts may delay array/system shutdown unnecessarily (UPS: consider battery runtime).</p>
+<p>In critical situations the system may or may not deem it necessary to kill still running processes anyhow - the plugin has no further control over such system behavior, although this should generally be a very rare occurence.</p>
 </blockquote>
 
 <hr>
