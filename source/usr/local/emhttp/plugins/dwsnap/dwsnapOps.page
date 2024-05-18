@@ -29,8 +29,8 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 $snap_lastsync_html = "-";
 $snap_lastscrub_html = "-";
 
-if($dwsnap_lastsync !== "-") { $snap_lastsync_html = $dwsnap_lastsync . " (<strong>" . dwsnap_time_ago($dwsnap_lastsync) . "</strong>)"; } else { $snap_lastsync_html = "<span class='orange-text'><strong>Never</strong></span>"; }
-if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<strong>" . dwsnap_time_ago($dwsnap_lastscrub) . "</strong>)"; } else { $snap_lastscrub_html = "<span class='orange-text'><strong>Never</strong></span>"; }
+if($dwsnap_lastsync !== "-") { $snap_lastsync_html = $dwsnap_lastsync . " (<strong>" . dwsnap_time_ago($dwsnap_lastsync, $dwsnap_sync_expires) . "</strong>)"; } else { $snap_lastsync_html = "<span class='orange-text'><strong>Never</strong></span>"; }
+if($dwsnap_lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_lastscrub . " (<strong>" . dwsnap_time_ago($dwsnap_lastscrub, $dwsnap_scrub_expires) . "</strong>)"; } else { $snap_lastscrub_html = "<span class='orange-text'><strong>Never</strong></span>"; }
 
 if($dwsnap_lastsync !== "-" && $dwsnap_lastnodiff !== "-" && !empty($snap_lastsync_html)) {
     $snap_lastsync_html_bak = $snap_lastsync_html;
@@ -40,7 +40,7 @@ if($dwsnap_lastsync !== "-" && $dwsnap_lastnodiff !== "-" && !empty($snap_lastsy
         $st_lastnodiff = strtotime($dwsnap_lastnodiff);
         $st_lastsync_diff = abs($st_now - $st_lastsync);
         $st_lastnodiff_diff = abs($st_now - $st_lastnodiff);
-        $snap_lastnodiff_ago = dwsnap_time_ago($dwsnap_lastnodiff);
+        $snap_lastnodiff_ago = dwsnap_time_ago($dwsnap_lastnodiff, $dwsnap_sync_expires);
         if($st_lastnodiff_diff < $st_lastsync_diff) {
             if (strpos($snap_lastnodiff_ago, "orange-text") !== false) {
                 $snap_lastsync_html = str_replace("green-text", "orange-text", $snap_lastsync_html);

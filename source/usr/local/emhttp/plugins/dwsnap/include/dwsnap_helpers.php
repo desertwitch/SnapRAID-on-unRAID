@@ -17,7 +17,16 @@
  * included in all copies or substantial portions of the Software.
  *
  */
-function dwsnap_time_ago($oldTime) {
+function dwsnap_time_ago($oldTime, $alertThreshold = 7) {
+    try {
+        if(!is_int($alertThreshold)) {
+            $alertThreshold = intval($alertThreshold);
+        }
+    } catch (Throwable $e) { // For PHP 7
+        $alertThreshold = 7;
+    } catch (Exception $e) { // For PHP 5
+        $alertThreshold = 7;
+    }
     try {
         $timeCalc = strtotime("now") - strtotime($oldTime);
         if ($timeCalc >= (60*60*24*30*12*2)){
@@ -29,7 +38,7 @@ function dwsnap_time_ago($oldTime) {
         }else if ($timeCalc >= (60*60*24*30)){
             $timeCalc = "<span class='orange-text'>" . intval($timeCalc/60/60/24/30) . " month ago</span>";
         }else if ($timeCalc >= (60*60*24*2)){
-            if(($timeCalc/60/60/24) > 7) {
+            if(($timeCalc/60/60/24) > $alertThreshold) {
                 $timeCalc = "<span class='orange-text'>" . intval($timeCalc/60/60/24) . " days ago</span>";
             } else {
                 $timeCalc = "<span class='green-text'>" . intval($timeCalc/60/60/24) . " days ago</span>";
@@ -79,12 +88,26 @@ function dwsnap_dom_options($time){
     return $options;
 }
 
+function dwsnap_threshold_options($time){
+    $options = '';
+        for($i = 1; $i <= 28; $i++){
+            $options .= '<option value="'.$i.'"';
+            if(intval($time) === $i)
+                $options .= ' selected';
+
+            $options .= '>'.$i.'</option>';
+        }
+    return $options;
+}
+
 function dwsnap_getFooterHTML() {
     global $dwsnap_parity_disks;
     global $dwsnap_data_disks;
     global $dwsnap_lastsync;
     global $dwsnap_lastscrub;
     global $dwsnap_lastnodiff;
+    global $dwsnap_sync_expires;
+    global $dwsnap_scrub_expires;
 
     try {
         $snap_footer_html = "";
@@ -101,8 +124,8 @@ function dwsnap_getFooterHTML() {
             }
             if($snap_all_disks_available) {
                 if($dwsnap_lastsync !== "-" && $dwsnap_lastscrub !== "-") {
-                    $snap_lastsync_ago = dwsnap_time_ago($dwsnap_lastsync);
-                    $snap_lastscrub_ago = dwsnap_time_ago($dwsnap_lastscrub);
+                    $snap_lastsync_ago = dwsnap_time_ago($dwsnap_lastsync, $dwsnap_sync_expires);
+                    $snap_lastscrub_ago = dwsnap_time_ago($dwsnap_lastscrub, $dwsnap_scrub_expires);
                     if(file_exists("/boot/config/plugins/dwsnap/config/syncneeded")) {
                         if($snap_ramdisk_util > 90) {
                             $snap_footer_html = "<span class='snaptip' title='All disks are online and mounted / RAM Disk > 90% / Data Differences (Not in Sync) / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'>SnapRAID<i class='fa fa-exclamation-triangle red-text'></i></span>";
@@ -116,7 +139,7 @@ function dwsnap_getFooterHTML() {
                         $t_lastnodiff = strtotime($dwsnap_lastnodiff);
                         $t_lastsync_diff = abs($t_now - $t_lastsync);
                         $t_lastnodiff_diff = abs($t_now - $t_lastnodiff);
-                        $snap_lastnodiff_ago = dwsnap_time_ago($dwsnap_lastnodiff);
+                        $snap_lastnodiff_ago = dwsnap_time_ago($dwsnap_lastnodiff, $dwsnap_sync_expires);
                         if($t_lastnodiff_diff < $t_lastsync_diff) {
                             if (strpos($snap_lastnodiff_ago, "orange-text") !== false || strpos($snap_lastscrub_ago, "orange-text") !== false) {
                                 if($snap_ramdisk_util > 90) {
@@ -170,7 +193,7 @@ function dwsnap_getFooterHTML() {
                         }
                     }
                 } elseif ($dwsnap_lastsync !== "-" && $dwsnap_lastscrub == "-") {
-                    $snap_lastsync_ago = dwsnap_time_ago($dwsnap_lastsync);
+                    $snap_lastsync_ago = dwsnap_time_ago($dwsnap_lastsync, $dwsnap_sync_expires);
                     if(file_exists("/boot/config/plugins/dwsnap/config/syncneeded")) {
                         if($snap_ramdisk_util > 90) {
                             $snap_footer_html = "<span class='snaptip' title='All disks are online and mounted / RAM Disk > 90% / Data Differences (Not in Sync) / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: Never'>SnapRAID<i class='fa fa-exclamation-triangle red-text'></i></span>";
@@ -185,7 +208,7 @@ function dwsnap_getFooterHTML() {
                         }
                     }
                 } elseif ($dwsnap_lastsync == "-" && $dwsnap_lastscrub !== "-") {
-                    $snap_lastscrub_ago = dwsnap_time_ago($dwsnap_lastscrub);
+                    $snap_lastscrub_ago = dwsnap_time_ago($dwsnap_lastscrub, $dwsnap_scrub_expires);
                     if(file_exists("/boot/config/plugins/dwsnap/config/syncneeded")) {
                         if($snap_ramdisk_util > 90) {
                             $snap_footer_html = "<span class='snaptip' title='All disks are online and mounted / RAM Disk > 90% / Data Differences (Not in Sync) / Last Sync: Never / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'>SnapRAID<i class='fa fa-exclamation-triangle red-text'></i></span>";
