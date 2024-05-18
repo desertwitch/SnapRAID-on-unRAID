@@ -90,7 +90,7 @@ function dwsnap_dom_options($time){
 
 function dwsnap_threshold_options($time){
     $options = '';
-        for($i = 1; $i <= 28; $i++){
+        for($i = 2; $i <= 28; $i++){
             $options .= '<option value="'.$i.'"';
             if(intval($time) === $i)
                 $options .= ' selected';
