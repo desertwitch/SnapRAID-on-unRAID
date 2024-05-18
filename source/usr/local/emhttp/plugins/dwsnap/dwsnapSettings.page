@@ -94,7 +94,8 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
     <dd>
         <select class="snaprun" id="SYNCEXPIRES" name="SYNCEXPIRES" size="1">
             <?=dwsnap_threshold_options($dwsnap_sync_expires);?>
-        </select> days
+        </select>
+        <span style="margin-left:10px;">days</span>
     </dd>
 </dl>
 
@@ -108,7 +109,8 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
     <dd>
         <select class="snaprun" id="SCRUBEXPIRES" name="SCRUBEXPIRES" size="1">
             <?=dwsnap_threshold_options($dwsnap_scrub_expires);?>
-        </select> days
+        </select>
+        <span style="margin-left:10px;">days</span>
     </dd>
 </dl>
 
@@ -122,7 +124,8 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <select class="snaprun" id="STOPARRAY" name="STOPARRAY" size="1">
             <?=mk_option($dwsnap_stoparray, "disable", "No");?>
             <?=mk_option($dwsnap_stoparray, "enable", "Yes");?>
-        </select> <i class="fa fa-exclamation-triangle snaphelptip" title="Keep this setting enabled unless having read and fully understood the help description."></i>
+        </select>
+        <span style="margin-left:10px;"><i class="fa fa-exclamation-triangle snaphelptip" title="Keep this setting enabled unless having read and fully understood the help description."></i></span>
     </dd>
 </dl>
 
