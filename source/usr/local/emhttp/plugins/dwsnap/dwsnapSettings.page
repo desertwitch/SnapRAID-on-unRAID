@@ -90,12 +90,42 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 </blockquote>
 
 <dl>
+    <dt>SnapRAID Sync Overdue Warning Threshold:</dt>
+    <dd>
+        <select class="snaprun" id="SYNCEXPIRES" name="SYNCEXPIRES" size="1">
+            <?=dwsnap_threshold_options($dwsnap_sync_expires);?>
+        </select>
+        <span style="margin-left:20px;">days</span>
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+<p>The amount of days since the last SYNC operation, after which a warning will be shown in the GUI (on this page and the footer).</p>
+<p>The SYNC overdue warning can either be cleared or will not be shown if a more recent DIFF operation has resulted in no data differences.</p>
+</blockquote>
+
+<dl>
+    <dt>SnapRAID Scrub Overdue Warning Threshold:</dt>
+    <dd>
+        <select class="snaprun" id="SCRUBEXPIRES" name="SCRUBEXPIRES" size="1">
+            <?=dwsnap_threshold_options($dwsnap_scrub_expires);?>
+        </select>
+        <span style="margin-left:20px;">days</span>
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+<p>The amount of days since the last SCRUB operation, after which a warning will be shown in the GUI (on this page and the footer).</p>
+</blockquote>
+
+<dl>
     <dt>SnapRAID Synchronize Array Shutdowns:</dt>
     <dd>
         <select class="snaprun" id="STOPARRAY" name="STOPARRAY" size="1">
             <?=mk_option($dwsnap_stoparray, "disable", "No");?>
             <?=mk_option($dwsnap_stoparray, "enable", "Yes");?>
-        </select><i class="fa fa-exclamation-triangle snaphelptip" title="Keep this setting enabled unless having read and fully understood the help description."></i>
+        </select>
+        <span style="margin-left:20px;"><i class="fa fa-exclamation-triangle snaphelptip" title="Keep this setting enabled unless having read and fully understood the help description."></i></span>
     </dd>
 </dl>
 
@@ -118,33 +148,6 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 <p>If <strong><em>Synchronize Array Shutdowns</em></strong> is enabled, this is also the timeout used for any still running, not-exiting SnapRAID operations when the Unraid array is being stopped.</p>
 <p>Setting <u>too short timeouts may result in data corruption</u> (SnapRAID not being able to gracefully finish up), too long timeouts may delay array/system shutdown unnecessarily (UPS: consider battery runtime).</p>
 <p>In critical situations the system may or may not deem it necessary to kill still running processes anyhow - the plugin has no further control over such system behavior, although this should generally be a very rare occurence.</p>
-</blockquote>
-
-<dl>
-    <dt>SnapRAID Sync Overdue Warning Threshold:</dt>
-    <dd>
-        <select class="snaprun" id="SYNCEXPIRES" name="SYNCEXPIRES" size="1">
-            <?=dwsnap_threshold_options($dwsnap_sync_expires);?>
-        </select>days
-    </dd>
-</dl>
-
-<blockquote class="inline_help">
-<p>The amount of days since the last SYNC operation, after which a warning will be shown in the GUI (on this page and the footer).</p>
-<p>The SYNC overdue warning can either be cleared or will not be shown if a more recent DIFF operation has resulted in no data differences.</p>
-</blockquote>
-
-<dl>
-    <dt>SnapRAID Scrub Overdue Warning Threshold:</dt>
-    <dd>
-        <select class="snaprun" id="SCRUBEXPIRES" name="SCRUBEXPIRES" size="1">
-            <?=dwsnap_threshold_options($dwsnap_scrub_expires);?>
-        </select>days
-    </dd>
-</dl>
-
-<blockquote class="inline_help">
-<p>The amount of days since the last SCRUB operation, after which a warning will be shown in the GUI (on this page and the footer).</p>
 </blockquote>
 
 <hr>
