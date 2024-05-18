@@ -18,6 +18,10 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2024.05.18
+- new: add setting to configure the overdue warning threshold for SYNC in GUI
+- new: add setting to configure the overdue warning threshold for SCRUB in GUI
+- fix: make operations page and footer consistent when showing overdue warnings
 ###2024.05.10
 - new: setting for user configurable hard-kill timeout on array or system shutdown
 - new: improvements to handling interruptions and premature exits in critical situations
