@@ -181,6 +181,7 @@ if [ "$DIFF" == "enable" ]; then
         failure_exit_cron
     fi
 
+    CHANGES_COUNT=$((ADD_COUNT+DEL_COUNT+UPDATE_COUNT+MOVE_COUNT+COPY_COUNT+RESTORE_COUNT))
     echo "### CRON -- Equal [$EQ_COUNT] - Added [$ADD_COUNT] - Deleted [$DEL_COUNT] - Moved [$MOVE_COUNT] - Copied [$COPY_COUNT] - Updated [$UPDATE_COUNT] - Restored [$RESTORE_COUNT]"  2>&1 | tee -a /var/lib/snapraid/logs/snaplog
 
     if [ "$ADDED" -ge 0 ] && [ "$ADD_COUNT" -gt "$ADDED" ]; then
@@ -262,7 +263,7 @@ if [ "$SYNC" == "enable" ]; then
             echo "### CRON -- Sync has finished, proceeding..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
         fi
     fi
-    SUCCESSOPS+=("SYNC")
+    [ -n "$CHANGES_COUNT" ] && SUCCESSOPS+=("SYNC(${CHANGES_COUNT})") || SUCCESSOPS+=("SYNC")
 else
     echo "### CRON -- Sync is disabled, proceeding..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
 fi
