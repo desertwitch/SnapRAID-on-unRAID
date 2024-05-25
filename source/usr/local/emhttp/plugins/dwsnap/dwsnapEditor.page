@@ -39,7 +39,7 @@ Markdown="false"
 <div>When planning your SnapRAID array, please do consider that it will perform best with many large files which rarely change (e.g. a media library) as opposed to many often changing small files.</div>
 <div>Parity has minor overhead, so best not fill data disks to the very last byte - when using on top of Unraid parity, reasonable '<em>Minimum free space</em>' values are usually automatically set on user shares.</div>
 <br>
-<div>You cannot use your Unraid parity disk as SnapRAID parity disk due to SnapRAID operating on a file level as opposed to Unraid's parity operating on a block level.</div>
+<div>You cannot use your Unraid parity disk as SnapRAID parity disk, this is because the parity calculations are done in an entirely different and non-interchangeable manner.</div>
 <div>That means in order to use SnapRAID you will need to sacrifice one regular data disk with at least the size of the largest to be protected data disk (same rules as on Unraid).</div>
 <div>When using on top of Unraid parity, you will access all your protected data as you usually would through Unraid's user shares, the data of all protected disks will remain pooled as before.</div>
 <br>
