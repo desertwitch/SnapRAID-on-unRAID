@@ -18,6 +18,10 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2024.05.26
+- new: add autosave parameter to default configuration for intermediate saves
+- new: report amount in notifications when changes are synced during maintenance
+- new: minor changes to documentation improving understanding regarding parity processes
 ###2024.05.18
 - new: add setting to configure the overdue warning threshold for SYNC in GUI
 - new: add setting to configure the overdue warning threshold for SCRUB in GUI
