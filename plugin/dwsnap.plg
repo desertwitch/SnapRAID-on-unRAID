@@ -18,6 +18,8 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2024.05.27
+- fix: reduce the GUI loading times by requesting specific mountpoint utilization
 ###2024.05.26
 - new: add autosave parameter to default configuration for intermediate saves
 - new: report amount in notifications when changes are synced during maintenance
