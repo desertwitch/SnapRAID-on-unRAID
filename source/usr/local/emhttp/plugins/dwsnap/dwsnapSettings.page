@@ -90,7 +90,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 </blockquote>
 
 <dl>
-    <dt>SnapRAID Write Raw Operation Reports:</dt>
+    <dt>SnapRAID Enable Raw Operation Reports:</dt>
     <dd>
         <select class="snaprun" id="RAWREPORTS" name="RAWREPORTS" size="1">
             <?=mk_option($dwsnap_rawreports, "disable", "No");?>
