@@ -64,6 +64,7 @@ fi
 [ "$PRIO" == "besteffort" ] && SNAP_BIN="ionice -c 2 /usr/bin/snapraid"
 [ "$PRIO" == "realtime" ] && SNAP_BIN="ionice -c 1 /usr/bin/snapraid"
 
+[ "$RAWREPORTS" == "manual" ] && RAWREPORTS="enable"
 for LOGPARAM in "${CMD[@]:1}"; do
     if [ "$LOGPARAM" == "-l" ]; then
         RAWREPORTS="disable"
