@@ -95,8 +95,8 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <select class="snaprun" id="RAWREPORTS" name="RAWREPORTS" size="1">
             <?=mk_option($dwsnap_rawreports, "disable", "Never");?>
             <?=mk_option($dwsnap_rawreports, "enable", "Always");?>
-            <?=mk_option($dwsnap_rawreports, "manual", "For Manual Operations");?>
-            <?=mk_option($dwsnap_rawreports, "cron", "For Maintenance Operations");?>
+            <?=mk_option($dwsnap_rawreports, "manual", "Manual Operations");?>
+            <?=mk_option($dwsnap_rawreports, "cron", "Maintenance Operations");?>
         </select>
         <span style="margin-left:10px;"><i class="fa fa-exclamation-triangle snaphelptip" title="Keep this setting disabled unless having read and fully understood the help description."></i></span>
     </dd>
