@@ -199,8 +199,8 @@ if($dwsnap_lastsync !== "-" && $dwsnap_lastnodiff !== "-" && !empty($snap_lastsy
         <label for="snapfix-forcedevice" title="Forces the insecure operation of fixing with inaccessible disks, or with disks on the same physical device. For example if you lost two data disks, and you have a spare disk to recover only the first one, and you want to ignore the second inaccessible disk. Alternatively if you want to recover a disk in the free space left on an already used disk, meaning on the same physical device. " class="snaphelptip">(Fix) Force Device</label>    
     
         <br><strong>Raw Operation Report Alternative File:</strong>
-        <input type="text" id="snap-rawreport" title="An alternative path for the raw operation report file, which can grow extremely large in size (up to many GBs)." class="snaphelptip" placeholder="Full File Path (e.g. /mnt/cache/operation-raw.log)">
-    
+        <input type="text" id="snap-rawreport" title="An alternative path for the raw operation report file, which can grow extremely large in size (up to many GBs). This can be useful on systems where SnapRAID's RAM disk is too small for large raw operation report files." class="snaphelptip" placeholder="Full File Path (e.g. /mnt/cache/operation-raw.log)">
+
     </div><br>
 
     <div><strong>INFORMATION:</strong></div>
