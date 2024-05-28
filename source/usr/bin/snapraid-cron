@@ -109,7 +109,7 @@ LOGTIME=$(date +"%Y%m%d-%H%M%S")
 OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
 MEASURESTART=$(date +%s)
 
-mkdir -p "/var/lib/snapraid/logs/cron-${LOGTIME}"
+[ "$RAWREPORTS" == "enable" ] && mkdir -p "/var/lib/snapraid/logs/cron-${LOGTIME}"
 
 echo "$OPTIME" >/var/lib/snapraid/logs/laststart
 echo "### CRON -- STARTED: ${OPTIME}" 2>&1 | tee /var/lib/snapraid/logs/snaplog
@@ -132,10 +132,12 @@ trap signal_exit_cron SIGTERM SIGINT
 if [ "$TOUCH" == "enable" ]; then
     RUNNINGOP="TOUCH"
     echo "### CRON -- Checking for files to be touched..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-    TIMESTATUS=$($SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/cron-${LOGTIME}/01a-status-${LOGTIME}.log" status 2>&1 | tee -a /var/lib/snapraid/logs/snaplog | grep -E 'You have [1-9][0-9]* files with( a)? zero sub-second timestamp\.')
+    [ "$RAWREPORTS" == "enable" ] && LOGLINE="-l /var/lib/snapraid/logs/cron-${LOGTIME}/01a-status-${LOGTIME}.log" || unset LOGLINE
+    TIMESTATUS=$($SNAP_BIN -c $SNAP_CONF $LOGLINE status 2>&1 | tee -a /var/lib/snapraid/logs/snaplog | grep -E 'You have [1-9][0-9]* files with( a)? zero sub-second timestamp\.')
     if [ -n "$TIMESTATUS" ]; then
         echo "### CRON -- Touching selected files..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-        if ! $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/cron-${LOGTIME}/01b-touch-${LOGTIME}.log" $QUIETARG touch >>/var/lib/snapraid/logs/snaplog 2>&1; then
+        [ "$RAWREPORTS" == "enable" ] && LOGLINE="-l /var/lib/snapraid/logs/cron-${LOGTIME}/01b-touch-${LOGTIME}.log" || unset LOGLINE
+        if ! $SNAP_BIN -c $SNAP_CONF $LOGLINE $QUIETARG touch >>/var/lib/snapraid/logs/snaplog 2>&1; then
             echo "### CRON -- Touching selected files has failed... exiting" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
             FAILUREMSG="The touching of selected files has failed - check LOG."
             failure_exit_cron
@@ -155,7 +157,8 @@ if [ "$DIFF" == "enable" ]; then
     RUNNINGOP="DIFF"
     echo "### CRON -- Checking for differences..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
     
-    DIFFS=$($SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/cron-${LOGTIME}/02-diff-${LOGTIME}.log" diff 2>&1 | tee -a /var/lib/snapraid/logs/snaplog ; exit "${PIPESTATUS[0]}")
+    [ "$RAWREPORTS" == "enable" ] && LOGLINE="-l /var/lib/snapraid/logs/cron-${LOGTIME}/02-diff-${LOGTIME}.log" || unset LOGLINE
+    DIFFS=$($SNAP_BIN -c $SNAP_CONF $LOGLINE diff 2>&1 | tee -a /var/lib/snapraid/logs/snaplog ; exit "${PIPESTATUS[0]}")
     DIFFRET=$?
     if [ "$DIFFRET" -eq 0 ]; then
         OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
@@ -237,7 +240,8 @@ if [ "$SYNC" == "enable" ]; then
         fi
         if [ "$PREHASH" == "enable" ]; then
             echo "### CRON -- Prehashed Syncing...${FORCEZEROMSG}${SYNCERRORMSG}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-            if ! $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/cron-${LOGTIME}/03-hsync-${LOGTIME}.log" $QUIETARG -h $FORCEZEROARG $SYNCERRORARG sync >>/var/lib/snapraid/logs/snaplog 2>&1; then
+            [ "$RAWREPORTS" == "enable" ] && LOGLINE="-l /var/lib/snapraid/logs/cron-${LOGTIME}/03-hsync-${LOGTIME}.log" || unset LOGLINE
+            if ! $SNAP_BIN -c $SNAP_CONF $LOGLINE $QUIETARG -h $FORCEZEROARG $SYNCERRORARG sync >>/var/lib/snapraid/logs/snaplog 2>&1; then
                 echo "### CRON -- Prehashed Sync has failed, exiting..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
                 FAILUREMSG="The prehashed sync has failed - check LOG."
                 failure_exit_cron
@@ -250,7 +254,8 @@ if [ "$SYNC" == "enable" ]; then
             echo "### CRON -- Prehashed Sync has finished, proceeding..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
         else
             echo "### CRON -- Syncing...${FORCEZEROMSG}${SYNCERRORMSG}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-            if ! $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/cron-${LOGTIME}/03-sync-${LOGTIME}.log" $QUIETARG $FORCEZEROARG $SYNCERRORARG sync >>/var/lib/snapraid/logs/snaplog 2>&1; then
+            [ "$RAWREPORTS" == "enable" ] && LOGLINE="-l /var/lib/snapraid/logs/cron-${LOGTIME}/03-sync-${LOGTIME}.log" || unset LOGLINE
+            if ! $SNAP_BIN -c $SNAP_CONF $LOGLINE $QUIETARG $FORCEZEROARG $SYNCERRORARG sync >>/var/lib/snapraid/logs/snaplog 2>&1; then
                 echo "### CRON -- Sync has failed, exiting..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
                 FAILUREMSG="The sync has failed - check LOG."
                 failure_exit_cron
@@ -278,7 +283,8 @@ if [ "$SCRUB" == "enable" ]; then
     if [ "$SCRUBNEW" == "enable" ]; then
         RUNNINGOP="SCRUBNEW"
         echo "### CRON -- Scrubbing New Blocks...${SCRUBERRORMSG}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-        if ! $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/cron-${LOGTIME}/04a-scrubnew-${LOGTIME}.log" $QUIETARG -p new $SCRUBERRORARG scrub >>/var/lib/snapraid/logs/snaplog 2>&1; then
+        [ "$RAWREPORTS" == "enable" ] && LOGLINE="-l /var/lib/snapraid/logs/cron-${LOGTIME}/04a-scrubnew-${LOGTIME}.log" || unset LOGLINE
+        if ! $SNAP_BIN -c $SNAP_CONF $LOGLINE $QUIETARG -p new $SCRUBERRORARG scrub >>/var/lib/snapraid/logs/snaplog 2>&1; then
                 echo "### CRON -- Scrub New Blocks has failed, exiting..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
                 FAILUREMSG="The new block scrub has failed - check LOG."
                 failure_exit_cron
@@ -292,7 +298,8 @@ if [ "$SCRUB" == "enable" ]; then
     fi
     RUNNINGOP="SCRUB"
     echo "### CRON -- Scrubbing [${SCRUBPERCENT} % / ${SCRUBAGE} days age]...${SCRUBERRORMSG}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-    if ! $SNAP_BIN -c $SNAP_CONF -l "/var/lib/snapraid/logs/cron-${LOGTIME}/04b-scrub-${LOGTIME}.log" $QUIETARG -p "$SCRUBPERCENT" -o "$SCRUBAGE" $SCRUBERRORARG scrub >>/var/lib/snapraid/logs/snaplog 2>&1; then
+    [ "$RAWREPORTS" == "enable" ] && LOGLINE="-l /var/lib/snapraid/logs/cron-${LOGTIME}/04b-scrub-${LOGTIME}.log" || unset LOGLINE
+    if ! $SNAP_BIN -c $SNAP_CONF $LOGLINE $QUIETARG -p "$SCRUBPERCENT" -o "$SCRUBAGE" $SCRUBERRORARG scrub >>/var/lib/snapraid/logs/snaplog 2>&1; then
             echo "### CRON -- Scrub has failed, exiting..." 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
             FAILUREMSG="The scrub has failed - check LOG."
             failure_exit_cron

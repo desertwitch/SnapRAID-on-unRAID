@@ -23,6 +23,7 @@ $dwsnap_cfg  = parse_ini_file("/boot/config/plugins/dwsnap/dwsnap.cfg");
 $dwsnap_prio = trim(isset($dwsnap_cfg['PRIO']) ? htmlspecialchars($dwsnap_cfg['PRIO']) : 'disable');
 $dwsnap_footer = trim(isset($dwsnap_cfg['FOOTER']) ? htmlspecialchars($dwsnap_cfg['FOOTER']) : 'disable');
 $dwsnap_screenimg = trim(isset($dwsnap_cfg['SCREENIMG']) ? htmlspecialchars($dwsnap_cfg['SCREENIMG']) : 'enable');
+$dwsnap_rawreports = trim(isset($dwsnap_cfg['RAWREPORTS']) ? htmlspecialchars($dwsnap_cfg['RAWREPORTS']) : 'disable');
 $dwsnap_stoparray = trim(isset($dwsnap_cfg['STOPARRAY']) ? htmlspecialchars($dwsnap_cfg['STOPARRAY']) : 'enable');
 $dwsnap_killtime = trim(isset($dwsnap_cfg['KILLTIME']) ? htmlspecialchars($dwsnap_cfg['KILLTIME']) : '30');
 $dwsnap_sync_expires = trim(isset($dwsnap_cfg['SYNCEXPIRES']) ? htmlspecialchars($dwsnap_cfg['SYNCEXPIRES']) : '7');

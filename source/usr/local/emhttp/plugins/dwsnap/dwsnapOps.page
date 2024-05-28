@@ -113,6 +113,8 @@ if($dwsnap_lastsync !== "-" && $dwsnap_lastnodiff !== "-" && !empty($snap_lastsy
     <input type="hidden" id="arg13" name="#arg[13]" value="">
     <input type="hidden" id="arg14" name="#arg[14]" value="">
     <input type="hidden" id="arg15" name="#arg[15]" value="">
+    <input type="hidden" id="arg16" name="#arg[16]" value="">
+    <input type="hidden" id="arg17" name="#arg[17]" value="">
 
     <input class="snaprun snaphelptip" type="button" id="snapstatus" value="STATUS" title="Prints a summary of the state of the disk array. It includes information about the parity fragmentation, how long the blocks have not been checked, and all the recorded silent errors encountered while scrubbing. Note that the information presented refers to the last time you ran SYNC. Later modifications to the array data are not taken into account.">
     <input class="snaprun snaphelptip" type="button" id="snaplist" value="LIST" title="Lists all the files contained in the array at the time of the last SYNC.">
@@ -195,6 +197,10 @@ if($dwsnap_lastsync !== "-" && $dwsnap_lastnodiff !== "-" && !empty($snap_lastsy
         <label for="snapcheck-forceuuid" title="Forces the insecure operation of syncing, checking and fixing with disks that have changed their UUID. If SnapRAID detects that some disks have changed UUID, it stops proceeding unless you specify this option. This allows to detect when your disks are mounted in the wrong mount points. It's anyway allowed to have a single UUID change with single parity, and more with multiple parity, because it's a normal situation when replacing disks as part of a recovery." class="snaphelptip">(Sync/Check/Fix) Force UUID</label>
         <input type="checkbox" id="snapfix-forcedevice" value="snapfix-forcedevice">
         <label for="snapfix-forcedevice" title="Forces the insecure operation of fixing with inaccessible disks, or with disks on the same physical device. For example if you lost two data disks, and you have a spare disk to recover only the first one, and you want to ignore the second inaccessible disk. Alternatively if you want to recover a disk in the free space left on an already used disk, meaning on the same physical device. " class="snaphelptip">(Fix) Force Device</label>    
+    
+        <br><strong>Raw Operation Report Alternative File:</strong>
+        <input type="text" id="snap-rawreport" title="An alternative path for the raw operation report file, which can grow extremely large in size (up to many GBs)." class="snaphelptip" placeholder="Full File Path (e.g. /mnt/cache/operation-raw.log)">
+    
     </div><br>
 
     <div><strong>INFORMATION:</strong></div>
@@ -401,7 +407,7 @@ function confirmCommandAndSubmit() {
         }
     });
     swal({
-        title: "Operation Command",
+        title: "Review Command",
         text: "Are you absolutely certain that this is the operation you want to run?<br>Please refer to the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> again if you are not 100% sure.<br><pre>" + snapCmd + "</pre>Be advised there will be no more confirmations after this message.",
         type: "warning",
         showCancelButton: true,
@@ -430,7 +436,11 @@ $(function(){
             $('#arg1').val('0');
         }
         $('#arg2').val('status');
-        $('#snapcommands').submit();
+        if($('#snap-rawreport').val()) {
+            $('#arg3').val('-l');
+            $('#arg4').val($('#snap-rawreport').val());
+        }
+        confirmCommandAndSubmit();
     });
     $('#snaplist').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
@@ -440,7 +450,11 @@ $(function(){
             $('#arg1').val('0');
         }
         $('#arg2').val('list');
-        $('#snapcommands').submit();
+        if($('#snap-rawreport').val()) {
+            $('#arg3').val('-l');
+            $('#arg4').val($('#snap-rawreport').val());
+        }
+        confirmCommandAndSubmit();
     });
     $('#snapdiff').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
@@ -450,10 +464,14 @@ $(function(){
             $('#arg1').val('0');
         }
         $('#arg2').val('diff');
-        if($('#snapcheck-forceuuid').is(':checked')) {
-            $('#arg3').val('-U');
+        if($('#snap-rawreport').val()) {
+            $('#arg3').val('-l');
+            $('#arg4').val($('#snap-rawreport').val());
         }
-        $('#snapcommands').submit();
+        if($('#snapcheck-forceuuid').is(':checked')) {
+            $('#arg5').val('-U');
+        }
+        confirmCommandAndSubmit();
     });
     $('#snapdup').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
@@ -463,7 +481,11 @@ $(function(){
             $('#arg1').val('0');
         }
         $('#arg2').val('dup');
-        $('#snapcommands').submit();
+        if($('#snap-rawreport').val()) {
+            $('#arg3').val('-l');
+            $('#arg4').val($('#snap-rawreport').val());
+        }
+        confirmCommandAndSubmit();
     });
     $('#snapscrub').click(function(){
         $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
@@ -473,36 +495,40 @@ $(function(){
             $('#arg1').val('0');
         }
         $('#arg2').val('scrub');
+        if($('#snap-rawreport').val()) {
+            $('#arg3').val('-l');
+            $('#arg4').val($('#snap-rawreport').val());
+        }
         if($('#snapscrub-bad').is(':checked')) {
-            $('#arg3').val('-p');
-            $('#arg4').val('bad');
+            $('#arg5').val('-p');
+            $('#arg6').val('bad');
         }
         else if($('#snapscrub-new').is(':checked')) {
-            $('#arg3').val('-p');
-            $('#arg4').val('new');
+            $('#arg5').val('-p');
+            $('#arg6').val('new');
         }
         else if($('#snapscrub-full').is(':checked')) {
-            $('#arg3').val('-p');
-            $('#arg4').val('full');
+            $('#arg5').val('-p');
+            $('#arg6').val('full');
         }
         else if($('#snapscrub-plan').is(':checked')) {
            if($('#snapscrub-percent').val()) {
-                $('#arg3').val('-p');
-                $('#arg4').val($('#snapscrub-percent').val());
+                $('#arg5').val('-p');
+                $('#arg6').val($('#snapscrub-percent').val());
             }
             if($('#snapscrub-age').val()) {
-                $('#arg5').val('-o');
-                $('#arg6').val($('#snapscrub-age').val());
+                $('#arg7').val('-o');
+                $('#arg8').val($('#snapscrub-age').val());
             }
         }
         if($('#snapsync-errorlimit').val()) {
-            $('#arg7').val('-L');
-            $('#arg8').val($('#snapsync-errorlimit').val());
+            $('#arg9').val('-L');
+            $('#arg10').val($('#snapsync-errorlimit').val());
         }
         if($('#snap-hideprogress').is(':checked')) {
-            $('#arg9').val('-q');
+            $('#arg11').val('-q');
         } else if ($('#snap-verbose').is(':checked')) {
-            $('#arg9').val('-v');
+            $('#arg11').val('-v');
         }
         confirmCommandAndSubmit();
     });
@@ -514,35 +540,39 @@ $(function(){
             $('#arg1').val('0');
         }
         $('#arg2').val('check');
+        if($('#snap-rawreport').val()) {
+            $('#arg3').val('-l');
+            $('#arg4').val($('#snap-rawreport').val());
+        }
         if($('#snapcheck-auditonly').is(':checked')) {
-            $('#arg3').val('-a');
+            $('#arg5').val('-a');
         }
         if($('#snapfix-diskpattern').val()) {
-            $('#arg4').val('-d');
-            $('#arg5').val($('#snapfix-diskpattern').val());
+            $('#arg6').val('-d');
+            $('#arg7').val($('#snapfix-diskpattern').val());
         }
         if($('#snapfix-pattern').val()) {
-            $('#arg6').val('-f');
-            $('#arg7').val($('#snapfix-pattern').val());
+            $('#arg8').val('-f');
+            $('#arg9').val($('#snapfix-pattern').val());
         }
         if($('#snapcheck-forceuuid').is(':checked')) {
-            $('#arg8').val('-U');
+            $('#arg10').val('-U');
         }
         if($('#snapsync-forcenocopy').is(':checked')) {
-            $('#arg9').val('-N');
+            $('#arg11').val('-N');
         }
         if($('#snapfix-blkstart').val()) {
-            $('#arg10').val('-S');
-            $('#arg11').val($('#snapfix-blkstart').val());
+            $('#arg12').val('-S');
+            $('#arg13').val($('#snapfix-blkstart').val());
         }
         if($('#snapfix-blkcount').val()) {
-            $('#arg12').val('-B');
-            $('#arg13').val($('#snapfix-blkcount').val());
+            $('#arg14').val('-B');
+            $('#arg15').val($('#snapfix-blkcount').val());
         }
         if($('#snap-hideprogress').is(':checked')) {
-            $('#arg14').val('-q');
+            $('#arg16').val('-q');
         } else if ($('#snap-verbose').is(':checked')) {
-            $('#arg14').val('-v');
+            $('#arg16').val('-v');
         }
         confirmCommandAndSubmit();
     });
@@ -640,32 +670,36 @@ $(function(){
                     $('#arg1').val('0');
                 }
                 $('#arg2').val('sync');
+                if($('#snap-rawreport').val()) {
+                    $('#arg3').val('-l');
+                    $('#arg4').val($('#snap-rawreport').val());
+                }
                 if($('#snapsync-forcezero').is(':checked')) {
-                    $('#arg3').val('-Z');
+                    $('#arg5').val('-Z');
                 }
                 if($('#snapsync-forceempty').is(':checked')) {
-                    $('#arg4').val('-E');
+                    $('#arg6').val('-E');
                 }
                 if($('#snapsync-forcefull').is(':checked')) {
-                    $('#arg5').val('-F');
+                    $('#arg7').val('-F');
                 }
                 if($('#snapsync-forcerealloc').is(':checked')) {
-                    $('#arg6').val('-R');
+                    $('#arg8').val('-R');
                 }
                 if($('#snapcheck-forceuuid').is(':checked')) {
-                    $('#arg7').val('-U');
+                    $('#arg9').val('-U');
                 }
                 if($('#snapsync-forcenocopy').is(':checked')) {
-                    $('#arg8').val('-N');
+                    $('#arg10').val('-N');
                 }
                 if($('#snapsync-errorlimit').val()) {
-                    $('#arg9').val('-L');
-                    $('#arg10').val($('#snapsync-errorlimit').val());
+                    $('#arg11').val('-L');
+                    $('#arg12').val($('#snapsync-errorlimit').val());
                 }
                 if($('#snap-hideprogress').is(':checked')) {
-                    $('#arg11').val('-q');
+                    $('#arg13').val('-q');
                 } else if ($('#snap-verbose').is(':checked')) {
-                    $('#arg11').val('-v');
+                    $('#arg13').val('-v');
                 }
                 confirmCommandAndSubmit();
             });
@@ -689,32 +723,36 @@ $(function(){
                 }
                 $('#arg2').val('sync');
                 $('#arg3').val('-h');
+                if($('#snap-rawreport').val()) {
+                    $('#arg4').val('-l');
+                    $('#arg5').val($('#snap-rawreport').val());
+                }
                 if($('#snapsync-forcezero').is(':checked')) {
-                    $('#arg4').val('-Z');
+                    $('#arg6').val('-Z');
                 }
                 if($('#snapsync-forceempty').is(':checked')) {
-                    $('#arg5').val('-E');
+                    $('#arg7').val('-E');
                 }
                 if($('#snapsync-forcefull').is(':checked')) {
-                    $('#arg6').val('-F');
+                    $('#arg8').val('-F');
                 }
                 if($('#snapsync-forcerealloc').is(':checked')) {
-                    $('#arg7').val('-R');
+                    $('#arg9').val('-R');
                 }
                 if($('#snapcheck-forceuuid').is(':checked')) {
-                    $('#arg8').val('-U');
+                    $('#arg10').val('-U');
                 }
                 if($('#snapsync-forcenocopy').is(':checked')) {
-                    $('#arg9').val('-N');
+                    $('#arg11').val('-N');
                 }
                 if($('#snapsync-errorlimit').val()) {
-                    $('#arg10').val('-L');
-                    $('#arg11').val($('#snapsync-errorlimit').val());
+                    $('#arg12').val('-L');
+                    $('#arg13').val($('#snapsync-errorlimit').val());
                 }
                 if($('#snap-hideprogress').is(':checked')) {
-                    $('#arg12').val('-q');
+                    $('#arg14').val('-q');
                 } else if ($('#snap-verbose').is(':checked')) {
-                    $('#arg12').val('-v');
+                    $('#arg14').val('-v');
                 }
                 confirmCommandAndSubmit();
             });
@@ -737,6 +775,10 @@ $(function(){
                     $('#arg1').val('0');
                 }
                 $('#arg2').val('touch');
+                if($('#snap-rawreport').val()) {
+                    $('#arg3').val('-l');
+                    $('#arg4').val($('#snap-rawreport').val());
+                }
                 confirmCommandAndSubmit();
             });
     });
@@ -758,35 +800,39 @@ $(function(){
                     $('#arg1').val('0');
                 }
                 $('#arg2').val('fix');
+                if($('#snap-rawreport').val()) {
+                    $('#arg3').val('-l');
+                    $('#arg4').val($('#snap-rawreport').val());
+                }
                 if($('#snapfix-diskpattern').val()) {
-                    $('#arg3').val('-d');
-                    $('#arg4').val($('#snapfix-diskpattern').val());
+                    $('#arg5').val('-d');
+                    $('#arg6').val($('#snapfix-diskpattern').val());
                 }
                 if($('#snapfix-pattern').val()) {
-                    $('#arg5').val('-f');
-                    $('#arg6').val($('#snapfix-pattern').val());
+                    $('#arg7').val('-f');
+                    $('#arg8').val($('#snapfix-pattern').val());
                 }
                 if($('#snapcheck-forceuuid').is(':checked')) {
-                    $('#arg7').val('-U');
+                    $('#arg9').val('-U');
                 }
                 if($('#snapfix-forcedevice').is(':checked')) {
-                    $('#arg8').val('-D');
+                    $('#arg10').val('-D');
                 }
                 if($('#snapsync-forcenocopy').is(':checked')) {
-                    $('#arg9').val('-N');
+                    $('#arg11').val('-N');
                 }
                 if($('#snapfix-blkstart').val()) {
-                    $('#arg10').val('-S');
-                    $('#arg11').val($('#snapfix-blkstart').val());
+                    $('#arg12').val('-S');
+                    $('#arg13').val($('#snapfix-blkstart').val());
                 }
                 if($('#snapfix-blkcount').val()) {
-                    $('#arg12').val('-B');
-                    $('#arg13').val($('#snapfix-blkcount').val());
+                    $('#arg14').val('-B');
+                    $('#arg15').val($('#snapfix-blkcount').val());
                 }
                 if($('#snap-hideprogress').is(':checked')) {
-                    $('#arg14').val('-q');
+                    $('#arg16').val('-q');
                 } else if ($('#snap-verbose').is(':checked')) {
-                    $('#arg14').val('-v');
+                    $('#arg16').val('-v');
                 }
                 confirmCommandAndSubmit();
             });
@@ -810,35 +856,39 @@ $(function(){
                 }
                 $('#arg2').val('fix');
                 $('#arg3').val('-m');
+                if($('#snap-rawreport').val()) {
+                    $('#arg4').val('-l');
+                    $('#arg5').val($('#snap-rawreport').val());
+                }
                 if($('#snapfix-diskpattern').val()) {
-                    $('#arg4').val('-d');
-                    $('#arg5').val($('#snapfix-diskpattern').val());
+                    $('#arg6').val('-d');
+                    $('#arg7').val($('#snapfix-diskpattern').val());
                 }
                 if($('#snapfix-pattern').val()) {
-                    $('#arg6').val('-f');
-                    $('#arg7').val($('#snapfix-pattern').val());
+                    $('#arg8').val('-f');
+                    $('#arg9').val($('#snapfix-pattern').val());
                 }
                 if($('#snapcheck-forceuuid').is(':checked')) {
-                    $('#arg8').val('-U');
+                    $('#arg10').val('-U');
                 }
                 if($('#snapfix-forcedevice').is(':checked')) {
-                    $('#arg9').val('-D');
+                    $('#arg11').val('-D');
                 }
                 if($('#snapsync-forcenocopy').is(':checked')) {
-                    $('#arg10').val('-N');
+                    $('#arg12').val('-N');
                 }
                 if($('#snapfix-blkstart').val()) {
-                    $('#arg11').val('-S');
-                    $('#arg12').val($('#snapfix-blkstart').val());
+                    $('#arg13').val('-S');
+                    $('#arg14').val($('#snapfix-blkstart').val());
                 }
                 if($('#snapfix-blkcount').val()) {
-                    $('#arg13').val('-B');
-                    $('#arg14').val($('#snapfix-blkcount').val());
+                    $('#arg15').val('-B');
+                    $('#arg16').val($('#snapfix-blkcount').val());
                 }
                 if($('#snap-hideprogress').is(':checked')) {
-                    $('#arg15').val('-q');
+                    $('#arg17').val('-q');
                 } else if ($('#snap-verbose').is(':checked')) {
-                    $('#arg15').val('-v');
+                    $('#arg17').val('-v');
                 }
                 confirmCommandAndSubmit();
             });
@@ -862,35 +912,39 @@ $(function(){
                 }
                 $('#arg2').val('fix');
                 $('#arg3').val('-e');
+                if($('#snap-rawreport').val()) {
+                    $('#arg4').val('-l');
+                    $('#arg5').val($('#snap-rawreport').val());
+                }
                 if($('#snapfix-diskpattern').val()) {
-                    $('#arg4').val('-d');
-                    $('#arg5').val($('#snapfix-diskpattern').val());
+                    $('#arg6').val('-d');
+                    $('#arg7').val($('#snapfix-diskpattern').val());
                 }
                 if($('#snapfix-pattern').val()) {
-                    $('#arg6').val('-f');
-                    $('#arg7').val($('#snapfix-pattern').val());
+                    $('#arg8').val('-f');
+                    $('#arg9').val($('#snapfix-pattern').val());
                 }
                 if($('#snapcheck-forceuuid').is(':checked')) {
-                    $('#arg8').val('-U');
+                    $('#arg10').val('-U');
                 }
                 if($('#snapfix-forcedevice').is(':checked')) {
-                    $('#arg9').val('-D');
+                    $('#arg11').val('-D');
                 }
                 if($('#snapsync-forcenocopy').is(':checked')) {
-                    $('#arg10').val('-N');
+                    $('#arg12').val('-N');
                 }
                 if($('#snapfix-blkstart').val()) {
-                    $('#arg11').val('-S');
-                    $('#arg12').val($('#snapfix-blkstart').val());
+                    $('#arg13').val('-S');
+                    $('#arg14').val($('#snapfix-blkstart').val());
                 }
                 if($('#snapfix-blkcount').val()) {
-                    $('#arg13').val('-B');
-                    $('#arg14').val($('#snapfix-blkcount').val());
+                    $('#arg15').val('-B');
+                    $('#arg16').val($('#snapfix-blkcount').val());
                 }
                 if($('#snap-hideprogress').is(':checked')) {
-                    $('#arg15').val('-q');
+                    $('#arg17').val('-q');
                 } else if ($('#snap-verbose').is(':checked')) {
-                    $('#arg15').val('-v');
+                    $('#arg17').val('-v');
                 }
                 confirmCommandAndSubmit();
             });
@@ -924,31 +978,35 @@ $(function(){
                 \$('#arg2').val('check');
                 \$('#arg3').val('-d');
                 \$('#arg4').val('$snap_parity_disk[1]');
+                if(\$('#snap-rawreport').val()) {
+                    \$('#arg5').val('-l');
+                    \$('#arg6').val(\$('#snap-rawreport').val());
+                }
                 if (\$('#snapcheck-auditonly').is(':checked')) {
-                    \$('#arg5').val('-a');
+                    \$('#arg7').val('-a');
                 }
                 if (\$('#snapfix-pattern').val()) {
-                    \$('#arg6').val('-f');
-                    \$('#arg7').val(\$('#snapfix-pattern').val());
+                    \$('#arg8').val('-f');
+                    \$('#arg9').val(\$('#snapfix-pattern').val());
                 }
                 if (\$('#snapcheck-forceuuid').is(':checked')) {
-                    \$('#arg8').val('-U');
+                    \$('#arg10').val('-U');
                 }
                 if (\$('#snapsync-forcenocopy').is(':checked')) {
-                    \$('#arg9').val('-N');
+                    \$('#arg11').val('-N');
                 }
                 if (\$('#snapfix-blkstart').val()) {
-                    \$('#arg10').val('-S');
-                    \$('#arg11').val(\$('#snapfix-blkstart').val());
+                    \$('#arg12').val('-S');
+                    \$('#arg13').val(\$('#snapfix-blkstart').val());
                 }
                 if (\$('#snapfix-blkcount').val()) {
-                    \$('#arg12').val('-B');
-                    \$('#arg13').val(\$('#snapfix-blkcount').val());
+                    \$('#arg14').val('-B');
+                    \$('#arg15').val(\$('#snapfix-blkcount').val());
                 }
                 if (\$('#snap-hideprogress').is(':checked')) {
-                    \$('#arg14').val('-q');
+                    \$('#arg16').val('-q');
                 } else if (\$('#snap-verbose').is(':checked')) {
-                    \$('#arg14').val('-v');
+                    \$('#arg16').val('-v');
                 }
                 confirmCommandAndSubmit();
             });
@@ -971,31 +1029,35 @@ $(function(){
                     \$('#arg2').val('fix');
                     \$('#arg3').val('-d');
                     \$('#arg4').val('$snap_parity_disk[1]');
+                    if(\$('#snap-rawreport').val()) {
+                        \$('#arg5').val('-l');
+                        \$('#arg6').val(\$('#snap-rawreport').val());
+                    }
                     if (\$('#snapfix-pattern').val()) {
-                        \$('#arg5').val('-f');
-                        \$('#arg6').val(\$('#snapfix-pattern').val());
+                        \$('#arg7').val('-f');
+                        \$('#arg8').val(\$('#snapfix-pattern').val());
                     }
                     if (\$('#snapcheck-forceuuid').is(':checked')) {
-                        \$('#arg7').val('-U');
+                        \$('#arg9').val('-U');
                     }
                     if (\$('#snapfix-forcedevice').is(':checked')) {
-                        \$('#arg8').val('-D');
+                        \$('#arg10').val('-D');
                     }
                     if (\$('#snapsync-forcenocopy').is(':checked')) {
-                        \$('#arg9').val('-N');
+                        \$('#arg11').val('-N');
                     }
                     if (\$('#snapfix-blkstart').val()) {
-                        \$('#arg10').val('-S');
-                        \$('#arg11').val(\$('#snapfix-blkstart').val());
+                        \$('#arg12').val('-S');
+                        \$('#arg13').val(\$('#snapfix-blkstart').val());
                     }
                     if (\$('#snapfix-blkcount').val()) {
-                        \$('#arg12').val('-B');
-                        \$('#arg13').val(\$('#snapfix-blkcount').val());
+                        \$('#arg14').val('-B');
+                        \$('#arg15').val(\$('#snapfix-blkcount').val());
                     }
                     if (\$('#snap-hideprogress').is(':checked')) {
-                        \$('#arg14').val('-q');
+                        \$('#arg16').val('-q');
                     } else if (\$('#snap-verbose').is(':checked')) {
-                        \$('#arg14').val('-v');
+                        \$('#arg16').val('-v');
                     }
                     confirmCommandAndSubmit();
                 });
@@ -1020,31 +1082,35 @@ $(function(){
                     \$('#arg3').val('-m');
                     \$('#arg4').val('-d');
                     \$('#arg5').val('$snap_parity_disk[1]');
+                    if(\$('#snap-rawreport').val()) {
+                        \$('#arg6').val('-l');
+                        \$('#arg7').val(\$('#snap-rawreport').val());
+                    }
                     if (\$('#snapfix-pattern').val()) {
-                        \$('#arg6').val('-f');
-                        \$('#arg7').val(\$('#snapfix-pattern').val());
+                        \$('#arg8').val('-f');
+                        \$('#arg9').val(\$('#snapfix-pattern').val());
                     }
                     if (\$('#snapcheck-forceuuid').is(':checked')) {
-                        \$('#arg8').val('-U');
+                        \$('#arg10').val('-U');
                     }
                     if (\$('#snapfix-forcedevice').is(':checked')) {
-                        \$('#arg9').val('-D');
+                        \$('#arg11').val('-D');
                     }
                     if (\$('#snapsync-forcenocopy').is(':checked')) {
-                        \$('#arg10').val('-N');
+                        \$('#arg12').val('-N');
                     }
                     if (\$('#snapfix-blkstart').val()) {
-                        \$('#arg11').val('-S');
-                        \$('#arg12').val(\$('#snapfix-blkstart').val());
+                        \$('#arg13').val('-S');
+                        \$('#arg14').val(\$('#snapfix-blkstart').val());
                     }
                     if (\$('#snapfix-blkcount').val()) {
-                        \$('#arg13').val('-B');
-                        \$('#arg14').val(\$('#snapfix-blkcount').val());
+                        \$('#arg15').val('-B');
+                        \$('#arg16').val(\$('#snapfix-blkcount').val());
                     }
                     if (\$('#snap-hideprogress').is(':checked')) {
-                        \$('#arg15').val('-q');
+                        \$('#arg17').val('-q');
                     } else if (\$('#snap-verbose').is(':checked')) {
-                        \$('#arg15').val('-v');
+                        \$('#arg17').val('-v');
                     }
                     confirmCommandAndSubmit();
                 });
@@ -1063,31 +1129,35 @@ END;
                 \$('#arg2').val('check');
                 \$('#arg3').val('-d');
                 \$('#arg4').val('$snap_data_disk[1]');
+                if(\$('#snap-rawreport').val()) {
+                    \$('#arg5').val('-l');
+                    \$('#arg6').val(\$('#snap-rawreport').val());
+                }
                 if (\$('#snapcheck-auditonly').is(':checked')) {
-                    \$('#arg5').val('-a');
+                    \$('#arg7').val('-a');
                 }
                 if (\$('#snapfix-pattern').val()) {
-                    \$('#arg6').val('-f');
-                    \$('#arg7').val(\$('#snapfix-pattern').val());
+                    \$('#arg8').val('-f');
+                    \$('#arg9').val(\$('#snapfix-pattern').val());
                 }
                 if (\$('#snapcheck-forceuuid').is(':checked')) {
-                    \$('#arg8').val('-U');
+                    \$('#arg10').val('-U');
                 }
                 if (\$('#snapsync-forcenocopy').is(':checked')) {
-                    \$('#arg9').val('-N');
+                    \$('#arg11').val('-N');
                 }
                 if (\$('#snapfix-blkstart').val()) {
-                    \$('#arg10').val('-S');
-                    \$('#arg11').val(\$('#snapfix-blkstart').val());
+                    \$('#arg12').val('-S');
+                    \$('#arg13').val(\$('#snapfix-blkstart').val());
                 }
                 if (\$('#snapfix-blkcount').val()) {
-                    \$('#arg12').val('-B');
-                    \$('#arg13').val(\$('#snapfix-blkcount').val());
+                    \$('#arg14').val('-B');
+                    \$('#arg15').val(\$('#snapfix-blkcount').val());
                 }
                 if (\$('#snap-hideprogress').is(':checked')) {
-                    \$('#arg14').val('-q');
+                    \$('#arg16').val('-q');
                 } else if (\$('#snap-verbose').is(':checked')) {
-                    \$('#arg14').val('-v');
+                    \$('#arg16').val('-v');
                 }
                 confirmCommandAndSubmit();
             });
@@ -1110,31 +1180,35 @@ END;
                     \$('#arg2').val('fix');
                     \$('#arg3').val('-d');
                     \$('#arg4').val('$snap_data_disk[1]');
+                    if(\$('#snap-rawreport').val()) {
+                        \$('#arg5').val('-l');
+                        \$('#arg6').val(\$('#snap-rawreport').val());
+                    }
                     if (\$('#snapfix-pattern').val()) {
-                        \$('#arg5').val('-f');
-                        \$('#arg6').val(\$('#snapfix-pattern').val());
+                        \$('#arg7').val('-f');
+                        \$('#arg8').val(\$('#snapfix-pattern').val());
                     }
                     if (\$('#snapcheck-forceuuid').is(':checked')) {
-                        \$('#arg7').val('-U');
+                        \$('#arg9').val('-U');
                     }
                     if (\$('#snapfix-forcedevice').is(':checked')) {
-                        \$('#arg8').val('-D');
+                        \$('#arg10').val('-D');
                     }
                     if (\$('#snapsync-forcenocopy').is(':checked')) {
-                        \$('#arg9').val('-N');
+                        \$('#arg11').val('-N');
                     }
                     if (\$('#snapfix-blkstart').val()) {
-                        \$('#arg10').val('-S');
-                        \$('#arg11').val(\$('#snapfix-blkstart').val());
+                        \$('#arg12').val('-S');
+                        \$('#arg13').val(\$('#snapfix-blkstart').val());
                     }
                     if (\$('#snapfix-blkcount').val()) {
-                        \$('#arg12').val('-B');
-                        \$('#arg13').val(\$('#snapfix-blkcount').val());
+                        \$('#arg14').val('-B');
+                        \$('#arg15').val(\$('#snapfix-blkcount').val());
                     }
                     if (\$('#snap-hideprogress').is(':checked')) {
-                        \$('#arg14').val('-q');
+                        \$('#arg16').val('-q');
                     } else if (\$('#snap-verbose').is(':checked')) {
-                        \$('#arg14').val('-v');
+                        \$('#arg16').val('-v');
                     }
                     confirmCommandAndSubmit();
                 });
@@ -1159,31 +1233,35 @@ END;
                     \$('#arg3').val('-m');
                     \$('#arg4').val('-d');
                     \$('#arg5').val('$snap_data_disk[1]');
+                    if(\$('#snap-rawreport').val()) {
+                        \$('#arg6').val('-l');
+                        \$('#arg7').val(\$('#snap-rawreport').val());
+                    }
                     if (\$('#snapfix-pattern').val()) {
-                        \$('#arg6').val('-f');
-                        \$('#arg7').val(\$('#snapfix-pattern').val());
+                        \$('#arg8').val('-f');
+                        \$('#arg9').val(\$('#snapfix-pattern').val());
                     }
                     if (\$('#snapcheck-forceuuid').is(':checked')) {
-                        \$('#arg8').val('-U');
+                        \$('#arg10').val('-U');
                     }
                     if (\$('#snapfix-forcedevice').is(':checked')) {
-                        \$('#arg9').val('-D');
+                        \$('#arg11').val('-D');
                     }
                     if (\$('#snapsync-forcenocopy').is(':checked')) {
-                        \$('#arg10').val('-N');
+                        \$('#arg12').val('-N');
                     }
                     if (\$('#snapfix-blkstart').val()) {
-                        \$('#arg11').val('-S');
-                        \$('#arg12').val(\$('#snapfix-blkstart').val());
+                        \$('#arg13').val('-S');
+                        \$('#arg14').val(\$('#snapfix-blkstart').val());
                     }
                     if (\$('#snapfix-blkcount').val()) {
-                        \$('#arg13').val('-B');
-                        \$('#arg14').val(\$('#snapfix-blkcount').val());
+                        \$('#arg15').val('-B');
+                        \$('#arg16').val(\$('#snapfix-blkcount').val());
                     }
                     if (\$('#snap-hideprogress').is(':checked')) {
-                        \$('#arg15').val('-q');
+                        \$('#arg17').val('-q');
                     } else if (\$('#snap-verbose').is(':checked')) {
-                        \$('#arg15').val('-v');
+                        \$('#arg17').val('-v');
                     }
                     confirmCommandAndSubmit();
                 });

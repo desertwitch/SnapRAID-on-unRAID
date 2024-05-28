@@ -90,6 +90,22 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 </blockquote>
 
 <dl>
+    <dt>SnapRAID Enable Raw Operation Reports:</dt>
+    <dd>
+        <select class="snaprun" id="RAWREPORTS" name="RAWREPORTS" size="1">
+            <?=mk_option($dwsnap_rawreports, "disable", "No");?>
+            <?=mk_option($dwsnap_rawreports, "enable", "Yes");?>
+        </select>
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+<p>This setting controls if raw operation reports should be written to SnapRAID's RAM disk, in addition to the regular (and smaller) operation logs.</p>
+<p>Such reports can provide additional diagnostic details, but can also be extremely large in size (up to many GBs) and possibly exceed the RAM disk's capacities.</p>
+<p>It is therefore recommended to keep this setting disabled, unless running into problems and needing such diagnostic information, on any systems with limited RAM reserves.</p>
+</blockquote>
+
+<dl>
     <dt>SnapRAID Sync Overdue Warning Threshold:</dt>
     <dd>
         <select class="snaprun" id="SYNCEXPIRES" name="SYNCEXPIRES" size="1">
