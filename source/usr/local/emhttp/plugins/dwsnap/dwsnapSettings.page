@@ -98,6 +98,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
             <?=mk_option($dwsnap_rawreports, "manual", "For Manual Operations");?>
             <?=mk_option($dwsnap_rawreports, "cron", "For Maintenance Operations");?>
         </select>
+        <span style="margin-left:10px;"><i class="fa fa-exclamation-triangle snaphelptip" title="Keep this setting disabled unless having read and fully understood the help description."></i></span>
     </dd>
 </dl>
 
