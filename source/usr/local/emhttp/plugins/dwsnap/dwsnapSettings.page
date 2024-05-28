@@ -105,7 +105,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 <blockquote class="inline_help">
 <p>This setting controls if raw operation reports should be written to SnapRAID's RAM disk, in addition to the regular summarized (and smaller) operation logs.</p>
 <p>These reports can provide additional diagnostic details, but can also be extremely large in size (up to many GBs) and possibly exceed the RAM disk's capacities.</p>
-<p>It is therefore recommended to keep this setting disabled, unless running into problems and needing such diagnostic information, on any systems with limited RAM reserves.</p>
+<p><strong>It is therefore recommended to keep this setting disabled, unless running into problems and needing such diagnostic information, on any systems with limited RAM reserves.</strong></p>
 <p>You can also keep this setting generally disabled, but enable on demand (for individual operations) raw operation reports to another (less space constrained) location by utilizing the additional parameters above.</p>
 <p>It is not possible to always write raw operation reports to another location, because ensuring full availability of that location (during the operation) should always be a conscious process before running array operations.</p>
 </blockquote>
