@@ -109,6 +109,7 @@ LOGTIME=$(date +"%Y%m%d-%H%M%S")
 OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
 MEASURESTART=$(date +%s)
 
+[ "$RAWREPORTS" == "cron" ] && RAWREPORTS="enable"
 [ "$RAWREPORTS" == "enable" ] && mkdir -p "/var/lib/snapraid/logs/cron-${LOGTIME}"
 
 echo "$OPTIME" >/var/lib/snapraid/logs/laststart

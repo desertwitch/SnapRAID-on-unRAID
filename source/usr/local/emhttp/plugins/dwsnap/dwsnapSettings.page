@@ -95,6 +95,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <select class="snaprun" id="RAWREPORTS" name="RAWREPORTS" size="1">
             <?=mk_option($dwsnap_rawreports, "disable", "No");?>
             <?=mk_option($dwsnap_rawreports, "enable", "Yes");?>
+            <?=mk_option($dwsnap_rawreports, "cron", "Only For Maintenance");?>
         </select>
     </dd>
 </dl>
