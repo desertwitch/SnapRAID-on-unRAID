@@ -19,6 +19,7 @@
 <CHANGES>
 ## SnapRAID on UNRAID
 ###2024.05.29
+- new: added additional check selectors to check only missing or error files
 - new: add setting to generally control the generation of raw operation reports
 - new: add additional parameter to write a raw operation report to another location
 ###2024.05.27
