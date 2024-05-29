@@ -148,9 +148,9 @@ if($dwsnap_lastsync !== "-" && $dwsnap_lastnodiff !== "-" && !empty($snap_lastsy
         <label for="snap-notifyme" title="Sends a notification when the manually started array operation finishes (using Unraid's system-wide notification settings)." class="snaphelptip">On Operation Complete</label>
         <span style="margin-left:10px"><strong>Check Filters:</strong></span>
         <input type="checkbox" id="snapcheck-missing" value="snapcheck-missing">
-        <label for="snapcheck-missing" title="Check only files marked as missing." class="snaphelptip">(Check) All Missing</label>
+        <label for="snapcheck-missing" title="Check all files marked as missing." class="snaphelptip">(Check) All Missing</label>
         <input type="checkbox" id="snapcheck-errors" value="snapcheck-errors">
-        <label for="snapcheck-errors" title="Check only files marked with errors." class="snaphelptip">(Check) All Errors</label>
+        <label for="snapcheck-errors" title="Check all files marked with errors." class="snaphelptip">(Check) All Errors</label>
         
         <span style="float:right;margin-right:10px"><a href="https://www.snapraid.it/manual" target="_blank" title="SnapRAID User Manual"><i class="fa fa-file-text-o"></i> User Manual</a> / <a href="https://www.snapraid.it/faq" target="_blank" title="SnapRAID FAQ"><i class="fa fa-question-circle-o"></i> Frequently Asked Questions</a></span>
         
