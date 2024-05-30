@@ -40,7 +40,7 @@ fi
 
 NOTIFY_BIN="/usr/local/emhttp/plugins/dynamix/scripts/notify"
 HOST="$(echo "$HOSTNAME" | awk '{print toupper($0)}')"
-EVENT="SnapRAID Operation"
+EVENT="SnapRAID Maintenance"
 SUBJECT="[${HOST}] SnapRAID"
 
 [ "$PRIO" == "idle" ] && SNAP_BIN="ionice -c 3 /usr/bin/snapraid"
