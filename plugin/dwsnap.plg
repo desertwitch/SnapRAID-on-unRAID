@@ -20,6 +20,8 @@
 ## SnapRAID on UNRAID
 ###2024.05.30
 - fix: amend excessive autosave value in default configuration and explain calculation
+- note for existing users: autosave value is in total GB read from all disks in the array
+- note for existing users: autosave of 1500 GB with 10 disks saves SYNC state every 150 GB
 ###2024.05.29
 - new: added additional check selectors to check only missing or error files
 - new: add setting to generally control the generation of raw operation reports
