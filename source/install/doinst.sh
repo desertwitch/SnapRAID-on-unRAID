@@ -18,10 +18,10 @@
 BOOT="/boot/config/plugins/dwsnap"
 DOCROOT="/usr/local/emhttp/plugins/dwsnap"
 
-chmod +0755 $DOCROOT/scripts/*
-chmod +0755 $DOCROOT/event/*
-chmod +0755 /usr/bin/snapraid-cron
-chmod +0755 /usr/bin/snapraid-runner
+chmod 755 $DOCROOT/scripts/*
+chmod 755 $DOCROOT/event/*
+chmod 755 /usr/bin/snapraid-cron
+chmod 755 /usr/bin/snapraid-runner
 
 if [ ! -d $BOOT/config ]; then
     mkdir -p $BOOT/config
