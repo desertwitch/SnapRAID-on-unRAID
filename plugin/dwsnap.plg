@@ -3,14 +3,14 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "dwsnap">
 <!ENTITY author    "desertwitch">
-<!ENTITY version   "2024.05.30">
+<!ENTITY version   "2024.06.02">
 <!ENTITY launch    "Settings/dwsnapOps">
 <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/SnapRAID-on-unRAID/main">
 <!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
 <!ENTITY pkgURL    "&gitURL;/packages">
 <!ENTITY plgPATH   "/boot/config/plugins/&name;">
-<!ENTITY plgNAME   "dwsnap-2024.05.30-x86_64-1">
-<!ENTITY plgMD5    "930021f6f10a75a8f2bcb7aa350cfc0f">
+<!ENTITY plgNAME   "dwsnap-2024.06.02-x86_64-1">
+<!ENTITY plgMD5    "39d5543e8c7aea7fef8f64d28402abfa">
 <!ENTITY emhttp    "/usr/local/emhttp/plugins/&name;">
 ]>
 
@@ -18,6 +18,8 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2024.06.02
+- fix: minor changes to array operation notification handling
 ###2024.05.30
 - fix: relax excessive autosave value in default configuration and explain calculation
 - note for existing users: autosave value is in total GB read from all disks in the array
