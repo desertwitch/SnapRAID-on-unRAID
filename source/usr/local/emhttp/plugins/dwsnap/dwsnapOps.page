@@ -128,7 +128,7 @@ if($dwsnap_lastsync !== "-" && $dwsnap_lastnodiff !== "-" && !empty($snap_lastsy
         <input class="snaprun snaphelptip" type="button" id="clearoutput" value="CLEAR SCREEN" title="Clears the output screen of the current/previous array operation.">
         <input class="snaprun snaphelptip" type="button" id="clearlogs" value="CLEAR ALL LOGS" title="Deletes all SnapRAID log files, also including the output screen of the current/previous array operation.">
         <input class="snapnotrun snaphelptip" type="button" id="snapstop" value="STOP OPERATION" title="Attempts to (gracefully) stop all running SnapRAID instances.">
-        <input class="snapnotrun snaphelptip" type="button" id="snapkill" value="KILL OPERATION" title="After a last attempt of (gracefully) stopping all running SnapRAID instances, this action hard-kills all still running SnapRAID instances with SIGKILL, beware that DATA CORRUPTION is very possible with this action.">
+        <input class="snapnotrun snaphelptip" type="button" id="snapkill" value="KILL OPERATION" title="After a last attempt of (gracefully) stopping all running SnapRAID instances, this action hard-kills all still running SnapRAID instances with SIGKILL, beware that DATA CORRUPTION is possible with this action.">
     </span><br>
 
     <input class="snaprun snaphelptip" type="button" id="snapsync" value="SYNC" title="Updates the parity information. All the modified files in the disk array are read, and the corresponding parity data is updated. This is the equivalent of taking a snapshot, which will be the base for all recoveries.">
