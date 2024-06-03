@@ -853,7 +853,7 @@ $(function(){
     $('#snapfixmissing').click(function(){
         swal({
             title: "Destructive Operation",
-            text: "This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.<br><br>Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it's reverted to the stored snapshot.<br><br>Only all files missing/deleted from the array are processed.",
+            text: "This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.<br><br>Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it's reverted to the stored snapshot. This command doesn't differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC.<br><br>Only all files missing/deleted from the array are processed.",
             type: "warning",
             showCancelButton: true,
             confirmButtonText: "Start Operation",
@@ -909,7 +909,7 @@ $(function(){
     $('#snapfixerrors').click(function(){
         swal({
             title: "Destructive Operation",
-            text: "This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.<br><br>Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it's reverted to the stored snapshot.<br><br>Only files that have blocks marked with silent or input/output errors during previous SYNC and SCRUB operations are processed.",
+            text: "This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.<br><br>Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it's reverted to the stored snapshot. This command doesn't differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC.<br><br>Only files that have blocks marked with silent or input/output errors during previous SYNC and SCRUB operations are processed.",
             type: "warning",
             showCancelButton: true,
             confirmButtonText: "Start Operation",
