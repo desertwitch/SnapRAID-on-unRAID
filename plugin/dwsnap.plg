@@ -18,6 +18,9 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2024.06.04
+- fix: minor modifications to improve permissioning for binaries
+- fix: minor modifications with further clarifications for documentation
 ###2024.06.02
 - fix: minor changes to array operation notification handling
 ###2024.05.30
@@ -109,8 +112,8 @@ if [ -x /usr/local/emhttp/plugins/dwsnap/scripts/write_config ]; then
 fi
 echo ""
 echo "-------------------------------------------------------------"
-echo " SnapRAID on UNRAID (&version;) has been installed."
-echo " Copyright 2023 - &author;"
+echo " SnapRAID on UNRAID has been installed."
+echo " Version: &version; / Plugin Maintainer: &author;"
 echo "-------------------------------------------------------------"
 echo ""
 </INLINE>
@@ -153,8 +156,8 @@ fi
 
 echo ""
 echo "-----------------------------------------------------------"
-echo " SnapRAID on UNRAID (&version;) has been removed."
-echo " Copyright 2023 - &author;"
+echo " SnapRAID on UNRAID has been removed."
+echo " Version: &version; / Plugin Maintainer: &author;"
 echo "-----------------------------------------------------------"
 echo ""
 </INLINE>
