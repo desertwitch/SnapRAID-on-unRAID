@@ -1,4 +1,4 @@
-Menu="dwsnapOps:3"
+Menu="dwsnapOps:4"
 Title="SnapRAID Array Operation Log Archive"
 Tag="folder-open-o"
 Markdown="false"
@@ -22,7 +22,8 @@ Markdown="false"
  * included in all copies or substantial portions of the Software.
  *
  */
-$snap_lastlog = shell_exec("ls -Art /var/lib/snapraid/logs/*.log 2>/dev/null | tail -n 1 2>/dev/null") ?? false;
+require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
+$snap_lastlog = shell_exec("ls -Art /var/lib/snapraid/logs/".$dwsnap_active_cfg->cfgname."/*.log 2>/dev/null | tail -n 1 2>/dev/null") ?? false;
 ?>
 <link type="text/css" rel="stylesheet" href="<?=autov('/webGui/styles/jquery.filetree.css');?>">
 <link type="text/css" rel="stylesheet" href="<?=autov('/plugins/dwsnap/css/codemirror.min.css');?>">

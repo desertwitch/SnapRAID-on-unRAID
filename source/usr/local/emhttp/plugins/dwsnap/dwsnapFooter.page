@@ -23,7 +23,6 @@ Link="nav-user"
 require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 ?>
 <?if($dwsnap_footer == "enable"):?>
-<?$snap_footer_html = dwsnap_getFooterHTML() ?? "";?>
 
 <style type="text/css">
 #snap_footer {
@@ -39,23 +38,10 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 
 <script type="text/javascript">
 function getSnapFooter() {
-    $.get('/plugins/dwsnap/include/dwsnap_status.php',function(data) {
+    $.get('/plugins/dwsnap/include/dwsnap_footer.php',function(data) {
         if (data) { 
-            if(data === "RUNNING:YES") {
-                $('#snap_footer').show();
-                $('#snap_footer').html('<span class="snaptip" title="Array Operation in Progress">SnapRAID<i class="fa fa-cog fa-spin"></i></span>');
-                $('.snaptip').tooltipster();
-            } else if (data === "RUNNING:NO") {
-                var snapFooter = "<?=$snap_footer_html?>";
-                if(snapFooter) {
-                    $('#snap_footer').show();	
-                    $('#snap_footer').html(snapFooter);
-                    $('.snaptip').tooltipster();
-                } else {
-                    $('#snap_footer').html("");
-                    $('#snap_footer').hide();
-                }
-            }
+            $('#snap_footer').html(data);
+            $('.snaptip').tooltipster();
 	    }
     });
     clearTimeout(timers.getSnapFooter);

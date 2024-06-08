@@ -1,4 +1,4 @@
-Menu="dwsnapOps:1"
+Menu="dwsnapOps:2"
 Title="SnapRAID Settings"
 Tag="sliders"
 Markdown="false"
@@ -32,8 +32,14 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 <br>
 
 <form markdown="0" id="dwsnap-settings" name="dwsnap_settings" method="POST" action="/update.php" target="progressFrame">
-<input type="hidden" name="#file" value="dwsnap/dwsnap.cfg">
-<input type="hidden" id="command2" name="#command" value="/usr/local/emhttp/plugins/dwsnap/scripts/write_config">
+<input type="hidden" id="sfile" name="#file" value="dwsnap/dwsnap.cfg">
+<input type="hidden" id="scmd" name="#command" value="/usr/local/emhttp/plugins/dwsnap/scripts/none">
+<input type="hidden" id="sarg" name="#arg[1]" value="">
+
+<div>
+    <span class="left" style="font-size:1.1rem;letter-spacing:1px;"><strong><i class="icon fa fa-cogs"></i> GENERAL SETTINGS</strong></span>
+</div><br>
+
 <dl>
     <dt>SnapRAID Backend:</dt>
     <dd>
@@ -42,27 +48,9 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 </dl>
 
 <dl>
-    <dt>SnapRAID I/O Process Priority:</dt>
-    <dd>
-        <select class="snaprun" id="PRIO" name="PRIO" size="1">
-            <?=mk_option($dwsnap_prio, "disable", "System Default");?>
-            <?=mk_option($dwsnap_prio, "idle", "Idle");?>
-            <?=mk_option($dwsnap_prio, "besteffort", "Best Effort");?>
-            <?=mk_option($dwsnap_prio, "realtime", "Real Time");?>
-        </select>
-    </dd>
-</dl>
-
-<blockquote class="inline_help">
-<p>This setting controls how much SnapRAID interferes with other running I/O (data transfer) operations (using <em>ionice</em>).</p>
-<p>If you are running SnapRAID operations or maintenance during the day it is recommended to choose 'Idle' as low-interference process priority.</p>
-<p>This will ensure that other processes accessing your array will be given priority over SnapRAID itself, which will in turn run slower (only for array operations).</p>
-</blockquote>
-
-<dl>
     <dt>SnapRAID Status Footer:</dt>
     <dd>
-        <select class="snaprun" id="FOOTER" name="FOOTER" size="1">
+        <select id="FOOTER" name="FOOTER" size="1">
             <?=mk_option($dwsnap_footer, "disable", "No");?>
             <?=mk_option($dwsnap_footer, "enable", "Yes");?>
         </select>
@@ -78,7 +66,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 <dl>
     <dt>SnapRAID Background Image:</dt>
     <dd>
-        <select class="snaprun" id="SCREENIMG" name="SCREENIMG" size="1">
+        <select id="SCREENIMG" name="SCREENIMG" size="1">
             <?=mk_option($dwsnap_screenimg, "disable", "No");?>
             <?=mk_option($dwsnap_screenimg, "enable", "Yes");?>
         </select>
@@ -90,58 +78,9 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 </blockquote>
 
 <dl>
-    <dt>SnapRAID Write Raw Operation Reports:</dt>
-    <dd>
-        <select class="snaprun" id="RAWREPORTS" name="RAWREPORTS" size="1">
-            <?=mk_option($dwsnap_rawreports, "disable", "Never");?>
-            <?=mk_option($dwsnap_rawreports, "enable", "Always");?>
-            <?=mk_option($dwsnap_rawreports, "manual", "Manual Operations");?>
-            <?=mk_option($dwsnap_rawreports, "cron", "Maintenance Operations");?>
-        </select>
-        <span style="margin-left:10px;"><i class="fa fa-exclamation-triangle snaphelptip" title="Keep this setting disabled unless having read and fully understood the help description."></i></span>
-    </dd>
-</dl>
-
-<blockquote class="inline_help">
-<p>This setting controls if raw operation reports should be written to SnapRAID's RAM disk, in addition to the regular summarized (and smaller) operation logs.</p>
-<p>These reports can provide additional diagnostic details, but can also be extremely large in size (up to many GBs) and possibly exceed the RAM disk's capacities.</p>
-<p><strong>It is therefore recommended to keep this setting disabled, unless running into problems and needing such diagnostic information, on any systems with limited RAM reserves.</strong></p>
-<p>You can also keep this setting generally disabled, but enable on demand (for individual operations) raw operation reports to another (less space constrained) location by utilizing the additional parameters above.</p>
-</blockquote>
-
-<dl>
-    <dt>SnapRAID Sync Overdue Warning Threshold:</dt>
-    <dd>
-        <select class="snaprun" id="SYNCEXPIRES" name="SYNCEXPIRES" size="1">
-            <?=dwsnap_threshold_options($dwsnap_sync_expires);?>
-        </select>
-        <span style="margin-left:10px;">days</span>
-    </dd>
-</dl>
-
-<blockquote class="inline_help">
-<p>The amount of days since the last SYNC operation, after which a warning will be shown in the GUI (on this page and the footer).</p>
-<p>The SYNC overdue warning can either be cleared or will not be shown if a more recent DIFF operation has resulted in no data differences.</p>
-</blockquote>
-
-<dl>
-    <dt>SnapRAID Scrub Overdue Warning Threshold:</dt>
-    <dd>
-        <select class="snaprun" id="SCRUBEXPIRES" name="SCRUBEXPIRES" size="1">
-            <?=dwsnap_threshold_options($dwsnap_scrub_expires);?>
-        </select>
-        <span style="margin-left:10px;">days</span>
-    </dd>
-</dl>
-
-<blockquote class="inline_help">
-<p>The amount of days since the last SCRUB operation, after which a warning will be shown in the GUI (on this page and the footer).</p>
-</blockquote>
-
-<dl>
     <dt>SnapRAID Synchronize Array Shutdowns:</dt>
     <dd>
-        <select class="snaprun" id="STOPARRAY" name="STOPARRAY" size="1">
+        <select id="STOPARRAY" name="STOPARRAY" size="1">
             <?=mk_option($dwsnap_stoparray, "disable", "No");?>
             <?=mk_option($dwsnap_stoparray, "enable", "Yes");?>
         </select>
@@ -159,7 +98,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 <dl>
     <dt>SnapRAID Running Operation Hard-Kill Timeout:</dt>
     <dd>
-        <input id="KILLTIME" type="text" class="narrow snaprun" name="KILLTIME" maxlength="30" value="<?=$dwsnap_killtime?>">seconds
+        <input id="KILLTIME" type="text" class="narrow" name="KILLTIME" maxlength="30" value="<?=$dwsnap_killtime?>">seconds
     </dd>
 </dl>
 
@@ -170,17 +109,100 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 <p>In critical situations the system may or may not deem it necessary to kill still running processes anyhow - the plugin has no further control over such system behavior, although this should generally be a very rare occurence.</p>
 </blockquote>
 
+<dl>
+    <dt><strong>SnapRAID Active Array Configuration (in GUI):</strong></dt>
+    <dd>
+        <select id="SELARRAY" name="SELARRAY" size="1">
+            <?=dwsnap_array_options($dwsnap_active_cfg->cfgname);?>
+        </select>
+        <span style="margin-left:10px;">.conf</span>
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+<p>Select the array configuration to perform array operations on and/or modify the array-specific settings in GUI.</p>
+</blockquote>
+
+<dl>
+    <dt>
+        <input id="RESETCONF" class="snapanyrun" type="button" value="Reset Configuration">
+    </dt>
+    <dd>
+        <input type="submit" id="btnApply" name="#apply" value="Apply">
+        <input type="button" value="Done" onclick="done()">
+    </dd>
+</dl>
+
+</form>
+
+<form markdown="0" id="dwsnap-asettings" name="dwsnap_asettings" method="POST" action="/update.php" target="progressFrame">
+<input type="hidden" name="#file" value="dwsnap/config/<?=$dwsnap_active_cfg->cfgname;?>.cfg">
+<input type="hidden" name="#command" value="/usr/local/emhttp/plugins/dwsnap/scripts/write_config">
+
 <hr>
+
+<div>
+    <span class="left" style="font-size:1.1rem;letter-spacing:1px;"><strong><i class="icon fa fa-cogs"></i>(<?=strtoupper($dwsnap_active_cfg->cfgname);?>) ARRAY-SPECIFIC SETTINGS</strong></span>
+</div><br>
+
+<dl>
+    <dt>SnapRAID Sync Overdue Warning Threshold:</dt>
+    <dd>
+        <select class="snaprun" id="SYNCEXPIRES" name="SYNCEXPIRES" size="1">
+            <?=dwsnap_threshold_options($dwsnap_active_cfg->sync_expires);?>
+        </select>
+        <span style="margin-left:10px;">days</span>
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+<p>The amount of days since the last SYNC operation, after which a warning will be shown in the GUI (on this page and the footer).</p>
+<p>The SYNC overdue warning can either be cleared or will not be shown if a more recent DIFF operation has resulted in no data differences.</p>
+</blockquote>
+
+<dl>
+    <dt>SnapRAID Scrub Overdue Warning Threshold:</dt>
+    <dd>
+        <select class="snaprun" id="SCRUBEXPIRES" name="SCRUBEXPIRES" size="1">
+            <?=dwsnap_threshold_options($dwsnap_active_cfg->scrub_expires);?>
+        </select>
+        <span style="margin-left:10px;">days</span>
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+<p>The amount of days since the last SCRUB operation, after which a warning will be shown in the GUI (on this page and the footer).</p>
+</blockquote>
+
+<dl>
+    <dt>SnapRAID Write Raw Operation Reports:</dt>
+    <dd>
+        <select class="snaprun" id="RAWREPORTS" name="RAWREPORTS" size="1">
+            <?=mk_option($dwsnap_active_cfg->rawreports, "disable", "Never");?>
+            <?=mk_option($dwsnap_active_cfg->rawreports, "enable", "Always");?>
+            <?=mk_option($dwsnap_active_cfg->rawreports, "manual", "Manual Operations");?>
+            <?=mk_option($dwsnap_active_cfg->rawreports, "cron", "Maintenance Operations");?>
+        </select>
+        <span style="margin-left:10px;"><i class="fa fa-exclamation-triangle snaphelptip" title="Keep this setting disabled unless having read and fully understood the help description."></i></span>
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+<p>This setting controls if raw operation reports should be written to SnapRAID's RAM disk, in addition to the regular summarized (and smaller) operation logs.</p>
+<p>These reports can provide additional diagnostic details, but can also be extremely large in size (up to many GBs) and possibly exceed the RAM disk's capacities.</p>
+<p><strong>It is therefore recommended to keep this setting disabled, unless running into problems and needing such diagnostic information, on any systems with limited RAM reserves.</strong></p>
+<p>You can also keep this setting generally disabled, but enable on demand (for individual operations) raw operation reports to another (less space constrained) location by utilizing the additional parameters above.</p>
+</blockquote>
 
 <dl>
     <dt><strong>SnapRAID Maintenance - Schedule:</strong></dt>
     <dd>
         <select class="snaprun" id="CRON" name="CRON" size="1">
-            <?=mk_option($dwsnap_cron, "disable", "Never");?>
-            <?=mk_option($dwsnap_cron, "hourly", "Hourly");?>
-            <?=mk_option($dwsnap_cron, "daily", "Daily");?>
-            <?=mk_option($dwsnap_cron, "weekly", "Weekly");?>
-            <?=mk_option($dwsnap_cron, "monthly", "Monthly");?>
+            <?=mk_option($dwsnap_active_cfg->cron, "disable", "Never");?>
+            <?=mk_option($dwsnap_active_cfg->cron, "hourly", "Hourly");?>
+            <?=mk_option($dwsnap_active_cfg->cron, "daily", "Daily");?>
+            <?=mk_option($dwsnap_active_cfg->cron, "weekly", "Weekly");?>
+            <?=mk_option($dwsnap_active_cfg->cron, "monthly", "Monthly");?>
         </select>
     </dd>
 </dl>
@@ -195,13 +217,13 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dt>SnapRAID Maintenance - Schedule Day of Week:</dt>
         <dd>
             <select class="snaprun" id="CRONDOW" name="CRONDOW" size="1">
-                <?=mk_option($dwsnap_crondow, "0", "Sunday");?>
-                <?=mk_option($dwsnap_crondow, "1", "Monday");?>
-                <?=mk_option($dwsnap_crondow, "2", "Tuesday");?>
-                <?=mk_option($dwsnap_crondow, "3", "Wednesday");?>
-                <?=mk_option($dwsnap_crondow, "4", "Thursday");?>
-                <?=mk_option($dwsnap_crondow, "5", "Friday");?>
-                <?=mk_option($dwsnap_crondow, "6", "Saturday");?>
+                <?=mk_option($dwsnap_active_cfg->crondow, "0", "Sunday");?>
+                <?=mk_option($dwsnap_active_cfg->crondow, "1", "Monday");?>
+                <?=mk_option($dwsnap_active_cfg->crondow, "2", "Tuesday");?>
+                <?=mk_option($dwsnap_active_cfg->crondow, "3", "Wednesday");?>
+                <?=mk_option($dwsnap_active_cfg->crondow, "4", "Thursday");?>
+                <?=mk_option($dwsnap_active_cfg->crondow, "5", "Friday");?>
+                <?=mk_option($dwsnap_active_cfg->crondow, "6", "Saturday");?>
             </select>
         </dd>
     </dl>
@@ -212,7 +234,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dt>SnapRAID Maintenance - Schedule Day of Month:</dt>
         <dd>
             <select class="snaprun" id="CRONDOM" name="CRONDOM" size="1">
-                <?=dwsnap_dom_options($dwsnap_crondom);?>
+                <?=dwsnap_dom_options($dwsnap_active_cfg->crondom);?>
             </select>
         </dd>
     </dl>
@@ -227,7 +249,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dt>SnapRAID Maintenance - Schedule Hour:</dt>
         <dd>
             <select class="snaprun" id="CRONHOUR" name="CRONHOUR" size="1">
-                <?=dwsnap_hour_options($dwsnap_cronhour);?>
+                <?=dwsnap_hour_options($dwsnap_active_cfg->cronhour);?>
             </select>
         </dd>
     </dl>
@@ -243,8 +265,8 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dt>SnapRAID Maintenance - Started Notifications:</dt>
         <dd>
             <select class="snaprun" id="STARTNOTIFY" name="STARTNOTIFY" size="1">
-                <?=mk_option($dwsnap_startnotify, "disable", "No");?>
-                <?=mk_option($dwsnap_startnotify, "enable", "Yes");?>
+                <?=mk_option($dwsnap_active_cfg->startnotify, "disable", "No");?>
+                <?=mk_option($dwsnap_active_cfg->startnotify, "enable", "Yes");?>
             </select>
         </dd>
     </dl>
@@ -258,8 +280,8 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dt>SnapRAID Maintenance - Finished Notifications:</dt>
         <dd>
             <select class="snaprun" id="FINISHNOTIFY" name="FINISHNOTIFY" size="1">
-                <?=mk_option($dwsnap_finishnotify, "disable", "No");?>
-                <?=mk_option($dwsnap_finishnotify, "enable", "Yes");?>
+                <?=mk_option($dwsnap_active_cfg->finishnotify, "disable", "No");?>
+                <?=mk_option($dwsnap_active_cfg->finishnotify, "enable", "Yes");?>
             </select>
         </dd>
     </dl>
@@ -273,8 +295,8 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dt>SnapRAID Maintenance - Failure Notifications:</dt>
         <dd>
             <select class="snaprun" id="ERRORNOTIFY" name="ERRORNOTIFY" size="1">
-                <?=mk_option($dwsnap_errornotify, "disable", "No");?>
-                <?=mk_option($dwsnap_errornotify, "enable", "Yes");?>
+                <?=mk_option($dwsnap_active_cfg->errornotify, "disable", "No");?>
+                <?=mk_option($dwsnap_active_cfg->errornotify, "enable", "Yes");?>
             </select>
         </dd>
     </dl>
@@ -289,8 +311,8 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dt>SnapRAID Maintenance - Disable Progress in Logfiles:</dt>
         <dd>
             <select class="snaprun" id="NOPROGRESS" name="NOPROGRESS" size="1">
-                <?=mk_option($dwsnap_noprogress, "disable", "No");?>
-                <?=mk_option($dwsnap_noprogress, "enable", "Yes");?>
+                <?=mk_option($dwsnap_active_cfg->noprogress, "disable", "No");?>
+                <?=mk_option($dwsnap_active_cfg->noprogress, "enable", "Yes");?>
             </select>
         </dd>
     </dl>
@@ -306,8 +328,8 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dt><strong>SnapRAID Maintenance - <u>Touch</u> (Step 1):</strong></dt>
         <dd>
             <select class="snaprun" id="TOUCH" name="TOUCH" size="1">
-                <?=mk_option($dwsnap_touch, "disable", "No");?>
-                <?=mk_option($dwsnap_touch, "enable", "Yes");?>
+                <?=mk_option($dwsnap_active_cfg->touch, "disable", "No");?>
+                <?=mk_option($dwsnap_active_cfg->touch, "enable", "Yes");?>
             </select>
         </dd>
     </dl>
@@ -321,8 +343,8 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dt><strong>SnapRAID Maintenance - <u>Diff</u> / Check Thresholds (Step 2):</strong></dt>
         <dd>
             <select class="snaprun" id="DIFF" name="DIFF" size="1">
-                <?=mk_option($dwsnap_diff, "disable", "No");?>
-                <?=mk_option($dwsnap_diff, "enable", "Yes");?>
+                <?=mk_option($dwsnap_active_cfg->diff, "disable", "No");?>
+                <?=mk_option($dwsnap_active_cfg->diff, "enable", "Yes");?>
             </select>
         </dd>
     </dl>
@@ -338,7 +360,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Added Files Threshold:</dt>
             <dd>
-                <input id="ADDED" type="text" class="narrow snaprun" name="ADDED" maxlength="30" value="<?=$dwsnap_added?>">files
+                <input id="ADDED" type="text" class="narrow snaprun" name="ADDED" maxlength="30" value="<?=$dwsnap_active_cfg->added?>">files
             </dd>
         </dl>
 
@@ -350,7 +372,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Deleted Files Threshold:</dt>
             <dd>
-                <input id="DELETED" type="text" class="narrow snaprun" name="DELETED" maxlength="30" value="<?=$dwsnap_deleted?>">files
+                <input id="DELETED" type="text" class="narrow snaprun" name="DELETED" maxlength="30" value="<?=$dwsnap_active_cfg->deleted?>">files
             </dd>
         </dl>
 
@@ -362,7 +384,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Updated Files Threshold:</dt>
             <dd>
-                <input id="UPDATED" type="text" class="narrow snaprun" name="UPDATED" maxlength="30" value="<?=$dwsnap_updated?>">files
+                <input id="UPDATED" type="text" class="narrow snaprun" name="UPDATED" maxlength="30" value="<?=$dwsnap_active_cfg->updated?>">files
             </dd>
         </dl>
 
@@ -374,7 +396,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Moved Files Threshold:</dt>
             <dd>
-                <input id="MOVED" type="text" class="narrow snaprun" name="MOVED" maxlength="30" value="<?=$dwsnap_moved?>">files
+                <input id="MOVED" type="text" class="narrow snaprun" name="MOVED" maxlength="30" value="<?=$dwsnap_active_cfg->moved?>">files
             </dd>
         </dl>
 
@@ -386,7 +408,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Copied Files Threshold:</dt>
             <dd>
-                <input id="COPIED" type="text" class="narrow snaprun" name="COPIED" maxlength="30" value="<?=$dwsnap_copied?>">files
+                <input id="COPIED" type="text" class="narrow snaprun" name="COPIED" maxlength="30" value="<?=$dwsnap_active_cfg->copied?>">files
             </dd>
         </dl>
 
@@ -398,7 +420,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Restored Files Threshold:</dt>
             <dd>
-                <input id="RESTORED" type="text" class="narrow snaprun" name="RESTORED" maxlength="30" value="<?=$dwsnap_restored?>">files
+                <input id="RESTORED" type="text" class="narrow snaprun" name="RESTORED" maxlength="30" value="<?=$dwsnap_active_cfg->restored?>">files
             </dd>
         </dl>
 
@@ -413,8 +435,8 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dt><strong>SnapRAID Maintenance - <u>Sync</u> (Step 3):</strong></dt>
         <dd>
             <select class="snaprun" id="SYNC" name="SYNC" size="1">
-                <?=mk_option($dwsnap_sync, "disable", "No");?>
-                <?=mk_option($dwsnap_sync, "enable", "Yes");?>
+                <?=mk_option($dwsnap_active_cfg->sync, "disable", "No");?>
+                <?=mk_option($dwsnap_active_cfg->sync, "enable", "Yes");?>
             </select>
         </dd>
     </dl>
@@ -430,8 +452,8 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
             <dt>SnapRAID Maintenance - Sync Zero Size Files:</dt>
             <dd>
                 <select class="snaprun" id="FORCEZERO" name="FORCEZERO" size="1">
-                    <?=mk_option($dwsnap_forcezero, "disable", "No");?>
-                    <?=mk_option($dwsnap_forcezero, "enable", "Yes");?>
+                    <?=mk_option($dwsnap_active_cfg->forcezero, "disable", "No");?>
+                    <?=mk_option($dwsnap_active_cfg->forcezero, "enable", "Yes");?>
                 </select>
             </dd>
         </dl>
@@ -447,8 +469,8 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
             <dt>SnapRAID Maintenance - Sync as Prehashed Sync:</dt>
             <dd>
                 <select class="snaprun" id="PREHASH" name="PREHASH" size="1">
-                    <?=mk_option($dwsnap_prehash, "disable", "No");?>
-                    <?=mk_option($dwsnap_prehash, "enable", "Yes");?>
+                    <?=mk_option($dwsnap_active_cfg->prehash, "disable", "No");?>
+                    <?=mk_option($dwsnap_active_cfg->prehash, "enable", "Yes");?>
                 </select>
             </dd>
         </dl>
@@ -461,7 +483,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Sync I/O Premature Interrupt:</dt>
             <dd>
-                <input id="SYNCERRORS" type="text" class="narrow snaprun" name="SYNCERRORS" maxlength="30" value="<?=$dwsnap_sync_errors?>">errors
+                <input id="SYNCERRORS" type="text" class="narrow snaprun" name="SYNCERRORS" maxlength="30" value="<?=$dwsnap_active_cfg->sync_errors?>">errors
             </dd>
         </dl>
 
@@ -477,8 +499,8 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dt><strong>SnapRAID Maintenance - <u>Scrub</u> (Step 4):</strong></dt>
         <dd>
             <select class="snaprun" id="SCRUB" name="SCRUB" size="1">
-                <?=mk_option($dwsnap_scrub, "disable", "No");?>
-                <?=mk_option($dwsnap_scrub, "enable", "Yes");?>
+                <?=mk_option($dwsnap_active_cfg->scrub, "disable", "No");?>
+                <?=mk_option($dwsnap_active_cfg->scrub, "enable", "Yes");?>
             </select>
         </dd>
     </dl>
@@ -493,7 +515,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Scrub Age:</dt>
             <dd>
-                <input id="SCRUBAGE" type="text" class="narrow snaprun" name="SCRUBAGE" maxlength="30" value="<?=$dwsnap_scrubage?>">days
+                <input id="SCRUBAGE" type="text" class="narrow snaprun" name="SCRUBAGE" maxlength="30" value="<?=$dwsnap_active_cfg->scrubage?>">days
             </dd>
         </dl>
 
@@ -504,7 +526,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Scrub Percentage:</dt>
             <dd>
-                <input id="SCRUBPERCENT" type="text" class="narrow snaprun" name="SCRUBPERCENT" maxlength="30" value="<?=$dwsnap_scrubpercent?>">%
+                <input id="SCRUBPERCENT" type="text" class="narrow snaprun" name="SCRUBPERCENT" maxlength="30" value="<?=$dwsnap_active_cfg->scrubpercent?>">%
             </dd>
         </dl>
 
@@ -516,8 +538,8 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
             <dt>SnapRAID Maintenance - Scrub Also New Blocks:</dt>
             <dd>
                 <select class="snaprun" id="SCRUBNEW" name="SCRUBNEW" size="1">
-                    <?=mk_option($dwsnap_scrubnew, "disable", "No");?>
-                    <?=mk_option($dwsnap_scrubnew, "enable", "Yes");?>
+                    <?=mk_option($dwsnap_active_cfg->scrubnew, "disable", "No");?>
+                    <?=mk_option($dwsnap_active_cfg->scrubnew, "enable", "Yes");?>
                 </select>
             </dd>
         </dl>
@@ -531,7 +553,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Scrub I/O Premature Interrupt:</dt>
             <dd>
-                <input id="SCRUBERRORS" type="text" class="narrow snaprun" name="SCRUBERRORS" maxlength="30" value="<?=$dwsnap_scrub_errors?>">errors
+                <input id="SCRUBERRORS" type="text" class="narrow snaprun" name="SCRUBERRORS" maxlength="30" value="<?=$dwsnap_active_cfg->scrub_errors?>">errors
             </dd>
         </dl>
 
@@ -546,12 +568,12 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 
 <dl>
     <dt>
-        <input id="DEFAULT" class="snaprun" type="submit" name="#default" value="Default">
-        <input id="RESETCONF" class="snaprun" type="button" value="Reset Config">
+        <input id="NEWARRAY" type="button" value="Create New Array">
+        <input id="DELARRAY" class="snaprun" type="button" value="Delete This Array">
     </dt>
     <dd>
-        <input type="submit" class="snaprun" id="btnApply" name="#apply" value="Apply">
-        <input type="button" class="snaprun" value="Done" onclick="done()">
+        <input type="submit" id="btnApply2" name="#apply" value="Apply">
+        <input type="button" value="Done" onclick="done()">
     </dd>
 </dl>
 
@@ -605,16 +627,67 @@ $(function(){
     $('#RESETCONF').click(function(){
         swal({
             title: "Are you sure?",
-            text: "This action will reset your entire configuration.<br>Your array configuration is also reset (take note of it).",
+            text: "This action will reset the plugin to its default state.<br>All the array configurations are also reset (do take note of them).",
             type: "error",
             showCancelButton: true,
             confirmButtonText: "Reset Configuration",
             html: true
             },
             function(){
-                $('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/reset_config');
-                $('#snapcommands').submit();
+                $('#sfile').remove();
+                $('#scmd').val('/usr/local/emhttp/plugins/dwsnap/scripts/reset_config');
+                $('#sarg').val('');
+                $('#dwsnap-settings').submit();
             });
+    });
+
+    $('#NEWARRAY').click(function(){
+        swal({
+            title: "New Array Configuration",
+            text: "Please choose a name for your new array configuration:",
+            type: "input",
+            showCancelButton: true,
+            confirmButtonText: "Create Array",
+            html: true,
+            inputPlaceholder: "Alphanumeric - no spaces or special characters!",
+            closeOnConfirm: false
+            },
+            function(value){
+                if(value !== false && value !== "") {
+                    var format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+                    if(format.test(value)) {
+                        swal("Operation Failure", "The chosen array name contained disallowed characters.", "error");
+                    }
+                    else {
+                        $('#sfile').remove();
+                        $('#scmd').val('/usr/local/emhttp/plugins/dwsnap/scripts/create_array');
+                        $('#sarg').val(value);
+                        $('#dwsnap-settings').submit();
+                    }
+                }
+            });
+    });
+
+    $('#DELARRAY').click(function(){
+        if("<?=$dwsnap_active_cfg->cfgname;?>" == "primary") {
+            swal("Operation Failure", "You cannot delete the primary array configuration.", "error");
+        }
+        else {
+            swal({
+                title: "Are you sure?",
+                text: "This action will <u>delete</u> the array configuration: <span style='font-weight:bold;'><?=strtoupper($dwsnap_active_cfg->cfgname);?></span>.<br>The data on the array will remain untouched and not be deleted.",
+                type: "error",
+                showCancelButton: true,
+                confirmButtonText: "Delete Array",
+                html: true
+                },
+                function(){
+                    $('#sfile').remove();
+                    $('#scmd').val('/usr/local/emhttp/plugins/dwsnap/scripts/delete_array');
+                    $('#sarg').val('<?=$dwsnap_active_cfg->cfgname;?>');
+                    $('#dwsnap-settings').submit();
+                });
+            }
     });
 
     $("#DIFF").change(checkCronSettings);

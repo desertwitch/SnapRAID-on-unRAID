@@ -15,7 +15,6 @@
 # The above copyright notice and this permission notice shall be
 # included in all copies or substantial portions of the Software.
 #
-
 CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
 [ -e "$CONFIG" ] && source $CONFIG
 
@@ -38,7 +37,7 @@ if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 |
             if pgrep -x snapraid >/dev/null 2>&1; then
                 echo "WARNING: Still shutting down a 'snapraid' instance..." | logger -t "snapraid-plugin"
                 TIMER=0
-                while killall snapraid 2>/dev/null; do
+                while killall snapraid >/dev/null 2>&1; do
                     sleep 1
                     killall snapraid-runner
                     killall snapraid-cron
@@ -59,7 +58,7 @@ if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 |
             if pgrep -x snapraid-runner >/dev/null 2>&1; then
                 echo "WARNING: Still shutting down a 'snapraid-runner' instance..." | logger -t "snapraid-plugin"
                 TIMER=0
-                while killall snapraid-runner 2>/dev/null; do
+                while killall snapraid-runner >/dev/null 2>&1; do
                     sleep 1
                     killall snapraid-runner
                     killall snapraid-cron
@@ -80,7 +79,7 @@ if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 |
             if pgrep -x snapraid-cron >/dev/null 2>&1; then
                 echo "WARNING: Still shutting down a 'snapraid-cron' instance..." | logger -t "snapraid-plugin"
                 TIMER=0
-                while killall snapraid-cron 2>/dev/null; do
+                while killall snapraid-cron >/dev/null 2>&1; do
                     sleep 1
                     killall snapraid-runner
                     killall snapraid-cron

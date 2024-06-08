@@ -17,55 +17,68 @@
 # included in all copies or substantial portions of the Software.
 #
 umask 000
-SNAP_BIN="/usr/bin/snapraid"
-SNAP_CONF="/etc/snapraid.conf"
-CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
+
 CMD=("$@")
+CFGNAME="${CMD[0]}"
+CFGNAMEBIG="$(echo "$CFGNAME" | awk '{print toupper($0)}')"
 
-[ ! -d /var/lib/snapraid/logs ] && mkdir -p /var/lib/snapraid/logs
+NOTIFYFLAG="${CMD[1]}"
+OPCMD="${CMD[2]}"
 
-[ -e "$CONFIG" ] && source $CONFIG
+SNAP_BIN="/usr/bin/snapraid"
+SNAP_CONF="/boot/config/plugins/dwsnap/config/${CFGNAME}.conf"
+CONFIG="/boot/config/plugins/dwsnap/config/${CFGNAME}.cfg"
+
+if [ -z "$CFGNAME" ]; then
+    echo "(${CFGNAME}) SnapRAID array configuration name was not provided, exiting..." | logger -s -t "snapraid-runner"
+    exit 1
+fi
+
+if [ ! -f "$SNAP_CONF" ] || [ ! -f "$CONFIG" ]; then
+    echo "(${CFGNAME}) SnapRAID array configuration was not found, exiting..." | logger -s -t "snapraid-runner"
+    exit 1
+fi
+
+[ ! -d "/var/lib/snapraid/logs/${CFGNAME}" ] && mkdir -p "/var/lib/snapraid/logs/${CFGNAME}"
+
+[ -e "$CONFIG" ] && source "$CONFIG"
 
 NOTIFY_BIN="/usr/local/emhttp/plugins/dynamix/scripts/notify"
 HOST="$(echo "$HOSTNAME" | awk '{print toupper($0)}')"
 EVENT="SnapRAID Operation"
-SUBJECT="[${HOST}] SnapRAID"
+SUBJECT="[${HOST}] SnapRAID - ${CFGNAMEBIG}:"
 
-if [ "${CMD[0]}" == "0" ] || [ "${CMD[0]}" == "1" ]; then
-    if [ "${CMD[0]}" == "1" ]; then
+if [ "${NOTIFYFLAG}" == "0" ] || [ "${NOTIFYFLAG}" == "1" ]; then
+    if [ "${NOTIFYFLAG}" == "1" ]; then
         NOTIFYDONE="YES"
     fi
 else
     echo "A small helper program to log SnapRAID's output into UNRAID's web interface."
-    echo "Usage: snapraid-runner 0|1 status|diff|sync|scrub|list|dup|up|down|touch|smart|pool|check|fix [options]"
+    echo "Usage: snapraid-runner <array name> 0|1 status|diff|sync|scrub|list|dup|up|down|touch|smart|pool|check|fix [options]"
     echo "-- 0|1: send notifications once operation completes (0:no/1:yes)"
     exit 1
 fi
 
 KNOWNCMDS=("status" "diff" "sync" "scrub" "list" "dup" "up" "down" "touch" "smart" "pool" "check" "fix")
 for KNOWNCMD in "${KNOWNCMDS[@]}"; do
-    if [ "${CMD[1]}" == "$KNOWNCMD" ]; then
+    if [ "$OPCMD" == "$KNOWNCMD" ]; then
         CMDKNOWN="YES"
     fi
 done
 if [ ! "$CMDKNOWN" == "YES" ]; then
     echo "A small helper program to log SnapRAID's output into UNRAID's web interface."
-    echo "Usage: snapraid-runner 0|1 status|diff|sync|scrub|list|dup|up|down|touch|smart|pool|check|fix [options]"
+    echo "Usage: snapraid-runner <array name> 0|1 status|diff|sync|scrub|list|dup|up|down|touch|smart|pool|check|fix [options]"
     echo "-- 0|1: send notifications once operation completes (0:no/1:yes)"
     exit 1
 fi
 
-if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1; then
-    echo "SnapRAID is already running somewhere, exiting..." | logger -s -t "snapraid-runner"
+if pgrep -f "^/usr/bin/snapraid -c ${SNAP_CONF}" >/dev/null 2>&1 || pgrep -f "^(/bin/bash )?/usr/bin/snapraid-cron ${CFGNAME}" >/dev/null 2>&1; then
+    echo "(${CFGNAME}) SnapRAID is already running on that array, exiting..." | logger -s -t "snapraid-runner"
     exit 1
 fi
 
-[ "$PRIO" == "idle" ] && SNAP_BIN="ionice -c 3 /usr/bin/snapraid"
-[ "$PRIO" == "besteffort" ] && SNAP_BIN="ionice -c 2 /usr/bin/snapraid"
-[ "$PRIO" == "realtime" ] && SNAP_BIN="ionice -c 1 /usr/bin/snapraid"
-
 [ "$RAWREPORTS" == "manual" ] && RAWREPORTS="enable"
-for LOGPARAM in "${CMD[@]:1}"; do
+for LOGPARAM in "${CMD[@]:2}"; do
     if [ "$LOGPARAM" == "-l" ]; then
         RAWREPORTS="disable"
     fi
@@ -82,41 +95,41 @@ signal_exit_snapraid() {
 
     [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Operation Interrupted" -d "SnapRAID operation ${BIGOP} was interrupted (after ${DURATION} ${DURATIONUNIT}).${RAMWARNINGSHORT}" -i "alert"
 
-    echo "$OPTIME" >/var/lib/snapraid/logs/lastfinish
-    echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-    echo "### ${BIGOP} INTERRUPTED [SIGTERM]: ${OPTIME} (after ${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-    [ -n "$RAMWARNING" ] && echo "###${RAMWARNING}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+    echo "$OPTIME" >"/var/lib/snapraid/logs/${CFGNAME}-lastfinish"
+    echo "################################################################" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+    echo "### ${BIGOP} INTERRUPTED [SIGTERM]: ${OPTIME} (after ${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+    [ -n "$RAMWARNING" ] && echo "###${RAMWARNING}" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
 
-    cp "/var/lib/snapraid/logs/snaplog" "/var/lib/snapraid/logs/${CMD[1]}-${LOGTIME}.log"
+    cp "/var/lib/snapraid/logs/${CFGNAME}-snaplog" "/var/lib/snapraid/logs/${CFGNAME}/${OPCMD}-${LOGTIME}.log"
     
     exit 1
 }
 
-BIGOP="$(echo "${CMD[1]}" | awk '{print toupper($0)}')"
+BIGOP="$(echo "${OPCMD}" | awk '{print toupper($0)}')"
 
-rm -f /var/lib/snapraid/logs/lastfinish
+rm -f "/var/lib/snapraid/logs/${CFGNAME}-lastfinish"
 LOGTIME=$(date +"%Y%m%d-%H%M%S")
 OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
 MEASURESTART=$(date +%s)
 
-echo "$OPTIME" >/var/lib/snapraid/logs/laststart
-echo "### ${BIGOP} STARTED: ${OPTIME}" 2>&1 | tee /var/lib/snapraid/logs/snaplog
-echo "### RUNNING: ${SNAP_BIN} -c ${SNAP_CONF} ${CMD[*]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog 
+echo "$OPTIME" >"/var/lib/snapraid/logs/${CFGNAME}-laststart"
+echo "### (${CFGNAMEBIG}) ${BIGOP} STARTED: ${OPTIME}" 2>&1 | tee "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+echo "### RUNNING: ${SNAP_BIN} -c ${SNAP_CONF} ${CMD[*]:2}" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog" 
 
 RAMUTIL=$(df --output=pcent /var/lib/snapraid | tr -dc '0-9')
 if [ "$RAMUTIL" -gt 90 ]; then
-    RAMWARNING=" RAM disk utilization above 90% - clear the log files to avoid future problems!"
+    RAMWARNING=" RAM disk utilization above 90% - clear the logfiles to avoid future problems!"
     RAMWARNINGSHORT=" RAM disk utilization above 90%."
-    echo "###${RAMWARNING}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+    echo "###${RAMWARNING}" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
 fi
 
-echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+echo "################################################################" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
 
 trap signal_exit_snapraid SIGTERM SIGINT 
 
-if [ "${CMD[1]}" == "sync" ]; then
-    [ "$RAWREPORTS" == "enable" ] && LOGLINE="-l /var/lib/snapraid/logs/${CMD[1]}-${LOGTIME}.raw.log" || unset LOGLINE
-    $SNAP_BIN -c $SNAP_CONF $LOGLINE "${CMD[@]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+if [ "${OPCMD}" == "sync" ]; then
+    [ "$RAWREPORTS" == "enable" ] && LOGLINE="-l /var/lib/snapraid/logs/${CFGNAME}/${OPCMD}-${LOGTIME}.raw.log" || unset LOGLINE
+    $SNAP_BIN -c $SNAP_CONF $LOGLINE "${CMD[@]:2}" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     CMDRET="${PIPESTATUS[0]}"
     
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
@@ -127,16 +140,16 @@ if [ "${CMD[1]}" == "sync" ]; then
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hours"
 
     if [ "$CMDRET" -eq 0 ]; then
-        echo "$OPTIME" > /boot/config/plugins/dwsnap/config/lastsync
-        rm -f /boot/config/plugins/dwsnap/config/syncneeded
-        rm -f /boot/config/plugins/dwsnap/config/lastnodiff
+        echo "$OPTIME" > "/boot/config/plugins/dwsnap/config/${CFGNAME}-lastsync"
+        rm -f "/boot/config/plugins/dwsnap/config/${CFGNAME}-syncneeded"
+        rm -f "/boot/config/plugins/dwsnap/config/${CFGNAME}-lastnodiff"
         [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Operation Finished" -d "SnapRAID operation ${BIGOP} finished with success (after ${DURATION} ${DURATIONUNIT}).${RAMWARNINGSHORT}" -i "normal"
     else
         [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Operation Failure" -d "SnapRAID operation ${BIGOP} finished with errors (after ${DURATION} ${DURATIONUNIT}).${RAMWARNINGSHORT}" -i "alert"
     fi
-elif [ "${CMD[1]}" == "scrub" ]; then
-    [ "$RAWREPORTS" == "enable" ] && LOGLINE="-l /var/lib/snapraid/logs/${CMD[1]}-${LOGTIME}.raw.log" || unset LOGLINE
-    $SNAP_BIN -c $SNAP_CONF $LOGLINE "${CMD[@]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+elif [ "${OPCMD}" == "scrub" ]; then
+    [ "$RAWREPORTS" == "enable" ] && LOGLINE="-l /var/lib/snapraid/logs/${CFGNAME}/${OPCMD}-${LOGTIME}.raw.log" || unset LOGLINE
+    $SNAP_BIN -c $SNAP_CONF $LOGLINE "${CMD[@]:2}" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     CMDRET="${PIPESTATUS[0]}"
     
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
@@ -147,14 +160,14 @@ elif [ "${CMD[1]}" == "scrub" ]; then
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hours"
 
     if [ "$CMDRET" -eq 0 ]; then
-        echo "$OPTIME" > /boot/config/plugins/dwsnap/config/lastscrub
+        echo "$OPTIME" > "/boot/config/plugins/dwsnap/config/${CFGNAME}-lastscrub"
         [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Operation Finished" -d "SnapRAID operation ${BIGOP} finished with success (after ${DURATION} ${DURATIONUNIT}).${RAMWARNINGSHORT}" -i "normal"
     else
         [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Operation Failure" -d "SnapRAID operation ${BIGOP} finished with errors (after ${DURATION} ${DURATIONUNIT}).${RAMWARNINGSHORT}" -i "alert"
     fi
-elif [ "${CMD[1]}" == "diff" ]; then
-    [ "$RAWREPORTS" == "enable" ] && LOGLINE="-l /var/lib/snapraid/logs/${CMD[1]}-${LOGTIME}.raw.log" || unset LOGLINE
-    $SNAP_BIN -c $SNAP_CONF $LOGLINE "${CMD[@]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+elif [ "${OPCMD}" == "diff" ]; then
+    [ "$RAWREPORTS" == "enable" ] && LOGLINE="-l /var/lib/snapraid/logs/${CFGNAME}/${OPCMD}-${LOGTIME}.raw.log" || unset LOGLINE
+    $SNAP_BIN -c $SNAP_CONF $LOGLINE "${CMD[@]:2}" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     CMDRET="${PIPESTATUS[0]}"
     
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
@@ -165,19 +178,19 @@ elif [ "${CMD[1]}" == "diff" ]; then
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hours"
 
     if [ "$CMDRET" -eq 0 ]; then
-        echo "$OPTIME" >/boot/config/plugins/dwsnap/config/lastnodiff
-        rm -f /boot/config/plugins/dwsnap/config/syncneeded
+        echo "$OPTIME" >"/boot/config/plugins/dwsnap/config/${CFGNAME}-lastnodiff"
+        rm -f "/boot/config/plugins/dwsnap/config/${CFGNAME}-syncneeded"
         [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Operation Finished" -d "SnapRAID operation ${BIGOP} finished with success (after ${DURATION} ${DURATIONUNIT}).${RAMWARNINGSHORT}" -i "normal"
     elif [ "$CMDRET" -eq 2 ]; then
-        touch /boot/config/plugins/dwsnap/config/syncneeded
-        rm -f /boot/config/plugins/dwsnap/config/lastnodiff
+        touch "/boot/config/plugins/dwsnap/config/${CFGNAME}-syncneeded"
+        rm -f "/boot/config/plugins/dwsnap/config/${CFGNAME}-lastnodiff"
         [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Operation Warnings" -d "SnapRAID operation ${BIGOP} finished with warnings (after ${DURATION} ${DURATIONUNIT}). Data differences were found (not in sync).${RAMWARNINGSHORT}" -i "warning"
     else
         [ "$NOTIFYDONE" == "YES" ] && $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Operation Failure" -d "SnapRAID operation ${BIGOP} finished with errors (after ${DURATION} ${DURATIONUNIT}).${RAMWARNINGSHORT}" -i "alert"
     fi
 else
-    [ "$RAWREPORTS" == "enable" ] && LOGLINE="-l /var/lib/snapraid/logs/${CMD[1]}-${LOGTIME}.raw.log" || unset LOGLINE
-    $SNAP_BIN -c $SNAP_CONF $LOGLINE "${CMD[@]:1}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+    [ "$RAWREPORTS" == "enable" ] && LOGLINE="-l /var/lib/snapraid/logs/${CFGNAME}/${OPCMD}-${LOGTIME}.raw.log" || unset LOGLINE
+    $SNAP_BIN -c $SNAP_CONF $LOGLINE "${CMD[@]:2}" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     CMDRET="${PIPESTATUS[0]}"
     
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
@@ -194,11 +207,11 @@ else
     fi
 fi
 
-echo "$OPTIME" >/var/lib/snapraid/logs/lastfinish
-echo "################################################################" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-echo "### ${BIGOP} FINISHED: ${OPTIME} (after ${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
-[ -n "$RAMWARNING" ] && echo "###${RAMWARNING}" 2>&1 | tee -a /var/lib/snapraid/logs/snaplog
+echo "$OPTIME" >"/var/lib/snapraid/logs/${CFGNAME}-lastfinish"
+echo "################################################################" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+echo "### ${BIGOP} FINISHED: ${OPTIME} (after ${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+[ -n "$RAMWARNING" ] && echo "###${RAMWARNING}" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
 
-cp "/var/lib/snapraid/logs/snaplog" "/var/lib/snapraid/logs/${CMD[1]}-${LOGTIME}.log"
+cp "/var/lib/snapraid/logs/${CFGNAME}-snaplog" "/var/lib/snapraid/logs/${CFGNAME}/${OPCMD}-${LOGTIME}.log"
 
 exit 0

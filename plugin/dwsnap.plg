@@ -3,21 +3,27 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "dwsnap">
 <!ENTITY author    "desertwitch">
-<!ENTITY version   "2024.06.04">
+<!ENTITY version   "2024.06.08">
 <!ENTITY launch    "Settings/dwsnapOps">
 <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/SnapRAID-on-unRAID/main">
 <!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
 <!ENTITY pkgURL    "&gitURL;/packages">
 <!ENTITY plgPATH   "/boot/config/plugins/&name;">
-<!ENTITY plgNAME   "dwsnap-2024.06.04-x86_64-1">
-<!ENTITY plgMD5    "db8c67e9b0192af9b25bc1829bc771b9">
+<!ENTITY plgNAME   "dwsnap-2024.06.08-x86_64-1">
+<!ENTITY plgMD5    "26407341e80bdbdb15a457b0e840fd88">
 <!ENTITY emhttp    "/usr/local/emhttp/plugins/&name;">
 ]>
 
-<PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" support="https://forums.unraid.net/topic/163648-plugin-snapraid-on-unraid/" min="6.8.3">
+<PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;" support="https://forums.unraid.net/topic/163648-plugin-snapraid-on-unraid/" min="6.8.3" icon="scissors">
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2024.06.08
+- new: support for maintaining multiple arrays
+- fix: complete revision of GUI code including various minor fixes
+- fix: complete revision of backend code including various minor fixes
+- release note: existing configuration will be migrated to multi array layout
+- release note: just to be sure please do take note of configuration before updating
 ###2024.06.04
 - fix: minor modifications to improve permissioning for binaries
 - fix: minor modifications with further clarifications for documentation
@@ -80,6 +86,13 @@ echo "Making sure all running SnapRAID instances are stopped (before install/upg
 if [ -x /usr/local/emhttp/plugins/dwsnap/scripts/shutdown ]; then
     /usr/local/emhttp/plugins/dwsnap/scripts/shutdown nobackup
 fi
+
+if [ -f /boot/config/plugins/dwsnap/dwsnap.cfg ]; then
+    if [ ! -f /boot/config/plugins/dwsnap/config/primary.cfg ]; then
+        touch /tmp/snapmigration
+    fi
+fi
+
 echo ""
 exit 0
 </INLINE>
@@ -107,9 +120,17 @@ run the post-installation scripts
 <FILE Run="/bin/bash">
 <INLINE> 
 echo ""
+
+if [ -f /tmp/snapmigration ]; then
+    if [ -x /usr/local/emhttp/plugins/dwsnap/scripts/migrate_config ]; then
+        /usr/local/emhttp/plugins/dwsnap/scripts/migrate_config
+    fi
+fi
+
 if [ -x /usr/local/emhttp/plugins/dwsnap/scripts/write_config ]; then
     /usr/local/emhttp/plugins/dwsnap/scripts/write_config
 fi
+
 echo ""
 echo "-------------------------------------------------------------"
 echo " SnapRAID on UNRAID has been installed."
@@ -133,8 +154,6 @@ removepkg &plgPATH;/*.txz
 rm -rf &plgPATH;/*.txz
 rm -rf &emhttp;
 
-rm -f /etc/snapraid.conf
-
 if mountpoint -q /var/lib/snapraid; then 
     rm -rf /var/lib/snapraid/*
     umount -l /var/lib/snapraid
@@ -143,16 +162,12 @@ fi
 
 rm -rf /var/lib/snapraid
 
-if [ -f /boot/config/plugins/dynamix/dwsnap-maintenance.cron ]; then
-    rm -f /boot/config/plugins/dynamix/dwsnap-maintenance.cron
-    sleep 1
-    update_cron
-    sleep 1
-fi
+rm -f /boot/config/plugins/dynamix/dwsnap*.cron
+sleep 1
+update_cron
+sleep 1
 
-if [ -f /boot/config/plugins/dwsnap/config/snaplog ]; then
-    rm -f /boot/config/plugins/dwsnap/config/snaplog
-fi
+rm -f /boot/config/plugins/dwsnap/config/*-snaplog
 
 echo ""
 echo "-----------------------------------------------------------"

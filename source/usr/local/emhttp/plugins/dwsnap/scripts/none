@@ -15,22 +15,4 @@
 # The above copyright notice and this permission notice shall be
 # included in all copies or substantial portions of the Software.
 #
-echo "Recreating the RAM disk..."
-
-rm -rf /var/lib/snapraid/* 2>&1 | logger -t "snapraid-ramdisk"
-sleep 1
-
-umount -l /var/lib/snapraid 2>&1 | logger -t "snapraid-ramdisk"
-sleep 1
-
-rm -rf /var/lib/snapraid 2>&1 | logger -t "snapraid-ramdisk"
-mkdir -p /var/lib/snapraid 2>&1 | logger -t "snapraid-ramdisk"
-
-mount -t tmpfs -o size=30% tmpfs /var/lib/snapraid 2>&1 | logger -t "snapraid-ramdisk"
-sleep 1
-
-chown root:root /var/lib/snapraid 2>&1 | logger -t "snapraid-ramdisk"
-chmod 755 /var/lib/snapraid 2>&1 | logger -t "snapraid-ramdisk"
-
-mkdir -p /var/lib/snapraid/logs 2>&1 | logger -t "snapraid-ramdisk"
-sleep 1
+exit 0

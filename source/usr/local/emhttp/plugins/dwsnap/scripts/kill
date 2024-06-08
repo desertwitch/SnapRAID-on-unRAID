@@ -15,14 +15,19 @@
 # The above copyright notice and this permission notice shall be
 # included in all copies or substantial portions of the Software.
 #
-echo "Killing all running SnapRAID instances..."
-killall snapraid-runner
-killall snapraid-cron
-killall snapraid
+[ -z "$1" ] && exit 1
+echo "Killing the running SnapRAID instances..."
+
+pgrep -f "^(/bin/bash )?/usr/bin/snapraid-runner ${1}" 2>/dev/null | xargs kill
+pgrep -f "^(/bin/bash )?/usr/bin/snapraid-cron ${1}" 2>/dev/null | xargs kill
+pgrep -f "^/usr/bin/snapraid -c /boot/config/plugins/dwsnap/config/${1}.conf" 2>/dev/null | xargs kill
+
 sleep 5
-if killall -9 snapraid >/dev/null 2>&1; then
-    sleep 5
-fi
-killall -9 snapraid-runner
-killall -9 snapraid-cron
+
+pgrep -f "^/usr/bin/snapraid -c /boot/config/plugins/dwsnap/config/${1}.conf" 2>/dev/null | xargs kill -9
+CMDRET=$? && { [ "$CMDRET" == 0 ] || [ "$CMDRET" == 64 ]; } && sleep 5  
+
+pgrep -f "^(/bin/bash )?/usr/bin/snapraid-runner ${1}" 2>/dev/null | xargs kill -9
+pgrep -f "^(/bin/bash )?/usr/bin/snapraid-cron ${1}" 2>/dev/null | xargs kill -9
+
 sleep 1

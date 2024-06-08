@@ -15,8 +15,11 @@
 # The above copyright notice and this permission notice shall be
 # included in all copies or substantial portions of the Software.
 #
-echo "Stopping all running SnapRAID instances..."
-killall snapraid-runner
-killall snapraid-cron
-killall snapraid
+[ -z "$1" ] && exit 1
+echo "Stopping the running SnapRAID instances..."
+
+pgrep -f "^(/bin/bash )?/usr/bin/snapraid-runner ${1}" 2>/dev/null | xargs kill
+pgrep -f "^(/bin/bash )?/usr/bin/snapraid-cron ${1}" 2>/dev/null | xargs kill
+pgrep -f "^/usr/bin/snapraid -c /boot/config/plugins/dwsnap/config/${1}.conf" 2>/dev/null | xargs kill
+
 sleep 1

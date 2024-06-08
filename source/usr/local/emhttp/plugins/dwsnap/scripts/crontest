@@ -15,6 +15,7 @@
 # The above copyright notice and this permission notice shall be
 # included in all copies or substantial portions of the Software.
 #
-echo "Starting SnapRAID operation: CRONTEST..."
-nohup /usr/bin/snapraid-cron >/dev/null 2>&1 &
+[ -z "$1" ] && exit 1
+echo "Starting the SnapRAID maintenance..."
+nohup /usr/bin/snapraid-cron "$1" >/dev/null 2>&1 &
 sleep 1

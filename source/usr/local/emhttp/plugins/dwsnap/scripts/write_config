@@ -16,8 +16,6 @@
 # included in all copies or substantial portions of the Software.
 #
 DOCROOT="/usr/local/emhttp/plugins/dwsnap"
-CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
-[ -e "$CONFIG" ] && source $CONFIG
 
 echo "Initiating SnapRAID configuration..."
 
@@ -25,21 +23,32 @@ if [ "$( grep -ic "dwsnap" /etc/rc.d/rc.local_shutdown )" -eq 0 ]; then
     sed -i -e '/# Get time-out setting/i [ -x /usr/local/emhttp/plugins/dwsnap/scripts/shutdown ] && /usr/local/emhttp/plugins/dwsnap/scripts/shutdown' -e //N /etc/rc.d/rc.local_shutdown
 fi
 
-if [ "$CRON" == "hourly" ]; then
-    cp -f $DOCROOT/misc/dwsnap-maintenance.cron /boot/config/plugins/dynamix/dwsnap-maintenance.cron
-    sed -i '/snapraid-cron/s,^\*,0,' /boot/config/plugins/dynamix/dwsnap-maintenance.cron
-elif [ "$CRON" == "daily" ]; then
-    cp -f $DOCROOT/misc/dwsnap-maintenance.cron /boot/config/plugins/dynamix/dwsnap-maintenance.cron
-    sed -i "/snapraid-cron/s,^\* \*,0 ${CRONHOUR}," /boot/config/plugins/dynamix/dwsnap-maintenance.cron
-elif [ "$CRON" == "weekly" ]; then
-    cp -f $DOCROOT/misc/dwsnap-maintenance.cron /boot/config/plugins/dynamix/dwsnap-maintenance.cron
-    sed -i "/snapraid-cron/s,^\* \* \* \* \*,0 ${CRONHOUR} \* \* ${CRONDOW}," /boot/config/plugins/dynamix/dwsnap-maintenance.cron
-elif [ "$CRON" == "monthly" ]; then
-    cp -f $DOCROOT/misc/dwsnap-maintenance.cron /boot/config/plugins/dynamix/dwsnap-maintenance.cron
-    sed -i "/snapraid-cron/s,^\* \* \*,0 ${CRONHOUR} ${CRONDOM}," /boot/config/plugins/dynamix/dwsnap-maintenance.cron
-else
-    rm -f /boot/config/plugins/dynamix/dwsnap-maintenance.cron
-fi
+rm -f /boot/config/plugins/dynamix/dwsnap*.cron
+
+for cfgfile in /boot/config/plugins/dwsnap/config/*.cfg; do
+    [ -e "$cfgfile" ] && source "$cfgfile" || continue
+    cfgname="$(basename --suffix=.cfg "$cfgfile")"
+
+    if [ "$CRON" == "hourly" ]; then
+        cp -f $DOCROOT/misc/dwsnap-maintenance.cron "/boot/config/plugins/dynamix/dwsnap-${cfgname}.cron"
+        sed -i '/snapraid-cron/s,^\*,0,' "/boot/config/plugins/dynamix/dwsnap-${cfgname}.cron"
+        sed -i "s/snapraid-cron/snapraid-cron ${cfgname}/g" "/boot/config/plugins/dynamix/dwsnap-${cfgname}.cron"
+    elif [ "$CRON" == "daily" ]; then
+        cp -f $DOCROOT/misc/dwsnap-maintenance.cron "/boot/config/plugins/dynamix/dwsnap-${cfgname}.cron"
+        sed -i "/snapraid-cron/s,^\* \*,0 ${CRONHOUR}," "/boot/config/plugins/dynamix/dwsnap-${cfgname}.cron"
+        sed -i "s/snapraid-cron/snapraid-cron ${cfgname}/g" "/boot/config/plugins/dynamix/dwsnap-${cfgname}.cron"
+    elif [ "$CRON" == "weekly" ]; then
+        cp -f $DOCROOT/misc/dwsnap-maintenance.cron "/boot/config/plugins/dynamix/dwsnap-${cfgname}.cron"
+        sed -i "/snapraid-cron/s,^\* \* \* \* \*,0 ${CRONHOUR} \* \* ${CRONDOW}," "/boot/config/plugins/dynamix/dwsnap-${cfgname}.cron"
+        sed -i "s/snapraid-cron/snapraid-cron ${cfgname}/g" "/boot/config/plugins/dynamix/dwsnap-${cfgname}.cron"
+    elif [ "$CRON" == "monthly" ]; then
+        cp -f $DOCROOT/misc/dwsnap-maintenance.cron "/boot/config/plugins/dynamix/dwsnap-${cfgname}.cron"
+        sed -i "/snapraid-cron/s,^\* \* \*,0 ${CRONHOUR} ${CRONDOM}," "/boot/config/plugins/dynamix/dwsnap-${cfgname}.cron"
+        sed -i "s/snapraid-cron/snapraid-cron ${cfgname}/g" "/boot/config/plugins/dynamix/dwsnap-${cfgname}.cron"
+    else
+        rm -f "/boot/config/plugins/dynamix/dwsnap-${cfgname}.cron"
+    fi
+done
 
 sleep 1
 update_cron

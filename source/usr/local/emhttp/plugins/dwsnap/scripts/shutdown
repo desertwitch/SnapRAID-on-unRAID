@@ -15,7 +15,6 @@
 # The above copyright notice and this permission notice shall be
 # included in all copies or substantial portions of the Software.
 #
-
 CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
 [ -e "$CONFIG" ] && source $CONFIG
 
@@ -41,7 +40,7 @@ if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 |
         WASRUNNING="YES"
         echo "WARNING: Still shutting down a 'snapraid' instance..." | logger -t "snapraid-shutdown"
         TIMER=0
-        while killall snapraid 2>/dev/null; do
+        while killall snapraid >/dev/null 2>&1; do
             sleep 1
             killall snapraid-runner
             killall snapraid-cron
@@ -63,7 +62,7 @@ if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 |
         WASRUNNING="YES"
         echo "WARNING: Still shutting down a 'snapraid-runner' instance..." | logger -t "snapraid-shutdown"
         TIMER=0
-        while killall snapraid-runner 2>/dev/null; do
+        while killall snapraid-runner >/dev/null 2>&1; do
             sleep 1
             killall snapraid-runner
             killall snapraid-cron
@@ -85,7 +84,7 @@ if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 |
         WASRUNNING="YES"
         echo "WARNING: Still shutting down a 'snapraid-cron' instance..." | logger -t "snapraid-shutdown"
         TIMER=0
-        while killall snapraid-cron 2>/dev/null; do
+        while killall snapraid-cron >/dev/null 2>&1; do
             sleep 1
             killall snapraid-runner
             killall snapraid-cron
@@ -106,15 +105,13 @@ fi
 
 if [ "$1" != "nobackup" ]; then
     if [ "$WASRUNNING" == "YES" ]; then
-        if [ -f /var/lib/snapraid/logs/snaplog ]; then
-            echo "Backing up SNAPLOG to USB drive..." | logger -t "snapraid-shutdown"
-            cp -f /var/lib/snapraid/logs/snaplog /boot/config/plugins/dwsnap/config/snaplog
-            echo "This operation output was saved because it seems to have been running when the system shutdown." >> /boot/config/plugins/dwsnap/config/snaplog
-        fi
+        for logfile in /var/lib/snapraid/logs/*-snaplog; do
+            logname="$(basename "$logfile")"
+            echo "Backing up SNAPLOG to USB drive... ${logfile}" | logger -t "snapraid-shutdown"
+            cp -f "$logfile" "/boot/config/plugins/dwsnap/config/${logname}"
+            echo "This operation output was saved because it may have been running when the system shutdown." >> "/boot/config/plugins/dwsnap/config/${logname}"
+        done
     else
-        if [ -f /boot/config/plugins/dwsnap/config/snaplog ]; then
-            echo "Removing outdated SNAPLOG from USB drive..." | logger -t "snapraid-shutdown"
-            rm -f /boot/config/plugins/dwsnap/config/snaplog
-        fi
+        rm -f /boot/config/plugins/dwsnap/config/*-snaplog
     fi
 fi

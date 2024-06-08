@@ -42,14 +42,15 @@ if [ ! -d /var/lib/snapraid/logs ]; then
     mkdir -p /var/lib/snapraid/logs
 fi
 
-if [ ! -f /var/lib/snapraid/logs/snaplog ] && [ -f $BOOT/config/snaplog ]; then
-    mv -f $BOOT/config/snaplog /var/lib/snapraid/logs/snaplog
-fi
+for logfile in "$BOOT"/config/*-snaplog; do
+    logname="$(basename "$logfile")"
+    if [ ! -f "/var/lib/snapraid/logs/${logname}" ]; then
+        mv -f "$logfile" "/var/lib/snapraid/logs/${logname}"
+    else
+        rm -f "$logfile"
+    fi
+done
 
 cp -n $DOCROOT/default.cfg $BOOT/dwsnap.cfg
-cp -n $DOCROOT/defaults/snapraid.conf $BOOT/config/snapraid.conf
-
-if [ ! -L /etc/snapraid.conf ]; then
-    rm -f /etc/snapraid.conf
-    ln -sf $BOOT/config/snapraid.conf /etc/snapraid.conf
-fi
+cp -n $DOCROOT/defaults/primary.cfg $BOOT/config/primary.cfg
+cp -n $DOCROOT/defaults/primary.conf $BOOT/config/primary.conf

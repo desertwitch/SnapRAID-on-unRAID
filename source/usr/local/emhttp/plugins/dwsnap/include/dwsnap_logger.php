@@ -17,14 +17,19 @@
  * included in all copies or substantial portions of the Software.
  *
  */
-if(file_exists("/var/lib/snapraid/logs/snaplog")) {
-    $snap_log = file_get_contents("/var/lib/snapraid/logs/snaplog");
-    if(!empty($snap_log)) {
-        echo("<pre class='snaplog'>".$snap_log."</pre>");
+if(!empty($_GET["config"])) {
+    $config = $_GET["config"];
+    if(file_exists("/var/lib/snapraid/logs/$config-snaplog")) {
+        $snap_log = file_get_contents("/var/lib/snapraid/logs/$config-snaplog");
+        if(!empty($snap_log)) {
+            echo("<pre class='snaplog'>".$snap_log."</pre>");
+        } else {
+            echo("<pre class='snaplog'></pre>");
+        }
     } else {
         echo("<pre class='snaplog'></pre>");
     }
 } else {
-    echo("<pre class='snaplog'></pre>");
+    echo("");
 }
 ?>

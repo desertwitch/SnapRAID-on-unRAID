@@ -15,8 +15,11 @@
 # The above copyright notice and this permission notice shall be
 # included in all copies or substantial portions of the Software.
 #
-echo "Clearing SnapRAID screen..."
-rm -f /var/lib/snapraid/logs/snaplog
-rm -f /var/lib/snapraid/logs/laststart
-rm -f /var/lib/snapraid/logs/lastfinish
+[ -z "$1" ] && exit 1
+echo "Clearing the SnapRAID array screen..."
+
+rm -f "/var/lib/snapraid/logs/${1}-snaplog"
+rm -f "/var/lib/snapraid/logs/${1}-laststart"
+rm -f "/var/lib/snapraid/logs/${1}-lastfinish"
+
 sleep 1

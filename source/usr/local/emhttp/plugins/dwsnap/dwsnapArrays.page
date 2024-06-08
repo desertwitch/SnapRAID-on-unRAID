@@ -1,0 +1,45 @@
+Menu="dwsnapOps:1"
+Title="SnapRAID Array Overview"
+Tag="magic"
+Markdown="false"
+---
+<?require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';?>
+
+<style type="text/css">
+.snaparrays tr:nth-child(1) > th {
+    text-align: center !important;
+}
+.snaparrays td {
+    text-align: center !important;
+    font-size: 1.1rem;
+}
+</style>
+
+<table class="tablesorter snaparrays shift">
+    <thead>
+        <tr>
+            <th><strong>GUI</strong></th><th><strong>Array Name</strong></th><th><strong>Parity Disks</strong></th><th><strong>Data Disks</strong></th><th><strong>Content Files</strong></th><th><strong>Maint. Schedule</strong></th><th><strong>Last Sync</strong></th><th><strong>Last Scrub</strong></th><th><strong>Array Status</strong></th>
+        </tr>
+    </thead>
+    <tbody id="snap_arrays">
+        <tr><td colspan='9' style="text-align:center"><i class="fa fa-spinner fa-spin"></i> <em>Please wait, retrieving information...</em></td></tr>
+    </tbody>
+</table>
+
+<script type="text/javascript">
+function getSnapArrays() {
+    $.get('/plugins/dwsnap/include/dwsnap_arrays.php',function(data) {
+        if (data) { 
+            $('#snap_arrays').html(data);
+            $('.snaptip').tooltipster();
+            $('.snaphtmltip').tooltipster({contentAsHTML: true});
+	    }
+    });
+    clearTimeout(timers.getSnapArrays);
+    timers.getSnapArrays = setTimeout(getSnapArrays, 3000);
+}
+$(function()
+{
+    getSnapArrays();
+});
+</script>

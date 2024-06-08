@@ -1,5 +1,5 @@
-Menu="dwsnapOps:2"
-Title="SnapRAID Array Configuration"
+Menu="dwsnapOps:3"
+Title="SnapRAID Array Configuration Editor"
 Tag="cogs"
 Markdown="false"
 ---
@@ -120,7 +120,7 @@ $(function(){
         );
     });
 
-    $('#editfile').val("/boot/config/plugins/dwsnap/config/snapraid.conf");
+    $('#editfile').val("/boot/config/plugins/dwsnap/config/<?=$dwsnap_active_cfg->cfgname;?>.conf");
     var EditfileDefault = $('#editfile').val();
     $.getJSON('/plugins/dwsnap/include/dwsnap_edit.php', {editfile: EditfileDefault}, function (data) {
             editor.setValue(data);

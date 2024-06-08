@@ -17,12 +17,20 @@
  * included in all copies or substantial portions of the Software.
  *
  */
-if(!empty($_GET["config"])) {
-    $config = $_GET["config"];
-    $snap_running = trim(htmlspecialchars(shell_exec( "if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-runner >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1; then echo YES; else echo NO; fi" ) ?? "-"));
-    $snap_array_running = trim(htmlspecialchars(shell_exec( "if pgrep -f \"^/usr/bin/snapraid -c /boot/config/plugins/dwsnap/config/$config.conf\" >/dev/null 2>&1 || pgrep -f \"^(/bin/bash )?/usr/bin/snapraid-cron $config\" >/dev/null 2>&1 || pgrep -f \"^(/bin/bash )?/usr/bin/snapraid-runner $config\" >/dev/null 2>&1; then echo YES; else echo NO; fi" ) ?? "-"));
-    echo("ANY:".$snap_running.",ARRAY:".$snap_array_running);
-} else {
+require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
+try {
+    $snap_footer = "SnapRAID";
+    $files = dwsnap_get_conf_files();
+    foreach ($files as $file) {
+        $footerCfgName = basename($file,".conf");
+        $footerCfg = new SnapraidArrayConfiguration($footerCfgName);
+        $snap_footer .= $footerCfg->getFooterHTML();
+        unset($footerCfg);
+    }
+    echo($snap_footer);
+} catch (Throwable $e) { // For PHP 7
+    echo("");
+} catch (Exception $e) { // For PHP 5
     echo("");
 }
 ?>
