@@ -43,12 +43,18 @@ logger -t "snapraid-cron" "(${CFGNAME}) started"
 
 [ -e "$CONFIG" ] && source "$CONFIG"
 
+if [ -x "/usr/bin/ionice" ]; then
+    [ "$PRIO" == "idle" ] && SNAP_BIN="/usr/bin/ionice -c 3 /usr/bin/snapraid"
+    [ "$PRIO" == "besteffort" ] && SNAP_BIN="/usr/bin/ionice -c 2 /usr/bin/snapraid"
+    [ "$PRIO" == "realtime" ] && SNAP_BIN="/usr/bin/ionice -c 1 /usr/bin/snapraid"
+fi
+
 if [ "$CRON" != "hourly" ] && [ "$CRON" != "daily" ] && [ "$CRON" != "weekly" ] && [ "$CRON" != "monthly" ]; then
     echo "(${CFGNAME}) SnapRAID maintenance not enabled in array settings, exiting..." | logger -s -t "snapraid-cron"
     exit 1
 fi
 
-if pgrep -f "^/usr/bin/snapraid -c ${SNAP_CONF}" >/dev/null 2>&1 || pgrep -f "^(/bin/bash )?/usr/bin/snapraid-runner ${CFGNAME}" >/dev/null 2>&1; then
+if pgrep -f "^(/usr/bin/ionice -c [0-9] )?/usr/bin/snapraid -c ${SNAP_CONF}" >/dev/null 2>&1 || pgrep -f "^(/bin/bash )?/usr/bin/snapraid-runner ${CFGNAME}" >/dev/null 2>&1; then
     echo "(${CFGNAME}) SnapRAID is already running on that array, exiting..." | logger -s -t "snapraid-cron"
     exit 1
 fi

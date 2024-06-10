@@ -146,6 +146,25 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 </div><br>
 
 <dl>
+    <dt>SnapRAID I/O Process Priority:</dt>
+    <dd>
+        <select class="snaprun" id="PRIO" name="PRIO" size="1">
+            <?=mk_option($dwsnap_active_cfg->prio, "disable", "System Default");?>
+            <?=mk_option($dwsnap_active_cfg->prio, "idle", "Idle");?>
+            <?=mk_option($dwsnap_active_cfg->prio, "besteffort", "Best Effort");?>
+            <?=mk_option($dwsnap_active_cfg->prio, "realtime", "Real Time");?>
+        </select>
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+<p>This setting controls how much SnapRAID interferes with other running I/O (data transfer) operations (using the <em>ionice</em> program).</p>
+<p>If you are running SnapRAID array operations or maintenance during the day, it is recommended to choose e.g. 'Idle' as a low-interference process priority.</p>
+<p>This will ensure that other processes accessing your array will be given priority over SnapRAID itself, which will in turn run slower (for its array operations).</p>
+<p>This setting only has an effect with I/O schedulers respecting I/O process priorities, such as the BFQ scheduler (which can be configured under Unraid's <em>Disk Settings</em>).</p>
+</blockquote>
+
+<dl>
     <dt>SnapRAID Sync Overdue Warning Threshold:</dt>
     <dd>
         <select class="snaprun" id="SYNCEXPIRES" name="SYNCEXPIRES" size="1">

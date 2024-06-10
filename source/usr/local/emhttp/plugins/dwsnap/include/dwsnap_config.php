@@ -22,6 +22,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_helpers.php';
 class SnapraidArrayConfiguration {
     public $cfgname;
     public $cfg;
+    public $prio;
     public $sync_expires;
     public $scrub_expires;
     public $rawreports;
@@ -69,6 +70,7 @@ class SnapraidArrayConfiguration {
         $this->cfg = file_exists("/boot/config/plugins/dwsnap/config/$cfg_name.cfg") ? parse_ini_file("/boot/config/plugins/dwsnap/config/$cfg_name.cfg") : [];
         $this->snapcfg = file_exists("/boot/config/plugins/dwsnap/config/$cfg_name.conf") ? file_get_contents("/boot/config/plugins/dwsnap/config/$cfg_name.conf") : "-";
 
+        $this->prio = trim(isset($this->cfg['PRIO']) ? htmlspecialchars($this->cfg['PRIO']) : 'disable');
         $this->sync_expires = trim(isset($this->cfg['SYNCEXPIRES']) ? htmlspecialchars($this->cfg['SYNCEXPIRES']) : '7');
         $this->scrub_expires = trim(isset($this->cfg['SCRUBEXPIRES']) ? htmlspecialchars($this->cfg['SCRUBEXPIRES']) : '7');
         $this->rawreports = trim(isset($this->cfg['RAWREPORTS']) ? htmlspecialchars($this->cfg['RAWREPORTS']) : 'disable');
@@ -118,7 +120,7 @@ class SnapraidArrayConfiguration {
             $snap_array_name = strtoupper($this->cfgname);
             
             $config = $this->cfgname;
-            $snap_running = trim(htmlspecialchars(shell_exec( "if pgrep -f \"^/usr/bin/snapraid -c /boot/config/plugins/dwsnap/config/$config.conf\" >/dev/null 2>&1 || pgrep -f \"^(/bin/bash )?/usr/bin/snapraid-cron $config\" >/dev/null 2>&1 || pgrep -f \"^(/bin/bash )?/usr/bin/snapraid-runner $config\" >/dev/null 2>&1; then echo YES; else echo NO; fi" ) ?? "-"));
+            $snap_running = trim(htmlspecialchars(shell_exec( "if pgrep -f \"^(/usr/bin/ionice -c [0-9] )?/usr/bin/snapraid -c /boot/config/plugins/dwsnap/config/$config.conf\" >/dev/null 2>&1 || pgrep -f \"^(/bin/bash )?/usr/bin/snapraid-cron $config\" >/dev/null 2>&1 || pgrep -f \"^(/bin/bash )?/usr/bin/snapraid-runner $config\" >/dev/null 2>&1; then echo YES; else echo NO; fi" ) ?? "-"));
             
             if($snap_running === "YES") { return "<span class='snaptip' title='$snap_array_name: Array Operation in Progress'><i class='fa fa-cog fa-spin'></i></span>"; }
     

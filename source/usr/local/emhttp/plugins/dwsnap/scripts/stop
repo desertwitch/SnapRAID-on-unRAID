@@ -20,6 +20,6 @@ echo "Stopping the running SnapRAID instances..."
 
 pgrep -f "^(/bin/bash )?/usr/bin/snapraid-runner ${1}" 2>/dev/null | xargs kill
 pgrep -f "^(/bin/bash )?/usr/bin/snapraid-cron ${1}" 2>/dev/null | xargs kill
-pgrep -f "^/usr/bin/snapraid -c /boot/config/plugins/dwsnap/config/${1}.conf" 2>/dev/null | xargs kill
+pgrep -f "^(/usr/bin/ionice -c [0-9] )?/usr/bin/snapraid -c /boot/config/plugins/dwsnap/config/${1}.conf" 2>/dev/null | xargs kill
 
 sleep 1
