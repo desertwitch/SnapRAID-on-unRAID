@@ -19,8 +19,11 @@
 BOOT="/boot/config/plugins/dwsnap"
 echo "Deleting an existing SnapRAID array..."
 
-rm -rf $BOOT/config/"$1"*
-rm -rf /var/lib/snapraid/logs/"$1"*
+rm -f $BOOT/config/"$1".conf
+rm -f $BOOT/config/"$1".cfg
+rm -f $BOOT/config/"$1"-*
+
+rm -f /var/lib/snapraid/logs/"$1"-*
 rm -rf /var/lib/snapraid/logs/"$1"
 
 sed -i "s/SELARRAY=.*/SELARRAY=\"primary\"/g" $BOOT/dwsnap.cfg
