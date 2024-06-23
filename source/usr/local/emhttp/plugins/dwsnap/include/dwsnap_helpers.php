@@ -18,7 +18,7 @@
  *
  */
 
-function humanFileSize($sizeObj,$unit="") {
+function dwsnap_humanFileSize($sizeObj,$unit="") {
     try {
         $size = intval($sizeObj);
         if($size) {
