@@ -19,7 +19,7 @@
 <CHANGES>
 ## SnapRAID on UNRAID
 ###2024.06.23a
-- fix: changed KiB to KB
+- fix: changed units from KiB to KB
 - fix: also match mountpoints located in UD subdirectories of /mnt
 - fix: renamed generic function names to avoid declaration collisions with other plugins
 ###2024.06.10
