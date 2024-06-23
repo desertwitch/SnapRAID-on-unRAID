@@ -120,11 +120,11 @@ class SnapraidArrayConfiguration {
             $snap_array_name = strtoupper($this->cfgname);
             
             $config = $this->cfgname;
-            $snap_running = trim(htmlspecialchars(shell_exec( "if pgrep -f \"^(/usr/bin/ionice -c [0-9] )?/usr/bin/snapraid -c /boot/config/plugins/dwsnap/config/$config.conf\" >/dev/null 2>&1 || pgrep -f \"^(/bin/bash )?/usr/bin/snapraid-cron $config\" >/dev/null 2>&1 || pgrep -f \"^(/bin/bash )?/usr/bin/snapraid-runner $config\" >/dev/null 2>&1; then echo YES; else echo NO; fi" ) ?? "-"));
+            $snap_running = htmlspecialchars(trim(shell_exec( "if pgrep -f \"^(/usr/bin/ionice -c [0-9] )?/usr/bin/snapraid -c /boot/config/plugins/dwsnap/config/$config.conf\" >/dev/null 2>&1 || pgrep -f \"^(/bin/bash )?/usr/bin/snapraid-cron $config\" >/dev/null 2>&1 || pgrep -f \"^(/bin/bash )?/usr/bin/snapraid-runner $config\" >/dev/null 2>&1; then echo YES; else echo NO; fi" ) ?? "-"));
             
             if($snap_running === "YES") { return "<span class='snaptip' title='$snap_array_name: Array Operation in Progress'><i class='fa fa-cog fa-spin'></i></span>"; }
     
-            $snap_ramdisk_util = trim(htmlspecialchars(shell_exec("df --output=pcent /var/lib/snapraid 2>/dev/null | tr -dc '0-9' 2>/dev/null") ?? "-"));
+            $snap_ramdisk_util = htmlspecialchars(trim(shell_exec("df --output=pcent /var/lib/snapraid 2>/dev/null | tr -dc '0-9' 2>/dev/null") ?? "-"));
             if(!empty($this->parity_disks) && !empty($this->data_disks)) {
                 $snap_all_disks_available = true;
                 foreach ($this->parity_disks as $snap_parity_disk){
@@ -282,6 +282,6 @@ $dwsnap_screenimg = trim(isset($dwsnap_cfg['SCREENIMG']) ? htmlspecialchars($dws
 $dwsnap_stoparray = trim(isset($dwsnap_cfg['STOPARRAY']) ? htmlspecialchars($dwsnap_cfg['STOPARRAY']) : 'enable');
 $dwsnap_killtime = trim(isset($dwsnap_cfg['KILLTIME']) ? htmlspecialchars($dwsnap_cfg['KILLTIME']) : '30');
 
-$dwsnap_backend = trim(htmlspecialchars(shell_exec("find /var/log/packages/ -type f -iname 'snapraid-*' -printf '%f\n' 2>/dev/null") ?? "n/a"));
+$dwsnap_backend = htmlspecialchars(trim(shell_exec("find /var/log/packages/ -type f -iname 'snapraid-*' -printf '%f\n' 2>/dev/null") ?? "n/a"));
 
 ?>

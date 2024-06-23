@@ -18,6 +18,29 @@
  *
  */
 
+function humanFileSize($sizeObj,$unit="") {
+    try {
+        $size = intval($sizeObj);
+        if($size) {
+            if( (!$unit && $size >= 1000000000000) || $unit == "TB")
+                return number_format(($size/1000000000000),2)." TB";
+            if( (!$unit && $size >= 1000000000) || $unit == "GB")
+                return number_format(($size/1000000000),2)." GB";
+            if( (!$unit && $size >= 1000000) || $unit == "MB")
+                return number_format(($size/1000000),2)." MB";
+            if( (!$unit && $size >= 1000) || $unit == "KB")
+                return number_format(($size/1000),2)." KB";
+            return number_format($size)." B";
+        } else {
+            return "-";
+        }
+    } catch (Throwable $e) { // For PHP 7
+        return "-";
+    } catch (Exception $e) { // For PHP 5
+        return "-";
+    }
+}
+
 function dwsnap_get_conf_files() {
     $files = glob("/boot/config/plugins/dwsnap/config/*.conf") ?? [];
     if(!empty($files)) {
