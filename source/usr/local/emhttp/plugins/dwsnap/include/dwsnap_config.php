@@ -128,11 +128,11 @@ class SnapraidArrayConfiguration {
             if(!empty($this->parity_disks) && !empty($this->data_disks)) {
                 $snap_all_disks_available = true;
                 foreach ($this->parity_disks as $snap_parity_disk){
-                    $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab 2>/dev/null | grep '" . $snap_parity_disk[2] . " ' 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-");
+                    $snap_disk_fs = htmlspecialchars(trim(shell_exec("cat /etc/mtab 2>/dev/null | grep '" . $snap_parity_disk[2] . " ' 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
                     if($snap_disk_fs == "-") { $snap_all_disks_available = false; }
                 }
                 foreach ($this->data_disks as $snap_data_disk){
-                    $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab 2>/dev/null | grep '" . $snap_data_disk[2] . " ' 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-");
+                    $snap_disk_fs = htmlspecialchars(trim(shell_exec("cat /etc/mtab 2>/dev/null | grep '" . $snap_data_disk[2] . " ' 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
                     if($snap_disk_fs == "-") { $snap_all_disks_available = false; }
                 }
                 if($snap_all_disks_available) {
