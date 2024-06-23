@@ -240,11 +240,11 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
 
             $snap_all_disks_mounted = true;
             foreach ($dwsnap_active_cfg->parity_disks as $snap_parity_disk) {
-                $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab 2>/dev/null | grep " . $snap_parity_disk[2] . " 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-");
+                $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab 2>/dev/null | grep '" . $snap_parity_disk[2] . " ' 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-");
                 if($snap_disk_fs == "-") { $snap_all_disks_mounted = false; }
             }
             foreach ($dwsnap_active_cfg->data_disks as $snap_data_disk) {
-                $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab 2>/dev/null | grep " . $snap_data_disk[2] . " 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-");
+                $snap_disk_fs = htmlspecialchars(shell_exec("cat /etc/mtab 2>/dev/null | grep '" . $snap_data_disk[2] . " ' 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-");
                 if($snap_disk_fs == "-") { $snap_all_disks_mounted = false; }
             }
 
@@ -266,7 +266,7 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
             <?
             if(!empty($dwsnap_active_cfg->parity_disks) || !empty($dwsnap_active_cfg->data_disks)) {
                 foreach ($dwsnap_active_cfg->parity_disks as $snap_parity_disk){
-                    $snap_disk_fs = htmlspecialchars(trim(shell_exec("cat /etc/mtab 2>/dev/null | grep " . $snap_parity_disk[2] . " 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
+                    $snap_disk_fs = htmlspecialchars(trim(shell_exec("cat /etc/mtab 2>/dev/null | grep '" . $snap_parity_disk[2] . " ' 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
                     $snap_disk_util = htmlspecialchars(trim(shell_exec("df -B1 " . $snap_parity_disk[2] . " 2>/dev/null | grep " . $snap_parity_disk[2] . " 2>/dev/null | awk '{print $5}' 2>/dev/null") ?? "-"));
                     $snap_disk_free = htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 " . $snap_parity_disk[2] . " 2>/dev/null | grep " . $snap_parity_disk[2] . " 2>/dev/null | awk '{print $4}' 2>/dev/null") ?? "-")));
                     $snap_disk_used = htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 " . $snap_parity_disk[2] . " 2>/dev/null | grep " . $snap_parity_disk[2] . " 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-")));
@@ -297,7 +297,7 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
 END;
                 }
                 foreach ($dwsnap_active_cfg->data_disks as $snap_data_disk){
-                    $snap_disk_fs = htmlspecialchars(trim(shell_exec("cat /etc/mtab 2>/dev/null | grep " . $snap_data_disk[2] . " 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
+                    $snap_disk_fs = htmlspecialchars(trim(shell_exec("cat /etc/mtab 2>/dev/null | grep '" . $snap_data_disk[2] . " ' 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
                     $snap_disk_util = htmlspecialchars(trim(shell_exec("df -B1 " . $snap_data_disk[2] . " 2>/dev/null | grep " . $snap_data_disk[2] . " 2>/dev/null | awk '{print $5}' 2>/dev/null") ?? "-"));
                     $snap_disk_free = htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 " . $snap_data_disk[2] . " 2>/dev/null | grep " . $snap_data_disk[2] . " 2>/dev/null | awk '{print $4}' 2>/dev/null") ?? "-")));
                     $snap_disk_used = htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 " . $snap_data_disk[2] . " 2>/dev/null | grep " . $snap_data_disk[2] . " 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-")));
