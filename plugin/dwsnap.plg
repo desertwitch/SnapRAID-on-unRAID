@@ -18,6 +18,9 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2024.06.23
+- fix: changed KiB to KB
+- fix: renamed generic function names to avoid declaration collisions with other plugins
 ###2024.06.10
 - new: added io process priority setting on a per array basis
 - fix: removed too generous wildcard when deleting array or array logfiles
