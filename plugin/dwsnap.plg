@@ -3,14 +3,14 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "dwsnap">
 <!ENTITY author    "desertwitch">
-<!ENTITY version   "2024.06.23">
+<!ENTITY version   "2024.06.23a">
 <!ENTITY launch    "Settings/dwsnapOps">
 <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/SnapRAID-on-unRAID/main">
 <!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
 <!ENTITY pkgURL    "&gitURL;/packages">
 <!ENTITY plgPATH   "/boot/config/plugins/&name;">
-<!ENTITY plgNAME   "dwsnap-2024.06.23-x86_64-1">
-<!ENTITY plgMD5    "152fb82d0b9d3a721c61aed84c5fdc77">
+<!ENTITY plgNAME   "dwsnap-2024.06.23-x86_64-2">
+<!ENTITY plgMD5    "959dd539d3a65cc309a071357e96491c">
 <!ENTITY emhttp    "/usr/local/emhttp/plugins/&name;">
 ]>
 
@@ -18,7 +18,7 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
-###2024.06.23
+###2024.06.23a
 - fix: changed KiB to KB
 - fix: also match mountpoints located in UD subdirectories of /mnt
 - fix: renamed generic function names to avoid declaration collisions with other plugins
