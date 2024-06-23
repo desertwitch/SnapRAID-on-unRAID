@@ -599,7 +599,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 </form>
 
 <script type="text/javascript">
-function checkCronSettings() {
+function snapCronSettings() {
     if ($("#DIFF").val() === "enable") {
         $("#THRESHOLDSETTINGS").show();
     } else {
@@ -709,11 +709,11 @@ $(function(){
             }
     });
 
-    $("#DIFF").change(checkCronSettings);
-    $("#SYNC").change(checkCronSettings);
-    $("#SCRUB").change(checkCronSettings);
-    $("#CRON").change(checkCronSettings);
-    checkCronSettings();
+    $("#DIFF").change(snapCronSettings);
+    $("#SYNC").change(snapCronSettings);
+    $("#SCRUB").change(snapCronSettings);
+    $("#CRON").change(snapCronSettings);
+    snapCronSettings();
 });
 </script>
     
