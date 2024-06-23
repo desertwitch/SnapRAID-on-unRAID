@@ -106,8 +106,8 @@ class SnapraidArrayConfiguration {
         $this->lastscrub = trim(file_exists("/boot/config/plugins/dwsnap/config/$cfg_name-lastscrub") ? htmlspecialchars(file_get_contents("/boot/config/plugins/dwsnap/config/$cfg_name-lastscrub")) : "-");
         $this->lastnodiff = trim(file_exists("/boot/config/plugins/dwsnap/config/$cfg_name-lastnodiff") ? htmlspecialchars(file_get_contents("/boot/config/plugins/dwsnap/config/$cfg_name-lastnodiff")) : "-");        
     
-        preg_match_all('/(.*?parity) (\/mnt\/(addons\/)?.*?)\//m', $this->snapcfg, $this->parity_disks, PREG_SET_ORDER);
-        preg_match_all('/data (.*?) (\/mnt\/(addons\/)?.*?)\//m', $this->snapcfg, $this->data_disks, PREG_SET_ORDER);
+        preg_match_all('/(.*?parity) (\/mnt\/((addons|disks|remotes|rootshare)\/)?.*?)\//m', $this->snapcfg, $this->parity_disks, PREG_SET_ORDER);
+        preg_match_all('/data (.*?) (\/mnt\/((addons|disks|remotes|rootshare)\/)?.*?)\//m', $this->snapcfg, $this->data_disks, PREG_SET_ORDER);
 
         preg_match_all('/(.*?parity) (.*?)$/m', $this->snapcfg, $this->parity_disks_raw, PREG_PATTERN_ORDER);
         preg_match_all('/data (.*?) (.*?)$/m', $this->snapcfg, $this->data_disks_raw, PREG_PATTERN_ORDER);
