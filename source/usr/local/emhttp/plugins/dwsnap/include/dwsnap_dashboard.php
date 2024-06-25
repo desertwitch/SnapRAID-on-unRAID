@@ -64,7 +64,7 @@ if(!empty($_GET["config"])) {
 
     $snapdashField_status = $snapdashCfg->getFooterHTML();
     
-    $return_html .= "<tr><td>$snapdashField_paritydisks</td><td>$snapdashField_datadisks</td><td><strong>$snapdashField_lastsync</strong></td><td><strong>$snapdashField_lastscrub</strong></td><td>$snapdashField_status</td></tr>";
+    $return_html .= "<td>$snapdashField_paritydisks</td><td>$snapdashField_datadisks</td><td><strong>$snapdashField_lastsync</strong></td><td><strong>$snapdashField_lastscrub</strong></td><td>$snapdashField_status</td>";
     
     unset($snapdashCfg);
 
