@@ -30,34 +30,37 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
     font-size: 1.2rem;
 }
 </style>
-
 <?
-$snap_cfgs = dwsnap_get_conf_files();
-$snap_cfg_counter = 0;
+try {
+    $snap_cfgs = dwsnap_get_conf_files() ?? [];
+    $snap_cfg_counter = 0;
 
-foreach ($snap_cfgs as $snap_cfg) {
-    $snap_cfg_name = basename($snap_cfg,".conf");
-    $snap_cfg_name_upper = strtoupper($snap_cfg_name);
-    $snap_cfg_obj = new SnapraidArrayConfiguration($snap_cfg_name);
-
-    if($snap_cfg_obj->dashboard == "enable") {
+    foreach ($snap_cfgs as $snap_cfg) {
         $snap_cfg_counter = $snap_cfg_counter + 1;
-        $snap_cfg_sched = ucwords(str_replace("disable", "disabled", $snap_cfg_obj->cron));
+        $snap_cfg_name = basename($snap_cfg,".conf");
+        $snap_cfg_name_upper = strtoupper($snap_cfg_name);
+        $snap_cfg_obj = new SnapraidArrayConfiguration($snap_cfg_name);
 
-        $pluginname = "snap" . $snap_cfg_counter; 
-        $mytiles[$pluginname]['column2'] = <<<EOT
-        <tbody id="$pluginname" title="SnapRAID: $snap_cfg_name_upper">
-        <tr><td>
-        <i class="icon-disks f32"></i>
-        <div class="section">SnapRAID: $snap_cfg_name_upper
-        <br><span class='snaphead' name='$snap_cfg_name'>Status: <i class="fa fa-circle orb grey-orb middle"></i><em>(Retrieving Information...)</em></span><br></div>
-        </td></tr>
-        <tr class='header'><td><span class='w18'>Parity Disks</span><span class='w18'>Data Disks</span><span class='w18'>Maintenance</span><span class='w26'>Last Snapshot (Sync)</span><span class='w18'>Last Scrub</span></td></tr>
-        <tr class='snapdash' name='$snap_cfg_name'><td style="text-align:center;"><i class="fa fa-spinner fa-spin"></i> <em>Please wait, retrieving information...</em></td></tr>
-        </tbody>
+        if($snap_cfg_obj->dashboard == "enable") {
+            $pluginname = "snap" . $snap_cfg_counter; 
+            $mytiles[$pluginname]['column2'] = <<<EOT
+            <tbody id="$pluginname" title="SnapRAID: $snap_cfg_name_upper">
+            <tr><td>
+            <i class="icon-disks f32"></i>
+            <div class="section">SnapRAID: $snap_cfg_name_upper<br>
+            <span class='snaphead' name='$snap_cfg_name'>Array Status: <i class="fa fa-spinner fa-spin"></i> <em>Please wait, retrieving information...</em></span><br></div>
+            </td></tr>
+            <tr class='header'><td><span class='w18'>Parity Disks</span><span class='w18'>Data Disks</span><span class='w18'>Maintenance</span><span class='w26'>Last Snapshot (Sync)</span><span class='w18'>Last Scrub</span></td></tr>
+            <tr class='snapdash' name='$snap_cfg_name'><td style="text-align:center;"><i class="fa fa-spinner fa-spin"></i> <em>Please wait, retrieving information...</em></td></tr>
+            </tbody>
 EOT;
+        }
+        unset($snap_cfg_obj);
     }
-    unset($snap_cfg_obj);
+} catch (Throwable $e) { // For PHP 7
+    // do nothing
+} catch (Exception $e) { // For PHP 5
+    // do nothing
 }
 ?>
 <script type="text/javascript">
@@ -69,13 +72,13 @@ function getSnapDashboards() {
                 var snapDashResponse = data.split(","); 
                 $('.snaphead[name="'+cfg+'"]').html(snapDashResponse[0]);
                 $('.snapdash[name="'+cfg+'"]').html(snapDashResponse[1]);
-                $('.snapdashhtmltip').tooltipster({contentAsHTML: true});
                 $('.snapdashtip').tooltipster();
+                $('.snapdashhtmltip').tooltipster({contentAsHTML: true});
             }
         });
     });
     clearTimeout(timers.getSnapDashboards);
-    timers.getSnapDashboards = setTimeout(getSnapDashboards, 3000);
+    timers.getSnapDashboards = setTimeout(getSnapDashboards, 10000);
 }
 $(function()
 {
@@ -86,7 +89,6 @@ $(function()
 <?endif;?>
 
 <?if($dwsnap_footer == "enable"):?>
-
 <style type="text/css">
 #snap_footer {
     float: right;
@@ -105,13 +107,13 @@ function getSnapFooter() {
         if (data) { 
             $('#snap_footer').html(data);
             $('.snapfootertip').tooltipster();
+            $('#snap_footer').click(function() {
+                location = '/Settings/dwsnapOps';
+            });
 	    }
     });
     clearTimeout(timers.getSnapFooter);
     timers.getSnapFooter = setTimeout(getSnapFooter, 3000);
-    $('#snap_footer').click(function() {
-        location = '/Settings/dwsnapOps';
-    });
 }
 $(function()
 {

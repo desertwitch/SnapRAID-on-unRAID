@@ -20,7 +20,7 @@
 require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 
 $return_html = "";
-$files = dwsnap_get_conf_files();
+$files = dwsnap_get_conf_files() ?? [];
 
 foreach ($files as $file) {
 
