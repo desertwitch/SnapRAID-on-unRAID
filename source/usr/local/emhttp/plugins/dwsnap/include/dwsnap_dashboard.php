@@ -24,10 +24,15 @@ $return_html = "";
 if(!empty($_GET["config"])) {
     $snapdashCfg = new SnapraidArrayConfiguration($_GET["config"]);
 
-    $snapdashField_paritydisks = "<span class='snapdashhtmltip' title='".implode("<br>", $snapdashCfg->parity_disks_raw[2])."'>".count($snapdashCfg->parity_disks_raw[2])."</span>" ?? "0";
-    $snapdashField_datadisks = "<span class='snapdashhtmltip' title='".implode("<br>", $snapdashCfg->data_disks_raw[2])."'>".count($snapdashCfg->data_disks_raw[2])."</span>" ?? "0";
+    $snapdashField_paritydisks = "<span class='snapdashhtmltip' title='".implode("<br>", $snapdashCfg->parity_disks_raw[2])."'>".count($snapdashCfg->parity_disks_raw[2])." Disk(s)</span>" ?? "0 Disk(s)";
+    $snapdashField_datadisks = "<span class='snapdashhtmltip' title='".implode("<br>", $snapdashCfg->data_disks_raw[2])."'>".count($snapdashCfg->data_disks_raw[2])." Disk(s)</span>" ?? "0 Disk(s)";
     $snapdashField_cron = ucwords(str_replace("disabled", "-", $snapdashCfg->cron));
     $snapdashField_status = $snapdashCfg->getFooterHTML("snapdashtip"); 
+
+    $snapdashField_util = htmlspecialchars(trim(shell_exec("df -B1 ".implode(" ", $snapdashCfg->data_disks_raw[2])." --total 2>/dev/null | grep total 2>/dev/null | awk '{print $5}' 2>/dev/null") ?? "-"));
+    $snapdashField_free = htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 ".implode(" ", $snapdashCfg->data_disks_raw[2])." --total 2>/dev/null | grep total 2>/dev/null | awk '{print $4}' 2>/dev/null") ?? "-")));
+    $snapdashField_used = htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 ".implode(" ", $snapdashCfg->data_disks_raw[2])." --total 2>/dev/null | grep total 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-")));
+    $snapdashField_total = htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 ".implode(" ", $snapdashCfg->data_disks_raw[2])." --total 2>/dev/null | grep total 2>/dev/null | awk '{print $2}' 2>/dev/null") ?? "-")));
 
     if($snapdashCfg->lastsync !== "-") {
         $snapdashField_lastsync = dwsnap_time_ago($snapdashCfg->lastsync, $snapdashCfg->sync_expires);
@@ -63,7 +68,7 @@ if(!empty($_GET["config"])) {
         $snapdashField_lastscrub = "<span class='orange-text'>Never</span>"; 
     }
     
-    $return_html .= "Array Status: $snapdashField_status,<td><span class='w18'>$snapdashField_paritydisks Disk(s)</span><span class='w18'>$snapdashField_datadisks Disk(s)</span><span class='w18'>$snapdashField_cron</span><span class='18'>$snapdashField_lastsync</span><span class='w26'>$snapdashField_lastscrub</span></td>";
+    $return_html .= "Array Status: $snapdashField_status / Free: $snapdashField_free / $snapdashField_used used of $snapdashField_total ($snapdashField_util),<td><span class='w18'>$snapdashField_paritydisks</span><span class='w18'>$snapdashField_datadisks</span><span class='w18'>$snapdashField_cron</span><span class='18'>$snapdashField_lastsync</span><span class='w26'>$snapdashField_lastscrub</span></td>";
     
     unset($snapdashCfg);
 }
