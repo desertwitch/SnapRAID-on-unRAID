@@ -31,24 +31,48 @@ $snap_cfg_counter = 0;
 
 foreach ($snap_cfgs as $snap_cfg) {
     $snap_cfg_name = basename($snap_cfg,".conf");
+    $snap_cfg_name_upper = strtoupper($snap_cfg_name);
     $snap_cfg_obj = new SnapraidArrayConfiguration($snap_cfg_name);
 
     if($snap_cfg_obj->dashboard == "enable") {
         $snap_cfg_counter = $snap_cfg_counter + 1;
+        $snap_cfg_sched = ucwords(str_replace("disable", "disabled", $snap_cfg_obj->cron));
+
         $pluginname = "snap" . $snap_cfg_counter; 
         $mytiles[$pluginname]['column2'] = <<<EOT
-        <tbody id="$pluginname" title="SnapRAID: $snap_cfg_name">
+        <tbody id="$pluginname" title="SnapRAID: $snap_cfg_name_upper">
         <tr><td>
         <i class="icon-disks f32"></i>
-        <div class="section">SnapRAID: $snap_cfg_name</div>
+        <div class="section">SnapRAID: $snap_cfg_name_upper
+        <br><span class='snaphead' name='$snap_cfg_name'>Status: <i class="fa fa-circle orb grey-orb middle"></i><em>(Retrieving Information...)</em></span><br></div>
         </td></tr>
-        <tr class='header'><td><span class='w18'>Parities</span><span class='w18'>Datas</span><span class='w18'>Last Sync</span><span class='w18'>Last Scrub</span><span class='w18'>Status</span></td></tr>
+        <tr class='header'><td><span class='w18'>Parity Disks</span><span class='w18'>Data Disks</span><span class='w18'>Last Sync</span><span class='w18'>Last Scrub</span><span class='w18'>Array Status</span></td></tr>
+        <tr class='snapdash' name='$snap_cfg_name'><td colspan="5" style="text-align:center;"><i class="fa fa-spinner fa-spin"></i> <em>Please wait, retrieving information...</em></td></tr>
         </tbody>
 EOT;
     }
     unset($snap_cfg_obj);
 }
 ?>
+<script type="text/javascript">
+function getSnapDashboards() {
+    $( ".snapdash" ).each(function() {
+        var cfg = $(this).attr('name');
+        $.get('/plugins/dwsnap/include/dwsnap_dashboard.php', {"config": cfg}, function(data) {
+            if (data) { 
+                $(this).html(data);
+            }
+        });
+    });
+    $('.snapdashtip').tooltipster({contentAsHTML: true});
+    clearTimeout(timers.getSnapDashboards);
+    timers.getSnapDashboards = setTimeout(getSnapDashboards, 3000);
+}
+$(function()
+{
+    getSnapDashboards();
+});
+</script>
 <?endif;?>
 <?endif;?>
 
