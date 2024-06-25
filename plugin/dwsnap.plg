@@ -3,14 +3,14 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "dwsnap">
 <!ENTITY author    "desertwitch">
-<!ENTITY version   "2024.06.23a">
+<!ENTITY version   "2024.06.25">
 <!ENTITY launch    "Settings/dwsnapOps">
 <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/SnapRAID-on-unRAID/main">
 <!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
 <!ENTITY pkgURL    "&gitURL;/packages">
 <!ENTITY plgPATH   "/boot/config/plugins/&name;">
-<!ENTITY plgNAME   "dwsnap-2024.06.23-x86_64-2">
-<!ENTITY plgMD5    "959dd539d3a65cc309a071357e96491c">
+<!ENTITY plgNAME   "dwsnap-2024.06.25-x86_64-1">
+<!ENTITY plgMD5    "3fd1c2636022ea63c9c38860b4814bb8">
 <!ENTITY emhttp    "/usr/local/emhttp/plugins/&name;">
 ]>
 
