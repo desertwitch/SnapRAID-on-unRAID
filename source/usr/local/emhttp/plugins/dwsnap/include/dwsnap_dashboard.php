@@ -68,7 +68,7 @@ try {
             $snapdashField_lastscrub = "<span class='orange-text'>Never</span>"; 
         }
         
-        $return_html .= "Array Status: $snapdashField_status / Free: $snapdashField_free / $snapdashField_used used of $snapdashField_total ($snapdashField_util)|<td><span class='w18'>$snapdashField_paritydisks</span><span class='w18'>$snapdashField_datadisks</span><span class='w18'>$snapdashField_cron</span><span class='18'>$snapdashField_lastsync</span><span class='w26'>$snapdashField_lastscrub</span></td>";
+        $return_html .= "Array Status: $snapdashField_status / Free: $snapdashField_free / $snapdashField_used used of $snapdashField_total ($snapdashField_util)|<td><span class='w18'>$snapdashField_paritydisks</span><span class='w18'>$snapdashField_datadisks</span><span class='w18'>$snapdashField_lastsync</span><span class='w18'>$snapdashField_lastscrub</span><span class='w26'>$snapdashField_cron</span></td>";
         
         unset($snapdashCfg);
     }
