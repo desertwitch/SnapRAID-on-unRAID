@@ -36,23 +36,29 @@ try {
     $snap_cfg_counter = 0;
 
     foreach ($snap_cfgs as $snap_cfg) {
-        $snap_cfg_counter = $snap_cfg_counter + 1;
-        $snap_cfg_name = basename($snap_cfg,".conf");
-        $snap_cfg_name_upper = strtoupper($snap_cfg_name);
+        try {
+            $snap_cfg_counter = $snap_cfg_counter + 1;
+            $snap_cfg_name = basename($snap_cfg,".conf");
+            $snap_cfg_name_upper = strtoupper($snap_cfg_name);
 
-        $pluginname = "snapraid" . $snap_cfg_counter; 
-        $mytiles[$pluginname]['column2'] = <<<EOT
-        <tbody id="$pluginname" title="SnapRAID: $snap_cfg_name_upper">
-        <tr><td>
-        <i class="icon-disks f32"></i>
-        <div class="section">SnapRAID: $snap_cfg_name_upper<br>
-        <span class='snaphead' name='$snap_cfg_name'>Array Status: <i class="fa fa-spinner fa-spin"></i></span><br></div>
-        <a href='/Settings/dwsnapOps' title="Go to SnapRAID Settings"><i class='fa fa-fw fa-cog control'></i></a>
-        </td></tr>
-        <tr class='header'><td><span class='w18'>Parity Disks</span><span class='w18'>Data Disks</span><span class='w18'>Maintenance</span><span class='w26'>Last Snapshot (Sync)</span><span class='w18'>Last Scrub</span></td></tr>
-        <tr class='snapdash' name='$snap_cfg_name'><td style="text-align:center;"><i class="fa fa-spinner fa-spin"></i> <em>Please wait, retrieving information...</em></td></tr>
-        </tbody>
+            $pluginname = "snapraid" . $snap_cfg_counter; 
+            $mytiles[$pluginname]['column2'] = <<<EOT
+            <tbody id="$pluginname" title="SnapRAID: $snap_cfg_name_upper">
+            <tr><td>
+            <i class="icon-disks f32"></i>
+            <div class="section">SnapRAID: $snap_cfg_name_upper<br>
+            <span class='snaphead' name='$snap_cfg_name'>Array Status: <i class="fa fa-spinner fa-spin"></i></span><br></div>
+            <a href='/Settings/dwsnapOps' title="Go to SnapRAID Settings"><i class='fa fa-fw fa-cog control'></i></a>
+            </td></tr>
+            <tr class='header'><td><span class='w18'>Parity Disks</span><span class='w18'>Data Disks</span><span class='w18'>Maintenance</span><span class='w26'>Last Snapshot (Sync)</span><span class='w18'>Last Scrub</span></td></tr>
+            <tr class='snapdash' name='$snap_cfg_name'><td style="text-align:center;"><i class="fa fa-spinner fa-spin"></i> <em>Please wait, retrieving information...</em></td></tr>
+            </tbody>
 EOT;
+        } catch (Throwable $e) { // For PHP 7
+            continue;
+        } catch (Exception $e) { // For PHP 5
+            continue;
+        }
     }
 } catch (Throwable $e) { // For PHP 7
     // do nothing, better show none of our dashboards than breaking the frontpage
