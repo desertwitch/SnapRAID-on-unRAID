@@ -40,7 +40,7 @@ try {
         $snap_cfg_name = basename($snap_cfg,".conf");
         $snap_cfg_name_upper = strtoupper($snap_cfg_name);
 
-        $pluginname = "snap" . $snap_cfg_counter; 
+        $pluginname = "snapraid" . $snap_cfg_counter; 
         $mytiles[$pluginname]['column2'] = <<<EOT
         <tbody id="$pluginname" title="SnapRAID: $snap_cfg_name_upper">
         <tr><td>
