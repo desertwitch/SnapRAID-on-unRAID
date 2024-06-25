@@ -114,7 +114,7 @@ class SnapraidArrayConfiguration {
         preg_match_all('/content (.*?)$/m', $this->snapcfg, $this->content_files_raw, PREG_PATTERN_ORDER);
     }
 
-    public function getFooterHTML($snap_tip_class = "snaptip") {
+    public function getFooterHTML($snap_tip_class) {
         try {
             $snap_footer_html = "";
             $snap_array_name = strtoupper($this->cfgname);
