@@ -30,7 +30,7 @@ function dwsnap_humanFileSize($sizeObj,$unit="") {
                 return rtrim(rtrim(number_format(($size/1000000),2), "0"), ".") . " MB";
             if( (!$unit && $size >= 1000) || $unit == "KB")
                 return rtrim(rtrim(number_format(($size/1000),2), "0"), ".") . " KB";
-            return rtrim(rtrim(number_format($size), "0"), ".") . " B";
+            return number_format($size) . " B";
         } else {
             return "-";
         }
