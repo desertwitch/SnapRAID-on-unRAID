@@ -110,7 +110,7 @@ function getSnapFooter() {
 	    }
     });
     clearTimeout(timers.getSnapFooter);
-    timers.getSnapFooter = setTimeout(getSnapFooter, 3000);
+    timers.getSnapFooter = setTimeout(getSnapFooter, 10000);
 }
 $(function()
 {
