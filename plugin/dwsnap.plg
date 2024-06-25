@@ -18,6 +18,9 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2024.06.25
+- new: added front page dashboards for created arrays (for versions 6.12+)
+- fix: adapt decimal handling in disk space translation functions to unraid standards
 ###2024.06.23a
 - fix: changed units from KiB to KB
 - fix: also match mountpoints located in UD subdirectories of /mnt
