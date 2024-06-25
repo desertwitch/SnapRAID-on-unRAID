@@ -55,9 +55,9 @@ try {
 EOT;
     }
 } catch (Throwable $e) { // For PHP 7
-    // do nothing
+    // do nothing, better show none of our dashboards than breaking the frontpage
 } catch (Exception $e) { // For PHP 5
-    // do nothing
+    // do nothing, better show none of our dashboards than breaking the frontpage
 }
 ?>
 <script type="text/javascript">
