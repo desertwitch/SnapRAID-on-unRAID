@@ -75,7 +75,7 @@ foreach ($files as $file) {
 
     $iterField_status = $iterCfg->getFooterHTML();
     
-    $return_html .= "<td>$iterField_selected</td><td>$iterField_cfgname</td><td>$iterField_paritydisks</td><td>$iterField_datadisks</td><td>$iterFields_contentfiles</td><td>$iterField_cron</td><td><strong>$iterField_lastsync</strong></td><td><strong>$iterField_lastscrub</strong></td><td>$iterField_status</td>";
+    $return_html .= "<tr><td>$iterField_selected</td><td>$iterField_cfgname</td><td>$iterField_paritydisks</td><td>$iterField_datadisks</td><td>$iterFields_contentfiles</td><td>$iterField_cron</td><td><strong>$iterField_lastsync</strong></td><td><strong>$iterField_lastscrub</strong></td><td>$iterField_status</td></tr>";
     
     unset($iterCfg);
 }
