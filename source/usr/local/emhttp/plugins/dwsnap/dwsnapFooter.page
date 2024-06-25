@@ -73,7 +73,7 @@ function getSnapDashboards() {
         if(cfg) {
             $.get('/plugins/dwsnap/include/dwsnap_dashboard.php', {"config": cfg}, function(data) {
                 if (data) {
-                    var snapDashResponse = data.split(","); 
+                    var snapDashResponse = data.split("|"); 
                     $('.snaphead[name="'+cfg+'"]').html(snapDashResponse[0]);
                     $('.snapdash[name="'+cfg+'"]').html(snapDashResponse[1]);
                     $('.snapdashtip').tooltipster();
