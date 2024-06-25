@@ -22,6 +22,34 @@ Link="nav-user"
  */
 require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 ?>
+
+<?if(version_compare(parse_ini_file('/etc/unraid-version')['version'],'6.12.0-beta5', '>')):?>
+<?if(stripos($path, "dashboard") !== false && $dwsnap_dashboards == "enable"):?>
+$snap_cfgs = dwsnap_get_conf_files();
+$snap_cfg_counter = 0;
+
+foreach ($snap_cfgs as $snap_cfg) {
+    $snap_cfg_name = basename($snap_cfg,".conf");
+    $snap_cfg_obj = new SnapraidArrayConfiguration($snap_cfg_name);
+
+    if($snap_cfg_obj->dashboard == "enable") {
+        $snap_cfg_counter = $snap_cfg_counter + 1;
+        $pluginname = "snap" . $snap_cfg_counter; 
+        $mytiles[$pluginname]['column2'] = <<<EOT
+        <tbody id="$pluginname" title="SnapRAID: $snap_cfg_name">
+        <tr><td>
+        <i class="icon-disks f32"></i>
+        <div class="section">SnapRAID: $snap_cfg_name</div>
+        </td></tr>
+        <tr class='header'><td><span class='w18'>Parities</span><span class='w18'>Datas</span><span class='w18'>Last Sync</span><span class='w18'>Last Scrub</span><span class='w18'>Status</span></td></tr>
+        </tbody>
+EOT;
+    }
+    unset($snap_cfg_obj);
+}
+<?endif;?>
+<?endif;?>
+
 <?if($dwsnap_footer == "enable"):?>
 
 <style type="text/css">

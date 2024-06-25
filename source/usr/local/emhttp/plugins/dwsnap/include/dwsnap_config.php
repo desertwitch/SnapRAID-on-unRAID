@@ -23,6 +23,7 @@ class SnapraidArrayConfiguration {
     public $cfgname;
     public $cfg;
     public $prio;
+    public $dashboard;
     public $sync_expires;
     public $scrub_expires;
     public $rawreports;
@@ -71,6 +72,7 @@ class SnapraidArrayConfiguration {
         $this->snapcfg = file_exists("/boot/config/plugins/dwsnap/config/$cfg_name.conf") ? file_get_contents("/boot/config/plugins/dwsnap/config/$cfg_name.conf") : "-";
 
         $this->prio = trim(isset($this->cfg['PRIO']) ? htmlspecialchars($this->cfg['PRIO']) : 'disable');
+        $this->dashboard = trim(isset($this->cfg['DASHBOARD']) ? htmlspecialchars($this->cfg['DASHBOARD']) : 'disable');
         $this->sync_expires = trim(isset($this->cfg['SYNCEXPIRES']) ? htmlspecialchars($this->cfg['SYNCEXPIRES']) : '7');
         $this->scrub_expires = trim(isset($this->cfg['SCRUBEXPIRES']) ? htmlspecialchars($this->cfg['SCRUBEXPIRES']) : '7');
         $this->rawreports = trim(isset($this->cfg['RAWREPORTS']) ? htmlspecialchars($this->cfg['RAWREPORTS']) : 'disable');
@@ -278,6 +280,7 @@ $dwsnap_selected_array = trim(isset($dwsnap_cfg['SELARRAY']) ? htmlspecialchars(
 $dwsnap_active_cfg = new SnapraidArrayConfiguration($dwsnap_selected_array);
 
 $dwsnap_footer = trim(isset($dwsnap_cfg['FOOTER']) ? htmlspecialchars($dwsnap_cfg['FOOTER']) : 'disable');
+$dwsnap_dashboards = trim(isset($dwsnap_cfg['DASHBOARDS']) ? htmlspecialchars($dwsnap_cfg['DASHBOARDS']) : 'disable');
 $dwsnap_screenimg = trim(isset($dwsnap_cfg['SCREENIMG']) ? htmlspecialchars($dwsnap_cfg['SCREENIMG']) : 'enable');
 $dwsnap_stoparray = trim(isset($dwsnap_cfg['STOPARRAY']) ? htmlspecialchars($dwsnap_cfg['STOPARRAY']) : 'enable');
 $dwsnap_killtime = trim(isset($dwsnap_cfg['KILLTIME']) ? htmlspecialchars($dwsnap_cfg['KILLTIME']) : '30');
