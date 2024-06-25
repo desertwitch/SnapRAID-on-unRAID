@@ -33,10 +33,10 @@ foreach ($files as $file) {
         $iterField_selected = ""; 
     }
     
-    $iterField_cfgname = "<span class='snaphtmltip' title='/boot/config/plugins/dwsnap/config/".$iterCfg->cfgname.".conf'>".strtoupper($iterCfg->cfgname)."</span>";
-    $iterField_paritydisks = "<span class='snaphtmltip' title='".implode("<br>", $iterCfg->parity_disks_raw[2])."'>".count($iterCfg->parity_disks_raw[2])."</span>" ?? "0";
-    $iterField_datadisks = "<span class='snaphtmltip' title='".implode("<br>", $iterCfg->data_disks_raw[2])."'>".count($iterCfg->data_disks_raw[2])."</span>" ?? "0";
-    $iterFields_contentfiles = "<span class='snaphtmltip' title='".implode("<br>", $iterCfg->content_files_raw[1])."'>".count($iterCfg->content_files_raw[1])."</span>" ?? "0";
+    $iterField_cfgname = "<span class='snaparraytip' title='/boot/config/plugins/dwsnap/config/".$iterCfg->cfgname.".conf'>".strtoupper($iterCfg->cfgname)."</span>";
+    $iterField_paritydisks = "<span class='snaparrayhtmltip' title='".implode("<br>", $iterCfg->parity_disks_raw[2])."'>".count($iterCfg->parity_disks_raw[2])."</span>" ?? "0";
+    $iterField_datadisks = "<span class='snaparrayhtmltip' title='".implode("<br>", $iterCfg->data_disks_raw[2])."'>".count($iterCfg->data_disks_raw[2])."</span>" ?? "0";
+    $iterFields_contentfiles = "<span class='snaparrayhtmltip' title='".implode("<br>", $iterCfg->content_files_raw[1])."'>".count($iterCfg->content_files_raw[1])."</span>" ?? "0";
     $iterField_cron = strtoupper(str_replace("disable", "-", $iterCfg->cron));
 
     if($iterCfg->lastsync !== "-") {
@@ -62,18 +62,18 @@ foreach ($files as $file) {
                 $iterField_lastsync = strip_tags(dwsnap_time_ago($iterCfg->lastsync, $iterCfg->sync_expires));
             }
         }
-        $iterField_lastsync = "<span class='snaphtmltip' title='".$iterCfg->lastsync."'>".$iterField_lastsync."</span>";
+        $iterField_lastsync = "<span class='snaparraytip' title='".$iterCfg->lastsync."'>".$iterField_lastsync."</span>";
     } else { 
         $iterField_lastsync = "<span class='orange-text'>Never</span>"; 
     }
 
     if($iterCfg->lastscrub !== "-") { 
-        $iterField_lastscrub = "<span class='snaphtmltip' title='".$iterCfg->lastscrub."'>".dwsnap_time_ago($iterCfg->lastscrub, $iterCfg->scrub_expires)."</span>";
+        $iterField_lastscrub = "<span class='snaparraytip' title='".$iterCfg->lastscrub."'>".dwsnap_time_ago($iterCfg->lastscrub, $iterCfg->scrub_expires)."</span>";
     } else {
         $iterField_lastscrub = "<span class='orange-text'>Never</span>"; 
     }
 
-    $iterField_status = $iterCfg->getFooterHTML();
+    $iterField_status = $iterCfg->getFooterHTML("snaparraytip");
     
     $return_html .= "<tr><td>$iterField_selected</td><td>$iterField_cfgname</td><td>$iterField_paritydisks</td><td>$iterField_datadisks</td><td>$iterFields_contentfiles</td><td>$iterField_cron</td><td><strong>$iterField_lastsync</strong></td><td><strong>$iterField_lastscrub</strong></td><td>$iterField_status</td></tr>";
     

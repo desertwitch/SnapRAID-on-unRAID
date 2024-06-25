@@ -24,7 +24,7 @@ try {
     foreach ($files as $file) {
         $footerCfgName = basename($file,".conf");
         $footerCfg = new SnapraidArrayConfiguration($footerCfgName);
-        $snap_footer .= $footerCfg->getFooterHTML();
+        $snap_footer .= $footerCfg->getFooterHTML("snapfootertip");
         unset($footerCfg);
     }
     echo($snap_footer);

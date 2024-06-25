@@ -25,6 +25,12 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 
 <?if(version_compare(parse_ini_file('/etc/unraid-version')['version'],'6.12.0-beta5', '>')):?>
 <?if(stripos($path, "dashboard") !== false && $dwsnap_dashboards == "enable"):?>
+<style type="text/css">
+.snapdash {
+    font-size: 1.2rem;
+}
+</style>
+
 <?
 $snap_cfgs = dwsnap_get_conf_files();
 $snap_cfg_counter = 0;
@@ -46,8 +52,8 @@ foreach ($snap_cfgs as $snap_cfg) {
         <div class="section">SnapRAID: $snap_cfg_name_upper
         <br><span class='snaphead' name='$snap_cfg_name'>Status: <i class="fa fa-circle orb grey-orb middle"></i><em>(Retrieving Information...)</em></span><br></div>
         </td></tr>
-        <tr class='header'><td><span class='w18'>Parity Disks</span><span class='w18'>Data Disks</span><span class='w18'>Last Sync</span><span class='w18'>Last Scrub</span><span class='w18'>Array Status</span></td></tr>
-        <tr class='snapdash' name='$snap_cfg_name'><td colspan="5" style="text-align:center;"><i class="fa fa-spinner fa-spin"></i> <em>Please wait, retrieving information...</em></td></tr>
+        <tr class='header'><td><span class='w18'>Parity Disks</span><span class='w18'>Data Disks</span><span class='w18'>Maintenance</span><span class='w26'>Last Snapshot (Sync)</span><span class='w18'>Last Scrub</span></td></tr>
+        <tr class='snapdash' name='$snap_cfg_name'><td style="text-align:center;"><i class="fa fa-spinner fa-spin"></i> <em>Please wait, retrieving information...</em></td></tr>
         </tbody>
 EOT;
     }
@@ -58,14 +64,16 @@ EOT;
 function getSnapDashboards() {
     $( ".snapdash" ).each(function() {
         var cfg = $(this).attr('name');
-        var cfgObj = this;
         $.get('/plugins/dwsnap/include/dwsnap_dashboard.php', {"config": cfg}, function(data) {
-            if (data) { 
-                $(cfgObj).html(data);
+            if (data) {
+                var snapDashResponse = data.split(","); 
+                $('.snaphead[name="'+cfg+'"]').html(snapDashResponse[0]);
+                $('.snapdash[name="'+cfg+'"]').html(snapDashResponse[1]);
+                $('.snapdashhtmltip').tooltipster({contentAsHTML: true});
+                $('.snapdashtip').tooltipster();
             }
         });
     });
-    $('.snapdashtip').tooltipster({contentAsHTML: true});
     clearTimeout(timers.getSnapDashboards);
     timers.getSnapDashboards = setTimeout(getSnapDashboards, 3000);
 }
@@ -96,7 +104,7 @@ function getSnapFooter() {
     $.get('/plugins/dwsnap/include/dwsnap_footer.php',function(data) {
         if (data) { 
             $('#snap_footer').html(data);
-            $('.snaptip').tooltipster();
+            $('.snapfootertip').tooltipster();
 	    }
     });
     clearTimeout(timers.getSnapFooter);

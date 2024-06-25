@@ -22,11 +22,12 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 $return_html = "";
 
 if(!empty($_GET["config"])) {
-
     $snapdashCfg = new SnapraidArrayConfiguration($_GET["config"]);
 
-    $snapdashField_paritydisks = "<span class='snapdashtip' title='".implode("<br>", $snapdashCfg->parity_disks_raw[2])."'>".count($snapdashCfg->parity_disks_raw[2])."</span>" ?? "0";
-    $snapdashField_datadisks = "<span class='snapdashtip' title='".implode("<br>", $snapdashCfg->data_disks_raw[2])."'>".count($snapdashCfg->data_disks_raw[2])."</span>" ?? "0";
+    $snapdashField_paritydisks = "<span class='snapdashhtmltip' title='".implode("<br>", $snapdashCfg->parity_disks_raw[2])."'>".count($snapdashCfg->parity_disks_raw[2])."</span>" ?? "0";
+    $snapdashField_datadisks = "<span class='snapdashhtmltip' title='".implode("<br>", $snapdashCfg->data_disks_raw[2])."'>".count($snapdashCfg->data_disks_raw[2])."</span>" ?? "0";
+    $snapdashField_cron = ucwords(str_replace("disabled", "-", $snapdashCfg->cron));
+    $snapdashField_status = $snapdashCfg->getFooterHTML("snapdashtip"); 
 
     if($snapdashCfg->lastsync !== "-") {
         $snapdashField_lastsync = dwsnap_time_ago($snapdashCfg->lastsync, $snapdashCfg->sync_expires);
@@ -61,13 +62,10 @@ if(!empty($_GET["config"])) {
     } else {
         $snapdashField_lastscrub = "<span class='orange-text'>Never</span>"; 
     }
-
-    $snapdashField_status = $snapdashCfg->getFooterHTML();
     
-    $return_html .= "<td>$snapdashField_paritydisks</td><td>$snapdashField_datadisks</td><td><strong>$snapdashField_lastsync</strong></td><td><strong>$snapdashField_lastscrub</strong></td><td>$snapdashField_status</td>";
+    $return_html .= "Array Status: $snapdashField_status,<td><span class='w18'>$snapdashField_paritydisks Disk(s)</span><span class='w18'>$snapdashField_datadisks Disk(s)</span><span class='w18'>$snapdashField_cron</span><span class='18'>$snapdashField_lastsync</span><span class='w26'>$snapdashField_lastscrub</span></td>";
     
     unset($snapdashCfg);
-
 }
 
 echo($return_html);

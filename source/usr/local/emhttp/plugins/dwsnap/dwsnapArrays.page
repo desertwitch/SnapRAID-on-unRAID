@@ -31,8 +31,8 @@ function getSnapArrays() {
     $.get('/plugins/dwsnap/include/dwsnap_arrays.php',function(data) {
         if (data) { 
             $('#snap_arrays').html(data);
-            $('.snaptip').tooltipster();
-            $('.snaphtmltip').tooltipster({contentAsHTML: true});
+            $('.snaparraytip').tooltipster();
+            $('.snaparrayhtmltip').tooltipster({contentAsHTML: true});
 	    }
     });
     clearTimeout(timers.getSnapArrays);
