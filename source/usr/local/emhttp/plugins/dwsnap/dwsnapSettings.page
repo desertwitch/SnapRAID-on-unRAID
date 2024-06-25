@@ -63,6 +63,20 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 <p>An exception to the 7 day reminder to SYNC is when a more recent DIFF (either manual or as part of SnapRAID maintenance) has determined the array data has not changed since the last (overdue) SYNC.</p>
 </blockquote>
 
+<dl>
+    <dt>SnapRAID Background Image:</dt>
+    <dd>
+        <select id="SCREENIMG" name="SCREENIMG" size="1">
+            <?=mk_option($dwsnap_screenimg, "disable", "No");?>
+            <?=mk_option($dwsnap_screenimg, "enable", "Yes");?>
+        </select>
+    </dd>
+</dl>
+
+<blockquote class="inline_help">
+<p>This setting controls if an eye-candy background image should be shown behind the array operation screen.</p>
+</blockquote>
+
 <?if(version_compare(parse_ini_file('/etc/unraid-version')['version'],'6.12.0-beta5', '>')):?>
 <dl>
     <dt>SnapRAID Front Page Dashboards:</dt>
@@ -79,20 +93,6 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 <p>Individual, per-array settings can be configured for each array, this setting just controls the global behavior.</p>
 </blockquote>
 <?endif;?>
-
-<dl>
-    <dt>SnapRAID Background Image:</dt>
-    <dd>
-        <select id="SCREENIMG" name="SCREENIMG" size="1">
-            <?=mk_option($dwsnap_screenimg, "disable", "No");?>
-            <?=mk_option($dwsnap_screenimg, "enable", "Yes");?>
-        </select>
-    </dd>
-</dl>
-
-<blockquote class="inline_help">
-<p>This setting controls if an eye-candy background image should be shown behind the array operation screen.</p>
-</blockquote>
 
 <dl>
     <dt>SnapRAID Synchronize Array Shutdowns:</dt>
@@ -183,7 +183,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 
 <?if(version_compare(parse_ini_file('/etc/unraid-version')['version'],'6.12.0-beta5', '>')):?>
 <dl>
-    <dt>SnapRAID Array Front Page Dashboard:</dt>
+    <dt>SnapRAID Front Page Dashboard:</dt>
     <dd>
         <select class="snaprun" id="DASHBOARD" name="DASHBOARD" size="1">
             <?=mk_option($dwsnap_active_cfg->dashboard, "disable", "No");?>
