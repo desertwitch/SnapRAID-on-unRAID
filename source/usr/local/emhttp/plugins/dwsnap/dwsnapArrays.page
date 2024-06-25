@@ -36,7 +36,7 @@ function getSnapArrays() {
 	    }
     });
     clearTimeout(timers.getSnapArrays);
-    timers.getSnapArrays = setTimeout(getSnapArrays, 3000);
+    timers.getSnapArrays = setTimeout(getSnapArrays, 5000);
 }
 $(function()
 {
