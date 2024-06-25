@@ -58,9 +58,10 @@ EOT;
 function getSnapDashboards() {
     $( ".snapdash" ).each(function() {
         var cfg = $(this).attr('name');
+        var cfgObj = this;
         $.get('/plugins/dwsnap/include/dwsnap_dashboard.php', {"config": cfg}, function(data) {
             if (data) { 
-                $(this).html(data);
+                $(cfgObj).html(data);
             }
         });
     });

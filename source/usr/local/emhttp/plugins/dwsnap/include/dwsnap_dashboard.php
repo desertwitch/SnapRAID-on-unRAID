@@ -19,6 +19,8 @@
  */
 require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 
+$return_html = "";
+
 if(!empty($_GET["config"])) {
 
     $snapdashCfg = new SnapraidArrayConfiguration($_GET["config"]);
@@ -67,5 +69,7 @@ if(!empty($_GET["config"])) {
     unset($snapdashCfg);
 
 }
+
+echo($return_html);
 
 ?>
