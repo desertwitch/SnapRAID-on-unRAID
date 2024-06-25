@@ -3,14 +3,14 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "dwsnap">
 <!ENTITY author    "desertwitch">
-<!ENTITY version   "2024.06.25b">
+<!ENTITY version   "2024.06.25c">
 <!ENTITY launch    "Settings/dwsnapOps">
 <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/SnapRAID-on-unRAID/main">
 <!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
 <!ENTITY pkgURL    "&gitURL;/packages">
 <!ENTITY plgPATH   "/boot/config/plugins/&name;">
-<!ENTITY plgNAME   "dwsnap-2024.06.25-x86_64-3">
-<!ENTITY plgMD5    "6033a048f5cf2acb01df4ae39862b51b">
+<!ENTITY plgNAME   "dwsnap-2024.06.25-x86_64-4">
+<!ENTITY plgMD5    "1db4a79bc834b2787e88230f5315bdde">
 <!ENTITY emhttp    "/usr/local/emhttp/plugins/&name;">
 ]>
 
@@ -18,7 +18,7 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
-###2024.06.25b
+###2024.06.25c
 - new: added front page dashboards for created arrays (for versions 6.12+)
 - fix: adapt decimal handling in disk space translation functions to unraid standards
 ###2024.06.23a
