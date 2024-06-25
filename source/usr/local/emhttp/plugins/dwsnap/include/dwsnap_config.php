@@ -23,7 +23,6 @@ class SnapraidArrayConfiguration {
     public $cfgname;
     public $cfg;
     public $prio;
-    public $dashboard;
     public $sync_expires;
     public $scrub_expires;
     public $rawreports;
@@ -72,7 +71,6 @@ class SnapraidArrayConfiguration {
         $this->snapcfg = file_exists("/boot/config/plugins/dwsnap/config/$cfg_name.conf") ? file_get_contents("/boot/config/plugins/dwsnap/config/$cfg_name.conf") : "-";
 
         $this->prio = trim(isset($this->cfg['PRIO']) ? htmlspecialchars($this->cfg['PRIO']) : 'disable');
-        $this->dashboard = trim(isset($this->cfg['DASHBOARD']) ? htmlspecialchars($this->cfg['DASHBOARD']) : 'disable');
         $this->sync_expires = trim(isset($this->cfg['SYNCEXPIRES']) ? htmlspecialchars($this->cfg['SYNCEXPIRES']) : '7');
         $this->scrub_expires = trim(isset($this->cfg['SCRUBEXPIRES']) ? htmlspecialchars($this->cfg['SCRUBEXPIRES']) : '7');
         $this->rawreports = trim(isset($this->cfg['RAWREPORTS']) ? htmlspecialchars($this->cfg['RAWREPORTS']) : 'disable');

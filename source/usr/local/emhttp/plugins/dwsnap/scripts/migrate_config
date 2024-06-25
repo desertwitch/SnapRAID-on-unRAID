@@ -37,7 +37,6 @@ cp -f /usr/local/emhttp/plugins/dwsnap/defaults/primary.cfg /boot/config/plugins
 cp -f /usr/local/emhttp/plugins/dwsnap/default.cfg /boot/config/plugins/dwsnap/dwsnap.cfg
 
 [ -n "${PRIO}" ] && sed -i "s/PRIO=.*/PRIO=\"${PRIO}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
-[ -n "${DASHBOARD}" ] && sed -i "s/DASHBOARD=.*/DASHBOARD=\"${DASHBOARD}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
 [ -n "${SYNCEXPIRES}" ] && sed -i "s/SYNCEXPIRES=.*/SYNCEXPIRES=\"${SYNCEXPIRES}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
 [ -n "${SCRUBEXPIRES}" ] && sed -i "s/SCRUBEXPIRES=.*/SCRUBEXPIRES=\"${SCRUBEXPIRES}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
 [ -n "${RAWREPORTS}" ] && sed -i "s/RAWREPORTS=.*/RAWREPORTS=\"${RAWREPORTS}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg

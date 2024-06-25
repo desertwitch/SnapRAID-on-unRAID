@@ -89,8 +89,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 </dl>
 
 <blockquote class="inline_help">
-<p>This setting controls if any front page dashboards with useful information should be shown at all.</p>
-<p>Individual, per-array settings can be configured for each array, this setting just controls the global behavior.</p>
+<p>This setting controls if front page dashboards with useful information should be shown for the arrays.</p>
 </blockquote>
 <?endif;?>
 
@@ -180,22 +179,6 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 <p>This will ensure that other processes accessing your array will be given I/O priority over SnapRAID itself, which will in turn run slower (for its array operations).</p>
 <p>This setting only has an effect with I/O schedulers respecting I/O process priorities, such as the BFQ scheduler (which can be configured under Unraid's <em>Disk Settings</em>).</p>
 </blockquote>
-
-<?if(version_compare(parse_ini_file('/etc/unraid-version')['version'],'6.12.0-beta5', '>')):?>
-<dl>
-    <dt>SnapRAID Front Page Dashboard:</dt>
-    <dd>
-        <select class="snaprun" id="DASHBOARD" name="DASHBOARD" size="1">
-            <?=mk_option($dwsnap_active_cfg->dashboard, "disable", "No");?>
-            <?=mk_option($dwsnap_active_cfg->dashboard, "enable", "Yes");?>
-        </select>
-    </dd>
-</dl>
-
-<blockquote class="inline_help">
-<p>This setting controls if a front page dashboard with useful information should be shown for this array.</p>
-</blockquote>
-<?endif;?>
 
 <dl>
     <dt>SnapRAID Sync Overdue Warning Threshold:</dt>

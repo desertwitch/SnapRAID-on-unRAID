@@ -39,23 +39,19 @@ try {
         $snap_cfg_counter = $snap_cfg_counter + 1;
         $snap_cfg_name = basename($snap_cfg,".conf");
         $snap_cfg_name_upper = strtoupper($snap_cfg_name);
-        $snap_cfg_obj = new SnapraidArrayConfiguration($snap_cfg_name);
 
-        if($snap_cfg_obj->dashboard == "enable") {
-            $pluginname = "snap" . $snap_cfg_counter; 
-            $mytiles[$pluginname]['column2'] = <<<EOT
-            <tbody id="$pluginname" title="SnapRAID: $snap_cfg_name_upper">
-            <tr><td>
-            <i class="icon-disks f32"></i>
-            <div class="section">SnapRAID: $snap_cfg_name_upper<br>
-            <span class='snaphead' name='$snap_cfg_name'>Array Status: <i class="fa fa-spinner fa-spin"></i> <em>Please wait, retrieving information...</em></span><br></div>
-            </td></tr>
-            <tr class='header'><td><span class='w18'>Parity Disks</span><span class='w18'>Data Disks</span><span class='w18'>Maintenance</span><span class='w26'>Last Snapshot (Sync)</span><span class='w18'>Last Scrub</span></td></tr>
-            <tr class='snapdash' name='$snap_cfg_name'><td style="text-align:center;"><i class="fa fa-spinner fa-spin"></i> <em>Please wait, retrieving information...</em></td></tr>
-            </tbody>
+        $pluginname = "snap" . $snap_cfg_counter; 
+        $mytiles[$pluginname]['column2'] = <<<EOT
+        <tbody id="$pluginname" title="SnapRAID: $snap_cfg_name_upper">
+        <tr><td>
+        <i class="icon-disks f32"></i>
+        <div class="section">SnapRAID: $snap_cfg_name_upper<br>
+        <span class='snaphead' name='$snap_cfg_name'>Array Status: <i class="fa fa-spinner fa-spin"></i> <em>Please wait, retrieving information...</em></span><br></div>
+        </td></tr>
+        <tr class='header'><td><span class='w18'>Parity Disks</span><span class='w18'>Data Disks</span><span class='w18'>Maintenance</span><span class='w26'>Last Snapshot (Sync)</span><span class='w18'>Last Scrub</span></td></tr>
+        <tr class='snapdash' name='$snap_cfg_name'><td style="text-align:center;"><i class="fa fa-spinner fa-spin"></i> <em>Please wait, retrieving information...</em></td></tr>
+        </tbody>
 EOT;
-        }
-        unset($snap_cfg_obj);
     }
 } catch (Throwable $e) { // For PHP 7
     // do nothing
