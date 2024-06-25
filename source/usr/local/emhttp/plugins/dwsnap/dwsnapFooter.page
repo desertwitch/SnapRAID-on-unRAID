@@ -25,6 +25,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 
 <?if(version_compare(parse_ini_file('/etc/unraid-version')['version'],'6.12.0-beta5', '>')):?>
 <?if(stripos($path, "dashboard") !== false && $dwsnap_dashboards == "enable"):?>
+<?
 $snap_cfgs = dwsnap_get_conf_files();
 $snap_cfg_counter = 0;
 
@@ -47,6 +48,7 @@ EOT;
     }
     unset($snap_cfg_obj);
 }
+?>
 <?endif;?>
 <?endif;?>
 
