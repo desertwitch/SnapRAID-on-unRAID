@@ -272,12 +272,13 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
                     $snap_disk_used = htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 " . escapeshellarg($snap_parity_disk[2]) . " 2>/dev/null | grep " . escapeshellarg($snap_parity_disk[2]) . " 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-")));
                     $snap_disk_total = htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 " . escapeshellarg($snap_parity_disk[2]) . " 2>/dev/null | grep " . escapeshellarg($snap_parity_disk[2]) . " 2>/dev/null | awk '{print $2}' 2>/dev/null") ?? "-")));
                     $snap_disk_status = ($snap_disk_fs !== "-") ? "<i class='fa fa-check green-text'></i>" : "<i class='fa fa-times red-text'></i>"; 
-                    $snap_parity_level = strtoupper($snap_parity_disk[1]);
+                    $snap_parity_level = htmlspecialchars(strtoupper($snap_parity_disk[1]));
+                    $snap_parity_name = htmlspecialchars($snap_parity_disk[1]);
                     $snap_parity_mount = htmlspecialchars($snap_parity_disk[2]);
                     echo <<<END
                     <tr>
                     <td class="snapdisktype">$snap_parity_level</td>
-                    <td>$snap_parity_disk[1]</td>
+                    <td>$snap_parity_name</td>
                     <td>
                         <a class="view" href="/Shares/Browse?dir=$snap_parity_mount/" target="_blank">
                         <i class="icon-u-tab" title="Browse $snap_parity_mount/"></i>
@@ -290,9 +291,9 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
                     <td>$snap_disk_free</td>
                     <td>$snap_disk_util</td>
                     <td>
-                        <input type="button" class="snaprun snaphelptip" id="$snap_parity_disk[1]-check" value="Check" title="Verify all the files and the parity data. It works like FIX, but it only simulates a recovery and no changes are written. This command only processes the selected disk.">
-                        <input type="button" class="snaprun snaphelptip" id="$snap_parity_disk[1]-fix" value="Fix" title="Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it is reverted to the stored snapshot. The FIX command does not differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC. This command only processes the selected disk.">
-                        <input type="button" class="snaprun snaphelptip" id="$snap_parity_disk[1]-fixmissing" value="Fix Missing" title="Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it is reverted to the stored snapshot. The FIX command does not differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC. Only processes missing or deleted files on the selected disk.">
+                        <input type="button" class="snaprun snaphelptip" id="$snap_parity_name-check" value="Check" title="Verify all the files and the parity data. It works like FIX, but it only simulates a recovery and no changes are written. This command only processes the selected disk.">
+                        <input type="button" class="snaprun snaphelptip" id="$snap_parity_name-fix" value="Fix" title="Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it is reverted to the stored snapshot. The FIX command does not differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC. This command only processes the selected disk.">
+                        <input type="button" class="snaprun snaphelptip" id="$snap_parity_name-fixmissing" value="Fix Missing" title="Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it is reverted to the stored snapshot. The FIX command does not differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC. Only processes missing or deleted files on the selected disk.">
                     </td>
                     </tr>
 END;
@@ -304,11 +305,12 @@ END;
                     $snap_disk_used = htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 " . escapeshellarg($snap_data_disk[2]) . " 2>/dev/null | grep " . escapeshellarg($snap_data_disk[2]) . " 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-")));
                     $snap_disk_total = htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 " . escapeshellarg($snap_data_disk[2]) . " 2>/dev/null | grep " . escapeshellarg($snap_data_disk[2]) . " 2>/dev/null | awk '{print $2}' 2>/dev/null") ?? "-")));
                     $snap_disk_status = ($snap_disk_fs !== "-") ? "<i class='fa fa-check green-text'></i>" : "<i class='fa fa-times red-text'></i>"; 
+                    $snap_data_name = htmlspecialchars($snap_data_disk[1]);
                     $snap_data_mount = htmlspecialchars($snap_data_disk[2]);
                     echo <<<END
                     <tr>
                     <td class="snapdisktype">DATA</td>
-                    <td>$snap_data_disk[1]</td>
+                    <td>$snap_data_name</td>
                     <td>
                         <a class="view" href="/Shares/Browse?dir=$snap_data_mount/" target="_blank">
                         <i class="icon-u-tab" title="Browse $snap_data_mount/"></i>
@@ -321,9 +323,9 @@ END;
                     <td>$snap_disk_free</td>
                     <td>$snap_disk_util</td>
                     <td>
-                        <input type="button" class="snaprun snaphelptip" id="$snap_data_disk[1]-check" value="Check" title="Verify all the files and the parity data. It works like FIX, but it only simulates a recovery and no changes are written. This command only processes the selected disk.">
-                        <input type="button" class="snaprun snaphelptip" id="$snap_data_disk[1]-fix" value="Fix" title="Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it is reverted to the stored snapshot. The FIX command does not differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC. This command only processes the selected disk.">
-                        <input type="button" class="snaprun snaphelptip" id="$snap_data_disk[1]-fixmissing" value="Fix Missing" title="Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it is reverted to the stored snapshot. The FIX command does not differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC. Only processes missing or deleted files on the selected disk.">
+                        <input type="button" class="snaprun snaphelptip" id="$snap_data_name-check" value="Check" title="Verify all the files and the parity data. It works like FIX, but it only simulates a recovery and no changes are written. This command only processes the selected disk.">
+                        <input type="button" class="snaprun snaphelptip" id="$snap_data_name-fix" value="Fix" title="Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it is reverted to the stored snapshot. The FIX command does not differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC. This command only processes the selected disk.">
+                        <input type="button" class="snaprun snaphelptip" id="$snap_data_name-fixmissing" value="Fix Missing" title="Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it is reverted to the stored snapshot. The FIX command does not differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC. Only processes missing or deleted files on the selected disk.">
                     </td>
                     </tr>
 END;
@@ -995,8 +997,9 @@ $(function(){
     <?
     if(!empty($dwsnap_active_cfg->parity_disks) || !empty($dwsnap_active_cfg->data_disks)) {
         foreach ($dwsnap_active_cfg->parity_disks as $snap_parity_disk) {
+            $snap_parity_name = htmlspecialchars($snap_parity_disk[1]);
             echo <<<END
-            \$('#$snap_parity_disk[1]-check').click(function() {
+            \$('#$snap_parity_name-check').click(function() {
                 \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
                 if(\$('#snap-notifyme').is(':checked')) {
                     \$('#arg2').val('1');
@@ -1005,7 +1008,7 @@ $(function(){
                 }
                 \$('#arg3').val('check');
                 \$('#arg4').val('-d');
-                \$('#arg5').val('$snap_parity_disk[1]');
+                \$('#arg5').val('$snap_parity_name');
                 if(\$('#snap-rawreport').val()) {
                     \$('#arg6').val('-l');
                     \$('#arg7').val(\$('#snap-rawreport').val());
@@ -1038,7 +1041,7 @@ $(function(){
                 }
                 confirmCommandAndSubmit();
             });
-            \$('#$snap_parity_disk[1]-fix').click(function() {
+            \$('#$snap_parity_name-fix').click(function() {
                 swal({
                     title: "Destructive Operation",
                     text: "This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.<br><br>Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it's reverted to the stored snapshot. This command doesn't differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC.<br><br>This command only processes the selected disk.",
@@ -1056,7 +1059,7 @@ $(function(){
                     }
                     \$('#arg3').val('fix');
                     \$('#arg4').val('-d');
-                    \$('#arg5').val('$snap_parity_disk[1]');
+                    \$('#arg5').val('$snap_parity_name');
                     if(\$('#snap-rawreport').val()) {
                         \$('#arg6').val('-l');
                         \$('#arg7').val(\$('#snap-rawreport').val());
@@ -1090,7 +1093,7 @@ $(function(){
                     confirmCommandAndSubmit();
                 });
             });
-            \$('#$snap_parity_disk[1]-fixmissing').click(function() {
+            \$('#$snap_parity_name-fixmissing').click(function() {
                 swal({
                     title: "Destructive Operation",
                     text: "This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.<br><br>Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it's reverted to the stored snapshot. This command doesn't differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC.<br><br>Only processes missing or deleted files on the selected disk.",
@@ -1109,7 +1112,7 @@ $(function(){
                     \$('#arg3').val('fix');
                     \$('#arg4').val('-m');
                     \$('#arg5').val('-d');
-                    \$('#arg6').val('$snap_parity_disk[1]');
+                    \$('#arg6').val('$snap_parity_name');
                     if(\$('#snap-rawreport').val()) {
                         \$('#arg7').val('-l');
                         \$('#arg8').val(\$('#snap-rawreport').val());
@@ -1146,8 +1149,9 @@ $(function(){
 END;
         }
         foreach ($dwsnap_active_cfg->data_disks as $snap_data_disk) {
+            $snap_data_name = htmlspecialchars($snap_data_disk[1]);
             echo <<<END
-            \$('#$snap_data_disk[1]-check').click(function() {
+            \$('#$snap_data_name-check').click(function() {
                 \$('#command').val('/usr/local/emhttp/plugins/dwsnap/scripts/start');
                 if(\$('#snap-notifyme').is(':checked')) {
                     \$('#arg2').val('1');
@@ -1156,7 +1160,7 @@ END;
                 }
                 \$('#arg3').val('check');
                 \$('#arg4').val('-d');
-                \$('#arg5').val('$snap_data_disk[1]');
+                \$('#arg5').val('$snap_data_name');
                 if(\$('#snap-rawreport').val()) {
                     \$('#arg6').val('-l');
                     \$('#arg7').val(\$('#snap-rawreport').val());
@@ -1189,7 +1193,7 @@ END;
                 }
                 confirmCommandAndSubmit();
             });
-            \$('#$snap_data_disk[1]-fix').click(function() {
+            \$('#$snap_data_name-fix').click(function() {
                 swal({
                     title: "Destructive Operation",
                     text: "This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.<br><br>Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it's reverted to the stored snapshot. This command doesn't differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC.<br><br>This command only processes the selected disk.",
@@ -1207,7 +1211,7 @@ END;
                     }
                     \$('#arg3').val('fix');
                     \$('#arg4').val('-d');
-                    \$('#arg5').val('$snap_data_disk[1]');
+                    \$('#arg5').val('$snap_data_name');
                     if(\$('#snap-rawreport').val()) {
                         \$('#arg6').val('-l');
                         \$('#arg7').val(\$('#snap-rawreport').val());
@@ -1241,7 +1245,7 @@ END;
                     confirmCommandAndSubmit();
                 });
             });
-            \$('#$snap_data_disk[1]-fixmissing').click(function() {
+            \$('#$snap_data_name-fixmissing').click(function() {
                 swal({
                     title: "Destructive Operation",
                     text: "This is a <u>potentially destructive</u> array operation. That means it will change either your parity, your protected files or both. Please make sure you consulted the <a href='https://www.snapraid.it/manual' target='_blank'>SnapRAID manual</a> and <u>fully understand what you are about to do</u> before proceeding with this operation.<br><br>Fix all the files and the parity data. All the files and the parity data are compared with the snapshot state saved in the last SYNC. If a difference is found, it's reverted to the stored snapshot. This command doesn't differentiate between errors and intentional modifications. It unconditionally reverts the file state to the last SYNC.<br><br>Only processes missing or deleted files on the selected disk.",
@@ -1260,7 +1264,7 @@ END;
                     \$('#arg3').val('fix');
                     \$('#arg4').val('-m');
                     \$('#arg5').val('-d');
-                    \$('#arg6').val('$snap_data_disk[1]');
+                    \$('#arg6').val('$snap_data_name');
                     if(\$('#snap-rawreport').val()) {
                         \$('#arg7').val('-l');
                         \$('#arg8').val(\$('#snap-rawreport').val());
