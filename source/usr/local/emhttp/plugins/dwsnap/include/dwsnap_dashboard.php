@@ -29,10 +29,10 @@ try {
         $snapdashField_cron = ucwords(str_replace("disable", "disabled", $snapdashCfg->cron)) . " Schedule";
         $snapdashField_status = $snapdashCfg->getFooterHTML("snapdashtip"); 
 
-        $snapdashField_util = count($snapdashCfg->data_disks_raw[2]) > 0 ? htmlspecialchars(trim(shell_exec("df -B1 ".implode(" ", $snapdashCfg->data_disks_raw[2])." --total 2>/dev/null | grep total 2>/dev/null | awk '{print $5}' 2>/dev/null") ?? "-")) : "-";
-        $snapdashField_free = count($snapdashCfg->data_disks_raw[2]) > 0 ? htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 ".implode(" ", $snapdashCfg->data_disks_raw[2])." --total 2>/dev/null | grep total 2>/dev/null | awk '{print $4}' 2>/dev/null") ?? "-"))) : "-";
-        $snapdashField_used = count($snapdashCfg->data_disks_raw[2]) > 0 ? htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 ".implode(" ", $snapdashCfg->data_disks_raw[2])." --total 2>/dev/null | grep total 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"))) : "-";
-        $snapdashField_total = count($snapdashCfg->data_disks_raw[2]) > 0 ? htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 ".implode(" ", $snapdashCfg->data_disks_raw[2])." --total 2>/dev/null | grep total 2>/dev/null | awk '{print $2}' 2>/dev/null") ?? "-"))) : "-";
+        $snapdashField_util = count($snapdashCfg->data_disks_raw[2]) > 0 ? htmlspecialchars(trim(shell_exec("df -B1 ".implode(" ", array_map("escapeshellarg", $snapdashCfg->data_disks_raw[2]))." --total 2>/dev/null | grep total 2>/dev/null | awk '{print $5}' 2>/dev/null") ?? "-")) : "-";
+        $snapdashField_free = count($snapdashCfg->data_disks_raw[2]) > 0 ? htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 ".implode(" ", array_map("escapeshellarg", $snapdashCfg->data_disks_raw[2]))." --total 2>/dev/null | grep total 2>/dev/null | awk '{print $4}' 2>/dev/null") ?? "-"))) : "-";
+        $snapdashField_used = count($snapdashCfg->data_disks_raw[2]) > 0 ? htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 ".implode(" ", array_map("escapeshellarg", $snapdashCfg->data_disks_raw[2]))." --total 2>/dev/null | grep total 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"))) : "-";
+        $snapdashField_total = count($snapdashCfg->data_disks_raw[2]) > 0 ? htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 ".implode(" ", array_map("escapeshellarg", $snapdashCfg->data_disks_raw[2]))." --total 2>/dev/null | grep total 2>/dev/null | awk '{print $2}' 2>/dev/null") ?? "-"))) : "-";
 
         if($snapdashCfg->lastsync !== "-") {
             $snapdashField_lastsync = dwsnap_time_ago($snapdashCfg->lastsync, $snapdashCfg->sync_expires);
