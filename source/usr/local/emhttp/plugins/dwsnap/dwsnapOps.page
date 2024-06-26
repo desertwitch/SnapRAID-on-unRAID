@@ -273,14 +273,15 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
                     $snap_disk_total = htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 " . escapeshellarg($snap_parity_disk[2]) . " 2>/dev/null | grep " . escapeshellarg($snap_parity_disk[2]) . " 2>/dev/null | awk '{print $2}' 2>/dev/null") ?? "-")));
                     $snap_disk_status = ($snap_disk_fs !== "-") ? "<i class='fa fa-check green-text'></i>" : "<i class='fa fa-times red-text'></i>"; 
                     $snap_parity_level = strtoupper($snap_parity_disk[1]);
+                    $snap_parity_mount = htmlspecialchars($snap_parity_disk[2]);
                     echo <<<END
                     <tr>
                     <td class="snapdisktype">$snap_parity_level</td>
                     <td>$snap_parity_disk[1]</td>
                     <td>
-                        <a class="view" href="/Shares/Browse?dir=$snap_parity_disk[2]/" target="_blank">
-                        <i class="icon-u-tab" title="Browse $snap_parity_disk[2]/"></i>
-                        </a>$snap_parity_disk[2]
+                        <a class="view" href="/Shares/Browse?dir=$snap_parity_mount/" target="_blank">
+                        <i class="icon-u-tab" title="Browse $snap_parity_mount/"></i>
+                        </a>$snap_parity_mount
                     </td>
                     <td>$snap_disk_status</td>
                     <td>$snap_disk_fs</td>
@@ -303,14 +304,15 @@ END;
                     $snap_disk_used = htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 " . escapeshellarg($snap_data_disk[2]) . " 2>/dev/null | grep " . escapeshellarg($snap_data_disk[2]) . " 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-")));
                     $snap_disk_total = htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 " . escapeshellarg($snap_data_disk[2]) . " 2>/dev/null | grep " . escapeshellarg($snap_data_disk[2]) . " 2>/dev/null | awk '{print $2}' 2>/dev/null") ?? "-")));
                     $snap_disk_status = ($snap_disk_fs !== "-") ? "<i class='fa fa-check green-text'></i>" : "<i class='fa fa-times red-text'></i>"; 
+                    $snap_data_mount = htmlspecialchars($snap_data_disk[2]);
                     echo <<<END
                     <tr>
                     <td class="snapdisktype">DATA</td>
                     <td>$snap_data_disk[1]</td>
                     <td>
-                        <a class="view" href="/Shares/Browse?dir=$snap_data_disk[2]/" target="_blank">
-                        <i class="icon-u-tab" title="Browse $snap_data_disk[2]/"></i>
-                        </a>$snap_data_disk[2]
+                        <a class="view" href="/Shares/Browse?dir=$snap_data_mount/" target="_blank">
+                        <i class="icon-u-tab" title="Browse $snap_data_mount/"></i>
+                        </a>$snap_data_mount
                     </td>
                     <td>$snap_disk_status</td>
                     <td>$snap_disk_fs</td>

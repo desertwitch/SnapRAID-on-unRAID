@@ -24,8 +24,8 @@ try {
     if(!empty($_GET["config"])) {
         $snapdashCfg = new SnapraidArrayConfiguration($_GET["config"]);
 
-        $snapdashField_paritydisks = "<span class='snapdashhtmltip' title='".implode("<br>", $snapdashCfg->parity_disks_raw[2])."'>".count($snapdashCfg->parity_disks_raw[2])." Disk(s)</span>" ?? "0 Disk(s)";
-        $snapdashField_datadisks = "<span class='snapdashhtmltip' title='".implode("<br>", $snapdashCfg->data_disks_raw[2])."'>".count($snapdashCfg->data_disks_raw[2])." Disk(s)</span>" ?? "0 Disk(s)";
+        $snapdashField_paritydisks = "<span class='snapdashhtmltip' title='".implode("<br>", array_map("htmlspecialchars", $snapdashCfg->parity_disks_raw[2]))."'>".count($snapdashCfg->parity_disks_raw[2])." Disk(s)</span>" ?? "0 Disk(s)";
+        $snapdashField_datadisks = "<span class='snapdashhtmltip' title='".implode("<br>", array_map("htmlspecialchars", $snapdashCfg->data_disks_raw[2]))."'>".count($snapdashCfg->data_disks_raw[2])." Disk(s)</span>" ?? "0 Disk(s)";
         $snapdashField_cron = ucwords(str_replace("disable", "disabled", $snapdashCfg->cron)) . " Schedule";
         $snapdashField_status = $snapdashCfg->getFooterHTML("snapdashtip"); 
 
