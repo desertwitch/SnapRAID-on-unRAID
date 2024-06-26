@@ -19,8 +19,8 @@
 <CHANGES>
 ## SnapRAID on UNRAID
 ###2024.06.26
-- fix: introduced various safeguards against malformed configurations
-- fix: introduced various safeguards against XSS cross-site vulnerabilities
+- fix: improved safeguards against malformed configurations
+- fix: improved safeguards against XSS cross-site vulnerabilities
 ###2024.06.25c
 - new: added front page dashboards for created arrays (for versions 6.12+)
 - fix: adapt decimal handling in disk space translation functions to unraid standards
