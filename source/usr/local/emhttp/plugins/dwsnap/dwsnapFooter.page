@@ -99,7 +99,6 @@ $(function()
     float: right;
     margin-right: 24px;
     font-size: 1.1rem;
-    cursor: pointer;
 }
 #snap_footer i {
     margin-left: 5px;

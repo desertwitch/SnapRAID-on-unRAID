@@ -19,7 +19,7 @@
  */
 require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 try {
-    $snap_footer = "SnapRAID";
+    $snap_footer = "<a href='/Settings/dwsnapOps' style='cursor:pointer;'>SnapRAID</a>";
     $files = dwsnap_get_conf_files() ?? [];
     foreach ($files as $file) {
         $footerCfgName = basename($file,".conf");
