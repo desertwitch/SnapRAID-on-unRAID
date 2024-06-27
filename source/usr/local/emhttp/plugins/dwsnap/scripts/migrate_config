@@ -66,6 +66,7 @@ cp -f /usr/local/emhttp/plugins/dwsnap/default.cfg /boot/config/plugins/dwsnap/d
 [ -n "${COPIED}" ] && sed -i "s/COPIED=.*/COPIED=\"${COPIED}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
 [ -n "${RESTORED}" ] && sed -i "s/RESTORED=.*/RESTORED=\"${RESTORED}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
 
+[ -n "${SELARRAY}" ] && sed -i "s/SELARRAY=.*/SELARRAY=\"${SELARRAY}\"/g" /boot/config/plugins/dwsnap/dwsnap.cfg
 [ -n "${DASHBOARDS}" ] && sed -i "s/DASHBOARDS=.*/DASHBOARDS=\"${DASHBOARDS}\"/g" /boot/config/plugins/dwsnap/dwsnap.cfg
 [ -n "${FOOTER}" ] && sed -i "s/FOOTER=.*/FOOTER=\"${FOOTER}\"/g" /boot/config/plugins/dwsnap/dwsnap.cfg
 [ -n "${SCREENIMG}" ] && sed -i "s/SCREENIMG=.*/SCREENIMG=\"${SCREENIMG}\"/g" /boot/config/plugins/dwsnap/dwsnap.cfg

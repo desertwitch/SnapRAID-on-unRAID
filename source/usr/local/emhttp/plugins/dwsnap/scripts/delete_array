@@ -26,4 +26,6 @@ rm -f $BOOT/config/"$1"-*
 rm -f /var/lib/snapraid/logs/"$1"-*
 rm -rf /var/lib/snapraid/logs/"$1"
 
+sed -i "s/SELARRAY=.*/SELARRAY=\"primary\"/g" $BOOT/dwsnap.cfg
+
 /usr/local/emhttp/plugins/dwsnap/scripts/write_config >/dev/null 2>&1

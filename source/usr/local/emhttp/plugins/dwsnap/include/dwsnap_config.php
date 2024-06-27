@@ -274,14 +274,14 @@ class SnapraidArrayConfiguration {
 }
 
 $dwsnap_selected_array = "primary";
-$dwsnap_selected_array_state = "";
+$dwsnap_selected_array_missing = "";
 
-if(!empty($_GET['snapconfig']) && $_GET['snapconfig'] !== "primary") {
-    if(file_exists("/boot/config/plugins/dwsnap/config/".$_GET['snapconfig'].".cfg") && file_exists("/boot/config/plugins/dwsnap/config/".$_GET['snapconfig'].".conf")) {
-        $dwsnap_selected_array = $_GET['snapconfig'];
-        $dwsnap_selected_array_state = "exists";
+if(!empty($_GET['snapconfig'])) {
+    $snap_get_config = $_GET['snapconfig'];
+    if(file_exists("/boot/config/plugins/dwsnap/config/$snap_get_config.cfg") && file_exists("/boot/config/plugins/dwsnap/config/$snap_get_config.conf")) {
+        $dwsnap_selected_array = $snap_get_config;
     } else {
-        $dwsnap_selected_array_state = "missing";
+        $dwsnap_selected_array_missing = "missing";
     }
 }
 

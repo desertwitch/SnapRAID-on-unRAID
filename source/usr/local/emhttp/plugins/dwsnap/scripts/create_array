@@ -23,4 +23,6 @@ echo "Creating a new SnapRAID array..."
 cp -n $DOCROOT/defaults/primary.cfg $BOOT/config/"$1".cfg
 cp -n $DOCROOT/defaults/primary.conf $BOOT/config/"$1".conf
 
+sed -i "s/SELARRAY=.*/SELARRAY=\"${1}\"/g" $BOOT/dwsnap.cfg
+
 /usr/local/emhttp/plugins/dwsnap/scripts/write_config >/dev/null 2>&1

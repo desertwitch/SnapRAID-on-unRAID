@@ -451,7 +451,7 @@ function confirmCommandAndSubmit() {
 }
 $(function(){
 
-    if("<?=$dwsnap_selected_array_state;?>" === "missing") {
+    if("<?=$dwsnap_selected_array_missing;?>" === "missing") {
         location = '/Settings/dwsnapOps?snapconfig=primary';
     }
 
