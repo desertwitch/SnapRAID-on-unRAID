@@ -450,11 +450,6 @@ function confirmCommandAndSubmit() {
         });
 }
 $(function(){
-
-    if("<?=$dwsnap_selected_array_missing;?>" === "true") {
-        location = '/Settings/dwsnapOps?snapconfig=primary';
-    }
-
     $('#logcontrol').click(toggleSnapLogs);
 
     $('#snapstatus').click(function(){

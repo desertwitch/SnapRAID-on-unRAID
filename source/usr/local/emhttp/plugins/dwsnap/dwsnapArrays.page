@@ -28,7 +28,7 @@ Markdown="false"
 
 <script type="text/javascript">
 function getSnapArrays() {
-    $.get('/plugins/dwsnap/include/dwsnap_arrays.php', {"config": "<?=$dwsnap_active_cfg->cfgname;?>"}, function(data) {
+    $.get('/plugins/dwsnap/include/dwsnap_arrays.php',function(data) {
         if (data) { 
             $('#snap_arrays').html(data);
             $('.snaparraytip').tooltipster();
