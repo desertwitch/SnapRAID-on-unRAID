@@ -264,6 +264,7 @@ class SnapraidArrayConfiguration {
                     $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: No parity and/or data disks are configured'><i class='fa fa-times red-text'></i></span>";
                 }
             }
+            $snap_footer_html = "<a href='/Settings/dwsnapOps?snapconfig=".$this->cfgname."'>" . $snap_footer_html . "</a>";
             return $snap_footer_html;
         } catch (Throwable $e) { // For PHP 7
             return "";
