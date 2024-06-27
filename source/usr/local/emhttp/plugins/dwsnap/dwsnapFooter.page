@@ -48,7 +48,7 @@ try {
             <i class="icon-disks f32"></i>
             <div class="section">SnapRAID: $snap_cfg_name_upper<br>
             <span class='snaphead' name='$snap_cfg_name'>Array Status: <i class="fa fa-spinner fa-spin"></i></span><br></div>
-            <a href='/Settings/dwsnapOps' title="Go to SnapRAID Settings"><i class='fa fa-fw fa-cog control'></i></a>
+            <a href='/Settings/dwsnapOps?snapconfig=$snap_cfg_name' title="Go to SnapRAID Settings"><i class='fa fa-fw fa-cog control'></i></a>
             </td></tr>
             <tr class='header'><td><span class='w18'>Parity Disks</span><span class='w18'>Data Disks</span><span class='w18'>Last Sync</span><span class='w18'>Last Scrub</span><span class='w26'>Maintenance</span></td></tr>
             <tr class='snapdash' name='$snap_cfg_name'><td style="text-align:center;"><i class="fa fa-spinner fa-spin"></i> <em>Please wait, retrieving information...</em></td></tr>
