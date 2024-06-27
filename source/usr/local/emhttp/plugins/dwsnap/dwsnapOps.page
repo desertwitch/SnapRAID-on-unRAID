@@ -82,13 +82,6 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
     font-family: bitstream;
     font-size: 1.1rem;
 }
-.snaparrays tr:nth-child(2) > th {
-    text-align: center !important;
-}
-.snaparrays td {
-    text-align: center !important;
-    font-size: 1.1rem;
-}
 </style>
 
 <table class="tablesorter shift" autofocus>
@@ -224,20 +217,6 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
     <div>A failing disk may write bogus data before Unraid disables it (if at all), and SnapRAID may fill that gap to recover from corruption using a sync state from before that.</div>
 
     <br>
-
-    <table class="tablesorter snaparrays">
-        <thead>
-            <tr>
-                <th colspan="9"><strong>OVERVIEW OF ARRAY CONFIGURATIONS</strong></th>
-            </tr>
-            <tr>
-                <th><strong>GUI</strong></th><th><strong>Array Name</strong></th><th><strong>Parity Disks</strong></th><th><strong>Data Disks</strong></th><th><strong>Content Files</strong></th><th><strong>Maint. Schedule</strong></th><th><strong>Last Sync</strong></th><th><strong>Last Scrub</strong></th><th><strong>Array Status</strong></th>
-            </tr>
-        </thead>
-        <tbody id="snap_arrays">
-            <tr><td colspan="9" style="text-align:center"><i class="fa fa-spinner fa-spin"></i> <em>Please wait, retrieving information...</em></td></tr>
-        </tbody>
-    </table><br>
 
     <?
         $snap_syncneeded_html = "";
@@ -436,17 +415,6 @@ function getSnapLogs() {
     });
     clearTimeout(timers.getSnapLogs);
     timers.getSnapLogs = setTimeout(getSnapLogs, 1000);
-}
-function getSnapArrays() {
-    $.get('/plugins/dwsnap/include/dwsnap_arrays.php', {"config": "<?=$dwsnap_active_cfg->cfgname;?>"}, function(data) {
-        if (data) { 
-            $('#snap_arrays').html(data);
-            $('.snaparraytip').tooltipster();
-            $('.snaparrayhtmltip').tooltipster({contentAsHTML: true});
-	    }
-    });
-    clearTimeout(timers.getSnapArrays);
-    timers.getSnapArrays = setTimeout(getSnapArrays, 5000);
 }
 function toggleSnapLogs() {
     if($('#logcontrol').attr("class") == "fa fa-refresh fa-spin") {
@@ -1344,7 +1312,6 @@ END;
 
     getSnapStatus()
     getSnapLogs();
-    getSnapArrays();
     
     $('.snaphelptip').tooltipster({
         maxWidth: 300
