@@ -15,7 +15,7 @@ Markdown="false"
 }
 </style>
 
-<table class="tablesorter snaparrays">
+<table class="tablesorter snaparrays shift">
     <thead>
         <tr>
             <th><strong>GUI</strong></th><th><strong>Array Name</strong></th><th><strong>Parity Disks</strong></th><th><strong>Data Disks</strong></th><th><strong>Content Files</strong></th><th><strong>Maint. Schedule</strong></th><th><strong>Last Sync</strong></th><th><strong>Last Scrub</strong></th><th><strong>Array Status</strong></th>
