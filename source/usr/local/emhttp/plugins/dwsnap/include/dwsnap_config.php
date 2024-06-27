@@ -273,15 +273,15 @@ class SnapraidArrayConfiguration {
     }
 }
 
-$dwsnap_selected_array = 'primary';
-$dwsnap_selected_array_missing = false;
+$dwsnap_selected_array = "primary";
+$dwsnap_selected_array_missing = "";
 
 if(!empty($_GET['snapconfig'])) {
     $snap_get_config = $_GET['snapconfig'];
     if(file_exists("/boot/config/plugins/dwsnap/config/$snap_get_config.cfg") && file_exists("/boot/config/plugins/dwsnap/config/$snap_get_config.conf")) {
         $dwsnap_selected_array = $snap_get_config;
     } else {
-        $dwsnap_selected_array_missing = true;
+        $dwsnap_selected_array_missing = "missing";
     }
 }
 
