@@ -112,9 +112,6 @@ function getSnapFooter() {
         if (data) { 
             $('#snap_footer').html(data);
             $('.snapfootertip').tooltipster();
-            $('#snap_footer').click(function() {
-                location = '/Settings/dwsnapOps';
-            });
 	    }
     });
     clearTimeout(timers.getSnapFooter);
