@@ -215,8 +215,8 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
     <div>When using SnapRAID on top of Unraid's parity, always attempt to recover disk failures using Unraid's parity first, before using any SnapRAID recovery functions.</div>
     <div>Ideally you can restore a disk failure with Unraid and then fix any file level corruption on the recovered disk using a previous (non-corrupted) SnapRAID snapshot.</div>
     <div>A failing disk may write bogus data before Unraid disables it (if at all), and SnapRAID may fill that gap to recover from corruption using a sync state from before that.</div>
+    
     <br>
-
     <?
         $snap_syncneeded_html = "";
         $snap_unmounted_disks_html = "";
@@ -369,6 +369,17 @@ END;
 </form> 
 
 <script type="text/javascript">
+function getSnapLogs() {
+    $.get('/plugins/dwsnap/include/dwsnap_logger.php', {"config": "<?=$dwsnap_active_cfg->cfgname;?>"}, function(data) {
+        if (data) { 
+            $('#logviewer').html(data); 
+	        var pre = $(".snaplog");
+	        pre.scrollTop(pre.prop("scrollHeight"));
+	    }
+    });
+    clearTimeout(timers.getSnapLogs);
+    timers.getSnapLogs = setTimeout(getSnapLogs, 1000);
+}
 function getSnapStatus() {
     $.get('/plugins/dwsnap/include/dwsnap_status.php', {"config": "<?=$dwsnap_active_cfg->cfgname;?>"}, function(data) {
         if (data) {
@@ -402,17 +413,6 @@ function getSnapStatus() {
     });
     clearTimeout(timers.getSnapStatus);
     timers.getSnapStatus = setTimeout(getSnapStatus, 3000);
-}
-function getSnapLogs() {
-    $.get('/plugins/dwsnap/include/dwsnap_logger.php', {"config": "<?=$dwsnap_active_cfg->cfgname;?>"}, function(data) {
-        if (data) { 
-            $('#logviewer').html(data); 
-	        var pre = $(".snaplog");
-	        pre.scrollTop(pre.prop("scrollHeight"));
-	    }
-    });
-    clearTimeout(timers.getSnapLogs);
-    timers.getSnapLogs = setTimeout(getSnapLogs, 1000);
 }
 function toggleSnapLogs() {
     if($('#logcontrol').attr("class") == "fa fa-refresh fa-spin") {
