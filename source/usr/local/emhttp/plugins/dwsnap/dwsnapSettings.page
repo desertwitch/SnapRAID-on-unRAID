@@ -589,8 +589,8 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 
 <dl>
     <dt>
-        <input class="snap_array_create" type="button" value="Create New Array">
-        <input class="snap_array_delete snaprun" type="button" value="Delete This Array">
+        <input id="NEWARRAY" type="button" value="Create New Array">
+        <input id="DELARRAY" class="snaprun" type="button" value="Delete This Array">
     </dt>
     <dd>
         <input type="submit" id="btnApply2" name="#apply" value="Apply">
@@ -662,7 +662,7 @@ $(function(){
             });
     });
 
-    $('.snap_array_create').click(function(){
+    $('#NEWARRAY').click(function(){
         swal({
             title: "New Array Configuration",
             text: "Please choose a name for your new array configuration:",
@@ -689,7 +689,7 @@ $(function(){
             });
     });
 
-    $('.snap_array_delete').click(function(){
+    $('#DELARRAY').click(function(){
         if("<?=$dwsnap_active_cfg->cfgname;?>" == "primary") {
             swal("Operation Failure", "You cannot delete the primary array configuration.", "error");
         }
