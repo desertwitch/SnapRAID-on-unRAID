@@ -31,7 +31,7 @@ foreach ($files as $file) {
     if($iterCfg->cfgname == $chosen_config) {
         $iterField_selected = "<i class='fa fa-check-square-o'></i>";
     } else { 
-        $iterField_selected = "<a href='/Settings/dwsnapOps?snapconfig=".$iterCfg->cfgname."' style='color:inherit;text-decoration:none;cursor:pointer;'><i class='fa fa-square-o'></i></a>"; 
+        $iterField_selected = "<a href='/Settings/dwsnapOps?snapconfig=".$iterCfg->cfgname."' style='cursor:pointer;color:inherit;text-decoration:none;'><i class='fa fa-square-o'></i></a>"; 
     }
     
     $iterField_cfgname = "<span class='snaparraytip' title='/boot/config/plugins/dwsnap/config/".$iterCfg->cfgname.".conf'>".strtoupper($iterCfg->cfgname)."</span>";
