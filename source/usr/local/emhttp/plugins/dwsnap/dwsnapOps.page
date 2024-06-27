@@ -228,7 +228,7 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
     <table class="tablesorter snaparrays">
         <thead>
             <tr>
-                <th colspan="9"><strong>OVERVIEW OF THE ARRAY CONFIGURATIONS AND THEIR STATUS</strong><span style="text-transform: none;float:right;"><strong>Array Configuration Options: </strong><span class="snap_array_create" style="cursor:pointer;"><i class="fa fa-plus-square-o" style="margin-left:5px;"></i> Create New Array</span> <span class="snap_array_delete snaprun" style="cursor:pointer;"><i class="fa fa-trash-o" style="margin-left:5px;"></i> Delete Existing Array</span></span></th>
+                <th colspan="9"><strong>OVERVIEW OF ARRAY CONFIGURATIONS</strong></th>
             </tr>
             <tr>
                 <th><strong>GUI</strong></th><th><strong>Array Name</strong></th><th><strong>Parity Disks</strong></th><th><strong>Data Disks</strong></th><th><strong>Content Files</strong></th><th><strong>Maint. Schedule</strong></th><th><strong>Last Sync</strong></th><th><strong>Last Scrub</strong></th><th><strong>Array Status</strong></th>
