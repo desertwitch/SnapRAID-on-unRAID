@@ -126,20 +126,6 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 </blockquote>
 
 <dl>
-    <dt><strong>SnapRAID Active Array Configuration (in GUI):</strong></dt>
-    <dd>
-        <select id="SELARRAY" name="SELARRAY" size="1">
-            <?=dwsnap_array_options($dwsnap_active_cfg->cfgname);?>
-        </select>
-        <span style="margin-left:10px;">.conf</span>
-    </dd>
-</dl>
-
-<blockquote class="inline_help">
-<p>Select the array configuration to perform array operations on and/or modify the array-specific settings in GUI.</p>
-</blockquote>
-
-<dl>
     <dt>
         <input id="RESETCONF" class="snapanyrun" type="button" value="Reset Configuration">
     </dt>

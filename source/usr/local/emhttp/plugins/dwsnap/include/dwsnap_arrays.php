@@ -21,16 +21,17 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 
 $return_html = "";
 $files = dwsnap_get_conf_files() ?? [];
+$chosen_config = !empty($_GET['config']) ? $_GET['config'] : "";
 
 foreach ($files as $file) {
 
     $iterCfgName = basename($file,".conf");
     $iterCfg = new SnapraidArrayConfiguration($iterCfgName);
 
-    if($iterCfg->cfgname == $dwsnap_active_cfg->cfgname) {
+    if($iterCfg->cfgname == $chosen_config) {
         $iterField_selected = "<i class='fa fa-hand-o-right'></i>";
     } else { 
-        $iterField_selected = ""; 
+        $iterField_selected = "<a href='/Settings/dwsnapOps?snapconfig='".$iterCfg->cfgname."'><i class='fa fa-share'></i></a>"; 
     }
     
     $iterField_cfgname = "<span class='snaparraytip' title='/boot/config/plugins/dwsnap/config/".$iterCfg->cfgname.".conf'>".strtoupper($iterCfg->cfgname)."</span>";
