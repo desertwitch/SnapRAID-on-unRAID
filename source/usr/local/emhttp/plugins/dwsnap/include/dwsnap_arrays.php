@@ -35,9 +35,9 @@ foreach ($snaparrayFiles as $snaparrayFile) {
     }
     
     $snaparrayField_cfgname = "<span class='snaparraytip' title='/boot/config/plugins/dwsnap/config/".$snaparrayCfg->cfgname.".conf'>".strtoupper($snaparrayCfg->cfgname)."</span>";
-    $snaparrayField_paritydisks = "<span class='snaparrayhtmltip' title='".implode("<br>", array_map("htmlspecialchars", $snaparrayCfg->parity_disks_raw[2]))."'>".count($snaparrayCfg->parity_disks_raw[2])."</span>" ?? "0";
-    $snaparrayField_datadisks = "<span class='snaparrayhtmltip' title='".implode("<br>", array_map("htmlspecialchars", $snaparrayCfg->data_disks_raw[2]))."'>".count($snaparrayCfg->data_disks_raw[2])."</span>" ?? "0";
-    $snaparrayField_contentfiles = "<span class='snaparrayhtmltip' title='".implode("<br>", array_map("htmlspecialchars",$snaparrayCfg->content_files_raw[1]))."'>".count($snaparrayCfg->content_files_raw[1])."</span>" ?? "0";
+    $snaparrayField_paritydisks = "<span class='snaparrayhtmltip' title='".(implode("<br>", array_map("htmlspecialchars", $snaparrayCfg->parity_disks_raw[2]))??"None")."'>".count($snaparrayCfg->parity_disks_raw[2])."</span>" ?? "0";
+    $snaparrayField_datadisks = "<span class='snaparrayhtmltip' title='".(implode("<br>", array_map("htmlspecialchars", $snaparrayCfg->data_disks_raw[2]))??"None")."'>".count($snaparrayCfg->data_disks_raw[2])."</span>" ?? "0";
+    $snaparrayField_contentfiles = "<span class='snaparrayhtmltip' title='".(implode("<br>", array_map("htmlspecialchars",$snaparrayCfg->content_files_raw[1]))??"None")."'>".count($snaparrayCfg->content_files_raw[1])."</span>" ?? "0";
     $snaparrayField_cron = strtoupper(str_replace("disable", "-", $snaparrayCfg->cron));
 
     if($snaparrayCfg->lastsync !== "-") {
