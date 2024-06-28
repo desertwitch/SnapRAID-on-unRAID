@@ -31,7 +31,7 @@ foreach ($snaparrayFiles as $snaparrayFile) {
     if($snaparrayCfg->cfgname == $snaparrayActiveCfg) {
         $snaparrayField_selected = "<i class='fa fa-check-square-o snaparraytip' title='This array is currently selected.'></i>";
     } else { 
-        $snaparrayField_selected = "<a href='/Settings/dwsnapOps?snapr=".$snaparrayCfg->cfgname."' class='snaparraytip' style='cursor:pointer;color:inherit;text-decoration:none;' title='A click here will switch to this array.'><i class='fa fa-square-o'></i></a>"; 
+        $snaparrayField_selected = "<a href='/Settings/dwsnapOps?snapr=".$snaparrayCfg->cfgname."' class='snaparraytip' style='cursor:pointer;color:inherit;text-decoration:none;' title='Click to switch to this array.'><i class='fa fa-square-o'></i></a>"; 
     }
     
     $snaparrayField_cfgname = "<span class='snaparraytip' title='/boot/config/plugins/dwsnap/config/".$snaparrayCfg->cfgname.".conf'>".strtoupper($snaparrayCfg->cfgname)."</span>";
