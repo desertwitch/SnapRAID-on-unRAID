@@ -264,7 +264,7 @@ class SnapraidArrayConfiguration {
                     $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: No parity and/or data disks are configured'><i class='fa fa-times red-text'></i></span>";
                 }
             }
-            $snap_footer_html = "<a href='/Settings/dwsnapOps?snapconfig=".$this->cfgname."' style='cursor:pointer;'>" . $snap_footer_html . "</a>";
+            $snap_footer_html = "<a href='/Settings/dwsnapOps?snapr=".$this->cfgname."' style='cursor:pointer;'>" . $snap_footer_html . "</a>";
             return $snap_footer_html;
         } catch (Throwable $e) { // For PHP 7
             return "";
@@ -277,9 +277,9 @@ class SnapraidArrayConfiguration {
 $dwsnap_selected_array = "primary";
 $dwsnap_selected_array_missing = "no";
 
-if(!empty($_GET['snapconfig']) && $_GET['snapconfig'] !== "primary") {
-    if(file_exists("/boot/config/plugins/dwsnap/config/".$_GET['snapconfig'].".cfg") && file_exists("/boot/config/plugins/dwsnap/config/".$_GET['snapconfig'].".conf")) {
-        $dwsnap_selected_array = $_GET['snapconfig'];
+if(!empty($_GET['snapr']) && $_GET['snapr'] !== "primary") {
+    if(file_exists("/boot/config/plugins/dwsnap/config/".$_GET['snapr'].".cfg") && file_exists("/boot/config/plugins/dwsnap/config/".$_GET['snapr'].".conf")) {
+        $dwsnap_selected_array = $_GET['snapr'];
     } else {
         $dwsnap_selected_array_missing = "yes";
     }

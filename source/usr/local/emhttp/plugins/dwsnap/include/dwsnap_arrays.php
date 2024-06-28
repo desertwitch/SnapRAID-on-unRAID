@@ -19,68 +19,68 @@
  */
 require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 
-$return_html = "";
-$files = dwsnap_get_conf_files() ?? [];
-$chosen_config = !empty($_GET['config']) ? $_GET['config'] : "";
+$snap_arrays = "";
+$snaparrayFiles = dwsnap_get_conf_files() ?? [];
+$snaparrayActiveCfg = !empty($_GET['config']) ? $_GET['config'] : "";
 
-foreach ($files as $file) {
+foreach ($snaparrayFiles as $snaparrayFile) {
 
-    $iterCfgName = basename($file,".conf");
-    $iterCfg = new SnapraidArrayConfiguration($iterCfgName);
+    $snaparrayCfgName = basename($snaparrayFile,".conf");
+    $snaparrayCfg = new SnapraidArrayConfiguration($snaparrayCfgName);
 
-    if($iterCfg->cfgname == $chosen_config) {
-        $iterField_selected = "<i class='fa fa-check-square-o'></i>";
+    if($snaparrayCfg->cfgname == $snaparrayActiveCfg) {
+        $snaparrayField_selected = "<i class='fa fa-check-square-o'></i>";
     } else { 
-        $iterField_selected = "<a href='/Settings/dwsnapOps?snapconfig=".$iterCfg->cfgname."' style='cursor:pointer;color:inherit;text-decoration:none;'><i class='fa fa-square-o'></i></a>"; 
+        $snaparrayField_selected = "<a href='/Settings/dwsnapOps?snapr=".$snaparrayCfg->cfgname."' style='cursor:pointer;color:inherit;text-decoration:none;'><i class='fa fa-square-o'></i></a>"; 
     }
     
-    $iterField_cfgname = "<span class='snaparraytip' title='/boot/config/plugins/dwsnap/config/".$iterCfg->cfgname.".conf'>".strtoupper($iterCfg->cfgname)."</span>";
-    $iterField_paritydisks = "<span class='snaparrayhtmltip' title='".implode("<br>", array_map("htmlspecialchars", $iterCfg->parity_disks_raw[2]))."'>".count($iterCfg->parity_disks_raw[2])."</span>" ?? "0";
-    $iterField_datadisks = "<span class='snaparrayhtmltip' title='".implode("<br>", array_map("htmlspecialchars", $iterCfg->data_disks_raw[2]))."'>".count($iterCfg->data_disks_raw[2])."</span>" ?? "0";
-    $iterFields_contentfiles = "<span class='snaparrayhtmltip' title='".implode("<br>", array_map("htmlspecialchars",$iterCfg->content_files_raw[1]))."'>".count($iterCfg->content_files_raw[1])."</span>" ?? "0";
-    $iterField_cron = strtoupper(str_replace("disable", "-", $iterCfg->cron));
+    $snaparrayField_cfgname = "<span class='snaparraytip' title='/boot/config/plugins/dwsnap/config/".$snaparrayCfg->cfgname.".conf'>".strtoupper($snaparrayCfg->cfgname)."</span>";
+    $snaparrayField_paritydisks = "<span class='snaparrayhtmltip' title='".implode("<br>", array_map("htmlspecialchars", $snaparrayCfg->parity_disks_raw[2]))."'>".count($snaparrayCfg->parity_disks_raw[2])."</span>" ?? "0";
+    $snaparrayField_datadisks = "<span class='snaparrayhtmltip' title='".implode("<br>", array_map("htmlspecialchars", $snaparrayCfg->data_disks_raw[2]))."'>".count($snaparrayCfg->data_disks_raw[2])."</span>" ?? "0";
+    $snaparrayField_contentfiles = "<span class='snaparrayhtmltip' title='".implode("<br>", array_map("htmlspecialchars",$snaparrayCfg->content_files_raw[1]))."'>".count($snaparrayCfg->content_files_raw[1])."</span>" ?? "0";
+    $snaparrayField_cron = strtoupper(str_replace("disable", "-", $snaparrayCfg->cron));
 
-    if($iterCfg->lastsync !== "-") {
-        $iterField_lastsync = dwsnap_time_ago($iterCfg->lastsync, $iterCfg->sync_expires);
-        if($iterCfg->lastnodiff !== "-" && !empty($iterField_lastsync)) {
+    if($snaparrayCfg->lastsync !== "-") {
+        $snaparrayField_lastsync = dwsnap_time_ago($snaparrayCfg->lastsync, $snaparrayCfg->sync_expires);
+        if($snaparrayCfg->lastnodiff !== "-" && !empty($snaparrayField_lastsync)) {
             try {
                 $st_now = time();
-                $st_lastsync = strtotime($iterCfg->lastsync);
-                $st_lastnodiff = strtotime($iterCfg->lastnodiff);
+                $st_lastsync = strtotime($snaparrayCfg->lastsync);
+                $st_lastnodiff = strtotime($snaparrayCfg->lastnodiff);
                 $st_lastsync_diff = abs($st_now - $st_lastsync);
                 $st_lastnodiff_diff = abs($st_now - $st_lastnodiff);
-                $snap_lastnodiff_ago = dwsnap_time_ago($iterCfg->lastnodiff, $iterCfg->sync_expires);
+                $snap_lastnodiff_ago = dwsnap_time_ago($snaparrayCfg->lastnodiff, $snaparrayCfg->sync_expires);
                 if($st_lastnodiff_diff < $st_lastsync_diff) {
                     if (strpos($snap_lastnodiff_ago, "orange-text") !== false) {
-                        $iterField_lastsync = str_replace("green-text", "orange-text", $iterField_lastsync);
+                        $snaparrayField_lastsync = str_replace("green-text", "orange-text", $snaparrayField_lastsync);
                     } else {
-                        $iterField_lastsync = str_replace("orange-text", "green-text", $iterField_lastsync);
+                        $snaparrayField_lastsync = str_replace("orange-text", "green-text", $snaparrayField_lastsync);
                     }
                 }
             } catch (Throwable $e) { // For PHP 7
-                $iterField_lastsync = strip_tags(dwsnap_time_ago($iterCfg->lastsync, $iterCfg->sync_expires));
+                $snaparrayField_lastsync = strip_tags(dwsnap_time_ago($snaparrayCfg->lastsync, $snaparrayCfg->sync_expires));
             } catch (Exception $e) { // For PHP 5
-                $iterField_lastsync = strip_tags(dwsnap_time_ago($iterCfg->lastsync, $iterCfg->sync_expires));
+                $snaparrayField_lastsync = strip_tags(dwsnap_time_ago($snaparrayCfg->lastsync, $snaparrayCfg->sync_expires));
             }
         }
-        $iterField_lastsync = "<span class='snaparraytip' title='".$iterCfg->lastsync."'>".$iterField_lastsync."</span>";
+        $snaparrayField_lastsync = "<span class='snaparraytip' title='".$snaparrayCfg->lastsync."'>".$snaparrayField_lastsync."</span>";
     } else { 
-        $iterField_lastsync = "<span class='orange-text'>Never</span>"; 
+        $snaparrayField_lastsync = "<span class='orange-text'>Never</span>"; 
     }
 
-    if($iterCfg->lastscrub !== "-") { 
-        $iterField_lastscrub = "<span class='snaparraytip' title='".$iterCfg->lastscrub."'>".dwsnap_time_ago($iterCfg->lastscrub, $iterCfg->scrub_expires)."</span>";
+    if($snaparrayCfg->lastscrub !== "-") { 
+        $snaparrayField_lastscrub = "<span class='snaparraytip' title='".$snaparrayCfg->lastscrub."'>".dwsnap_time_ago($snaparrayCfg->lastscrub, $snaparrayCfg->scrub_expires)."</span>";
     } else {
-        $iterField_lastscrub = "<span class='orange-text'>Never</span>"; 
+        $snaparrayField_lastscrub = "<span class='orange-text'>Never</span>"; 
     }
 
-    $iterField_status = $iterCfg->getFooterHTML("snaparraytip");
+    $snaparrayField_status = $snaparrayCfg->getFooterHTML("snaparraytip");
     
-    $return_html .= "<tr><td>$iterField_selected</td><td>$iterField_cfgname</td><td>$iterField_paritydisks</td><td>$iterField_datadisks</td><td>$iterFields_contentfiles</td><td>$iterField_cron</td><td><strong>$iterField_lastsync</strong></td><td><strong>$iterField_lastscrub</strong></td><td>$iterField_status</td></tr>";
+    $snap_arrays .= "<tr><td>$snaparrayField_selected</td><td>$snaparrayField_cfgname</td><td>$snaparrayField_paritydisks</td><td>$snaparrayField_datadisks</td><td>$snaparrayField_contentfiles</td><td>$snaparrayField_cron</td><td><strong>$snaparrayField_lastsync</strong></td><td><strong>$snaparrayField_lastscrub</strong></td><td>$snaparrayField_status</td></tr>";
     
-    unset($iterCfg);
+    unset($snaparrayCfg);
 }
 
-echo($return_html);
+echo($snap_arrays);
 
 ?>

@@ -19,13 +19,13 @@
  */
 require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 try {
-    $snap_footer = "<a href='/Settings/dwsnapOps' style='cursor:pointer;color:inherit;text-decoration:none;'>SnapRAID</a>";
-    $files = dwsnap_get_conf_files() ?? [];
-    foreach ($files as $file) {
-        $footerCfgName = basename($file,".conf");
-        $footerCfg = new SnapraidArrayConfiguration($footerCfgName);
-        $snap_footer .= $footerCfg->getFooterHTML("snapfootertip");
-        unset($footerCfg);
+    $snap_footer = "SnapRAID";
+    $snapfooterFiles = dwsnap_get_conf_files() ?? [];
+    foreach ($snapfooterFiles as $snapfooterFile) {
+        $snapfooterCfgName = basename($snapfooterFile,".conf");
+        $snapfooterCfg = new SnapraidArrayConfiguration($snapfooterCfgName);
+        $snap_footer .= $snapfooterCfg->getFooterHTML("snapfootertip");
+        unset($snapfooterCfg);
     }
     echo($snap_footer);
 } catch (Throwable $e) { // For PHP 7

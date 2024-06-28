@@ -18,9 +18,9 @@
  *
  */
 if(!empty($_GET["config"])) {
-    $config = $_GET["config"];
-    if(file_exists("/var/lib/snapraid/logs/$config-snaplog")) {
-        $snap_log = file_get_contents("/var/lib/snapraid/logs/$config-snaplog");
+    $snaplogActiveCfg = $_GET["config"];
+    if(file_exists("/var/lib/snapraid/logs/$snaplogActiveCfg-snaplog")) {
+        $snap_log = file_get_contents("/var/lib/snapraid/logs/$snaplogActiveCfg-snaplog");
         if(!empty($snap_log)) {
             echo("<pre class='snaplog'>".htmlspecialchars($snap_log)."</pre>");
         } else {
