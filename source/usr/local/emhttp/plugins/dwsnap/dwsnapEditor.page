@@ -22,6 +22,7 @@ Markdown="false"
  * included in all copies or substantial portions of the Software.
  *
  */
+require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 ?>
 <link type="text/css" rel="stylesheet" href="<?=autov('/webGui/styles/jquery.filetree.css');?>">
 <link type="text/css" rel="stylesheet" href="<?=autov('/plugins/dwsnap/css/codemirror.min.css');?>">
@@ -96,7 +97,7 @@ data d5 /mnt/disk5/
 <script type="text/javascript">
 $(function(){
     $('#btnCancel').click(function() {
-        location = '/Settings/dwsnapOps';
+        location = '/Settings/dwsnapOps?snapr=<?=$dwsnap_active_cfg->cfgname;?>';
     });
 
     var editor = CodeMirror.fromTextArea($('#editdata')[0], {
@@ -135,7 +136,7 @@ $(function(){
             if(data.success)
                 swal({title: Title+'Saved', text: data.saved, timer: 2000, showConfirmButton: false, type:'success'},
                 function(){
-                   location = '/Settings/dwsnapOps'; 
+                   location = '/Settings/dwsnapOps?snapr=<?=$dwsnap_active_cfg->cfgname;?>'; 
                 });
             if(data.error)
                 swal({title:Title+'Error', text: data.error+'\n\nThere was an error saving the configuration file.', type:'error'});

@@ -400,7 +400,7 @@ function getSnapStatus() {
                     $('.snapnotrun').prop('disabled', false);
                 } else if (statusResponse[1] === "ARRAY:NO") {
                     if($('#snapstatusicon').is(":visible")) {
-                        location = '/Settings/dwsnapOps';
+                        location = '/Settings/dwsnapOps?snapr=<?=$dwsnap_active_cfg->cfgname;?>'; 
                     }
                     $('#snapstatusicon').hide();
                     $('.snaprun').prop('disabled', false);
