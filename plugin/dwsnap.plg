@@ -18,6 +18,9 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2024.06.28
+- new: several improvements for array dashboards and footers
+- fix: refactored parts of the frontend code to be more flexible
 ###2024.06.26
 - fix: improved safeguards against malformed configurations
 - fix: improved safeguards against XSS cross-site vulnerabilities
