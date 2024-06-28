@@ -42,11 +42,11 @@ function dwsnap_humanFileSize($sizeObj,$unit="") {
 }
 
 function dwsnap_get_conf_files() {
-    $files = glob("/boot/config/plugins/dwsnap/config/*.conf") ?? [];
-    if(!empty($files)) {
-        $files_bak = $files;
+    $snap_files = glob("/boot/config/plugins/dwsnap/config/*.conf") ?? [];
+    if(!empty($snap_files)) {
+        $snap_files_bak = $snap_files;
         try {
-            usort($files, function ($a, $b) {
+            usort($snap_files, function ($a, $b) {
                 if ($a != "/boot/config/plugins/dwsnap/config/primary.conf" && $b == "/boot/config/plugins/dwsnap/config/primary.conf") {
                     return 1;
                 } else {
@@ -54,12 +54,12 @@ function dwsnap_get_conf_files() {
                 }
             });
         } catch (Throwable $e) { // For PHP 7
-            $files = $files_bak;
+            $snap_files = $snap_files_bak;
         } catch (Exception $e) { // For PHP 5
-            $files = $files_bak;
+            $snap_files = $snap_files_bak;
         }
     }
-    return $files;
+    return $snap_files;
 }
 
 function dwsnap_time_ago($oldTime, $alertThreshold = 7) {
@@ -110,52 +110,52 @@ function dwsnap_time_ago($oldTime, $alertThreshold = 7) {
 }
 
 function dwsnap_hour_options($time){
-    $options = '';
+    $snap_options = '';
         for($i = 0; $i <= 23; $i++){
-            $options .= '<option value="'.$i.'"';
+            $snap_options .= '<option value="'.$i.'"';
             if(intval($time) === $i)
-                $options .= ' selected';
+                $snap_options .= ' selected';
 
-            $options .= '>'.$i.':00</option>';
+            $snap_options .= '>'.$i.':00</option>';
         }
-    return $options;
+    return $snap_options;
 }
 
 function dwsnap_dom_options($time){
-    $options = '';
+    $snap_options = '';
         for($i = 1; $i <= 31; $i++){
-            $options .= '<option value="'.$i.'"';
+            $snap_options .= '<option value="'.$i.'"';
             if(intval($time) === $i)
-                $options .= ' selected';
+                $snap_options .= ' selected';
 
-            $options .= '>'.$i.'</option>';
+            $snap_options .= '>'.$i.'</option>';
         }
-    return $options;
+    return $snap_options;
 }
 
 function dwsnap_threshold_options($time){
-    $options = '';
+    $snap_options = '';
         for($i = 2; $i <= 28; $i++){
-            $options .= '<option value="'.$i.'"';
+            $snap_options .= '<option value="'.$i.'"';
             if(intval($time) === $i)
-                $options .= ' selected';
+                $snap_options .= ' selected';
 
-            $options .= '>'.$i.'</option>';
+            $snap_options .= '>'.$i.'</option>';
         }
-    return $options;
+    return $snap_options;
 }
 
 function dwsnap_array_options($selected){
-    $files = dwsnap_get_conf_files();
-    $options = '';
-    foreach ($files as $file) {
-            $bfile = basename($file,".conf");
-            $options .= '<option value="'.$bfile.'"';
-            if($bfile === $selected)
-                $options .= ' selected';
+    $snap_files = dwsnap_get_conf_files();
+    $snap_options = '';
+    foreach ($snap_files as $snap_file) {
+            $snap_file_base = basename($snap_file,".conf");
+            $snap_options .= '<option value="'.$snap_file_base.'"';
+            if($snap_file_base === $selected)
+                $snap_options .= ' selected';
 
-            $options .= '>'.$bfile.'</option>';
+            $snap_options .= '>'.$snap_file_base.'</option>';
         }
-    return $options;
+    return $snap_options;
 }
 ?>

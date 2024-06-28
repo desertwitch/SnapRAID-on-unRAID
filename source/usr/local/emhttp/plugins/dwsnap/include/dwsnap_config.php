@@ -119,8 +119,8 @@ class SnapraidArrayConfiguration {
             $snap_footer_html = "";
             $snap_array_name = strtoupper($this->cfgname);
             
-            $config = $this->cfgname;
-            $snap_running = htmlspecialchars(trim(shell_exec( "if pgrep -f \"^(/usr/bin/ionice -c [0-9] )?/usr/bin/snapraid -c /boot/config/plugins/dwsnap/config/$config.conf\" >/dev/null 2>&1 || pgrep -f \"^(/bin/bash )?/usr/bin/snapraid-cron $config\" >/dev/null 2>&1 || pgrep -f \"^(/bin/bash )?/usr/bin/snapraid-runner $config\" >/dev/null 2>&1; then echo YES; else echo NO; fi" ) ?? "-"));
+            $snap_config_name = $this->cfgname;
+            $snap_running = htmlspecialchars(trim(shell_exec( "if pgrep -f \"^(/usr/bin/ionice -c [0-9] )?/usr/bin/snapraid -c /boot/config/plugins/dwsnap/config/$snap_config_name.conf\" >/dev/null 2>&1 || pgrep -f \"^(/bin/bash )?/usr/bin/snapraid-cron $snap_config_name\" >/dev/null 2>&1 || pgrep -f \"^(/bin/bash )?/usr/bin/snapraid-runner $snap_config_name\" >/dev/null 2>&1; then echo YES; else echo NO; fi" ) ?? "-"));
             
             if($snap_running === "YES") { return "<span class='$snap_tip_class' title='$snap_array_name: Array Operation in Progress'><i class='fa fa-cog fa-spin'></i></span>"; }
     
