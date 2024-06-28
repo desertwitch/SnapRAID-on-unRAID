@@ -1,5 +1,5 @@
 Menu="dwsnapOps:1"
-Title="SnapRAID Array Overview"
+Title="SnapRAID Arrays"
 Tag="magic"
 Markdown="false"
 ---
@@ -22,13 +22,13 @@ Markdown="false"
         </tr>
     </thead>
     <tbody id="snap_arrays">
-        <tr><td colspan='9' style="text-align:center"><i class="fa fa-spinner fa-spin"></i> <em>Please wait, retrieving information...</em></td></tr>
+        <tr><td colspan="9" style="text-align:center"><i class="fa fa-spinner fa-spin"></i> <em>Please wait, retrieving information...</em></td></tr>
     </tbody>
 </table>
 
 <script type="text/javascript">
 function getSnapArrays() {
-    $.get('/plugins/dwsnap/include/dwsnap_arrays.php',function(data) {
+    $.get('/plugins/dwsnap/include/dwsnap_arrays.php', {"config": "<?=$dwsnap_active_cfg->cfgname;?>"}, function(data) {
         if (data) { 
             $('#snap_arrays').html(data);
             $('.snaparraytip').tooltipster();

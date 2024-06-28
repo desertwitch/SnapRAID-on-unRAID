@@ -358,8 +358,8 @@ END;
             <td>$snap_disk_free</td>
             <td>$snap_disk_util</td>
             <td>
-                <input class="snaprun snaphelptip" type="button" id="fixramdisk" value="RECREATE DISK" title="Recreates and fixes any issues with the RAM disk used for all SnapRAID operational output - beware that all arrays logfiles are also deleted when recreating the RAM disk.">
-                <input class="snaprun snaphelptip" type="button" id="clearlogs2" value="CLEAR ALL LOGS" title="Deletes all arrays SnapRAID logfiles, also including the array's output screen of the current/previous array operation.">
+                <input class="snapanyrun snaphelptip" type="button" id="fixramdisk" value="RECREATE DISK" title="Recreates and fixes any issues with the RAM disk used for all SnapRAID operational output - beware that all arrays logfiles are also deleted when recreating the RAM disk.">
+                <input class="snapanyrun snaphelptip" type="button" id="clearlogs2" value="CLEAR ALL LOGS" title="Deletes all arrays SnapRAID logfiles, also including the array's output screen of the current/previous array operation.">
             </td>
             </tr>
 END;
@@ -450,6 +450,11 @@ function confirmCommandAndSubmit() {
         });
 }
 $(function(){
+
+    if("<?=$dwsnap_selected_array_missing;?>" === "yes") {
+        location = '/Settings/dwsnapOps?snapr=primary';
+    }
+
     $('#logcontrol').click(toggleSnapLogs);
 
     $('#snapstatus').click(function(){

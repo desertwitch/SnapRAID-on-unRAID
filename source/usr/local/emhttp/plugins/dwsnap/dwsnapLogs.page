@@ -23,7 +23,7 @@ Markdown="false"
  *
  */
 require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
-$snap_lastlog = shell_exec("ls -Art /var/lib/snapraid/logs/".$dwsnap_active_cfg->cfgname."/*.log 2>/dev/null | tail -n 1 2>/dev/null") ?? false;
+$snap_log_last = shell_exec("ls -Art /var/lib/snapraid/logs/".$dwsnap_active_cfg->cfgname."/*.log 2>/dev/null | tail -n 1 2>/dev/null") ?? false;
 ?>
 <link type="text/css" rel="stylesheet" href="<?=autov('/webGui/styles/jquery.filetree.css');?>">
 <link type="text/css" rel="stylesheet" href="<?=autov('/plugins/dwsnap/css/codemirror.min.css');?>">
@@ -79,8 +79,8 @@ $(function(){
         );
     });
 
-    <?if ($snap_lastlog):?>
-    $('#editfile2').val("<?=trim($snap_lastlog)?>");
+    <?if ($snap_log_last):?>
+    $('#editfile2').val("<?=trim($snap_log_last)?>");
     var EditfileDefault2 = $('#editfile2').val();
     $.getJSON('/plugins/dwsnap/include/dwsnap_edit.php', {editfile: EditfileDefault2}, function (data) {
             editor2.setValue(data);

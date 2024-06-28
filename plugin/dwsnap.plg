@@ -3,14 +3,14 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "dwsnap">
 <!ENTITY author    "desertwitch">
-<!ENTITY version   "2024.06.26">
+<!ENTITY version   "2024.06.28">
 <!ENTITY launch    "Settings/dwsnapOps">
 <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/SnapRAID-on-unRAID/main">
 <!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
 <!ENTITY pkgURL    "&gitURL;/packages">
 <!ENTITY plgPATH   "/boot/config/plugins/&name;">
-<!ENTITY plgNAME   "dwsnap-2024.06.26-x86_64-1">
-<!ENTITY plgMD5    "901c00692a070b29d9b66b344522409a">
+<!ENTITY plgNAME   "dwsnap-2024.06.28-x86_64-1">
+<!ENTITY plgMD5    "b2c3c901a1922b726af9946fda1e95a3">
 <!ENTITY emhttp    "/usr/local/emhttp/plugins/&name;">
 ]>
 
@@ -18,6 +18,9 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2024.06.28
+- new: several improvements for array dashboards and footers
+- fix: refactored and improved frontend scripts to be more flexible
 ###2024.06.26
 - fix: improved safeguards against malformed configurations
 - fix: improved safeguards against XSS cross-site vulnerabilities

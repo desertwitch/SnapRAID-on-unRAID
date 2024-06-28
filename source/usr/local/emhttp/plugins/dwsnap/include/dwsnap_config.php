@@ -119,10 +119,10 @@ class SnapraidArrayConfiguration {
             $snap_footer_html = "";
             $snap_array_name = strtoupper($this->cfgname);
             
-            $config = $this->cfgname;
-            $snap_running = htmlspecialchars(trim(shell_exec( "if pgrep -f \"^(/usr/bin/ionice -c [0-9] )?/usr/bin/snapraid -c /boot/config/plugins/dwsnap/config/$config.conf\" >/dev/null 2>&1 || pgrep -f \"^(/bin/bash )?/usr/bin/snapraid-cron $config\" >/dev/null 2>&1 || pgrep -f \"^(/bin/bash )?/usr/bin/snapraid-runner $config\" >/dev/null 2>&1; then echo YES; else echo NO; fi" ) ?? "-"));
+            $snap_config_name = $this->cfgname;
+            $snap_running = htmlspecialchars(trim(shell_exec( "if pgrep -f \"^(/usr/bin/ionice -c [0-9] )?/usr/bin/snapraid -c /boot/config/plugins/dwsnap/config/$snap_config_name.conf\" >/dev/null 2>&1 || pgrep -f \"^(/bin/bash )?/usr/bin/snapraid-cron $snap_config_name\" >/dev/null 2>&1 || pgrep -f \"^(/bin/bash )?/usr/bin/snapraid-runner $snap_config_name\" >/dev/null 2>&1; then echo YES; else echo NO; fi" ) ?? "-"));
             
-            if($snap_running === "YES") { return "<span class='$snap_tip_class' title='$snap_array_name: Array Operation in Progress'><i class='fa fa-cog fa-spin'></i></span>"; }
+            if($snap_running === "YES") { return "<a href='/Settings/dwsnapOps?snapr=".$this->cfgname."' style='cursor:pointer;color:inherit;text-decoration:none;'><span class='$snap_tip_class' title='$snap_array_name: Array Operation in Progress'><i class='fa fa-cog fa-spin'></i></span></a>"; }
     
             $snap_ramdisk_util = htmlspecialchars(trim(shell_exec("df --output=pcent /var/lib/snapraid 2>/dev/null | tr -dc '0-9' 2>/dev/null") ?? "-"));
             if(!empty($this->parity_disks) && !empty($this->data_disks)) {
@@ -264,6 +264,7 @@ class SnapraidArrayConfiguration {
                     $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: No parity and/or data disks are configured'><i class='fa fa-times red-text'></i></span>";
                 }
             }
+            $snap_footer_html = "<a href='/Settings/dwsnapOps?snapr=".$this->cfgname."' style='cursor:pointer;color:inherit;text-decoration:none;'>" . $snap_footer_html . "</a>";
             return $snap_footer_html;
         } catch (Throwable $e) { // For PHP 7
             return "";
@@ -273,8 +274,18 @@ class SnapraidArrayConfiguration {
     }
 }
 
+$dwsnap_selected_array = "primary";
+$dwsnap_selected_array_missing = "no";
+
+if(!empty($_GET['snapr']) && $_GET['snapr'] !== "primary") {
+    if(file_exists("/boot/config/plugins/dwsnap/config/".$_GET['snapr'].".cfg") && file_exists("/boot/config/plugins/dwsnap/config/".$_GET['snapr'].".conf")) {
+        $dwsnap_selected_array = $_GET['snapr'];
+    } else {
+        $dwsnap_selected_array_missing = "yes";
+    }
+}
+
 $dwsnap_cfg = parse_ini_file("/boot/config/plugins/dwsnap/dwsnap.cfg");
-$dwsnap_selected_array = trim(isset($dwsnap_cfg['SELARRAY']) ? htmlspecialchars($dwsnap_cfg['SELARRAY']) : 'primary');
 $dwsnap_active_cfg = new SnapraidArrayConfiguration($dwsnap_selected_array);
 
 $dwsnap_footer = trim(isset($dwsnap_cfg['FOOTER']) ? htmlspecialchars($dwsnap_cfg['FOOTER']) : 'disable');

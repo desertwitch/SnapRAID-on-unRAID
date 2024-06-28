@@ -18,10 +18,10 @@
  *
  */
 if(!empty($_GET["config"])) {
-    $config = $_GET["config"];
-    $snap_running = htmlspecialchars(trim(shell_exec( "if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-runner >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1; then echo YES; else echo NO; fi" ) ?? "-"));
-    $snap_array_running = htmlspecialchars(trim(shell_exec( "if pgrep -f \"^(/usr/bin/ionice -c [0-9] )?/usr/bin/snapraid -c /boot/config/plugins/dwsnap/config/$config.conf\" >/dev/null 2>&1 || pgrep -f \"^(/bin/bash )?/usr/bin/snapraid-cron $config\" >/dev/null 2>&1 || pgrep -f \"^(/bin/bash )?/usr/bin/snapraid-runner $config\" >/dev/null 2>&1; then echo YES; else echo NO; fi" ) ?? "-"));
-    echo("ANY:".$snap_running.",ARRAY:".$snap_array_running);
+    $snap_status_active_cfg = $_GET["config"];
+    $snap_status_overall_running = htmlspecialchars(trim(shell_exec( "if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-runner >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1; then echo YES; else echo NO; fi" ) ?? "-"));
+    $snap_status_array_running = htmlspecialchars(trim(shell_exec( "if pgrep -f \"^(/usr/bin/ionice -c [0-9] )?/usr/bin/snapraid -c /boot/config/plugins/dwsnap/config/$snap_status_active_cfg.conf\" >/dev/null 2>&1 || pgrep -f \"^(/bin/bash )?/usr/bin/snapraid-cron $snap_status_active_cfg\" >/dev/null 2>&1 || pgrep -f \"^(/bin/bash )?/usr/bin/snapraid-runner $snap_status_active_cfg\" >/dev/null 2>&1; then echo YES; else echo NO; fi" ) ?? "-"));
+    echo("ANY:".$snap_status_overall_running.",ARRAY:".$snap_status_array_running);
 } else {
     echo("");
 }
