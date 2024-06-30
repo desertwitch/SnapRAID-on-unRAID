@@ -75,7 +75,7 @@ foreach ($snap_array_files as $snaparrayFile) {
 
     $snap_array_field_status = $snap_array_cfg_obj->getFooterHTML("snaparraytip");
     
-    $snap_arrays .= "<tr><td>$snap_array_field_selected</td><td>$snap_array_field_cfgname</td><td>$snap_array_field_paritydisks</td><td>$snap_array_field_datadisks</td><td>$snap_array_field_contentfiles</td><td>$snap_array_field_cron</td><td><strong>$snap_array_field_lastsync</strong></td><td><strong>$snap_array_field_lastscrub</strong></td><td>$snap_array_field_status</td></tr>";
+    $snap_arrays .= "<tr><td>$snap_array_field_selected</td><td>$snap_array_field_cfgname</td><td>$snap_array_field_paritydisks</td><td>$snap_array_field_datadisks</td><td>$snap_array_field_contentfiles</td><td>$snap_array_field_cron</td><td>$snap_array_field_lastsync</td><td>$snap_array_field_lastscrub</td><td>$snap_array_field_status</td></tr>";
     
     unset($snap_array_cfg_obj);
 }
