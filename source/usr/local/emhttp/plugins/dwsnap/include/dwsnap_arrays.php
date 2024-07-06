@@ -42,6 +42,7 @@ foreach ($snap_array_files as $snaparrayFile) {
     if($snap_array_cfg_obj->lastsync !== "-") {
         $snap_array_field_lastsync = dwsnap_time_ago($snap_array_cfg_obj->lastsync, $snap_array_cfg_obj->sync_expires);
         if($snap_array_cfg_obj->lastnodiff !== "-" && !empty($snap_array_field_lastsync)) {
+            $snap_array_field_lastsync_bak = $snap_array_field_lastsync;
             try {
                 $st_now = time();
                 $st_lastsync = strtotime($snap_array_cfg_obj->lastsync);
@@ -57,9 +58,9 @@ foreach ($snap_array_files as $snaparrayFile) {
                     }
                 }
             } catch (Throwable $e) { // For PHP 7
-                $snap_array_field_lastsync = strip_tags(dwsnap_time_ago($snap_array_cfg_obj->lastsync, $snap_array_cfg_obj->sync_expires));
+                $snap_array_field_lastsync = $snap_array_field_lastsync_bak;
             } catch (Exception $e) { // For PHP 5
-                $snap_array_field_lastsync = strip_tags(dwsnap_time_ago($snap_array_cfg_obj->lastsync, $snap_array_cfg_obj->sync_expires));
+                $snap_array_field_lastsync = $snap_array_field_lastsync_bak;
             }
         }
         $snap_array_field_lastsync = "<span class='snaparraytip' title='".$snap_array_cfg_obj->lastsync."'>".$snap_array_field_lastsync."</span>";

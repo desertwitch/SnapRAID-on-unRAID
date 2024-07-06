@@ -38,6 +38,7 @@ try {
         if($snap_dash_cfg_obj->lastsync !== "-") {
             $snap_dash_field_lastsync = dwsnap_time_ago($snap_dash_cfg_obj->lastsync, $snap_dash_cfg_obj->sync_expires);
             if($snap_dash_cfg_obj->lastnodiff !== "-" && !empty($snap_dash_field_lastsync)) {
+                $snap_dash_field_lastsync_bak = $snap_dash_field_lastsync;
                 try {
                     $sdt_now = time();
                     $sdt_lastsync = strtotime($snap_dash_cfg_obj->lastsync);
@@ -53,9 +54,9 @@ try {
                         }
                     }
                 } catch (Throwable $e) { // For PHP 7
-                    $snap_dash_field_lastsync = strip_tags(dwsnap_time_ago($snap_dash_cfg_obj->lastsync, $snap_dash_cfg_obj->sync_expires));
+                    $snap_dash_field_lastsync = $snap_dash_field_lastsync_bak;
                 } catch (Exception $e) { // For PHP 5
-                    $snap_dash_field_lastsync = strip_tags(dwsnap_time_ago($snap_dash_cfg_obj->lastsync, $snap_dash_cfg_obj->sync_expires));
+                    $snap_dash_field_lastsync = $snap_dash_field_lastsync_bak;
                 }
             }
             $snap_dash_field_lastsync = "<span class='snapdashtip' title='".$snap_dash_cfg_obj->lastsync."'>".$snap_dash_field_lastsync."</span>";
