@@ -38,7 +38,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 <div><strong>INFORMATION:</strong></div>
 <div>Always use the disk mountpoints e.g. <strong>/mnt/disk<em><sup>[number]</sup></em><span style="color:red;">/</span></strong> when refering to disks in the array configuration, never user share or physical disk locations otherwhere on the system.</div>
 <div>When planning your SnapRAID array, please do consider that it will perform best with many large files which rarely change (e.g. a media library) as opposed to many often changing small files.</div>
-<div>Parity has some overhead, so best not fill data disks to the very last byte - when using on top of Unraid parity, reasonable '<em>Minimum free space</em>' values are usually automatically set on user shares.</div>
+<div>Parity has overhead, so leave some space on your data disks (<em>read details below</em>) - when using on top of Unraid parity, '<em>Minimum free space</em>' default values are usually sufficiently set on user shares.</div>
 <br>
 <div>You cannot use your Unraid parity disk as SnapRAID parity disk, this is because the parity calculations are stored in an entirely different and non-interchangeable manner.</div>
 <div>That means in order to use SnapRAID you will need to sacrifice one regular data disk with at least the size of the largest to be protected data disk (same rules as on Unraid).</div>
