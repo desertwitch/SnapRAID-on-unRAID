@@ -47,13 +47,13 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 <details>
 <summary><strong>Parity Overhead Considerations:</strong></summary><br>
 <div style="width:600px;text-align:justify;"><em>
-For each file (even of a few bytes) a whole block of parity (default: 256 KiB)
+For each file (even of a few bytes) a whole block of parity (<a href="https://www.snapraid.it/manual#7.8" target="_blank">default: 256 KiB</a>)
 is allocated, and with many files this may result in a lot of wasted parity. The
 wasted parity doesn't sum between data disks, meaning that wasted space resulting
 from a high number of files on one data disk, limits only the amount of useable
 space on that data disk and not on others. In this case useable space means not all
-free disk space, but rather the disk space you can still use to still be able to
-run a 'sync'.<br><br>As an approximation, you can assume that half of the block
+free disk space, but rather the disk space you can use to still be able to
+run a 'sync' operation.<br><br>As an approximation, you can assume that half of the block
 size is wasted for each file. For example, with 100,000 files and a 256 KiB block
 size, there will be 13 GB less space available on the respective data disk due to
 wasted parity. You can see the amount of wasted space on each data disk using the
@@ -69,7 +69,7 @@ array.
 </details><br>
 <details>
 <summary><strong>Example Array Configuration on Unraid:</strong></summary>
-<br><em><div>While SnapRAID supports a number of <a href="https://www.snapraid.it/faq#fs">various filesystems</a>, it is recommended to use it on XFS-formatted disks - which most of my testing were done on.</div>
+<br><em><div>While SnapRAID supports a number of <a href="https://www.snapraid.it/faq#fs" target="_blank">various filesystems</a>, it is recommended to use it on XFS-formatted disks - which most of my testing were done on.</div>
 <div>Using it on BTRFS or ZFS disks (particularly when Copy-on-Write is enabled) should be considered more experimental and may not deliver only advantages.</div>
 </em>
 <pre style="font-size:x-small;">
