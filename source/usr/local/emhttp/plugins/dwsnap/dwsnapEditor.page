@@ -38,12 +38,35 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 <div><strong>INFORMATION:</strong></div>
 <div>Always use the disk mountpoints e.g. <strong>/mnt/disk<em><sup>[number]</sup></em><span style="color:red;">/</span></strong> when refering to disks in the array configuration, never user share or physical disk locations otherwhere on the system.</div>
 <div>When planning your SnapRAID array, please do consider that it will perform best with many large files which rarely change (e.g. a media library) as opposed to many often changing small files.</div>
-<div>Parity has some overhead<span id="snapoverhead" style="cursor:pointer;"><sup><strong><em>[?]</em></strong></sup></span>, so best not fill data disks to the very last byte - when using on top of Unraid parity, reasonable '<em>Minimum free space</em>' values are usually automatically set on user shares.</div>
+<div>Parity has some overhead, so best not fill data disks to the very last byte - when using on top of Unraid parity, reasonable '<em>Minimum free space</em>' values are usually automatically set on user shares.</div>
 <br>
 <div>You cannot use your Unraid parity disk as SnapRAID parity disk, this is because the parity calculations are stored in an entirely different and non-interchangeable manner.</div>
 <div>That means in order to use SnapRAID you will need to sacrifice one regular data disk with at least the size of the largest to be protected data disk (same rules as on Unraid).</div>
 <div>When using on top of Unraid parity, you will access all your protected data as you usually would through Unraid's user shares, the data of all protected disks will remain pooled as before.</div>
 <br>
+<details>
+<summary><strong>Parity Overhead Considerations:</strong></summary><br>
+<div style="width:600px;text-align:justify;"><em>
+For each file (even of a few bytes) a whole block of parity (default: 256 KiB)
+is allocated, and with many files this may result in a lot of wasted parity. The
+wasted parity doesn't sum between data disks, meaning that wasted space resulting
+from a high number of files on one data disk, limits only the amount of useable
+space on that data disk and not on others. In this case useable space means not all
+free disk space, but rather the disk space you can still use to still be able to
+run a 'sync'.<br><br>As an approximation, you can assume that half of the block
+size is wasted for each file. For example, with 100,000 files and a 256 KiB block
+size, there will be 13 GB less space available on the respective data disk due to
+wasted parity. You can see the amount of wasted space on each data disk using the
+'status' operation. This is the amount of space that you must leave free on your data
+disks. If this value is negative, it means that you are nearing the maximum parity
+capacity, and the value now shows the space that you can still waste.<br><br>To mitigate
+this problem, it is recommended to carefully take this into consideration and limit
+the amount of data that can be written onto any data drive, leaving some free
+space for such parity waste. Another more convenient solution to the limitation is
+simply choosing a larger sized parity drive than any existing data drive size in your
+array.
+</em></div>
+</details><br>
 <details>
 <summary><strong>Example Array Configuration on Unraid:</strong></summary>
 <br><em><div>While SnapRAID supports a number of <a href="https://www.snapraid.it/faq#fs">various filesystems</a>, it is recommended to use it on XFS-formatted disks - which most of my testing were done on.</div>
@@ -96,16 +119,6 @@ data d5 /mnt/disk5/
 
 <script type="text/javascript">
 $(function(){
-
-    $('#snapoverhead').click(function() {
-        swal({
-            title: "Limitation of Parity Overhead",
-            text: "For each file (even of a few bytes) a whole block of parity (default: 256 KiB) is allocated, and with many files this may result in a lot of wasted parity. The wasted parity doesn't sum between data disks, meaning that wasted space resulting from a high number of files on one data disk, limits only the amount of useable space on that data disk and not on others. In this case useable space means not all free disk space, but rather the disk space you can still use to still be able to run a 'sync'.<br><br>As an approximation, you can assume that half of the block size is wasted for each file. For example, with 100,000 files and a 256 KiB block size, there will be 13 GB less space available on the respective data disk due to wasted parity. You can see the amount of wasted space on each data disk using the 'status' operation. This is the amount of space that you must leave free on your data disks. If this value is negative, it means that you are nearing the maximum parity capacity, and the value now shows the space that you can still waste.<br><br>To mitigate this problem, it is recommended to carefully take this into consideration and limit the amount of data that can be written onto any data drive, leaving some free space for such parity waste. Another more convenient solution to the limitation is simply choosing a larger sized parity drive than any existing data drive size in your array.",
-            type: "warning",
-            confirmButtonText: "OK",
-            html: true
-            });
-    });
 
     $('#btnCancel').click(function() {
         location = '/Settings/dwsnapOps?snapr=<?=$dwsnap_active_cfg->cfgname;?>';
