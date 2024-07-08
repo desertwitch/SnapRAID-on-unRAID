@@ -3,14 +3,14 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "dwsnap">
 <!ENTITY author    "desertwitch">
-<!ENTITY version   "2024.07.08a">
+<!ENTITY version   "2024.07.08b">
 <!ENTITY launch    "Settings/dwsnapOps">
 <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/SnapRAID-on-unRAID/main">
 <!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
 <!ENTITY pkgURL    "&gitURL;/packages">
 <!ENTITY plgPATH   "/boot/config/plugins/&name;">
-<!ENTITY plgNAME   "dwsnap-2024.07.08-x86_64-2">
-<!ENTITY plgMD5    "e7c443791f9992b99dfc0fe1e8c256a0">
+<!ENTITY plgNAME   "dwsnap-2024.07.08-x86_64-3">
+<!ENTITY plgMD5    "5534b7ecf12e66c9953dae222e90763d">
 <!ENTITY emhttp    "/usr/local/emhttp/plugins/&name;">
 ]>
 
@@ -18,7 +18,7 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
-###2024.07.08a
+###2024.07.08b
 - new: restructured compilation process and streamlined package structure
 - new: added further detailed information about parity overhead considerations
 - fix: minor changes to error handling so it is more consistent between functions
