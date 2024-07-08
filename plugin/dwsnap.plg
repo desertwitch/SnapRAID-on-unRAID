@@ -18,6 +18,10 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2024.07.08
+- new: restructured compilation process and streamlined package structure
+- new: added further detailed information about parity overhead considerations
+- fix: minor changes to error handling so it is more consistent between functions
 ###2024.06.28a
 - new: several improvements for array dashboards and footers
 - fix: refactored and improved frontend scripts to be more flexible
@@ -117,9 +121,9 @@ exit 0
 <!--
 install or upgrade dependency files
 -->
-<FILE Name="&plgPATH;/snapraid-12.3-x86_64-3.txz" Min="6.8.3" Run="upgradepkg --install-new">
-<URL>&pkgURL;/snapraid-12.3-x86_64-3.txz</URL>
-<MD5>417e9f7d9a50d6cc7060ac004329b744</MD5>
+<FILE Name="&plgPATH;/snapraid-12.3-x86_64-4.txz" Min="6.8.3" Run="upgradepkg --install-new">
+<URL>&pkgURL;/snapraid-12.3-x86_64-4.txz</URL>
+<MD5>8678eb3006984aac84310b7707335eaa</MD5>
 </FILE>
 
 <!--
