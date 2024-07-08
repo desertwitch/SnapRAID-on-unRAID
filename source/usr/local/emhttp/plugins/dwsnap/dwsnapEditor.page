@@ -119,7 +119,6 @@ data d5 /mnt/disk5/
 
 <script type="text/javascript">
 $(function(){
-
     $('#btnCancel').click(function() {
         location = '/Settings/dwsnapOps?snapr=<?=$dwsnap_active_cfg->cfgname;?>';
     });
