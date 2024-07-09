@@ -61,9 +61,9 @@ wasted parity. You can see the amount of wasted space on each data disk using th
 disks. If this value is negative, it means that you are nearing the maximum parity
 capacity, and the value now shows the space that you can still waste.<br><br>To mitigate
 this problem, it is recommended to carefully take this into consideration and limit
-the amount of data that can be written onto any data drive, leaving some free
+the amount of data that can be written onto any data disk, leaving some free
 space for such parity waste. Another more convenient solution to the limitation is
-simply choosing a larger sized parity drive than any existing data drive size in your
+simply choosing a larger sized parity disk than any existing data disk size in your
 array.
 </em></div>
 </details><br>
@@ -97,7 +97,7 @@ data d5 /mnt/disk5/
 <form id="editform" method="POST">
 
 <img id="editfolder" style="cursor:pointer;margin-left: 10px;" src="/webGui/images/explore.png" >
-<span style="float:right;"><strong>Warning:</strong> You <u>must</u> use trailing slashes when referring to folder content, as with data disk declarations (e.g. <strong>data d1 /mnt/disk1<span style="color:red;">/</span></strong>).</span>
+<span style="float:right;"><strong>Warning:</strong> You <u>must</u> use trailing slashes when referring to folder content, as with data disk directives (e.g. <strong>data d1 /mnt/disk1<span style="color:red;">/</span></strong>).</span>
 <input id="editfile" type="text" name="editfile" value="" readonly="" data-picktop="/boot/config/plugins/dwsnap/config" data-pickcloseonfile="true" data-pickfilter="conf,log" data-pickroot="/boot/config/plugins/dwsnap/config" data-pickfolders="false" required="required" >
 
 <textarea id="editdata" name="editdata" placeholder="Select Configuration File"></textarea>
