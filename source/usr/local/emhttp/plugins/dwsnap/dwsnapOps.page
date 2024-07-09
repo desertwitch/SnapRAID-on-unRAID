@@ -247,7 +247,7 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
                     $snap_paritymissing_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='There are no parity disks configured.'><i class='fa fa-exclamation-triangle'></i> <strong>No Parity Disks</strong></span>"; 
                 }
             }
-            
+
             if(empty($dwsnap_active_cfg->data_disks) || empty($dwsnap_active_cfg->data_disks_raw[2])) {
                 if((!empty($dwsnap_active_cfg->data_disks_raw[2]) && empty($dwsnap_active_cfg->data_disks)) || (empty($dwsnap_active_cfg->data_disks_raw[2]) && !empty($dwsnap_active_cfg->data_disks))) {
                     $snap_datamissing_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='There are no data disks parseable, perhaps a mount is not inside /mnt or missing trailing slashes? Please review your array configuration file for any such problems.'><i class='fa fa-exclamation-triangle'></i> <strong>No Data Disks</strong></span>"; 
@@ -257,8 +257,14 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
             }
         }
 
-        if(!empty($dwsnap_active_cfg->parity_disks) && !empty($dwsnap_active_cfg->data_disks) && !empty($dwsnap_active_cfg->parity_disks_raw[2]) && !empty($dwsnap_active_cfg->data_disks_raw[2])) {
-            if(count($dwsnap_active_cfg->parity_disks_raw[2]) !== count($dwsnap_active_cfg->parity_disks) || count($dwsnap_active_cfg->data_disks_raw[2]) !== count($dwsnap_active_cfg->data_disks)) {
+        if(!empty($dwsnap_active_cfg->parity_disks) && !empty($dwsnap_active_cfg->parity_disks_raw[2])) {
+            if(count($dwsnap_active_cfg->parity_disks_raw[2]) !== count($dwsnap_active_cfg->parity_disks)) {
+                $snap_malformedconf_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='At least one configuration directive is not parseable, perhaps a mountpoint is not inside /mnt or missing trailing slashes? Please review your array configuration file.'><i class='fa fa-exclamation-triangle'></i> <strong>Malformed Configuration</strong></span>"; 
+            }    
+        }
+
+        if(!empty($dwsnap_active_cfg->data_disks) && !empty($dwsnap_active_cfg->data_disks_raw[2])) {
+            if(count($dwsnap_active_cfg->data_disks_raw[2]) !== count($dwsnap_active_cfg->data_disks)) {
                 $snap_malformedconf_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='At least one configuration directive is not parseable, perhaps a mountpoint is not inside /mnt or missing trailing slashes? Please review your array configuration file.'><i class='fa fa-exclamation-triangle'></i> <strong>Malformed Configuration</strong></span>"; 
             }    
         }
