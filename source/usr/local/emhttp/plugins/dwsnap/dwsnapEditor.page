@@ -97,8 +97,8 @@ data d5 /mnt/disk5/
 <form id="editform" method="POST">
 
 <img id="editfolder" style="cursor:pointer;margin-left: 10px;" src="/webGui/images/explore.png" >
+<span style="float:right;"><strong>Warning:</strong> You <u>must</u> use trailing slashes when refering to folder content, as with data disk configurations (e.g. <strong>/mnt/disks/hdd1<span style="color:red;">/</span></strong>).</span>
 <input id="editfile" type="text" name="editfile" value="" readonly="" data-picktop="/boot/config/plugins/dwsnap/config" data-pickcloseonfile="true" data-pickfilter="conf,log" data-pickroot="/boot/config/plugins/dwsnap/config" data-pickfolders="false" required="required" >
-
 <textarea id="editdata" name="editdata" placeholder="Select Configuration File"></textarea>
 <input type="hidden" name="commit" value="1" />
 
