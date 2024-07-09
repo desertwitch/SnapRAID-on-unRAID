@@ -258,10 +258,24 @@ class SnapraidArrayConfiguration {
                     }
                 }
             } else {
-                if($snap_ramdisk_util > 90) {
-                    $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: No parity and/or data disks are configured / RAM Disk > 90%'><i class='fa fa-times red-text'></i></span>";
+                if(!empty($this->parity_disks_raw) && empty($this->parity_disks)) {
+                    if($snap_ramdisk_util > 90) {
+                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: No parity disks parseable - malformed declaration or not inside /mnt? / RAM Disk > 90%'><i class='fa fa-times red-text'></i></span>";
+                    } else {
+                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: No parity disks parseable - malformed declaration or not inside /mnt?'><i class='fa fa-times red-text'></i></span>";
+                    }
+                } elseif(!empty($this->data_disks_raw) && empty($this->data_disks)) {
+                    if($snap_ramdisk_util > 90) {
+                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: No data disks parseable - missing trailing slashes or not inside /mnt? / RAM Disk > 90%'><i class='fa fa-times red-text'></i></span>";
+                    } else {
+                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: No data disks parseable - missing trailing slashes or not inside /mnt?'><i class='fa fa-times red-text'></i></span>";
+                    }            
                 } else {
-                    $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: No parity and/or data disks are configured'><i class='fa fa-times red-text'></i></span>";
+                    if($snap_ramdisk_util > 90) {
+                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: No parity and/or data disks are configured - check configuration? / RAM Disk > 90%'><i class='fa fa-times red-text'></i></span>";
+                    } else {
+                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: No parity and/or data disks are configured - check configuration?'><i class='fa fa-times red-text'></i></span>";
+                    }
                 }
             }
             $snap_footer_html = "<a href='/Settings/dwsnapOps?snapr=".$this->cfgname."' style='cursor:pointer;color:inherit;text-decoration:none;'>" . $snap_footer_html . "</a>";
