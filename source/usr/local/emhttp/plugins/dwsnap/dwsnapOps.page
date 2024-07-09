@@ -222,10 +222,11 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
         $snap_unmounted_disks_html = "";
         $snap_missingram_html = "";
         $snap_highram_html = "";
-        $snap_malformedconf_html = "";
-        $snap_paritymissing_html = "";
-        $snap_datamissing_html = "";
-
+        $snap_data_missing_html = "";
+        $snap_data_malformed_html = "";
+        $snap_parity_missing_html = "";
+        $snap_parity_malformed_html = "";
+       
         $snap_disk_fs = htmlspecialchars(trim(shell_exec("cat /etc/mtab 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
         if($snap_disk_fs == "-") {
             $snap_missingram_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='SnapRAID was not able to create a RAM disk for its operational output. It is now running on the rootfs (/) with unlimited RAM, which is the fallback method and not recommended for safe operation. Please recreate the RAM disk manually on this page to avoid future system instabilities due to excessive RAM usage. The disk utilization currently shown for the RAM disk is that of the rootfs (/).'><i class='fa fa-exclamation-triangle'></i> <strong>Missing RAM Disk</strong></span>";
@@ -237,35 +238,35 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
         }
 
         if(empty($dwsnap_active_cfg->parity_disks) && empty($dwsnap_active_cfg->data_disks) && empty($dwsnap_active_cfg->parity_disks_raw[2]) && empty($dwsnap_active_cfg->data_disks_raw[2])) {
-            $snap_paritymissing_html = "";
-            $snap_datamissing_html = "";
+            $snap_parity_missing_html = "";
+            $snap_data_missing_html = "";
         } else {
             if(empty($dwsnap_active_cfg->parity_disks) || empty($dwsnap_active_cfg->parity_disks_raw[2])) {
                 if((!empty($dwsnap_active_cfg->parity_disks_raw[2]) && empty($dwsnap_active_cfg->parity_disks)) || (empty($dwsnap_active_cfg->parity_disks_raw[2]) && !empty($dwsnap_active_cfg->parity_disks))) {
-                    $snap_paritymissing_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='No parity disks parseable, perhaps a mountpoint is not inside /mnt or the declaration malformed? Please review your array configuration file for any problems.'><i class='fa fa-exclamation-triangle'></i> <strong>No Parity Disks</strong></span>"; 
+                    $snap_parity_missing_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='No parity disks parseable, perhaps a mountpoint is not inside /mnt or the declaration malformed? Please review your array configuration file for any problems.'><i class='fa fa-exclamation-triangle'></i> <strong>No Parity Disks</strong></span>"; 
                 } else {
-                    $snap_paritymissing_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='There are no parity disks configured.'><i class='fa fa-exclamation-triangle'></i> <strong>No Parity Disks</strong></span>"; 
+                    $snap_parity_missing_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='There are no parity disks configured.'><i class='fa fa-exclamation-triangle'></i> <strong>No Parity Disks</strong></span>"; 
                 }
             }
 
             if(empty($dwsnap_active_cfg->data_disks) || empty($dwsnap_active_cfg->data_disks_raw[2])) {
                 if((!empty($dwsnap_active_cfg->data_disks_raw[2]) && empty($dwsnap_active_cfg->data_disks)) || (empty($dwsnap_active_cfg->data_disks_raw[2]) && !empty($dwsnap_active_cfg->data_disks))) {
-                    $snap_datamissing_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='There are no data disks parseable, perhaps a mountpoint is not inside /mnt or missing trailing slashes? Please review your array configuration file for any problems.'><i class='fa fa-exclamation-triangle'></i> <strong>No Data Disks</strong></span>"; 
+                    $snap_data_missing_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='There are no data disks parseable, perhaps a mountpoint is not inside /mnt or missing trailing slashes? Please review your array configuration file for any problems.'><i class='fa fa-exclamation-triangle'></i> <strong>No Data Disks</strong></span>"; 
                 } else {
-                    $snap_datamissing_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='There are no data disks configured.'><i class='fa fa-exclamation-triangle'></i> <strong>No Data Disks</strong></span>"; 
+                    $snap_data_missing_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='There are no data disks configured.'><i class='fa fa-exclamation-triangle'></i> <strong>No Data Disks</strong></span>"; 
                 }
             }
         }
 
         if(!empty($dwsnap_active_cfg->parity_disks) && !empty($dwsnap_active_cfg->parity_disks_raw[2])) {
             if(count($dwsnap_active_cfg->parity_disks_raw[2]) !== count($dwsnap_active_cfg->parity_disks)) {
-                $snap_malformedconf_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='At least one configuration directive is not parseable, perhaps a mountpoint is not inside /mnt or missing trailing slashes? Please review your array configuration file.'><i class='fa fa-exclamation-triangle'></i> <strong>Malformed Configuration</strong></span>"; 
+                $snap_parity_malformed_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='At least one data disk directive is not parseable, perhaps a mountpoint is not inside /mnt or missing trailing slashes? Please review your array configuration file.'><i class='fa fa-exclamation-triangle'></i> <strong>Malformed Configuration</strong></span>"; 
             }    
         }
         
         if(!empty($dwsnap_active_cfg->data_disks) && !empty($dwsnap_active_cfg->data_disks_raw[2])) {
             if(count($dwsnap_active_cfg->data_disks_raw[2]) !== count($dwsnap_active_cfg->data_disks)) {
-                $snap_malformedconf_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='At least one configuration directive is not parseable, perhaps a mountpoint is not inside /mnt or missing trailing slashes? Please review your array configuration file.'><i class='fa fa-exclamation-triangle'></i> <strong>Malformed Configuration</strong></span>"; 
+                $snap_data_malformed_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='At least one parity disk directive is not parseable, perhaps a mountpoint is not inside /mnt or missing trailing slashes? Please review your array configuration file.'><i class='fa fa-exclamation-triangle'></i> <strong>Malformed Configuration</strong></span>"; 
             }    
         }
 
@@ -292,7 +293,7 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
     <table class="tablesorter snapdisks">
         <thead>
             <tr>
-                <th colspan="10"><strong>(<?=$dwsnap_active_cfg->cfgname;?>) ARRAY WITH INDIVIDUAL DISKS</strong> <span style="text-transform: none;float:right;"><?=$snap_missingram_html?><?=$snap_highram_html?><?=$snap_malformedconf_html?><?=$snap_paritymissing_html?><?=$snap_datamissing_html?><?=$snap_unmounted_disks_html?><?=$snap_syncneeded_html?><span style="margin-left:10px;"><strong>Last Sync:</strong> <?=$snap_lastsync_html?></span><span style="margin-left:10px;"><strong>Last Scrub:</strong> <?=$snap_lastscrub_html?></span></span></th>
+                <th colspan="10"><strong>(<?=$dwsnap_active_cfg->cfgname;?>) ARRAY WITH INDIVIDUAL DISKS</strong> <span style="text-transform: none;float:right;"><?=$snap_missingram_html?><?=$snap_highram_html?><?=$snap_parity_missing_html?><?=$snap_data_missing_html?><?=$snap_parity_malformed_html?><?=$snap_data_malformed_html?><?=$snap_unmounted_disks_html?><?=$snap_syncneeded_html?><span style="margin-left:10px;"><strong>Last Sync:</strong> <?=$snap_lastsync_html?></span><span style="margin-left:10px;"><strong>Last Scrub:</strong> <?=$snap_lastscrub_html?></span></span></th>
             </tr>
             <tr>
                  <th><strong>Disk Type</strong></th><th><strong>Disk Name</strong></th><th><strong>Mountpoint</strong></th><th><strong>Mounted</strong></th><th><strong>FileSystem</strong></th><th><strong>Total Space</strong></th><th><strong>Used Space</strong></th><th><strong>Free Space</strong></th><th><strong>Utilization</strong></th><th><strong>Disk-Specific Operations</strong><br><span style="font-size:x-small;"><em>Options Selected From Above Apply</em></span></th>
