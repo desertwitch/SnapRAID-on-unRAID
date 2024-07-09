@@ -243,7 +243,7 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
         } else {
             if(empty($dwsnap_active_cfg->parity_disks) || empty($dwsnap_active_cfg->parity_disks_raw[2])) {
                 if((!empty($dwsnap_active_cfg->parity_disks_raw[2]) && empty($dwsnap_active_cfg->parity_disks)) || (empty($dwsnap_active_cfg->parity_disks_raw[2]) && !empty($dwsnap_active_cfg->parity_disks))) {
-                    $snap_parity_missing_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='No parity disks parseable, perhaps a mountpoint is not inside /mnt or the declaration malformed? Please review your array configuration file for any problems.'><i class='fa fa-exclamation-triangle'></i> <strong>No Parity Disks</strong></span>"; 
+                    $snap_parity_missing_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='No parity disks parseable, perhaps a mountpoint is not inside /mnt or the directive malformed? Please review your array configuration file for any problems.'><i class='fa fa-exclamation-triangle'></i> <strong>No Parity Disks</strong></span>"; 
                 } else {
                     $snap_parity_missing_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='There are no parity disks configured.'><i class='fa fa-exclamation-triangle'></i> <strong>No Parity Disks</strong></span>"; 
                 }

@@ -268,9 +268,9 @@ class SnapraidArrayConfiguration {
             } else {
                 if((!empty($this->parity_disks_raw[2]) && empty($this->parity_disks)) || (empty($this->parity_disks_raw[2]) && !empty($this->parity_disks))) {
                     if($snap_ramdisk_util > 90) {
-                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: No parity disks parseable - not inside /mnt or malformed declaration? / RAM Disk > 90%'><i class='fa fa-times red-text'></i></span>";
+                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: No parity disks parseable - not inside /mnt or malformed directive? / RAM Disk > 90%'><i class='fa fa-times red-text'></i></span>";
                     } else {
-                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: No parity disks parseable - not inside /mnt or malformed declaration?'><i class='fa fa-times red-text'></i></span>";
+                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: No parity disks parseable - not inside /mnt or malformed directive?'><i class='fa fa-times red-text'></i></span>";
                     }
                 } elseif((!empty($this->data_disks_raw[2]) && empty($this->data_disks)) || (empty($this->data_disks_raw[2]) && !empty($this->data_disks))) {
                     if($snap_ramdisk_util > 90) {
