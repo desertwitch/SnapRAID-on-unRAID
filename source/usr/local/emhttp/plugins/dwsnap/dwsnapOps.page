@@ -348,7 +348,7 @@ END;
 
             echo <<<END
             <tr style="border: 1px solid;">
-            <td class="snapdisktype"><span class="snaphelptip" style="cursor:help;" title="This system disk is located in RAM and used for all SnapRAID operational output. The total space only displays the maximum possible RAM usage, the RAM itself is not reserved.">RAM<sup>?</sup></span></td>
+            <td class="snapdisktype"><span class="snaphelptip" style="cursor:help;" title="This system disk is located in RAM and used for all SnapRAID operational output. The total space only displays the maximum possible RAM usage, the RAM itself is not blocked.">RAM<sup>?</sup></span></td>
             <td>system</td>
             <td>/var/lib/snapraid</td>
             <td>$snap_disk_status</td>
