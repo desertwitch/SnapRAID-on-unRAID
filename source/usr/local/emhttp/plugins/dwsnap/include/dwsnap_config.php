@@ -125,146 +125,154 @@ class SnapraidArrayConfiguration {
             if($snap_running === "YES") { return "<a href='/Settings/dwsnapOps?snapr=".$this->cfgname."' style='cursor:pointer;color:inherit;text-decoration:none;'><span class='$snap_tip_class' title='$snap_array_name: Array Operation in Progress'><i class='fa fa-cog fa-spin'></i></span></a>"; }
     
             $snap_ramdisk_util = htmlspecialchars(trim(shell_exec("df --output=pcent /var/lib/snapraid 2>/dev/null | tr -dc '0-9' 2>/dev/null") ?? "-"));
-            if(!empty($this->parity_disks) && !empty($this->data_disks)) {
-                $snap_all_disks_available = true;
-                foreach ($this->parity_disks as $snap_parity_disk){
-                    $snap_disk_fs = htmlspecialchars(trim(shell_exec("cat /etc/mtab 2>/dev/null | grep '" . $snap_parity_disk[2] . " ' 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
-                    if($snap_disk_fs == "-") { $snap_all_disks_available = false; }
-                }
-                foreach ($this->data_disks as $snap_data_disk){
-                    $snap_disk_fs = htmlspecialchars(trim(shell_exec("cat /etc/mtab 2>/dev/null | grep '" . $snap_data_disk[2] . " ' 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
-                    if($snap_disk_fs == "-") { $snap_all_disks_available = false; }
-                }
-                if($snap_all_disks_available) {
-                    if($this->lastsync !== "-" && $this->lastscrub !== "-") {
-                        $snap_lastsync_ago = dwsnap_time_ago($this->lastsync, $this->sync_expires);
-                        $snap_lastscrub_ago = dwsnap_time_ago($this->lastscrub, $this->scrub_expires);
-                        if(file_exists("/boot/config/plugins/dwsnap/config/".$this->cfgname."-syncneeded")) {
-                            if($snap_ramdisk_util > 90) {
-                                $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Data Differences (Not in Sync) / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-exclamation-triangle red-text'></i></span>";
-                            } else {
-                                $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Data Differences (Not in Sync) / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-exclamation-triangle red-text'></i></span>";
-                            }
-                        }
-                        elseif($this->lastnodiff !== "-") {
-                            $t_now = time();
-                            $t_lastsync = strtotime($this->lastsync);
-                            $t_lastnodiff = strtotime($this->lastnodiff);
-                            $t_lastsync_diff = abs($t_now - $t_lastsync);
-                            $t_lastnodiff_diff = abs($t_now - $t_lastnodiff);
-                            $snap_lastnodiff_ago = dwsnap_time_ago($this->lastnodiff, $this->sync_expires);
-                            if($t_lastnodiff_diff < $t_lastsync_diff) {
-                                if (strpos($snap_lastnodiff_ago, "orange-text") !== false || strpos($snap_lastscrub_ago, "orange-text") !== false) {
-                                    if($snap_ramdisk_util > 90) {
-                                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-exclamation-triangle red-text'></i></span>";
-                                    } else {
-                                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-clock-o orange-text'></i></span>";
-                                    }
-                                } else {
-                                    if($snap_ramdisk_util > 90) {
-                                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-exclamation-triangle red-text'></i></span>";
-                                    } else {   
-                                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-check green-text'></i></span>";
-                                    }
-                                }
-                            } else {
-                                if (strpos($snap_lastsync_ago, "orange-text") !== false || strpos($snap_lastscrub_ago, "orange-text") !== false) {
-                                    if($snap_ramdisk_util > 90) {
-                                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-exclamation-triangle red-text'></i></span>";
-                                    } else {
-                                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-clock-o orange-text'></i></span>";
-                                    }
-                                } else {
-                                    if($snap_ramdisk_util > 90) {
-                                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-exclamation-triangle red-text'></i></span>";
-                                    } else {
-                                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-check green-text'></i></span>";
-                                    }
-                                }
-                            }
-                        } else {
+            if(!empty($this->parity_disks) && !empty($this->data_disks) && !empty($this->parity_disks_raw[2]) && !empty($this->data_disks_raw[2])) {
+                if(count($this->parity_disks_raw[2]) === count($this->parity_disks) && count($this->data_disks_raw[2]) === count($this->data_disks)) {
+                    $snap_all_disks_available = true;
+                    foreach ($this->parity_disks as $snap_parity_disk){
+                        $snap_disk_fs = htmlspecialchars(trim(shell_exec("cat /etc/mtab 2>/dev/null | grep '" . $snap_parity_disk[2] . " ' 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
+                        if($snap_disk_fs == "-") { $snap_all_disks_available = false; }
+                    }
+                    foreach ($this->data_disks as $snap_data_disk){
+                        $snap_disk_fs = htmlspecialchars(trim(shell_exec("cat /etc/mtab 2>/dev/null | grep '" . $snap_data_disk[2] . " ' 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
+                        if($snap_disk_fs == "-") { $snap_all_disks_available = false; }
+                    }
+                    if($snap_all_disks_available) {
+                        if($this->lastsync !== "-" && $this->lastscrub !== "-") {
+                            $snap_lastsync_ago = dwsnap_time_ago($this->lastsync, $this->sync_expires);
+                            $snap_lastscrub_ago = dwsnap_time_ago($this->lastscrub, $this->scrub_expires);
                             if(file_exists("/boot/config/plugins/dwsnap/config/".$this->cfgname."-syncneeded")) {
                                 if($snap_ramdisk_util > 90) {
                                     $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Data Differences (Not in Sync) / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-exclamation-triangle red-text'></i></span>";
                                 } else {
                                     $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Data Differences (Not in Sync) / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-exclamation-triangle red-text'></i></span>";
                                 }
-                            } else {
-                                if (strpos($snap_lastsync_ago, "orange-text") !== false || strpos($snap_lastscrub_ago, "orange-text") !== false) {
-                                    if($snap_ramdisk_util > 90) {
-                                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-exclamation-triangle red-text'></i></span>";
+                            }
+                            elseif($this->lastnodiff !== "-") {
+                                $t_now = time();
+                                $t_lastsync = strtotime($this->lastsync);
+                                $t_lastnodiff = strtotime($this->lastnodiff);
+                                $t_lastsync_diff = abs($t_now - $t_lastsync);
+                                $t_lastnodiff_diff = abs($t_now - $t_lastnodiff);
+                                $snap_lastnodiff_ago = dwsnap_time_ago($this->lastnodiff, $this->sync_expires);
+                                if($t_lastnodiff_diff < $t_lastsync_diff) {
+                                    if (strpos($snap_lastnodiff_ago, "orange-text") !== false || strpos($snap_lastscrub_ago, "orange-text") !== false) {
+                                        if($snap_ramdisk_util > 90) {
+                                            $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-exclamation-triangle red-text'></i></span>";
+                                        } else {
+                                            $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-clock-o orange-text'></i></span>";
+                                        }
                                     } else {
-                                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-clock-o orange-text'></i></span>";
+                                        if($snap_ramdisk_util > 90) {
+                                            $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-exclamation-triangle red-text'></i></span>";
+                                        } else {   
+                                            $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-check green-text'></i></span>";
+                                        }
                                     }
                                 } else {
-                                    if($snap_ramdisk_util > 90) {
-                                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-exclamation-triangle red-text'></i></span>";
+                                    if (strpos($snap_lastsync_ago, "orange-text") !== false || strpos($snap_lastscrub_ago, "orange-text") !== false) {
+                                        if($snap_ramdisk_util > 90) {
+                                            $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-exclamation-triangle red-text'></i></span>";
+                                        } else {
+                                            $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-clock-o orange-text'></i></span>";
+                                        }
                                     } else {
-                                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-check green-text'></i></span>";
+                                        if($snap_ramdisk_util > 90) {
+                                            $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-exclamation-triangle red-text'></i></span>";
+                                        } else {
+                                            $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-check green-text'></i></span>";
+                                        }
+                                    }
+                                }
+                            } else {
+                                if(file_exists("/boot/config/plugins/dwsnap/config/".$this->cfgname."-syncneeded")) {
+                                    if($snap_ramdisk_util > 90) {
+                                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Data Differences (Not in Sync) / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-exclamation-triangle red-text'></i></span>";
+                                    } else {
+                                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Data Differences (Not in Sync) / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-exclamation-triangle red-text'></i></span>";
+                                    }
+                                } else {
+                                    if (strpos($snap_lastsync_ago, "orange-text") !== false || strpos($snap_lastscrub_ago, "orange-text") !== false) {
+                                        if($snap_ramdisk_util > 90) {
+                                            $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-exclamation-triangle red-text'></i></span>";
+                                        } else {
+                                            $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-clock-o orange-text'></i></span>";
+                                        }
+                                    } else {
+                                        if($snap_ramdisk_util > 90) {
+                                            $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-exclamation-triangle red-text'></i></span>";
+                                        } else {
+                                            $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-check green-text'></i></span>";
+                                        }
                                     }
                                 }
                             }
-                        }
-                    } elseif ($this->lastsync !== "-" && $this->lastscrub == "-") {
-                        $snap_lastsync_ago = dwsnap_time_ago($this->lastsync, $this->sync_expires);
-                        if(file_exists("/boot/config/plugins/dwsnap/config/".$this->cfgname."-syncneeded")) {
-                            if($snap_ramdisk_util > 90) {
-                                $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Data Differences (Not in Sync) / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: Never'><i class='fa fa-exclamation-triangle red-text'></i></span>";
+                        } elseif ($this->lastsync !== "-" && $this->lastscrub == "-") {
+                            $snap_lastsync_ago = dwsnap_time_ago($this->lastsync, $this->sync_expires);
+                            if(file_exists("/boot/config/plugins/dwsnap/config/".$this->cfgname."-syncneeded")) {
+                                if($snap_ramdisk_util > 90) {
+                                    $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Data Differences (Not in Sync) / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: Never'><i class='fa fa-exclamation-triangle red-text'></i></span>";
+                                } else {
+                                    $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Data Differences (Not in Sync) / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: Never'><i class='fa fa-exclamation-triangle red-text'></i></span>";
+                                }
                             } else {
-                                $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Data Differences (Not in Sync) / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: Never'><i class='fa fa-exclamation-triangle red-text'></i></span>";
+                                if($snap_ramdisk_util > 90) {
+                                    $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: Never'><i class='fa fa-exclamation-triangle red-text'></i></span>";
+                                } else {
+                                    $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: Never'><i class='fa fa-clock-o orange-text'></i></span>";
+                                }
+                            }
+                        } elseif ($this->lastsync == "-" && $this->lastscrub !== "-") {
+                            $snap_lastscrub_ago = dwsnap_time_ago($this->lastscrub, $this->scrub_expires);
+                            if(file_exists("/boot/config/plugins/dwsnap/config/".$this->cfgname."-syncneeded")) {
+                                if($snap_ramdisk_util > 90) {
+                                    $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Data Differences (Not in Sync) / Last Sync: Never / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-exclamation-triangle red-text'></i></span>";
+                                } else {
+                                    $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Data Differences (Not in Sync) / Last Sync: Never / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-exclamation-triangle red-text'></i></span>";
+                                }
+                            } else {
+                                if($snap_ramdisk_util > 90) {
+                                    $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Last Sync: Never / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-exclamation-triangle red-text'></i></span>";
+                                } else {
+                                    $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Last Sync: Never / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-clock-o orange-text'></i></span>";
+                                }
                             }
                         } else {
-                            if($snap_ramdisk_util > 90) {
-                                $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: Never'><i class='fa fa-exclamation-triangle red-text'></i></span>";
+                            if(file_exists("/boot/config/plugins/dwsnap/config/".$this->cfgname."-syncneeded")) {
+                                if($snap_ramdisk_util > 90) {
+                                    $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Data Differences (Not in Sync) / Last Sync: Never / Last Scrub: Never'><i class='fa fa-exclamation-triangle red-text'></i></span>";
+                                } else {
+                                    $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Data Differences (Not in Sync) / Last Sync: Never / Last Scrub: Never'><i class='fa fa-exclamation-triangle red-text'></i></span>";
+                                }
                             } else {
-                                $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: Never'><i class='fa fa-clock-o orange-text'></i></span>";
-                            }
-                        }
-                    } elseif ($this->lastsync == "-" && $this->lastscrub !== "-") {
-                        $snap_lastscrub_ago = dwsnap_time_ago($this->lastscrub, $this->scrub_expires);
-                        if(file_exists("/boot/config/plugins/dwsnap/config/".$this->cfgname."-syncneeded")) {
-                            if($snap_ramdisk_util > 90) {
-                                $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Data Differences (Not in Sync) / Last Sync: Never / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-exclamation-triangle red-text'></i></span>";
-                            } else {
-                                $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Data Differences (Not in Sync) / Last Sync: Never / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-exclamation-triangle red-text'></i></span>";
-                            }
-                        } else {
-                            if($snap_ramdisk_util > 90) {
-                                $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Last Sync: Never / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-exclamation-triangle red-text'></i></span>";
-                            } else {
-                                $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Last Sync: Never / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-clock-o orange-text'></i></span>";
+                                if($snap_ramdisk_util > 90) {
+                                    $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Last Sync: Never / Last Scrub: Never'><i class='fa fa-exclamation-triangle red-text'></i></span>";
+                                } else {
+                                    $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Last Sync: Never / Last Scrub: Never'><i class='fa fa-clock-o orange-text'></i></span>";
+                                }
                             }
                         }
                     } else {
-                        if(file_exists("/boot/config/plugins/dwsnap/config/".$this->cfgname."-syncneeded")) {
-                            if($snap_ramdisk_util > 90) {
-                                $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Data Differences (Not in Sync) / Last Sync: Never / Last Scrub: Never'><i class='fa fa-exclamation-triangle red-text'></i></span>";
-                            } else {
-                                $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Data Differences (Not in Sync) / Last Sync: Never / Last Scrub: Never'><i class='fa fa-exclamation-triangle red-text'></i></span>";
-                            }
+                        if($snap_ramdisk_util > 90) {
+                            $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: At least one disk is not online and/or mounted / RAM Disk > 90%'><i class='fa fa-times red-text'></i></span>";
                         } else {
-                            if($snap_ramdisk_util > 90) {
-                                $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / RAM Disk > 90% / Last Sync: Never / Last Scrub: Never'><i class='fa fa-exclamation-triangle red-text'></i></span>";
-                            } else {
-                                $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are online and mounted / Last Sync: Never / Last Scrub: Never'><i class='fa fa-clock-o orange-text'></i></span>";
-                            }
+                            $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: At least one disk is not online and/or mounted'><i class='fa fa-times red-text'></i></span>";
                         }
                     }
                 } else {
                     if($snap_ramdisk_util > 90) {
-                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: At least one disk is not online and/or mounted / RAM Disk > 90%'><i class='fa fa-times red-text'></i></span>";
+                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: Malformed configuration - mounts not inside /mnt or missing trailing slashes? / RAM Disk > 90%'><i class='fa fa-times red-text'></i></span>";
                     } else {
-                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: At least one disk is not online and/or mounted'><i class='fa fa-times red-text'></i></span>";
+                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: Malformed configuration - mounts not inside /mnt or missing trailing slashes?'><i class='fa fa-times red-text'></i></span>";
                     }
                 }
             } else {
-                if(!empty($this->parity_disks_raw[2]) && empty($this->parity_disks)) {
+                if((!empty($this->parity_disks_raw[2]) && empty($this->parity_disks)) || (empty($this->parity_disks_raw[2]) && !empty($this->parity_disks))) {
                     if($snap_ramdisk_util > 90) {
                         $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: No parity disks parseable - not inside /mnt or malformed declaration? / RAM Disk > 90%'><i class='fa fa-times red-text'></i></span>";
                     } else {
                         $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: No parity disks parseable - not inside /mnt or malformed declaration?'><i class='fa fa-times red-text'></i></span>";
                     }
-                } elseif(!empty($this->data_disks_raw[2]) && empty($this->data_disks)) {
+                } elseif((!empty($this->data_disks_raw[2]) && empty($this->data_disks)) || (empty($this->data_disks_raw[2]) && !empty($this->data_disks))) {
                     if($snap_ramdisk_util > 90) {
                         $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: No data disks parseable - not inside /mnt or missing trailing slashes? / RAM Disk > 90%'><i class='fa fa-times red-text'></i></span>";
                     } else {
