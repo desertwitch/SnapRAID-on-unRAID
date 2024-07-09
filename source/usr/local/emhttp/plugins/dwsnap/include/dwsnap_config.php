@@ -260,9 +260,9 @@ class SnapraidArrayConfiguration {
                     }
                 } else {
                     if($snap_ramdisk_util > 90) {
-                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: Malformed configuration - mounts not inside /mnt or missing trailing slashes? / RAM Disk > 90%'><i class='fa fa-times red-text'></i></span>";
+                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: Malformed configuration - mount not inside /mnt or missing trailing slashes? / RAM Disk > 90%'><i class='fa fa-times red-text'></i></span>";
                     } else {
-                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: Malformed configuration - mounts not inside /mnt or missing trailing slashes?'><i class='fa fa-times red-text'></i></span>";
+                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: Malformed configuration - mount not inside /mnt or missing trailing slashes?'><i class='fa fa-times red-text'></i></span>";
                     }
                 }
             } else {
