@@ -19,9 +19,10 @@
 <CHANGES>
 ## SnapRAID on UNRAID
 ###2024.07.09
-- fix: refactored various sections of documentation with clarifications
-- fix: added additional clarifications regarding declaration of data disks
-- fix: added additional clarifications regarding function of tmpfs disk in RAM
+- fix: refactored warnings for malformed configurations to be more specific
+- fix: refactored various sections of the documentation with further clarifications
+- fix: added further information regarding declaration of data disks in the configuration
+- fix: added further information regarding the function of tmpfs disk which is located in RAM
 ###2024.07.08b
 - new: restructured compilation process and streamlined package structure
 - new: added further detailed information about parity overhead considerations
