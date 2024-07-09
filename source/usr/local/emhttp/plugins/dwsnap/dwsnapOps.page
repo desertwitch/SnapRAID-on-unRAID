@@ -222,6 +222,7 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
         $snap_unmounted_disks_html = "";
         $snap_missingram_html = "";
         $snap_highram_html = "";
+        $snap_malformedconf_html = "";
 
         $snap_disk_fs = htmlspecialchars(trim(shell_exec("cat /etc/mtab 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
         if($snap_disk_fs == "-") {
@@ -231,6 +232,12 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
         $snap_disk_util = htmlspecialchars(trim(shell_exec("df --output=pcent /var/lib/snapraid 2>/dev/null | tr -dc '0-9' 2>/dev/null") ?? "-"));
         if($snap_disk_util !== "-") {
             $snap_highram_html = ($snap_disk_util < 90) ? "" : "<span class='snaphelptip' style='margin-left:10px;color:red;' title='Your RAM disk utilization is above 90%, please clear the SnapRAID logfiles to ensure the continued operation of SnapRAID.'><i class='fa fa-exclamation-triangle'></i> <strong>RAM Disk Utilization</strong></span>";
+        }
+
+        if(!empty($dwsnap_active_cfg->parity_disks) && !empty($dwsnap_active_cfg->data_disks) && !empty($dwsnap_active_cfg->parity_disks_raw[2]) && !empty($dwsnap_active_cfg->data_disks_raw[2])) {
+            if(count($dwsnap_active_cfg->parity_disks_raw[2]) !== count($dwsnap_active_cfg->parity_disks) && count($dwsnap_active_cfg->data_disks_raw[2]) !== count($dwsnap_active_cfg->data_disks)) {
+                $snap_malformedconf_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='At least one configuration directive is malformed, perhaps a mount is not inside /mnt or missing trailing slashes? Please review your array configuration file for any such problems.'><i class='fa fa-exclamation-triangle'></i> <strong>Malformed Configuration</strong></span>"; 
+            }    
         }
 
         if(!empty($dwsnap_active_cfg->parity_disks) || !empty($dwsnap_active_cfg->data_disks)) {
@@ -256,7 +263,7 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
     <table class="tablesorter snapdisks">
         <thead>
             <tr>
-                <th colspan="10"><strong>(<?=$dwsnap_active_cfg->cfgname;?>) ARRAY WITH INDIVIDUAL DISKS</strong> <span style="text-transform: none;float:right;"><?=$snap_missingram_html?><?=$snap_highram_html?><?=$snap_unmounted_disks_html?><?=$snap_syncneeded_html?><span style="margin-left:10px;"><strong>Last Sync:</strong> <?=$snap_lastsync_html?></span><span style="margin-left:10px;"><strong>Last Scrub:</strong> <?=$snap_lastscrub_html?></span></span></th>
+                <th colspan="10"><strong>(<?=$dwsnap_active_cfg->cfgname;?>) ARRAY WITH INDIVIDUAL DISKS</strong> <span style="text-transform: none;float:right;"><?=$snap_missingram_html?><?=$snap_highram_html?><?=$snap_malformedconf_html?><?=$snap_unmounted_disks_html?><?=$snap_syncneeded_html?><span style="margin-left:10px;"><strong>Last Sync:</strong> <?=$snap_lastsync_html?></span><span style="margin-left:10px;"><strong>Last Scrub:</strong> <?=$snap_lastscrub_html?></span></span></th>
             </tr>
             <tr>
                  <th><strong>Disk Type</strong></th><th><strong>Disk Name</strong></th><th><strong>Mountpoint</strong></th><th><strong>Mounted</strong></th><th><strong>FileSystem</strong></th><th><strong>Total Space</strong></th><th><strong>Used Space</strong></th><th><strong>Free Space</strong></th><th><strong>Utilization</strong></th><th><strong>Disk-Specific Operations</strong><br><span style="font-size:x-small;"><em>Options Selected From Above Apply</em></span></th>
