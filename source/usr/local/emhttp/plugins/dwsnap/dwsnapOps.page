@@ -260,13 +260,13 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
 
         if(!empty($dwsnap_active_cfg->parity_disks) && !empty($dwsnap_active_cfg->parity_disks_raw[2])) {
             if(count($dwsnap_active_cfg->parity_disks_raw[2]) !== count($dwsnap_active_cfg->parity_disks)) {
-                $snap_parity_malformed_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='At least one data disk directive is not parseable, perhaps a mountpoint is not inside /mnt or missing trailing slashes? Please review your array configuration file.'><i class='fa fa-exclamation-triangle'></i> <strong>Malformed Parity Directive</strong></span>"; 
+                $snap_parity_malformed_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='At least one data disk directive is not parseable, perhaps a mountpoint is not inside /mnt or missing trailing slashes? Please review your array configuration file.'><i class='fa fa-exclamation-triangle'></i> <strong>Invalid Parity Directive</strong></span>"; 
             }    
         }
         
         if(!empty($dwsnap_active_cfg->data_disks) && !empty($dwsnap_active_cfg->data_disks_raw[2])) {
             if(count($dwsnap_active_cfg->data_disks_raw[2]) !== count($dwsnap_active_cfg->data_disks)) {
-                $snap_data_malformed_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='At least one parity disk directive is not parseable, perhaps a mountpoint is not inside /mnt or missing trailing slashes? Please review your array configuration file.'><i class='fa fa-exclamation-triangle'></i> <strong>Malformed Data Directive</strong></span>"; 
+                $snap_data_malformed_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='At least one parity disk directive is not parseable, perhaps a mountpoint is not inside /mnt or missing trailing slashes? Please review your array configuration file.'><i class='fa fa-exclamation-triangle'></i> <strong>Invalid Data Directive</strong></span>"; 
             }    
         }
 
