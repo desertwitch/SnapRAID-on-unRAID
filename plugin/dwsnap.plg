@@ -22,7 +22,7 @@
 - fix: refactored warnings for malformed configurations to be more specific
 - fix: refactored various sections of the documentation with further clarifications
 - fix: added further information regarding declaration of data disks in the configuration
-- fix: added further information regarding the function of tmpfs disk which is located in RAM
+- fix: added further information regarding function of the tmpfs disk which is located in RAM
 ###2024.07.08b
 - new: restructured compilation process and streamlined package structure
 - new: added further detailed information about parity overhead considerations
