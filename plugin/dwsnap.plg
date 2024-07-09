@@ -3,14 +3,14 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "dwsnap">
 <!ENTITY author    "desertwitch">
-<!ENTITY version   "2024.07.09">
+<!ENTITY version   "2024.07.09a">
 <!ENTITY launch    "Settings/dwsnapOps">
 <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/SnapRAID-on-unRAID/main">
 <!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
 <!ENTITY pkgURL    "&gitURL;/packages">
 <!ENTITY plgPATH   "/boot/config/plugins/&name;">
-<!ENTITY plgNAME   "dwsnap-2024.07.09-x86_64-1">
-<!ENTITY plgMD5    "98a724a94cb07142382ad0f1622aac62">
+<!ENTITY plgNAME   "dwsnap-2024.07.09-x86_64-2">
+<!ENTITY plgMD5    "596e10dab2ebc4ee75a8ec501c566a6a">
 <!ENTITY emhttp    "/usr/local/emhttp/plugins/&name;">
 ]>
 
@@ -18,7 +18,7 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
-###2024.07.09
+###2024.07.09a
 - fix: refactored warnings for malformed configurations to be more specific
 - fix: refactored various sections of the documentation with further clarifications
 - fix: added further information regarding declaration of data disks in the configuration
