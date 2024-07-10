@@ -36,7 +36,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 </style>
 
 <div><strong>INFORMATION:</strong></div>
-<div>Always use the disk mountpoints e.g. <strong>/mnt/disk<em><sup>[number]</sup></em><span style="color:red;">/</span></strong> when refering to disks in the array configuration, never user shares or physical disk locations otherwhere on the system.</div>
+<div>Always use the disk mountpoints e.g. <strong>/mnt/disk<em><sup>[number]</sup></em>/</strong> when refering to disks in the array configuration, never user shares or physical disk locations otherwhere on the system.</div>
 <div>When planning your SnapRAID array, please consider that it will perform best with fewer large files which rarely change (e.g. a media library) as opposed to many often changing small files.</div>
 <div>Parity has overhead, so leave some space on your data disks (<em>more details below</em>) - when using on top of Unraid parity, '<em>Minimum free space</em>' default values are usually sufficiently set on user shares.</div>
 <br>
@@ -97,7 +97,6 @@ data d5 /mnt/disk5/
 <form id="editform" method="POST">
 
 <img id="editfolder" style="cursor:pointer;margin-left: 10px;" src="/webGui/images/explore.png" >
-<span style="float:right;"><strong>Warning:</strong> You <u>must</u> use trailing slashes when referring to folder content, as with data disk directives (e.g. <strong>data d1 /mnt/disk1<span style="color:red;">/</span></strong>).</span>
 <input id="editfile" type="text" name="editfile" value="" readonly="" data-picktop="/boot/config/plugins/dwsnap/config" data-pickcloseonfile="true" data-pickfilter="conf,log" data-pickroot="/boot/config/plugins/dwsnap/config" data-pickfolders="false" required="required" >
 
 <textarea id="editdata" name="editdata" placeholder="Select Configuration File"></textarea>

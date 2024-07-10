@@ -3,14 +3,14 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "dwsnap">
 <!ENTITY author    "desertwitch">
-<!ENTITY version   "2024.07.09b">
+<!ENTITY version   "2024.07.10">
 <!ENTITY launch    "Settings/dwsnapOps">
 <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/SnapRAID-on-unRAID/main">
 <!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
 <!ENTITY pkgURL    "&gitURL;/packages">
 <!ENTITY plgPATH   "/boot/config/plugins/&name;">
-<!ENTITY plgNAME   "dwsnap-2024.07.09-x86_64-3">
-<!ENTITY plgMD5    "ec7655abd0e41a2775a6d984340a70f0">
+<!ENTITY plgNAME   "dwsnap-2024.07.10-x86_64-1">
+<!ENTITY plgMD5    "4bcf0b82de4eb616b653cb8628379e38">
 <!ENTITY emhttp    "/usr/local/emhttp/plugins/&name;">
 ]>
 
@@ -18,11 +18,15 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2024.07.10
+- fix: trailing slashes on data disk directives are no longer enforced
+- fix: refactored the configuration parsing mechanisms to be more flexible
+- fix: refactored specific code into generalized functions to be more flexible
 ###2024.07.09b
-- fix: refactored warnings for malformed configurations to be more specific
+- fix: refactored various malformed configuration warnings to be more specific
 - fix: refactored various sections of the documentation with further clarifications
-- fix: added further information regarding declaration of data disks in the configuration
-- fix: added further information regarding function of the tmpfs disk which is located in RAM
+- fix: added further information regarding data disk directives inside the configuration
+- fix: added further information regarding function of tmpfs disk (which is located in RAM)
 ###2024.07.08b
 - new: restructured compilation process and streamlined package structure
 - new: added further detailed information about parity overhead considerations

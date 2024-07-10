@@ -38,26 +38,7 @@ try {
         if($snap_dash_cfg_obj->lastsync !== "-") {
             $snap_dash_field_lastsync = dwsnap_time_ago($snap_dash_cfg_obj->lastsync, $snap_dash_cfg_obj->sync_expires);
             if($snap_dash_cfg_obj->lastnodiff !== "-" && !empty($snap_dash_field_lastsync)) {
-                $snap_dash_field_lastsync_bak = $snap_dash_field_lastsync;
-                try {
-                    $sdt_now = time();
-                    $sdt_lastsync = strtotime($snap_dash_cfg_obj->lastsync);
-                    $sdt_lastnodiff = strtotime($snap_dash_cfg_obj->lastnodiff);
-                    $sdt_lastsync_diff = abs($sdt_now - $sdt_lastsync);
-                    $sdt_lastnodiff_diff = abs($sdt_now - $sdt_lastnodiff);
-                    $snap_lastnodiff_ago = dwsnap_time_ago($snap_dash_cfg_obj->lastnodiff, $snap_dash_cfg_obj->sync_expires);
-                    if($sdt_lastnodiff_diff < $sdt_lastsync_diff) {
-                        if (strpos($snap_lastnodiff_ago, "orange-text") !== false) {
-                            $snap_dash_field_lastsync = str_replace("green-text", "orange-text", $snap_dash_field_lastsync);
-                        } else {
-                            $snap_dash_field_lastsync = str_replace("orange-text", "green-text", $snap_dash_field_lastsync);
-                        }
-                    }
-                } catch (Throwable $e) { // For PHP 7
-                    $snap_dash_field_lastsync = $snap_dash_field_lastsync_bak;
-                } catch (Exception $e) { // For PHP 5
-                    $snap_dash_field_lastsync = $snap_dash_field_lastsync_bak;
-                }
+                $snap_dash_field_lastsync = dwsnap_consider_nodiff($snap_dash_field_lastsync, $snap_dash_cfg_obj->lastnodiff, $snap_dash_cfg_obj->lastsync, $snap_dash_cfg_obj->sync_expires);
             }
             $snap_dash_field_lastsync = "<span class='snapdashtip' title='".$snap_dash_cfg_obj->lastsync."'>".$snap_dash_field_lastsync."</span>";
         } else { 

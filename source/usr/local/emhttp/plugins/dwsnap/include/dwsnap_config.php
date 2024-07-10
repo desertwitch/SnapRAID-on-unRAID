@@ -106,12 +106,12 @@ class SnapraidArrayConfiguration {
         $this->lastscrub = trim(file_exists("/boot/config/plugins/dwsnap/config/$cfg_name-lastscrub") ? htmlspecialchars(file_get_contents("/boot/config/plugins/dwsnap/config/$cfg_name-lastscrub")) : "-");
         $this->lastnodiff = trim(file_exists("/boot/config/plugins/dwsnap/config/$cfg_name-lastnodiff") ? htmlspecialchars(file_get_contents("/boot/config/plugins/dwsnap/config/$cfg_name-lastnodiff")) : "-");        
     
-        preg_match_all('/(.*?parity) (\/mnt\/((addons|disks|remotes|rootshare)\/)?.*?)\//m', $this->snapcfg, $this->parity_disks, PREG_SET_ORDER);
-        preg_match_all('/data (.*?) (\/mnt\/((addons|disks|remotes|rootshare)\/)?.*?)\//m', $this->snapcfg, $this->data_disks, PREG_SET_ORDER);
+        preg_match_all('/^((?:.-)?parity) (\/mnt\/(?:(?:addons|disks|remotes|rootshare)\/)?.*?)\//m', $this->snapcfg, $this->parity_disks, PREG_SET_ORDER);
+        preg_match_all('/^data (.*?) (\/mnt\/(?:(?:addons|disks|remotes|rootshare)\/)?.*?)(?:\/|$)/m', $this->snapcfg, $this->data_disks, PREG_SET_ORDER);
 
-        preg_match_all('/(.*?parity) (.*?)$/m', $this->snapcfg, $this->parity_disks_raw, PREG_PATTERN_ORDER);
-        preg_match_all('/data (.*?) (.*?)$/m', $this->snapcfg, $this->data_disks_raw, PREG_PATTERN_ORDER);
-        preg_match_all('/content (.*?)$/m', $this->snapcfg, $this->content_files_raw, PREG_PATTERN_ORDER);
+        preg_match_all('/^((?:.-)?parity) (.*?)$/m', $this->snapcfg, $this->parity_disks_raw, PREG_PATTERN_ORDER);
+        preg_match_all('/^data (.*?) (.*?)$/m', $this->snapcfg, $this->data_disks_raw, PREG_PATTERN_ORDER);
+        preg_match_all('/^content (.*?)$/m', $this->snapcfg, $this->content_files_raw, PREG_PATTERN_ORDER);
     }
 
     public function getFooterHTML($snap_tip_class) {
@@ -260,23 +260,23 @@ class SnapraidArrayConfiguration {
                     }
                 } else {
                     if($snap_ramdisk_util > 90) {
-                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: Malformed configuration - mount not inside /mnt or missing trailing slashes? / RAM Disk > 90%'><i class='fa fa-times red-text'></i></span>";
+                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: Malformed configuration - mount not inside /mnt or malformed disk directive? / RAM Disk > 90%'><i class='fa fa-times red-text'></i></span>";
                     } else {
-                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: Malformed configuration - mount not inside /mnt or missing trailing slashes?'><i class='fa fa-times red-text'></i></span>";
+                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: Malformed configuration - mount not inside /mnt or malformed disk directive?'><i class='fa fa-times red-text'></i></span>";
                     }
                 }
             } else {
                 if((!empty($this->parity_disks_raw[2]) && empty($this->parity_disks)) || (empty($this->parity_disks_raw[2]) && !empty($this->parity_disks))) {
                     if($snap_ramdisk_util > 90) {
-                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: No parity disks parseable - not inside /mnt or malformed directive? / RAM Disk > 90%'><i class='fa fa-times red-text'></i></span>";
+                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: No parseable parity disks - not inside /mnt or malformed directives? / RAM Disk > 90%'><i class='fa fa-times red-text'></i></span>";
                     } else {
-                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: No parity disks parseable - not inside /mnt or malformed directive?'><i class='fa fa-times red-text'></i></span>";
+                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: No parseable parity disks - not inside /mnt or malformed directives?'><i class='fa fa-times red-text'></i></span>";
                     }
                 } elseif((!empty($this->data_disks_raw[2]) && empty($this->data_disks)) || (empty($this->data_disks_raw[2]) && !empty($this->data_disks))) {
                     if($snap_ramdisk_util > 90) {
-                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: No data disks parseable - not inside /mnt or missing trailing slashes? / RAM Disk > 90%'><i class='fa fa-times red-text'></i></span>";
+                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: No parseable data disks - not inside /mnt or malformed directives? / RAM Disk > 90%'><i class='fa fa-times red-text'></i></span>";
                     } else {
-                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: No data disks parseable - not inside /mnt or missing trailing slashes?'><i class='fa fa-times red-text'></i></span>";
+                        $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: No parseable data disks - not inside /mnt or malformed directives?'><i class='fa fa-times red-text'></i></span>";
                     }            
                 } else {
                     if($snap_ramdisk_util > 90) {

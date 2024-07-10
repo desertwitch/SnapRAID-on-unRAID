@@ -109,6 +109,31 @@ function dwsnap_time_ago($oldTime, $alertThreshold = 7) {
     }
 }
 
+function dwsnap_consider_nodiff($inputHtml, $lastNoDiff, $lastSync, $syncExpires) {
+    $outputHtml = $inputHtml;
+    $outputHtml_onErr = $inputHtml;
+    try {
+        $st_now = time();
+        $st_lastsync = strtotime($lastSync);
+        $st_lastnodiff = strtotime($lastNoDiff);
+        $st_lastsync_diff = abs($st_now - $st_lastsync);
+        $st_lastnodiff_diff = abs($st_now - $st_lastnodiff);
+        $snap_lastnodiff_ago = dwsnap_time_ago($lastNoDiff, $syncExpires);
+        if($st_lastnodiff_diff < $st_lastsync_diff) {
+            if (strpos($snap_lastnodiff_ago, "orange-text") !== false) {
+                $outputHtml = str_replace("green-text", "orange-text", $inputHtml);
+            } else {
+                $outputHtml = str_replace("orange-text", "green-text", $inputHtml);
+            }
+        }
+        return $outputHtml;
+    } catch (Throwable $e) { // For PHP 7
+        return $outputHtml_onErr;
+    } catch (Exception $e) { // For PHP 5
+        return $outputHtml_onErr;
+    }
+}
+
 function dwsnap_hour_options($time){
     $snap_options = '';
         for($i = 0; $i <= 23; $i++){

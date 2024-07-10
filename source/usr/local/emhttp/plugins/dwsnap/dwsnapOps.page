@@ -33,26 +33,7 @@ if($dwsnap_active_cfg->lastsync !== "-") { $snap_lastsync_html = $dwsnap_active_
 if($dwsnap_active_cfg->lastscrub !== "-") { $snap_lastscrub_html = $dwsnap_active_cfg->lastscrub . " (<strong>" . dwsnap_time_ago($dwsnap_active_cfg->lastscrub, $dwsnap_active_cfg->scrub_expires) . "</strong>)"; } else { $snap_lastscrub_html = "<span class='orange-text'><strong>Never</strong></span>"; }
 
 if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-" && !empty($snap_lastsync_html)) {
-    $snap_lastsync_html_bak = $snap_lastsync_html;
-    try {
-        $st_now = time();
-        $st_lastsync = strtotime($dwsnap_active_cfg->lastsync);
-        $st_lastnodiff = strtotime($dwsnap_active_cfg->lastnodiff);
-        $st_lastsync_diff = abs($st_now - $st_lastsync);
-        $st_lastnodiff_diff = abs($st_now - $st_lastnodiff);
-        $snap_lastnodiff_ago = dwsnap_time_ago($dwsnap_active_cfg->lastnodiff, $dwsnap_active_cfg->sync_expires);
-        if($st_lastnodiff_diff < $st_lastsync_diff) {
-            if (strpos($snap_lastnodiff_ago, "orange-text") !== false) {
-                $snap_lastsync_html = str_replace("green-text", "orange-text", $snap_lastsync_html);
-            } else {
-                $snap_lastsync_html = str_replace("orange-text", "green-text", $snap_lastsync_html);
-            }
-        }
-    } catch (Throwable $e) { // For PHP 7
-        $snap_lastsync_html = $snap_lastsync_html_bak;
-    } catch (Exception $e) { // For PHP 5
-        $snap_lastsync_html = $snap_lastsync_html_bak;
-    }
+    $snap_lastsync_html = dwsnap_consider_nodiff($snap_lastsync_html, $dwsnap_active_cfg->lastnodiff, $dwsnap_active_cfg->lastsync, $dwsnap_active_cfg->sync_expires);
 }
 ?>
 
@@ -218,14 +199,14 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
     
     <br>
     <?
-        $snap_syncneeded_html = "";
-        $snap_unmounted_disks_html = "";
         $snap_missingram_html = "";
         $snap_highram_html = "";
-        $snap_data_missing_html = "";
-        $snap_data_malformed_html = "";
         $snap_parity_missing_html = "";
+        $snap_data_missing_html = "";
         $snap_parity_malformed_html = "";
+        $snap_data_malformed_html = "";
+        $snap_unmounted_disks_html = "";
+        $snap_syncneeded_html = "";
        
         $snap_disk_fs = htmlspecialchars(trim(shell_exec("cat /etc/mtab 2>/dev/null | grep /var/lib/snapraid 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
         if($snap_disk_fs == "-") {
@@ -243,7 +224,7 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
         } else {
             if(empty($dwsnap_active_cfg->parity_disks) || empty($dwsnap_active_cfg->parity_disks_raw[2])) {
                 if((!empty($dwsnap_active_cfg->parity_disks_raw[2]) && empty($dwsnap_active_cfg->parity_disks)) || (empty($dwsnap_active_cfg->parity_disks_raw[2]) && !empty($dwsnap_active_cfg->parity_disks))) {
-                    $snap_parity_missing_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='There are no parity disks parseable, perhaps a mountpoint is not inside /mnt or the directive malformed? Please review your array configuration file for any problems.'><i class='fa fa-exclamation-triangle'></i> <strong>No Parity Disks</strong></span>"; 
+                    $snap_parity_missing_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='There are no parseable parity disks, perhaps a mountpoint is not inside /mnt or some disk directives are malformed? Please review your array configuration file for any faults.'><i class='fa fa-exclamation-triangle'></i> <strong>No Parity Disks</strong></span>"; 
                 } else {
                     $snap_parity_missing_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='There are no parity disks configured.'><i class='fa fa-exclamation-triangle'></i> <strong>No Parity Disks</strong></span>"; 
                 }
@@ -251,7 +232,7 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
 
             if(empty($dwsnap_active_cfg->data_disks) || empty($dwsnap_active_cfg->data_disks_raw[2])) {
                 if((!empty($dwsnap_active_cfg->data_disks_raw[2]) && empty($dwsnap_active_cfg->data_disks)) || (empty($dwsnap_active_cfg->data_disks_raw[2]) && !empty($dwsnap_active_cfg->data_disks))) {
-                    $snap_data_missing_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='There are no data disks parseable, perhaps a mountpoint is not inside /mnt or missing trailing slashes? Please review your array configuration file for any problems.'><i class='fa fa-exclamation-triangle'></i> <strong>No Data Disks</strong></span>"; 
+                    $snap_data_missing_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='There are no parseable data disks, perhaps a mountpoint is not inside /mnt or some disk directives are malformed? Please review your array configuration file for any faults.'><i class='fa fa-exclamation-triangle'></i> <strong>No Data Disks</strong></span>"; 
                 } else {
                     $snap_data_missing_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='There are no data disks configured.'><i class='fa fa-exclamation-triangle'></i> <strong>No Data Disks</strong></span>"; 
                 }
@@ -260,21 +241,17 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
 
         if(!empty($dwsnap_active_cfg->parity_disks) && !empty($dwsnap_active_cfg->parity_disks_raw[2])) {
             if(count($dwsnap_active_cfg->parity_disks_raw[2]) !== count($dwsnap_active_cfg->parity_disks)) {
-                $snap_parity_malformed_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='At least one parity disk directive is not parseable, perhaps a mountpoint is not inside /mnt or missing trailing slashes? Please review your array configuration file.'><i class='fa fa-exclamation-triangle'></i> <strong>Invalid Parity Directive</strong></span>"; 
+                $snap_parity_malformed_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='At least one parity disk directive is not parseable, perhaps a mountpoint is not inside /mnt or a directive malformed? Please review your array configuration file for any faults.'><i class='fa fa-exclamation-triangle'></i> <strong>Invalid Parity Directive</strong></span>"; 
             }    
         }
         
         if(!empty($dwsnap_active_cfg->data_disks) && !empty($dwsnap_active_cfg->data_disks_raw[2])) {
             if(count($dwsnap_active_cfg->data_disks_raw[2]) !== count($dwsnap_active_cfg->data_disks)) {
-                $snap_data_malformed_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='At least one data disk directive is not parseable, perhaps a mountpoint is not inside /mnt or missing trailing slashes? Please review your array configuration file.'><i class='fa fa-exclamation-triangle'></i> <strong>Invalid Data Directive</strong></span>"; 
+                $snap_data_malformed_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='At least one data disk directive is not parseable, perhaps a mountpoint is not inside /mnt or a directive malformed? Please review your array configuration file for any faults.'><i class='fa fa-exclamation-triangle'></i> <strong>Invalid Data Directive</strong></span>"; 
             }    
         }
 
         if(!empty($dwsnap_active_cfg->parity_disks) || !empty($dwsnap_active_cfg->data_disks)) {
-            if(file_exists("/boot/config/plugins/dwsnap/config/".$dwsnap_active_cfg->cfgname."-syncneeded")) {
-                $snap_syncneeded_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='Differences between the last sync (snapshot) state and the data present in the array were found. If these changes were intentional, a SYNC operation is required for any such changes to also be protected in case of disk failure. If these changes were not intentional, a FIX operation can help revert the array data back to the last sync (snapshot) state.'><i class='fa fa-exclamation-triangle'></i> <strong>Data Differences (Not in Sync)</strong></span>";
-            }
-
             $snap_all_disks_mounted = true;
             foreach ($dwsnap_active_cfg->parity_disks as $snap_parity_disk) {
                 $snap_disk_fs = htmlspecialchars(trim(shell_exec("cat /etc/mtab 2>/dev/null | grep '" . $snap_parity_disk[2] . " ' 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
@@ -287,6 +264,10 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
 
             if(!$snap_all_disks_mounted) {
                 $snap_unmounted_disks_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='At least one configured disk is not online and/or mounted, please check both your configuration and the actual disks for issues.'><i class='fa fa-exclamation-triangle'></i> <strong>Missing Disk(s)</strong></span>";
+            }
+
+            if(file_exists("/boot/config/plugins/dwsnap/config/".$dwsnap_active_cfg->cfgname."-syncneeded")) {
+                $snap_syncneeded_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='Differences between the last sync (snapshot) state and the data present in the array were found. If these changes were intentional, a SYNC operation is required for any such changes to also be protected in case of disk failure. If these changes were not intentional, a FIX operation can help revert the array data back to the last sync (snapshot) state.'><i class='fa fa-exclamation-triangle'></i> <strong>Data Differences (Not in Sync)</strong></span>";
             }
         }
     ?>
