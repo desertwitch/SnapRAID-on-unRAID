@@ -189,13 +189,13 @@ if [ "$DIFF" == "enable" ]; then
         rm -f "/boot/config/plugins/dwsnap/config/${CFGNAME}-lastnodiff"
     fi
     
-    EQ_COUNT=$(grep -w '^ \{1,\}[0-9]* equal' 2>/dev/null <<< "$DIFFS" | sed 's/^ *//g' 2>/dev/null | cut -d ' ' -f1 2>/dev/null)
-    ADD_COUNT=$(grep -w '^ \{1,\}[0-9]* added' 2>/dev/null <<< "$DIFFS" | sed 's/^ *//g' 2>/dev/null | cut -d ' ' -f1 2>/dev/null)
-    DEL_COUNT=$(grep -w '^ \{1,\}[0-9]* removed' 2>/dev/null <<< "$DIFFS" | sed 's/^ *//g' 2>/dev/null | cut -d ' ' -f1 2>/dev/null)
-    UPDATE_COUNT=$(grep -w '^ \{1,\}[0-9]* updated' 2>/dev/null <<< "$DIFFS" | sed 's/^ *//g' 2>/dev/null | cut -d ' ' -f1 2>/dev/null)
-    MOVE_COUNT=$(grep -w '^ \{1,\}[0-9]* moved' 2>/dev/null <<< "$DIFFS" | sed 's/^ *//g' 2>/dev/null | cut -d ' ' -f1 2>/dev/null)
-    COPY_COUNT=$(grep -w '^ \{1,\}[0-9]* copied' 2>/dev/null <<< "$DIFFS" | sed 's/^ *//g' 2>/dev/null | cut -d ' ' -f1 2>/dev/null)
-    RESTORE_COUNT=$(grep -w '^ \{1,\}[0-9]* restored' 2>/dev/null <<< "$DIFFS" | sed 's/^ *//g' 2>/dev/null | cut -d ' ' -f1 2>/dev/null)
+    EQ_COUNT=$(grep -w '^ *[0-9]\+ equal' 2>/dev/null <<< "$DIFFS" | sed 's/^ *//g' 2>/dev/null | cut -d ' ' -f1 2>/dev/null)
+    ADD_COUNT=$(grep -w '^ *[0-9]\+ added' 2>/dev/null <<< "$DIFFS" | sed 's/^ *//g' 2>/dev/null | cut -d ' ' -f1 2>/dev/null)
+    DEL_COUNT=$(grep -w '^ *[0-9]\+ removed' 2>/dev/null <<< "$DIFFS" | sed 's/^ *//g' 2>/dev/null | cut -d ' ' -f1 2>/dev/null)
+    UPDATE_COUNT=$(grep -w '^ *[0-9]\+ updated' 2>/dev/null <<< "$DIFFS" | sed 's/^ *//g' 2>/dev/null | cut -d ' ' -f1 2>/dev/null)
+    MOVE_COUNT=$(grep -w '^ *[0-9]\+ moved' 2>/dev/null <<< "$DIFFS" | sed 's/^ *//g' 2>/dev/null | cut -d ' ' -f1 2>/dev/null)
+    COPY_COUNT=$(grep -w '^ *[0-9]\+ copied' 2>/dev/null <<< "$DIFFS" | sed 's/^ *//g' 2>/dev/null | cut -d ' ' -f1 2>/dev/null)
+    RESTORE_COUNT=$(grep -w '^ *[0-9]\+ restored' 2>/dev/null <<< "$DIFFS" | sed 's/^ *//g' 2>/dev/null | cut -d ' ' -f1 2>/dev/null)
 
     if [[ ! "$ADD_COUNT" =~ ^[0-9]+$ ]] || [[ ! "$DEL_COUNT" =~ ^[0-9]+$ ]] || [[ ! "$UPDATE_COUNT" =~ ^[0-9]+$ ]] || [[ ! "$MOVE_COUNT" =~ ^[0-9]+$ ]] || [[ ! "$COPY_COUNT" =~ ^[0-9]+$ ]] || [[ ! "$RESTORE_COUNT" =~ ^[0-9]+$ ]]; then
         echo "### CRON -- Checking for differences has failed (unable to parse reported differences as numbers), exiting..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
