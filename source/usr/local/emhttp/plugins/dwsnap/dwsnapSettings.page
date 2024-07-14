@@ -472,21 +472,6 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 
     <div id="SYNCSETTINGS">
         <dl>
-            <dt>SnapRAID Maintenance - Sync Zero Differences:</dt>
-            <dd>
-                <select class="snaprun" id="SYNCNODIFFS" name="SYNCNODIFFS" size="1">
-                    <?=mk_option($dwsnap_active_cfg->syncnodiffs, "disable", "No");?>
-                    <?=mk_option($dwsnap_active_cfg->syncnodiffs, "enable", "Yes");?>
-                </select>
-            </dd>
-        </dl>
-
-        <blockquote class="inline_help">
-        <p>Runs the SYNC operation even if the DIFF has resulted in no differences, as opposed to just skipping it.</p>
-        <p>This can be helpful to resume any previously failed SYNC operations on the next maintenance run (without needing any user interaction).</p>
-        </blockquote>
-
-        <dl>
             <dt>SnapRAID Maintenance - Sync Zero Size Files:</dt>
             <dd>
                 <select class="snaprun" id="FORCEZERO" name="FORCEZERO" size="1">
@@ -501,6 +486,21 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <p>If SnapRAID detects a such condition, it stops proceeding unless you specify this option.</p>
         <p>This allows to easily detect when after a system crash, some accessed files were truncated.</p>
         <p>This, however, can also be a normal possible condition in Linux with e.g. the ext3/ext4 file-systems.</p>
+        </blockquote>
+
+        <dl>
+            <dt>SnapRAID Maintenance - Sync Zero Differences:</dt>
+            <dd>
+                <select class="snaprun" id="SYNCNODIFFS" name="SYNCNODIFFS" size="1">
+                    <?=mk_option($dwsnap_active_cfg->syncnodiffs, "disable", "No");?>
+                    <?=mk_option($dwsnap_active_cfg->syncnodiffs, "enable", "Yes");?>
+                </select>
+            </dd>
+        </dl>
+
+        <blockquote class="inline_help">
+        <p>Runs the SYNC operation even if the DIFF has resulted in no differences, as opposed to just skipping it.</p>
+        <p>This can be helpful to resume any previously failed SYNC operations on the next maintenance run (without user interaction).</p>
         </blockquote>
 
         <dl>
