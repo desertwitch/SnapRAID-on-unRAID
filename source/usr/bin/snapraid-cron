@@ -252,9 +252,12 @@ echo "################################################################" 2>&1 | t
 
 if [ "$SYNC" == "enable" ]; then
     RUNNINGOP="SYNC"
-    if [ "$DIFF" == "enable" ] && [ "$DIFFRET" -eq 0 ] && [ "$ADD_COUNT" -eq 0 ] && [ "$DEL_COUNT" -eq 0 ] && [ "$MOVE_COUNT" -eq 0 ] && [ "$COPY_COUNT" -eq 0 ] && [ "$UPDATE_COUNT" -eq 0 ] && [ "$RESTORE_COUNT" -eq 0 ]; then
+    if [ "$DIFF" == "enable" ] && [ "$DIFFRET" -eq 0 ] && [ "$ADD_COUNT" -eq 0 ] && [ "$DEL_COUNT" -eq 0 ] && [ "$MOVE_COUNT" -eq 0 ] && [ "$COPY_COUNT" -eq 0 ] && [ "$UPDATE_COUNT" -eq 0 ] && [ "$RESTORE_COUNT" -eq 0 ] && [ "$SYNCNODIFFS" != "enable" ]; then
         echo "### CRON -- No differences detected (skipping sync), proceeding..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     else
+        if [ "$DIFF" == "enable" ] && [ "$DIFFRET" -eq 0 ] && [ "$ADD_COUNT" -eq 0 ] && [ "$DEL_COUNT" -eq 0 ] && [ "$MOVE_COUNT" -eq 0 ] && [ "$COPY_COUNT" -eq 0 ] && [ "$UPDATE_COUNT" -eq 0 ] && [ "$RESTORE_COUNT" -eq 0 ] && [ "$SYNCNODIFFS" == "enable" ]; then
+            echo "### CRON -- No differences detected (but still syncing), proceeding..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+        fi
         if [ "$FORCEZERO" == "enable" ]; then
             FORCEZEROARG="-Z"
             FORCEZEROMSG=" (w/ Force Zero)"

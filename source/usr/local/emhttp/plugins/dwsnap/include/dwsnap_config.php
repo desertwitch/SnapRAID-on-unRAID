@@ -37,6 +37,7 @@ class SnapraidArrayConfiguration {
     public $touch;
     public $diff;
     public $sync;
+    public $syncnodiffs;
     public $prehash;
     public $forcezero;
     public $sync_errors;
@@ -85,6 +86,7 @@ class SnapraidArrayConfiguration {
         $this->touch = trim(isset($this->cfg['TOUCH']) ? htmlspecialchars($this->cfg['TOUCH']) : 'enable');
         $this->diff = trim(isset($this->cfg['DIFF']) ? htmlspecialchars($this->cfg['DIFF']) : 'enable');
         $this->sync = trim(isset($this->cfg['SYNC']) ? htmlspecialchars($this->cfg['SYNC']) : 'enable');
+        $this->syncnodiffs = trim(isset($this->cfg['SYNCNODIFFS']) ? htmlspecialchars($this->cfg['SYNCNODIFFS']) : 'disable');
         $this->prehash = trim(isset($this->cfg['PREHASH']) ? htmlspecialchars($this->cfg['PREHASH']) : 'disable');
         $this->forcezero = trim(isset($this->cfg['FORCEZERO']) ? htmlspecialchars($this->cfg['FORCEZERO']) : 'disable');
         $this->sync_errors = trim(isset($this->cfg['SYNCERRORS']) ? htmlspecialchars($this->cfg['SYNCERRORS']) : '100');
