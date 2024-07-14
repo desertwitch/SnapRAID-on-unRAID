@@ -25,6 +25,8 @@ Markdown="false"
 require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 ?>
 
+<script src="<?=autov('/plugins/dwsnap/js/jquery.mask.min.js');?>"></script>
+
 <div><strong>WARNING:</strong></div>
 <div>SnapRAID is a non-supported backup utility for advanced users and can - depending on how YOU set it up - wreak havoc on your data.</div>
 <div>It is crucial to make yourself familiar with the documentation before setting up SnapRAID on your system - you are warned only once here.</div>
@@ -114,7 +116,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 <dl>
     <dt>SnapRAID Running Operation Hard-Kill Timeout:</dt>
     <dd>
-        <input id="KILLTIME" type="text" class="narrow" name="KILLTIME" maxlength="30" value="<?=$dwsnap_killtime?>">seconds
+        <input id="KILLTIME" type="text" class="narrow snapnumber" name="KILLTIME" maxlength="30" value="<?=$dwsnap_killtime?>">seconds
     </dd>
 </dl>
 
@@ -381,7 +383,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Added Files Threshold:</dt>
             <dd>
-                <input id="ADDED" type="text" class="narrow snaprun" name="ADDED" maxlength="30" value="<?=$dwsnap_active_cfg->added?>">files
+                <input id="ADDED" type="text" class="narrow snaprun snapnegativenumber" name="ADDED" maxlength="30" value="<?=$dwsnap_active_cfg->added?>">files
             </dd>
         </dl>
 
@@ -393,7 +395,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Deleted Files Threshold:</dt>
             <dd>
-                <input id="DELETED" type="text" class="narrow snaprun" name="DELETED" maxlength="30" value="<?=$dwsnap_active_cfg->deleted?>">files
+                <input id="DELETED" type="text" class="narrow snaprun snapnegativenumber" name="DELETED" maxlength="30" value="<?=$dwsnap_active_cfg->deleted?>">files
             </dd>
         </dl>
 
@@ -405,7 +407,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Updated Files Threshold:</dt>
             <dd>
-                <input id="UPDATED" type="text" class="narrow snaprun" name="UPDATED" maxlength="30" value="<?=$dwsnap_active_cfg->updated?>">files
+                <input id="UPDATED" type="text" class="narrow snaprun snapnegativenumber" name="UPDATED" maxlength="30" value="<?=$dwsnap_active_cfg->updated?>">files
             </dd>
         </dl>
 
@@ -417,7 +419,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Moved Files Threshold:</dt>
             <dd>
-                <input id="MOVED" type="text" class="narrow snaprun" name="MOVED" maxlength="30" value="<?=$dwsnap_active_cfg->moved?>">files
+                <input id="MOVED" type="text" class="narrow snaprun snapnegativenumber" name="MOVED" maxlength="30" value="<?=$dwsnap_active_cfg->moved?>">files
             </dd>
         </dl>
 
@@ -429,7 +431,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Copied Files Threshold:</dt>
             <dd>
-                <input id="COPIED" type="text" class="narrow snaprun" name="COPIED" maxlength="30" value="<?=$dwsnap_active_cfg->copied?>">files
+                <input id="COPIED" type="text" class="narrow snaprun snapnegativenumber" name="COPIED" maxlength="30" value="<?=$dwsnap_active_cfg->copied?>">files
             </dd>
         </dl>
 
@@ -441,7 +443,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Restored Files Threshold:</dt>
             <dd>
-                <input id="RESTORED" type="text" class="narrow snaprun" name="RESTORED" maxlength="30" value="<?=$dwsnap_active_cfg->restored?>">files
+                <input id="RESTORED" type="text" class="narrow snaprun snapnegativenumber" name="RESTORED" maxlength="30" value="<?=$dwsnap_active_cfg->restored?>">files
             </dd>
         </dl>
 
@@ -504,7 +506,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Sync I/O Premature Interrupt:</dt>
             <dd>
-                <input id="SYNCERRORS" type="text" class="narrow snaprun" name="SYNCERRORS" maxlength="30" value="<?=$dwsnap_active_cfg->sync_errors?>">errors
+                <input id="SYNCERRORS" type="text" class="narrow snaprun snapnumber" name="SYNCERRORS" maxlength="30" value="<?=$dwsnap_active_cfg->sync_errors?>">errors
             </dd>
         </dl>
 
@@ -536,7 +538,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Scrub Age:</dt>
             <dd>
-                <input id="SCRUBAGE" type="text" class="narrow snaprun" name="SCRUBAGE" maxlength="30" value="<?=$dwsnap_active_cfg->scrubage?>">days
+                <input id="SCRUBAGE" type="text" class="narrow snaprun snapnumber" name="SCRUBAGE" maxlength="30" value="<?=$dwsnap_active_cfg->scrubage?>">days
             </dd>
         </dl>
 
@@ -547,7 +549,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Scrub Percentage:</dt>
             <dd>
-                <input id="SCRUBPERCENT" type="text" class="narrow snaprun" name="SCRUBPERCENT" maxlength="30" value="<?=$dwsnap_active_cfg->scrubpercent?>">%
+                <input id="SCRUBPERCENT" type="text" class="narrow snaprun snapnumber" name="SCRUBPERCENT" maxlength="30" value="<?=$dwsnap_active_cfg->scrubpercent?>">%
             </dd>
         </dl>
 
@@ -574,7 +576,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Scrub I/O Premature Interrupt:</dt>
             <dd>
-                <input id="SCRUBERRORS" type="text" class="narrow snaprun" name="SCRUBERRORS" maxlength="30" value="<?=$dwsnap_active_cfg->scrub_errors?>">errors
+                <input id="SCRUBERRORS" type="text" class="narrow snaprun snapnumber" name="SCRUBERRORS" maxlength="30" value="<?=$dwsnap_active_cfg->scrub_errors?>">errors
             </dd>
         </dl>
 
@@ -716,6 +718,9 @@ $(function(){
     $("#SCRUB").change(snapCronSettings);
     $("#CRON").change(snapCronSettings);
     snapCronSettings();
+
+    $('.snapnumber').mask('ZZZZZZZZZZZZZZZ', {translation:  {'Z': {pattern: /[0-9]/, optional: true}}});
+    $('.snapnegativenumber').mask('ZZZZZZZZZZZZZZZ', {translation:  {'Z': {pattern: /[-0-9]/, optional: true}}});
 });
 </script>
     
