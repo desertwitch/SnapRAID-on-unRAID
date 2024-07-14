@@ -65,7 +65,6 @@ EVENT="SnapRAID Maintenance"
 SUBJECT="[${HOST}] SnapRAID - ${CFGNAMEBIG}:"
 
 failure_exit_cron() {
-    FAILUREMSG="Error: ${FAILUREMSG}"
     RUNNINGOP="FINALIZE"
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     MEASURESTOP=$(date +%s)
@@ -80,11 +79,11 @@ failure_exit_cron() {
     cp "/var/lib/snapraid/logs/${CFGNAME}-snaplog" "/var/lib/snapraid/logs/${CFGNAME}/cron-${LOGTIME}.log"
     if [ -z "${SUCCESSOPS[*]}" ]; then
         if [ "$FINISHNOTIFY" == "enable" ] || [ "$ERRORNOTIFY" == "enable" ]; then
-            $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "SnapRAID maintenance finished with errors (after ${DURATION} ${DURATIONUNIT}). No operations performed without errors. ${FAILUREMSG}${RAMWARNINGSHORT}" -i "alert"
+            $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "SnapRAID maintenance finished with errors (after ${DURATION} ${DURATIONUNIT}). ${FAILUREMSG} No operations performed without errors.${RAMWARNINGSHORT}" -i "alert"
         fi
     else
         if [ "$FINISHNOTIFY" == "enable" ] || [ "$ERRORNOTIFY" == "enable" ]; then
-            $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "SnapRAID maintenance finished with errors (after ${DURATION} ${DURATIONUNIT}). ${SUCCESSOPS[*]} performed without errors. ${FAILUREMSG}${RAMWARNINGSHORT}" -i "alert"
+            $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "SnapRAID maintenance finished with errors (after ${DURATION} ${DURATIONUNIT}). ${FAILUREMSG} ${SUCCESSOPS[*]} performed without errors.${RAMWARNINGSHORT}" -i "alert"
         fi
     fi
     logger -t "snapraid-cron" "(${CFGNAME}) finished with errors (exit code: 1)"
@@ -93,7 +92,7 @@ failure_exit_cron() {
 
 # shellcheck disable=SC2317
 signal_exit_cron() {
-    FAILUREMSG="Interrupt: SIGTERM was received during ${RUNNINGOP}."
+    FAILUREMSG="SIGTERM was received during ${RUNNINGOP}."
     RUNNINGOP="FINALIZE"
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     MEASURESTOP=$(date +%s)
@@ -108,11 +107,11 @@ signal_exit_cron() {
     cp "/var/lib/snapraid/logs/${CFGNAME}-snaplog" "/var/lib/snapraid/logs/${CFGNAME}/cron-${LOGTIME}.log"
     if [ -z "${SUCCESSOPS[*]}" ]; then
         if [ "$FINISHNOTIFY" == "enable" ] || [ "$ERRORNOTIFY" == "enable" ]; then
-            $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Interrupted" -d "SnapRAID maintenance was interrupted during ${RUNNINGOP} (after ${DURATION} ${DURATIONUNIT}). No operations performed without errors. ${FAILUREMSG}${RAMWARNINGSHORT}" -i "alert"
+            $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Interrupted" -d "SnapRAID maintenance was interrupted during ${RUNNINGOP} (after ${DURATION} ${DURATIONUNIT}). ${FAILUREMSG} No operations performed without errors.${RAMWARNINGSHORT}" -i "alert"
         fi
     else
         if [ "$FINISHNOTIFY" == "enable" ] || [ "$ERRORNOTIFY" == "enable" ]; then
-            $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Interrupted" -d "SnapRAID maintenance was interrupted during ${RUNNINGOP} (after ${DURATION} ${DURATIONUNIT}). ${SUCCESSOPS[*]} performed without errors. ${FAILUREMSG}${RAMWARNINGSHORT}" -i "alert"
+            $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Interrupted" -d "SnapRAID maintenance was interrupted during ${RUNNINGOP} (after ${DURATION} ${DURATIONUNIT}). ${FAILUREMSG} ${SUCCESSOPS[*]} performed without errors.${RAMWARNINGSHORT}" -i "alert"
         fi
     fi
     logger -t "snapraid-cron" "(${CFGNAME}) interrupted (exit code: 1)"
@@ -159,7 +158,7 @@ if [ "$TOUCH" == "enable" ]; then
         [ "$RAWREPORTS" == "enable" ] && LOGLINE="-l /var/lib/snapraid/logs/${CFGNAME}/cron-${LOGTIME}/01b-touch-${LOGTIME}.raw.log" || unset LOGLINE
         if ! $SNAP_BIN -c $SNAP_CONF $LOGLINE $QUIETARG touch >>"/var/lib/snapraid/logs/${CFGNAME}-snaplog" 2>&1; then
             echo "### CRON -- Touching selected files has failed (received non-zero return code), exiting..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-            FAILUREMSG="The touching of selected files has failed - check LOG."
+            FAILUREMSG="The touching of selected files has failed (see logs)."
             failure_exit_cron
         fi
         echo "### CRON -- Touch has finished, proceeding..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"    
@@ -200,13 +199,13 @@ if [ "$DIFF" == "enable" ]; then
 
     if [[ ! "$ADD_COUNT" =~ ^[0-9]+$ ]] || [[ ! "$DEL_COUNT" =~ ^[0-9]+$ ]] || [[ ! "$UPDATE_COUNT" =~ ^[0-9]+$ ]] || [[ ! "$MOVE_COUNT" =~ ^[0-9]+$ ]] || [[ ! "$COPY_COUNT" =~ ^[0-9]+$ ]] || [[ ! "$RESTORE_COUNT" =~ ^[0-9]+$ ]]; then
         echo "### CRON -- Checking for differences has failed (unable to parse reported differences as numbers), exiting..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-        FAILUREMSG="The checking for differences has failed - check LOG."
+        FAILUREMSG="The checking for differences has failed (see logs)."
         failure_exit_cron
     fi
 
     if [[ ! "$ADDED" =~ ^[-0-9]+$ ]] || [[ ! "$DELETED" =~ ^[-0-9]+$ ]] || [[ ! "$UPDATED" =~ ^[-0-9]+$ ]] || [[ ! "$MOVED" =~ ^[-0-9]+$ ]] || [[ ! "$COPIED" =~ ^[-0-9]+$ ]] || [[ ! "$RESTORED" =~ ^[-0-9]+$ ]]; then
         echo "### CRON -- Checking for differences has failed (non-numeric characters in user-configured thresholds), exiting..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-        FAILUREMSG="The checking for differences has failed - check LOG."
+        FAILUREMSG="The checking for differences has failed (see logs)."
         failure_exit_cron
     fi
 
@@ -215,32 +214,32 @@ if [ "$DIFF" == "enable" ]; then
 
     if [ "$ADDED" -ge 0 ] && [ "$ADD_COUNT" -gt "$ADDED" ]; then
         echo "### CRON -- Added count ${ADD_COUNT} exceeded threshold ${ADDED}, exiting..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-        FAILUREMSG="The added count ${ADD_COUNT} exceeded the threshold ${ADDED} - check LOG."
+        FAILUREMSG="The added count ${ADD_COUNT} exceeded the threshold ${ADDED} (see logs)."
         failure_exit_cron
     fi
     if [ "$DELETED" -ge 0 ] && [ "$DEL_COUNT" -gt "$DELETED" ]; then
         echo "### CRON -- Deleted count ${DEL_COUNT} exceeded threshold ${DELETED}, exiting..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-        FAILUREMSG="The deleted count ${DEL_COUNT} exceeded the threshold ${DELETED} - check LOG."
+        FAILUREMSG="The deleted count ${DEL_COUNT} exceeded the threshold ${DELETED} (see logs)."
         failure_exit_cron
     fi
     if [ "$MOVED" -ge 0 ] && [ "$MOVE_COUNT" -gt "$MOVED" ]; then
         echo "### CRON -- Moved count ${MOVE_COUNT} exceeded threshold ${MOVED}, exiting..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-        FAILUREMSG="The moved count ${MOVE_COUNT} exceeded the threshold ${MOVED} - check LOG."
+        FAILUREMSG="The moved count ${MOVE_COUNT} exceeded the threshold ${MOVED} (see logs)."
         failure_exit_cron
     fi
     if [ "$COPIED" -ge 0 ] && [ "$COPY_COUNT" -gt "$COPIED" ]; then
         echo "### CRON -- Copied count ${COPY_COUNT} exceeded threshold ${COPIED}, exiting..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-        FAILUREMSG="The copied count ${COPY_COUNT} exceeded the threshold ${COPIED} - check LOG."
+        FAILUREMSG="The copied count ${COPY_COUNT} exceeded the threshold ${COPIED} (see logs)."
         failure_exit_cron
     fi
     if [ "$UPDATED" -ge 0 ] && [ "$UPDATE_COUNT" -gt "$UPDATED" ]; then
         echo "### CRON -- Updated count ${UPDATE_COUNT} exceeded threshold ${UPDATED}, exiting..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-        FAILUREMSG="The updated count ${UPDATE_COUNT} exceeded the threshold ${UPDATED} - check LOG."
+        FAILUREMSG="The updated count ${UPDATE_COUNT} exceeded the threshold ${UPDATED} (see logs)."
         failure_exit_cron
     fi
     if [ "$RESTORED" -ge 0 ] && [ "$RESTORE_COUNT" -gt "$RESTORED" ]; then
         echo "### CRON -- Restored count ${RESTORE_COUNT} exceeded threshold ${RESTORED}, exiting..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-        FAILUREMSG="The restored count ${RESTORE_COUNT} exceeded the threshold ${RESTORED} - check LOG."
+        FAILUREMSG="The restored count ${RESTORE_COUNT} exceeded the threshold ${RESTORED} (see logs)."
         failure_exit_cron
     fi
     echo "### CRON -- No difference thresholds have been exceeded, proceeding..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
@@ -269,7 +268,7 @@ if [ "$SYNC" == "enable" ]; then
             [ "$RAWREPORTS" == "enable" ] && LOGLINE="-l /var/lib/snapraid/logs/${CFGNAME}/cron-${LOGTIME}/03-hsync-${LOGTIME}.raw.log" || unset LOGLINE
             if ! $SNAP_BIN -c $SNAP_CONF $LOGLINE $QUIETARG -h $FORCEZEROARG $SYNCERRORARG sync >>"/var/lib/snapraid/logs/${CFGNAME}-snaplog" 2>&1; then
                 echo "### CRON -- Prehashed Sync has failed (received non-zero return code), exiting..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-                FAILUREMSG="The prehashed sync has failed - check LOG."
+                FAILUREMSG="The prehashed sync has failed (see logs)."
                 failure_exit_cron
             else
                 OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
@@ -283,7 +282,7 @@ if [ "$SYNC" == "enable" ]; then
             [ "$RAWREPORTS" == "enable" ] && LOGLINE="-l /var/lib/snapraid/logs/${CFGNAME}/cron-${LOGTIME}/03-sync-${LOGTIME}.raw.log" || unset LOGLINE
             if ! $SNAP_BIN -c $SNAP_CONF $LOGLINE $QUIETARG $FORCEZEROARG $SYNCERRORARG sync >>"/var/lib/snapraid/logs/${CFGNAME}-snaplog" 2>&1; then
                 echo "### CRON -- Sync has failed (received non-zero return code), exiting..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-                FAILUREMSG="The sync has failed - check LOG."
+                FAILUREMSG="The sync has failed (see logs)."
                 failure_exit_cron
             else
                 OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
@@ -312,7 +311,7 @@ if [ "$SCRUB" == "enable" ]; then
         [ "$RAWREPORTS" == "enable" ] && LOGLINE="-l /var/lib/snapraid/logs/${CFGNAME}/cron-${LOGTIME}/04a-scrubnew-${LOGTIME}.raw.log" || unset LOGLINE
         if ! $SNAP_BIN -c $SNAP_CONF $LOGLINE $QUIETARG -p new $SCRUBERRORARG scrub >>"/var/lib/snapraid/logs/${CFGNAME}-snaplog" 2>&1; then
                 echo "### CRON -- Scrub New Blocks has failed (received non-zero return code), exiting..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-                FAILUREMSG="The new block scrub has failed - check LOG."
+                FAILUREMSG="The new block scrub has failed (see logs)."
                 failure_exit_cron
         else
             OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
@@ -327,7 +326,7 @@ if [ "$SCRUB" == "enable" ]; then
     [ "$RAWREPORTS" == "enable" ] && LOGLINE="-l /var/lib/snapraid/logs/${CFGNAME}/cron-${LOGTIME}/04b-scrub-${LOGTIME}.raw.log" || unset LOGLINE
     if ! $SNAP_BIN -c $SNAP_CONF $LOGLINE $QUIETARG -p "$SCRUBPERCENT" -o "$SCRUBAGE" $SCRUBERRORARG scrub >>"/var/lib/snapraid/logs/${CFGNAME}-snaplog" 2>&1; then
             echo "### CRON -- Scrub has failed (received non-zero return code), exiting..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-            FAILUREMSG="The scrub has failed - check LOG."
+            FAILUREMSG="The scrub has failed (see logs)."
             failure_exit_cron
     else
         OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
