@@ -243,7 +243,7 @@ if [ "$DIFF" == "enable" ]; then
         failure_exit_cron
     fi
     echo "### CRON -- No difference thresholds have been exceeded, proceeding..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-    SUCCESSOPS+=("DIFF")
+    SUCCESSOPS+=("DIFF(${CHANGES_COUNT})")
 else
     echo "### CRON -- Checking for differences is disabled, proceeding..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
 fi
