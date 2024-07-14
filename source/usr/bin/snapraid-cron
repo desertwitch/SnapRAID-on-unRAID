@@ -92,8 +92,8 @@ failure_exit_cron() {
 
 # shellcheck disable=SC2317
 signal_exit_cron() {
-    FAILUREMSG="SIGTERM was received during ${RUNNINGOP}."
     RUNNINGOP="FINALIZE"
+    FAILUREMSG="SIGTERM was received during ${RUNNINGOP}."
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     MEASURESTOP=$(date +%s)
     DURATION=$((MEASURESTOP-MEASURESTART))
