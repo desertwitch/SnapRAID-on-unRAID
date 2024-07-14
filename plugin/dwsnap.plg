@@ -18,6 +18,9 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2024.07.14
+- fix: introduced additional safeguards against non-parseable difference counts
+- fix: introduced additional safeguards against malformed user-configured settings
 ###2024.07.10
 - fix: trailing slashes on data disk directives are no longer enforced
 - fix: refactored the configuration parsing mechanisms to be more flexible
