@@ -719,8 +719,10 @@ $(function(){
     $("#CRON").change(snapCronSettings);
     snapCronSettings();
 
-    $('.snapnumber').mask('ZZZZZZZZZZZZZZZ', {translation:  {'Z': {pattern: /[0-9]/, optional: true}}});
-    $('.snapnegativenumber').mask('ZZZZZZZZZZZZZZZ', {translation:  {'Z': {pattern: /[-0-9]/, optional: true}}});
+    if (typeof $.fn.mask === "function" ) {
+        $('.snapnumber').mask('ZZZZZZZZZZZZZZZ', {translation:  {'Z': {pattern: /[0-9]/, optional: true}}});
+        $('.snapnegativenumber').mask('ZZZZZZZZZZZZZZZ', {translation:  {'Z': {pattern: /[-0-9]/, optional: true}}});
+    }
 });
 </script>
     
