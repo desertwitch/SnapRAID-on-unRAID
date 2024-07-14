@@ -214,32 +214,32 @@ if [ "$DIFF" == "enable" ]; then
 
     if [ "$ADDED" -ge 0 ] && [ "$ADD_COUNT" -gt "$ADDED" ]; then
         echo "### CRON -- Added count ${ADD_COUNT} exceeded threshold ${ADDED}, exiting..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-        FAILUREMSG="The added count ${ADD_COUNT} exceeded the threshold ${ADDED} (see logs)."
+        FAILUREMSG="The added count ${ADD_COUNT} exceeded the threshold of ${ADDED} (see logs)."
         failure_exit_cron
     fi
     if [ "$DELETED" -ge 0 ] && [ "$DEL_COUNT" -gt "$DELETED" ]; then
         echo "### CRON -- Deleted count ${DEL_COUNT} exceeded threshold ${DELETED}, exiting..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-        FAILUREMSG="The deleted count ${DEL_COUNT} exceeded the threshold ${DELETED} (see logs)."
+        FAILUREMSG="The deleted count ${DEL_COUNT} exceeded the threshold of ${DELETED} (see logs)."
         failure_exit_cron
     fi
     if [ "$MOVED" -ge 0 ] && [ "$MOVE_COUNT" -gt "$MOVED" ]; then
         echo "### CRON -- Moved count ${MOVE_COUNT} exceeded threshold ${MOVED}, exiting..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-        FAILUREMSG="The moved count ${MOVE_COUNT} exceeded the threshold ${MOVED} (see logs)."
+        FAILUREMSG="The moved count ${MOVE_COUNT} exceeded the threshold of ${MOVED} (see logs)."
         failure_exit_cron
     fi
     if [ "$COPIED" -ge 0 ] && [ "$COPY_COUNT" -gt "$COPIED" ]; then
         echo "### CRON -- Copied count ${COPY_COUNT} exceeded threshold ${COPIED}, exiting..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-        FAILUREMSG="The copied count ${COPY_COUNT} exceeded the threshold ${COPIED} (see logs)."
+        FAILUREMSG="The copied count ${COPY_COUNT} exceeded the threshold of ${COPIED} (see logs)."
         failure_exit_cron
     fi
     if [ "$UPDATED" -ge 0 ] && [ "$UPDATE_COUNT" -gt "$UPDATED" ]; then
         echo "### CRON -- Updated count ${UPDATE_COUNT} exceeded threshold ${UPDATED}, exiting..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-        FAILUREMSG="The updated count ${UPDATE_COUNT} exceeded the threshold ${UPDATED} (see logs)."
+        FAILUREMSG="The updated count ${UPDATE_COUNT} exceeded the threshold of ${UPDATED} (see logs)."
         failure_exit_cron
     fi
     if [ "$RESTORED" -ge 0 ] && [ "$RESTORE_COUNT" -gt "$RESTORED" ]; then
         echo "### CRON -- Restored count ${RESTORE_COUNT} exceeded threshold ${RESTORED}, exiting..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-        FAILUREMSG="The restored count ${RESTORE_COUNT} exceeded the threshold ${RESTORED} (see logs)."
+        FAILUREMSG="The restored count ${RESTORE_COUNT} exceeded the threshold of ${RESTORED} (see logs)."
         failure_exit_cron
     fi
     echo "### CRON -- No difference thresholds have been exceeded, proceeding..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
