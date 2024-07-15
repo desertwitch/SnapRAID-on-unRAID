@@ -364,7 +364,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 
     <div id="TOUCHSETTINGS">
         <dl>
-            <dt>SnapRAID Maintenance - Force Touch Files:</dt>
+            <dt>SnapRAID Maintenance - Force Touch All Files:</dt>
             <dd>
                 <select class="snaprun" id="TOUCHNODIFFS" name="TOUCHNODIFFS" size="1">
                     <?=mk_option($dwsnap_active_cfg->touchnodiffs, "disable", "No");?>
