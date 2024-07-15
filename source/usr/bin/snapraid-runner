@@ -103,8 +103,8 @@ signal_exit_snapraid() {
 
     echo "$OPTIME" >"/var/lib/snapraid/logs/${CFGNAME}-lastfinish"
     echo "################################################################" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-    echo "### ${BIGOP} INTERRUPTED [SIGTERM]: ${OPTIME} (after ${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-    [ -n "$RAMWARNING" ] && echo "###${RAMWARNING}" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+    echo "### (${CFGNAMEBIG}) ${BIGOP} INTERRUPTED [SIGTERM]: ${OPTIME} (after ${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+    [ -n "$RAMWARNING" ] && echo "### (${CFGNAMEBIG})${RAMWARNING}" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
 
     cp "/var/lib/snapraid/logs/${CFGNAME}-snaplog" "/var/lib/snapraid/logs/${CFGNAME}/${OPCMD}-${LOGTIME}.log"
     
@@ -120,13 +120,13 @@ MEASURESTART=$(date +%s)
 
 echo "$OPTIME" >"/var/lib/snapraid/logs/${CFGNAME}-laststart"
 echo "### (${CFGNAMEBIG}) ${BIGOP} STARTED: ${OPTIME}" 2>&1 | tee "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-echo "### RUNNING: ${SNAP_BIN} -c ${SNAP_CONF} ${CMD[*]:2}" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog" 
+echo "### (${CFGNAMEBIG}) RUNNING: ${SNAP_BIN} -c ${SNAP_CONF} ${CMD[*]:2}" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog" 
 
 RAMUTIL=$(df --output=pcent /var/lib/snapraid | tr -dc '0-9')
 if [ "$RAMUTIL" -gt 90 ]; then
     RAMWARNING=" RAM disk utilization above 90% - clear the logfiles to avoid future problems!"
     RAMWARNINGSHORT=" RAM disk utilization above 90%."
-    echo "###${RAMWARNING}" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+    echo "### (${CFGNAMEBIG})${RAMWARNING}" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
 fi
 
 echo "################################################################" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
@@ -215,8 +215,8 @@ fi
 
 echo "$OPTIME" >"/var/lib/snapraid/logs/${CFGNAME}-lastfinish"
 echo "################################################################" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-echo "### ${BIGOP} FINISHED: ${OPTIME} (after ${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-[ -n "$RAMWARNING" ] && echo "###${RAMWARNING}" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+echo "### (${CFGNAMEBIG}) ${BIGOP} FINISHED: ${OPTIME} (after ${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+[ -n "$RAMWARNING" ] && echo "### (${CFGNAMEBIG})${RAMWARNING}" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
 
 cp "/var/lib/snapraid/logs/${CFGNAME}-snaplog" "/var/lib/snapraid/logs/${CFGNAME}/${OPCMD}-${LOGTIME}.log"
 
