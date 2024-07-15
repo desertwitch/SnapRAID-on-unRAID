@@ -26,8 +26,9 @@ fi
 rm -f /boot/config/plugins/dynamix/dwsnap*.cron
 
 for cfgfile in /boot/config/plugins/dwsnap/config/*.cfg; do
+    # shellcheck disable=SC2015
     [ -e "$cfgfile" ] && source "$cfgfile" || continue
-    cfgname="$(basename --suffix=.cfg "$cfgfile")"
+    cfgname=$(basename --suffix=.cfg "$cfgfile")
 
     if [ "$CRON" == "hourly" ]; then
         cp -f $DOCROOT/misc/dwsnap-maintenance.cron "/boot/config/plugins/dynamix/dwsnap-${cfgname}.cron"

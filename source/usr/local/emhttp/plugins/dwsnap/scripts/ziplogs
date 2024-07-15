@@ -16,7 +16,7 @@
 # included in all copies or substantial portions of the Software.
 #
 
-PKGTIME="$(date '+%Y%m%d%H%M%S' 2>/dev/null)"
+PKGTIME=$(date '+%Y%m%d%H%M%S' 2>/dev/null)
 PKGNAME="snapraid-logs-${PKGTIME}.zip"
 
 rm -f /tmp/snapraid-logs-*.zip
