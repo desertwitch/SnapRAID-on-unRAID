@@ -150,11 +150,13 @@ trap signal_exit_cron SIGTERM SIGINT
 
 if [ "$TOUCH" == "enable" ]; then
     RUNNINGOP="TOUCH"
+    TOUCH_COUNT="0"
     echo "### (${CFGNAMEBIG}) CRON -- Checking for files to be touched..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     [ "$RAWREPORTS" == "enable" ] && LOGLINE="-l /var/lib/snapraid/logs/${CFGNAME}/cron-${LOGTIME}/01a-status-${LOGTIME}.raw.log" || unset LOGLINE
     TIMESTATUS=$($SNAP_BIN -c $SNAP_CONF $LOGLINE status 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog" | grep -E 'You have [1-9][0-9]* files with( a)? zero sub-second timestamp\.' 2>/dev/null)
     if [ -n "$TIMESTATUS" ] || [ "$TOUCHNODIFFS" == "enable" ]; then
-        echo "### (${CFGNAMEBIG}) CRON -- Touching selected files..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+        [ -n "$TIMESTATUS" ] && TOUCH_COUNT=$(sed 's/^You have //g' 2>/dev/null <<< "$TIMESTATUS" | cut -d ' ' -f1 2>/dev/null)
+        echo "### (${CFGNAMEBIG}) CRON -- ${TOUCH_COUNT} files to be touched, now touching..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
         [ "$RAWREPORTS" == "enable" ] && LOGLINE="-l /var/lib/snapraid/logs/${CFGNAME}/cron-${LOGTIME}/01b-touch-${LOGTIME}.raw.log" || unset LOGLINE
         if ! $SNAP_BIN -c $SNAP_CONF $LOGLINE $QUIETARG touch >>"/var/lib/snapraid/logs/${CFGNAME}-snaplog" 2>&1; then
             echo "### (${CFGNAMEBIG}) CRON -- Touching selected files has failed (received non-zero return code), exiting..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
@@ -162,7 +164,7 @@ if [ "$TOUCH" == "enable" ]; then
             failure_exit_cron
         fi
         echo "### (${CFGNAMEBIG}) CRON -- Touch has finished, proceeding..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-        SUCCESSOPS+=("TOUCH")    
+        SUCCESSOPS+=("TOUCH(${TOUCH_COUNT})")
     else
         echo "### (${CFGNAMEBIG}) CRON -- No files to be touched, proceeding..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     fi
