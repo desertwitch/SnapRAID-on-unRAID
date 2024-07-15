@@ -20,7 +20,7 @@
 ## SnapRAID on UNRAID
 ###2024.07.15
 - new: added maintenance setting to force sync operation despite no differences reported
-- new: added maintenance setting to force touch operation despite no files reported touchable
+- new: added maintenance setting to force touch operation despite no files touchable reported
 - new: added to report of maintenance touch operation a numeric count of touchable/touched files
 - new: added to report of any operation the name of the array that is being operated on as prefix
 - fix: addressed an issue where difference counts above 8 digits were not parseable by maintenance
