@@ -73,7 +73,7 @@ failure_exit_cron() {
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="minutes"
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hours"
     echo "$OPTIME" >"/var/lib/snapraid/logs/${CFGNAME}-lastfinish"
-    echo "################################################################" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+    echo "##########################################################################" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     echo "### (${CFGNAMEBIG}) CRON -- FINISHED: ${OPTIME} (after ${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     [ -n "$RAMWARNING" ] && echo "### (${CFGNAMEBIG}) CRON --${RAMWARNING}" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     cp "/var/lib/snapraid/logs/${CFGNAME}-snaplog" "/var/lib/snapraid/logs/${CFGNAME}/cron-${LOGTIME}.log"
@@ -101,7 +101,7 @@ signal_exit_cron() {
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="minutes"
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hours"
     echo "$OPTIME" >"/var/lib/snapraid/logs/${CFGNAME}-lastfinish"
-    echo "################################################################" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+    echo "##########################################################################" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     echo "### (${CFGNAMEBIG}) CRON -- INTERRUPTED [SIGTERM during ${RUNNINGOP}]: ${OPTIME} (after ${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     [ -n "$RAMWARNING" ] && echo "### (${CFGNAMEBIG}) CRON --${RAMWARNING}" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     cp "/var/lib/snapraid/logs/${CFGNAME}-snaplog" "/var/lib/snapraid/logs/${CFGNAME}/cron-${LOGTIME}.log"
@@ -140,7 +140,7 @@ if [ "$RAMUTIL" -gt 90 ]; then
     echo "### (${CFGNAMEBIG}) CRON --${RAMWARNING}" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
 fi
 
-echo "################################################################" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+echo "##########################################################################" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
 
 trap signal_exit_cron SIGTERM SIGINT
 
@@ -170,7 +170,7 @@ else
     echo "### (${CFGNAMEBIG}) CRON -- Checking for files to be touched is disabled, proceeding..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
 fi
 
-echo "################################################################" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+echo "##########################################################################" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
 
 if [ "$DIFF" == "enable" ]; then
     RUNNINGOP="DIFF"
@@ -248,7 +248,7 @@ else
     echo "### (${CFGNAMEBIG}) CRON -- Checking for differences is disabled, proceeding..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
 fi
 
-echo "################################################################" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+echo "##########################################################################" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
 
 if [ "$SYNC" == "enable" ]; then
     RUNNINGOP="SYNC"
@@ -301,7 +301,7 @@ else
     echo "### (${CFGNAMEBIG}) CRON -- Sync is disabled, proceeding..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
 fi
 
-echo "################################################################" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+echo "##########################################################################" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
 
 if [ "$SCRUB" == "enable" ]; then
     if [ -n "$SCRUBERRORS" ] && [[ $SCRUBERRORS =~ ^[0-9]+$ ]] && [ "$SCRUBERRORS" != "100" ]; then
@@ -321,7 +321,7 @@ if [ "$SCRUB" == "enable" ]; then
             echo "$OPTIME" > "/boot/config/plugins/dwsnap/config/${CFGNAME}-lastscrub"
         fi
         echo "### (${CFGNAMEBIG}) CRON -- Scrub New Blocks has finished, proceeding..." 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-        echo "################################################################" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+        echo "##########################################################################" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
         SUCCESSOPS+=("SCRUBNEW")
     fi
     RUNNINGOP="SCRUB"
@@ -351,7 +351,7 @@ DURATIONUNIT="seconds"
 [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hours"
 
 echo "$OPTIME" >"/var/lib/snapraid/logs/${CFGNAME}-lastfinish"
-echo "################################################################" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+echo "##########################################################################" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
 echo "### (${CFGNAMEBIG}) CRON -- FINISHED: ${OPTIME} (after ${DURATION} ${DURATIONUNIT})" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
 [ -n "$RAMWARNING" ] && echo "### (${CFGNAMEBIG}) CRON --${RAMWARNING}" 2>&1 | tee -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
 
