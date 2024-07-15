@@ -35,6 +35,7 @@ class SnapraidArrayConfiguration {
     public $errornotify;
     public $noprogress;
     public $touch;
+    public $touchnodiffs;
     public $diff;
     public $sync;
     public $syncnodiffs;
@@ -84,6 +85,7 @@ class SnapraidArrayConfiguration {
         $this->errornotify = trim(isset($this->cfg['ERRORNOTIFY']) ? htmlspecialchars($this->cfg['ERRORNOTIFY']) : 'enable');
         $this->noprogress = trim(isset($this->cfg['NOPROGRESS']) ? htmlspecialchars($this->cfg['NOPROGRESS']) : 'enable');
         $this->touch = trim(isset($this->cfg['TOUCH']) ? htmlspecialchars($this->cfg['TOUCH']) : 'enable');
+        $this->touchnodiffs = trim(isset($this->cfg['TOUCHNODIFFS']) ? htmlspecialchars($this->cfg['TOUCHNODIFFS']) : 'disable');
         $this->diff = trim(isset($this->cfg['DIFF']) ? htmlspecialchars($this->cfg['DIFF']) : 'enable');
         $this->sync = trim(isset($this->cfg['SYNC']) ? htmlspecialchars($this->cfg['SYNC']) : 'enable');
         $this->syncnodiffs = trim(isset($this->cfg['SYNCNODIFFS']) ? htmlspecialchars($this->cfg['SYNCNODIFFS']) : 'disable');

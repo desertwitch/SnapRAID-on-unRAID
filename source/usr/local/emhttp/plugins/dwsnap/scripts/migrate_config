@@ -49,6 +49,7 @@ cp -f /usr/local/emhttp/plugins/dwsnap/default.cfg /boot/config/plugins/dwsnap/d
 [ -n "${ERRORNOTIFY}" ] && sed -i "s/ERRORNOTIFY=.*/ERRORNOTIFY=\"${ERRORNOTIFY}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
 [ -n "${NOPROGRESS}" ] && sed -i "s/NOPROGRESS=.*/NOPROGRESS=\"${NOPROGRESS}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
 [ -n "${TOUCH}" ] && sed -i "s/TOUCH=.*/TOUCH=\"${TOUCH}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
+[ -n "${TOUCHNODIFFS}" ] && sed -i "s/TOUCHNODIFFS=.*/TOUCHNODIFFS=\"${TOUCHNODIFFS}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
 [ -n "${DIFF}" ] && sed -i "s/DIFF=.*/DIFF=\"${DIFF}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
 [ -n "${SYNC}" ] && sed -i "s/SYNC=.*/SYNC=\"${SYNC}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
 [ -n "${SYNCNODIFFS}" ] && sed -i "s/SYNCNODIFFS=.*/SYNCNODIFFS=\"${SYNCNODIFFS}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg

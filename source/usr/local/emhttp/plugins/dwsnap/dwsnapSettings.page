@@ -362,6 +362,23 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
     <p>This improves the SnapRAID capability to recognize moved and copied files as it makes the time-stamp almost unique, removing possible duplicates.</p> 
     </blockquote>
 
+    <div id="TOUCHSETTINGS">
+        <dl>
+            <dt>SnapRAID Maintenance - Touch Zero Differences:</dt>
+            <dd>
+                <select class="snaprun" id="TOUCHNODIFFS" name="TOUCHNODIFFS" size="1">
+                    <?=mk_option($dwsnap_active_cfg->touchnodiffs, "disable", "No");?>
+                    <?=mk_option($dwsnap_active_cfg->touchnodiffs, "enable", "Yes");?>
+                </select>
+            </dd>
+        </dl>
+
+        <blockquote class="inline_help">
+        <p>Runs the TOUCH operation even if the STATUS has resulted in no files to be touched, as opposed to just skipping it.</p>
+        <p>This can be helpful to resume any previously failed TOUCH operations on the next maintenance run (without user interaction).</p>
+        </blockquote>
+    </div>
+
     <dl>
         <dt><strong>SnapRAID Maintenance - <u>Diff</u> / Check Thresholds (Step 2):</strong></dt>
         <dd>
@@ -634,6 +651,11 @@ function snapCronSettings() {
     } else {
         $("#SCRUBSETTINGS").hide();
     }
+    if ($("#TOUCH").val() === "enable") {
+        $("#TOUCHSETTINGS").show();
+    } else {
+        $("#TOUCHSETTINGS").hide();
+    }
     if ($("#CRON").val() === "hourly") {
         $("#CRONSETTINGS").show();
         $("#CRONHOURSETTING").hide();
@@ -732,6 +754,8 @@ $(function(){
     $("#SYNC").change(snapCronSettings);
     $("#SCRUB").change(snapCronSettings);
     $("#CRON").change(snapCronSettings);
+    $("#TOUCH").change(snapCronSettings);
+    
     snapCronSettings();
 
     if (typeof $.fn.mask === "function" ) {
