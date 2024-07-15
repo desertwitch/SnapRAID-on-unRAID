@@ -364,7 +364,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 
     <div id="TOUCHSETTINGS">
         <dl>
-            <dt>SnapRAID Maintenance - Force Touch All Files:</dt>
+            <dt>SnapRAID Maintenance - Force Touch Operation:</dt>
             <dd>
                 <select class="snaprun" id="TOUCHNODIFFS" name="TOUCHNODIFFS" size="1">
                     <?=mk_option($dwsnap_active_cfg->touchnodiffs, "disable", "No");?>
@@ -375,7 +375,6 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 
         <blockquote class="inline_help">
         <p>Runs the TOUCH operation even if the STATUS has resulted in no files to be touched, as opposed to just skipping it.</p>
-        <p>This can be helpful to resume any previously failed TOUCH operations on the next maintenance run (without user interaction).</p>
         </blockquote>
     </div>
 
