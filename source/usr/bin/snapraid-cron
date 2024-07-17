@@ -28,7 +28,8 @@ CONFIG="/boot/config/plugins/dwsnap/config/${CFGNAME}.cfg"
 
 if [ -z "$CFGNAME" ]; then
     echo "A backend helper program that facilitates SnapRAID's periodic array maintenance."
-    echo "Usage: snapraid-cron <array name>"
+    echo "Usage: snapraid-cron primary"
+    echo "-- primary: name of the array configuration to perform the operation on (example: primary)"
     echo ""
     echo "(${CFGNAME}) SnapRAID array configuration name was not provided, exiting..." | logger -s -t "snapraid-cron"
     exit 1
@@ -36,7 +37,8 @@ fi
 
 if [ ! -f "$SNAP_CONF" ] || [ ! -f "$CONFIG" ]; then
     echo "A backend helper program that facilitates SnapRAID's periodic array maintenance."
-    echo "Usage: snapraid-cron <array name>"
+    echo "Usage: snapraid-cron primary"
+    echo "-- primary: name of the array configuration to perform the operation on (example: primary)"
     echo ""
     echo "(${CFGNAME}) SnapRAID array configuration specified was not found, exiting..." | logger -s -t "snapraid-cron"
     exit 1
