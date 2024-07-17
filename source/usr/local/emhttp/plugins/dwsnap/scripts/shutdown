@@ -107,7 +107,7 @@ if [ "$1" != "nobackup" ]; then
     if [ "$WASRUNNING" == "YES" ]; then
         for logfile in /var/lib/snapraid/logs/*-snaplog; do
             logname=$(basename "$logfile")
-            echo "[warning] Backing up SNAPLOG to USB drive... ${logfile}" | logger -t "snapraid-plugin"
+            echo "Backing up SNAPLOG to USB drive... ${logfile}" | logger -t "snapraid-plugin"
             cp -f "$logfile" "/boot/config/plugins/dwsnap/config/${logname}"
             echo "This operation output was saved because it may have been running when the system shutdown." >> "/boot/config/plugins/dwsnap/config/${logname}"
         done
