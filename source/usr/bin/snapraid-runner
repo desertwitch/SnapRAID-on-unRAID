@@ -30,12 +30,57 @@ SNAP_CONF="/boot/config/plugins/dwsnap/config/${CFGNAME}.conf"
 CONFIG="/boot/config/plugins/dwsnap/config/${CFGNAME}.cfg"
 
 if [ -z "$CFGNAME" ]; then
+    echo "A backend helper program that facilitates communication between SnapRAID and UNRAID's web interface."
+    echo "Usage: snapraid-runner primary 0|1 status|diff|sync|scrub|list|dup|up|down|touch|smart|pool|check|fix [options]"
+    echo "-- primary: name of the array configuration to perform the operation on (example: primary)"
+    echo "-- 0|1: send notifications once the operation completes (0:no/1:yes)"
+    echo "-- [options]: optional parameters for the requested operation (see SnapRAID manual)"
+    echo ""
     echo "(${CFGNAME}) SnapRAID array configuration name was not provided, exiting..." | logger -s -t "snapraid-runner"
     exit 1
 fi
 
 if [ ! -f "$SNAP_CONF" ] || [ ! -f "$CONFIG" ]; then
+    echo "A backend helper program that facilitates communication between SnapRAID and UNRAID's web interface."
+    echo "Usage: snapraid-runner primary 0|1 status|diff|sync|scrub|list|dup|up|down|touch|smart|pool|check|fix [options]"
+    echo "-- primary: name of the array configuration to perform the operation on (example: primary)"
+    echo "-- 0|1: send notifications once the operation completes (0:no/1:yes)"
+    echo "-- [options]: optional parameters for the requested operation (see SnapRAID manual)"
+    echo ""
     echo "(${CFGNAME}) SnapRAID array configuration specified was not found, exiting..." | logger -s -t "snapraid-runner"
+    exit 1
+fi
+
+if [ "${NOTIFYFLAG}" == "0" ] || [ "${NOTIFYFLAG}" == "1" ]; then
+    if [ "${NOTIFYFLAG}" == "1" ]; then
+        NOTIFYDONE="YES"
+    fi
+else
+    echo "A backend helper program that facilitates communication between SnapRAID and UNRAID's web interface."
+    echo "Usage: snapraid-runner primary 0|1 status|diff|sync|scrub|list|dup|up|down|touch|smart|pool|check|fix [options]"
+    echo "-- primary: name of the array configuration to perform the operation on (example: primary)"
+    echo "-- 0|1: send notifications once the operation completes (0:no/1:yes)"
+    echo "-- [options]: optional parameters for the requested operation (see SnapRAID manual)"
+    exit 1
+fi
+
+KNOWNCMDS=("status" "diff" "sync" "scrub" "list" "dup" "up" "down" "touch" "smart" "pool" "check" "fix")
+for KNOWNCMD in "${KNOWNCMDS[@]}"; do
+    if [ "$OPCMD" == "$KNOWNCMD" ]; then
+        CMDKNOWN="YES"
+    fi
+done
+if [ ! "$CMDKNOWN" == "YES" ]; then
+    echo "A backend helper program that facilitates communication between SnapRAID and UNRAID's web interface."
+    echo "Usage: snapraid-runner primary 0|1 status|diff|sync|scrub|list|dup|up|down|touch|smart|pool|check|fix [options]"
+    echo "-- primary: name of the array configuration to perform the operation on (example: primary)"
+    echo "-- 0|1: send notifications once the operation completes (0:no/1:yes)"
+    echo "-- [options]: optional parameters for the requested operation (see SnapRAID manual)"
+    exit 1
+fi
+
+if pgrep -f "^(/usr/bin/ionice -c [0-9] )?/usr/bin/snapraid -c ${SNAP_CONF}" >/dev/null 2>&1 || pgrep -f "^(/bin/bash )?/usr/bin/snapraid-cron ${CFGNAME}" >/dev/null 2>&1; then
+    echo "(${CFGNAME}) SnapRAID is already running on the specified array, exiting..." | logger -s -t "snapraid-runner"
     exit 1
 fi
 
@@ -49,46 +94,17 @@ if [ -x "/usr/bin/ionice" ]; then
     [ "$PRIO" == "realtime" ] && SNAP_BIN="/usr/bin/ionice -c 1 /usr/bin/snapraid"
 fi
 
-NOTIFY_BIN="/usr/local/emhttp/plugins/dynamix/scripts/notify"
-HOST=$(echo "$HOSTNAME" | awk '{print toupper($0)}')
-EVENT="SnapRAID Operation"
-SUBJECT="[${HOST}] SnapRAID - ${CFGNAMEBIG}:"
-
-if [ "${NOTIFYFLAG}" == "0" ] || [ "${NOTIFYFLAG}" == "1" ]; then
-    if [ "${NOTIFYFLAG}" == "1" ]; then
-        NOTIFYDONE="YES"
-    fi
-else
-    echo "A small helper program to log SnapRAID's output into UNRAID's web interface."
-    echo "Usage: snapraid-runner <array name> 0|1 status|diff|sync|scrub|list|dup|up|down|touch|smart|pool|check|fix [options]"
-    echo "-- 0|1: send notifications once operation completes (0:no/1:yes)"
-    exit 1
-fi
-
-KNOWNCMDS=("status" "diff" "sync" "scrub" "list" "dup" "up" "down" "touch" "smart" "pool" "check" "fix")
-for KNOWNCMD in "${KNOWNCMDS[@]}"; do
-    if [ "$OPCMD" == "$KNOWNCMD" ]; then
-        CMDKNOWN="YES"
-    fi
-done
-if [ ! "$CMDKNOWN" == "YES" ]; then
-    echo "A small helper program to log SnapRAID's output into UNRAID's web interface."
-    echo "Usage: snapraid-runner <array name> 0|1 status|diff|sync|scrub|list|dup|up|down|touch|smart|pool|check|fix [options]"
-    echo "-- 0|1: send notifications once operation completes (0:no/1:yes)"
-    exit 1
-fi
-
-if pgrep -f "^(/usr/bin/ionice -c [0-9] )?/usr/bin/snapraid -c ${SNAP_CONF}" >/dev/null 2>&1 || pgrep -f "^(/bin/bash )?/usr/bin/snapraid-cron ${CFGNAME}" >/dev/null 2>&1; then
-    echo "(${CFGNAME}) SnapRAID is already running on specified array, exiting..." | logger -s -t "snapraid-runner"
-    exit 1
-fi
-
 [ "$RAWREPORTS" == "manual" ] && RAWREPORTS="enable"
 for LOGPARAM in "${CMD[@]:2}"; do
     if [ "$LOGPARAM" == "-l" ]; then
         RAWREPORTS="disable"
     fi
 done
+
+NOTIFY_BIN="/usr/local/emhttp/plugins/dynamix/scripts/notify"
+HOST=$(echo "$HOSTNAME" | awk '{print toupper($0)}')
+EVENT="SnapRAID Operation"
+SUBJECT="[${HOST}] SnapRAID - ${CFGNAMEBIG}:"
 
 # shellcheck disable=SC2317
 signal_exit_snapraid() {
