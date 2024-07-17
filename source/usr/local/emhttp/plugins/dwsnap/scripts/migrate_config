@@ -16,6 +16,7 @@
 # included in all copies or substantial portions of the Software.
 #
 echo "Migrating the previous configuration layout..."
+echo "Migrating the previous configuration layout..." | logger -t "snapraid-plugin"
 
 mkdir -p /boot/config/plugins/dwsnap/config
 source /boot/config/plugins/dwsnap/dwsnap.cfg

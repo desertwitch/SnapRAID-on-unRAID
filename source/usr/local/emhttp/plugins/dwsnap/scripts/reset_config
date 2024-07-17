@@ -16,6 +16,7 @@
 # included in all copies or substantial portions of the Software.
 #
 echo "Resetting the SnapRAID configuration..."
+echo "Resetting the SnapRAID configuration..." | logger -t "snapraid-plugin"
 
 rm -f /boot/config/plugins/dynamix/dwsnap*.cron
 sleep 1

@@ -18,6 +18,7 @@
 DOCROOT="/usr/local/emhttp/plugins/dwsnap"
 
 echo "Initiating SnapRAID configuration..."
+echo "Initiating SnapRAID configuration..." | logger -t "snapraid-plugin"
 
 if [ "$( grep -ic "dwsnap" /etc/rc.d/rc.local_shutdown )" -eq 0 ]; then
     sed -i -e '/# Get time-out setting/i [ -x /usr/local/emhttp/plugins/dwsnap/scripts/shutdown ] && /usr/local/emhttp/plugins/dwsnap/scripts/shutdown' -e //N /etc/rc.d/rc.local_shutdown
