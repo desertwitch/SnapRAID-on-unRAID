@@ -62,7 +62,7 @@ if ! source "$CONFIG"; then
     echo "Usage: snapraid-cron <array name>"
     echo "-- <array name>: name of the array configuration to perform the operation on (example: primary)"
     echo ""
-    echo "(${CFGNAME}) [error] SnapRAID array settings file cannot be parsed, exiting..." | logger -s -t "snapraid-runner"
+    echo "(${CFGNAME}) [error] SnapRAID array settings file cannot be parsed, exiting..." | logger -s -t "snapraid-cron"
     exit 1
 fi
 
