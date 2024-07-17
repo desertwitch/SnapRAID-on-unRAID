@@ -31,9 +31,9 @@ CONFIG="/boot/config/plugins/dwsnap/config/${CFGNAME}.cfg"
 
 if [ -z "$CFGNAME" ]; then
     echo "A backend helper program that facilitates communication between SnapRAID and UNRAID's web interface."
-    echo "Usage: snapraid-runner primary 0|1 status|diff|sync|scrub|list|dup|up|down|touch|smart|pool|check|fix [options]"
-    echo "-- primary: name of the array configuration to perform the operation on (example: primary)"
-    echo "-- 0|1: send notifications once the operation completes (0:no/1:yes)"
+    echo "Usage: snapraid-runner <array name> <0|1> status|diff|sync|scrub|list|dup|up|down|touch|smart|pool|check|fix [options]"
+    echo "-- <array name>: name of the array configuration to perform the operation on (example: primary)"
+    echo "-- <0|1>: send notifications once the operation completes (0:no/1:yes)"
     echo "-- [options]: optional parameters for the requested operation (see SnapRAID manual)"
     echo ""
     echo "(${CFGNAME}) SnapRAID array configuration name was not provided, exiting..." | logger -s -t "snapraid-runner"
@@ -42,9 +42,9 @@ fi
 
 if [ ! -f "$SNAP_CONF" ] || [ ! -f "$CONFIG" ]; then
     echo "A backend helper program that facilitates communication between SnapRAID and UNRAID's web interface."
-    echo "Usage: snapraid-runner primary 0|1 status|diff|sync|scrub|list|dup|up|down|touch|smart|pool|check|fix [options]"
-    echo "-- primary: name of the array configuration to perform the operation on (example: primary)"
-    echo "-- 0|1: send notifications once the operation completes (0:no/1:yes)"
+    echo "Usage: snapraid-runner <array name> <0|1> status|diff|sync|scrub|list|dup|up|down|touch|smart|pool|check|fix [options]"
+    echo "-- <array name>: name of the array configuration to perform the operation on (example: primary)"
+    echo "-- <0|1>: send notifications once the operation completes (0:no/1:yes)"
     echo "-- [options]: optional parameters for the requested operation (see SnapRAID manual)"
     echo ""
     echo "(${CFGNAME}) SnapRAID array configuration specified was not found, exiting..." | logger -s -t "snapraid-runner"
@@ -57,9 +57,9 @@ if [ "${NOTIFYFLAG}" == "0" ] || [ "${NOTIFYFLAG}" == "1" ]; then
     fi
 else
     echo "A backend helper program that facilitates communication between SnapRAID and UNRAID's web interface."
-    echo "Usage: snapraid-runner primary 0|1 status|diff|sync|scrub|list|dup|up|down|touch|smart|pool|check|fix [options]"
-    echo "-- primary: name of the array configuration to perform the operation on (example: primary)"
-    echo "-- 0|1: send notifications once the operation completes (0:no/1:yes)"
+    echo "Usage: snapraid-runner <array name> <0|1> status|diff|sync|scrub|list|dup|up|down|touch|smart|pool|check|fix [options]"
+    echo "-- <array name>: name of the array configuration to perform the operation on (example: primary)"
+    echo "-- <0|1>: send notifications once the operation completes (0:no/1:yes)"
     echo "-- [options]: optional parameters for the requested operation (see SnapRAID manual)"
     exit 1
 fi
@@ -72,9 +72,9 @@ for KNOWNCMD in "${KNOWNCMDS[@]}"; do
 done
 if [ ! "$CMDKNOWN" == "YES" ]; then
     echo "A backend helper program that facilitates communication between SnapRAID and UNRAID's web interface."
-    echo "Usage: snapraid-runner primary 0|1 status|diff|sync|scrub|list|dup|up|down|touch|smart|pool|check|fix [options]"
-    echo "-- primary: name of the array configuration to perform the operation on (example: primary)"
-    echo "-- 0|1: send notifications once the operation completes (0:no/1:yes)"
+    echo "Usage: snapraid-runner <array name> <0|1> status|diff|sync|scrub|list|dup|up|down|touch|smart|pool|check|fix [options]"
+    echo "-- <array name>: name of the array configuration to perform the operation on (example: primary)"
+    echo "-- <0|1>: send notifications once the operation completes (0:no/1:yes)"
     echo "-- [options]: optional parameters for the requested operation (see SnapRAID manual)"
     exit 1
 fi
