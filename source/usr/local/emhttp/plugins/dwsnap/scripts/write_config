@@ -28,7 +28,7 @@ rm -f /boot/config/plugins/dynamix/dwsnap*.cron
 for cfgfile in /boot/config/plugins/dwsnap/config/*.cfg; do
     # shellcheck disable=SC2015
     if ! source "$cfgfile"; then
-        echo "write_config: Failed to parse SnapRAID array settings file '${cfgfile}' -- SKIPPED" | logger -t "snapraid-plugin"
+        echo "(write_config) Failed to parse SnapRAID array settings file '${cfgfile}' -- SKIPPED" | logger -t "snapraid-plugin"
         continue
     fi
     cfgname=$(basename --suffix=.cfg "$cfgfile")
