@@ -36,7 +36,7 @@ if [ -z "$CFGNAME" ]; then
     echo "-- <0|1>: send notifications once the requested operation completes (0:no/1:yes)"
     echo "-- [options]: optional parameters for the requested operation (see SnapRAID manual)"
     echo ""
-    echo "(${CFGNAME}) SnapRAID array configuration name was not provided, exiting..." | logger -s -t "snapraid-runner"
+    echo "(${CFGNAME}) [ERROR] SnapRAID array configuration name was not provided, exiting..." | logger -s -t "snapraid-runner"
     exit 1
 fi
 
@@ -47,7 +47,7 @@ if [ ! -f "$SNAP_CONF" ] || [ ! -f "$CONFIG" ]; then
     echo "-- <0|1>: send notifications once the requested operation completes (0:no/1:yes)"
     echo "-- [options]: optional parameters for the requested operation (see SnapRAID manual)"
     echo ""
-    echo "(${CFGNAME}) SnapRAID array configuration specified was not found, exiting..." | logger -s -t "snapraid-runner"
+    echo "(${CFGNAME}) [ERROR] SnapRAID array configuration specified was not found, exiting..." | logger -s -t "snapraid-runner"
     exit 1
 fi
 
@@ -62,7 +62,7 @@ else
     echo "-- <0|1>: send notifications once the requested operation completes (0:no/1:yes)"
     echo "-- [options]: optional parameters for the requested operation (see SnapRAID manual)"
     echo ""
-    echo "(${CFGNAME}) No valid notification setting was provided, exiting..." | logger -s -t "snapraid-runner"
+    echo "(${CFGNAME}) [ERROR] No valid notification setting was provided, exiting..." | logger -s -t "snapraid-runner"
     exit 1
 fi
 
@@ -79,7 +79,7 @@ if [ ! "$CMDKNOWN" == "YES" ]; then
     echo "-- <0|1>: send notifications once the requested operation completes (0:no/1:yes)"
     echo "-- [options]: optional parameters for the requested operation (see SnapRAID manual)"
     echo ""
-    echo "(${CFGNAME}) No valid operation command was provided, exiting..." | logger -s -t "snapraid-runner"
+    echo "(${CFGNAME}) [ERROR] No valid operation command was provided, exiting..." | logger -s -t "snapraid-runner"
     exit 1
 fi
 
@@ -90,7 +90,7 @@ if pgrep -f "^(/usr/bin/ionice -c [0-9] )?/usr/bin/snapraid -c ${SNAP_CONF}" >/d
     echo "-- <0|1>: send notifications once the requested operation completes (0:no/1:yes)"
     echo "-- [options]: optional parameters for the requested operation (see SnapRAID manual)"
     echo ""
-    echo "(${CFGNAME}) SnapRAID is already running on the specified array, exiting..." | logger -s -t "snapraid-runner"
+    echo "(${CFGNAME}) [ERROR] SnapRAID is already running on the specified array, exiting..." | logger -s -t "snapraid-runner"
     exit 1
 fi
 
@@ -103,7 +103,7 @@ if ! source "$CONFIG"; then
     echo "-- <0|1>: send notifications once the requested operation completes (0:no/1:yes)"
     echo "-- [options]: optional parameters for the requested operation (see SnapRAID manual)"
     echo ""
-    echo "(${CFGNAME}) SnapRAID array settings file cannot be parsed, exiting..." | logger -s -t "snapraid-runner"
+    echo "(${CFGNAME}) [ERROR] SnapRAID array settings file cannot be parsed, exiting..." | logger -s -t "snapraid-runner"
     exit 1
 fi
 

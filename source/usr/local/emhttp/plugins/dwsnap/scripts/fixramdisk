@@ -16,6 +16,7 @@
 # included in all copies or substantial portions of the Software.
 #
 echo "Recreating the RAM disk..."
+echo "Recreating the RAM disk..." | logger -t "snapraid-plugin"
 
 rm -rf /var/lib/snapraid/* 2>&1 | logger -t "snapraid-ramdisk"
 sleep 1
