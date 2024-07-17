@@ -31,7 +31,7 @@ if ! mountpoint -q /var/lib/snapraid; then
     rm -rf /var/lib/snapraid
     mkdir -p /var/lib/snapraid
     if ! mount -t tmpfs -o size=30% tmpfs /var/lib/snapraid; then
-        echo "(doinst) [ERROR] Failed to create a RAM disk for SnapRAID, falling back to a regular folder." | logger -t "snapraid-plugin"
+        echo "(doinst) [warning] Failed to create a RAM disk for SnapRAID, falling back to a regular folder." | logger -t "snapraid-plugin"
     fi
 fi
 

@@ -31,7 +31,7 @@ if [ -z "$CFGNAME" ]; then
     echo "Usage: snapraid-cron <array name>"
     echo "-- <array name>: name of the array configuration to perform the operation on (example: primary)"
     echo ""
-    echo "(${CFGNAME}) [ERROR] SnapRAID array configuration name was not provided, exiting..." | logger -s -t "snapraid-cron"
+    echo "(${CFGNAME}) [error] SnapRAID array configuration name was not provided, exiting..." | logger -s -t "snapraid-cron"
     exit 1
 fi
 
@@ -40,7 +40,7 @@ if [ ! -f "$SNAP_CONF" ] || [ ! -f "$CONFIG" ]; then
     echo "Usage: snapraid-cron <array name>"
     echo "-- <array name>: name of the array configuration to perform the operation on (example: primary)"
     echo ""
-    echo "(${CFGNAME}) [ERROR] SnapRAID array configuration specified was not found, exiting..." | logger -s -t "snapraid-cron"
+    echo "(${CFGNAME}) [error] SnapRAID array configuration specified was not found, exiting..." | logger -s -t "snapraid-cron"
     exit 1
 fi
 
@@ -49,7 +49,7 @@ if pgrep -f "^(/usr/bin/ionice -c [0-9] )?/usr/bin/snapraid -c ${SNAP_CONF}" >/d
     echo "Usage: snapraid-cron <array name>"
     echo "-- <array name>: name of the array configuration to perform the operation on (example: primary)"
     echo ""
-    echo "(${CFGNAME}) [ERROR] SnapRAID is already running on the specified array, exiting..." | logger -s -t "snapraid-cron"
+    echo "(${CFGNAME}) [error] SnapRAID is already running on the specified array, exiting..." | logger -s -t "snapraid-cron"
     exit 1
 fi
 
@@ -62,7 +62,7 @@ if ! source "$CONFIG"; then
     echo "Usage: snapraid-cron <array name>"
     echo "-- <array name>: name of the array configuration to perform the operation on (example: primary)"
     echo ""
-    echo "(${CFGNAME}) [ERROR] SnapRAID array settings file cannot be parsed, exiting..." | logger -s -t "snapraid-runner"
+    echo "(${CFGNAME}) [error] SnapRAID array settings file cannot be parsed, exiting..." | logger -s -t "snapraid-runner"
     exit 1
 fi
 
@@ -71,7 +71,7 @@ if [ "$CRON" != "hourly" ] && [ "$CRON" != "daily" ] && [ "$CRON" != "weekly" ] 
     echo "Usage: snapraid-cron <array name>"
     echo "-- <array name>: name of the array configuration to perform the operation on (example: primary)"
     echo ""
-    echo "(${CFGNAME}) [ERROR] SnapRAID maintenance is not enabled in array settings, exiting..." | logger -s -t "snapraid-cron"
+    echo "(${CFGNAME}) [error] SnapRAID maintenance is not enabled in array settings, exiting..." | logger -s -t "snapraid-cron"
     exit 1
 fi
 
@@ -107,7 +107,7 @@ failure_exit_cron() {
             $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "SnapRAID maintenance finished with errors (after ${DURATION} ${DURATIONUNIT}). ${FAILUREMSG} ${SUCCESSOPS[*]} performed without errors.${RAMWARNINGSHORT}" -i "alert"
         fi
     fi
-    logger -t "snapraid-cron" "(${CFGNAME}) [ERROR] array maintenance finished with errors (exit code: 1)"
+    logger -t "snapraid-cron" "(${CFGNAME}) [error] array maintenance finished with errors (exit code: 1)"
     exit 1
 }
 
@@ -134,7 +134,7 @@ signal_exit_cron() {
             $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Interrupted" -d "SnapRAID maintenance was interrupted during ${RUNNINGOP} (after ${DURATION} ${DURATIONUNIT}). ${FAILUREMSG} ${SUCCESSOPS[*]} performed without errors.${RAMWARNINGSHORT}" -i "alert"
         fi
     fi
-    logger -t "snapraid-cron" "(${CFGNAME}) [ERROR] array maintenance interrupted (exit code: 1)"
+    logger -t "snapraid-cron" "(${CFGNAME}) [error] array maintenance interrupted (exit code: 1)"
     exit 1
 }
 
