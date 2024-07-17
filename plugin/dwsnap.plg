@@ -18,6 +18,10 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2024.07.17
+- fix: improved interrupt signal handling for backend programs (SIGINT)
+- fix: improved the error handling and documentation for most backend scripts
+- fix: made logged messages more visible using tags and priorities where possible
 ###2024.07.15a
 - new: added maintenance setting to force sync operation despite no differences reported
 - new: added maintenance setting to force touch operation despite no files touchable reported
