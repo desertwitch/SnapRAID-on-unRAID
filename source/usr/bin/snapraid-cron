@@ -100,11 +100,11 @@ failure_exit_cron() {
     cp "/var/lib/snapraid/logs/${CFGNAME}-snaplog" "/var/lib/snapraid/logs/${CFGNAME}/cron-${LOGTIME}.log"
     if [ -z "${SUCCESSOPS[*]}" ]; then
         if [ "$FINISHNOTIFY" == "enable" ] || [ "$ERRORNOTIFY" == "enable" ]; then
-            $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "SnapRAID maintenance finished with errors (after ${DURATION} ${DURATIONUNIT}). ${FAILUREMSG} No operations performed without errors.${RAMWARNINGSHORT}" -i "alert"
+            "$NOTIFY_BIN" -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "SnapRAID maintenance finished with errors (after ${DURATION} ${DURATIONUNIT}). ${FAILUREMSG} No operations performed without errors.${RAMWARNINGSHORT}" -i "alert"
         fi
     else
         if [ "$FINISHNOTIFY" == "enable" ] || [ "$ERRORNOTIFY" == "enable" ]; then
-            $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "SnapRAID maintenance finished with errors (after ${DURATION} ${DURATIONUNIT}). ${FAILUREMSG} ${SUCCESSOPS[*]} performed without errors.${RAMWARNINGSHORT}" -i "alert"
+            "$NOTIFY_BIN" -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "SnapRAID maintenance finished with errors (after ${DURATION} ${DURATIONUNIT}). ${FAILUREMSG} ${SUCCESSOPS[*]} performed without errors.${RAMWARNINGSHORT}" -i "alert"
         fi
     fi
     logger -t "snapraid-cron" "(${CFGNAME}) [error] array maintenance finished with errors (exit code: 1)"
@@ -127,11 +127,11 @@ signal_exit_cron() {
     cp "/var/lib/snapraid/logs/${CFGNAME}-snaplog" "/var/lib/snapraid/logs/${CFGNAME}/cron-${LOGTIME}.log"
     if [ -z "${SUCCESSOPS[*]}" ]; then
         if [ "$FINISHNOTIFY" == "enable" ] || [ "$ERRORNOTIFY" == "enable" ]; then
-            $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Interrupted" -d "SnapRAID maintenance was interrupted during ${RUNNINGOP} (after ${DURATION} ${DURATIONUNIT}). ${FAILUREMSG} No operations performed without errors.${RAMWARNINGSHORT}" -i "alert"
+            "$NOTIFY_BIN" -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Interrupted" -d "SnapRAID maintenance was interrupted during ${RUNNINGOP} (after ${DURATION} ${DURATIONUNIT}). ${FAILUREMSG} No operations performed without errors.${RAMWARNINGSHORT}" -i "alert"
         fi
     else
         if [ "$FINISHNOTIFY" == "enable" ] || [ "$ERRORNOTIFY" == "enable" ]; then
-            $NOTIFY_BIN -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Interrupted" -d "SnapRAID maintenance was interrupted during ${RUNNINGOP} (after ${DURATION} ${DURATIONUNIT}). ${FAILUREMSG} ${SUCCESSOPS[*]} performed without errors.${RAMWARNINGSHORT}" -i "alert"
+            "$NOTIFY_BIN" -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Interrupted" -d "SnapRAID maintenance was interrupted during ${RUNNINGOP} (after ${DURATION} ${DURATIONUNIT}). ${FAILUREMSG} ${SUCCESSOPS[*]} performed without errors.${RAMWARNINGSHORT}" -i "alert"
         fi
     fi
     logger -t "snapraid-cron" "(${CFGNAME}) [error] array maintenance interrupted (exit code: 1)"
@@ -166,7 +166,7 @@ echo "################################################################" 2>&1 | t
 
 trap signal_exit_cron SIGTERM SIGINT
 
-[ "$STARTNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Started" -d "The SnapRAID maintenance has started.${RAMWARNINGSHORT}" -i "warning"
+[ "$STARTNOTIFY" == "enable" ] && "$NOTIFY_BIN" -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Started" -d "The SnapRAID maintenance has started.${RAMWARNINGSHORT}" -i "warning"
 
 [ "$NOPROGRESS" == "enable" ] && QUIETARG="-q"
 
@@ -394,9 +394,9 @@ echo "### (${CFGNAMEBIG}) CRON -- FINISHED: ${OPTIME} (after ${DURATION} ${DURAT
 cp "/var/lib/snapraid/logs/${CFGNAME}-snaplog" "/var/lib/snapraid/logs/${CFGNAME}/cron-${LOGTIME}.log"
 
 if [ -z "${SUCCESSOPS[*]}" ]; then
-    [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Finished" -d "SnapRAID maintenance finished with success (after ${DURATION} ${DURATIONUNIT}). No operations performed without errors.${RAMWARNINGSHORT}" -i "normal"
+    [ "$FINISHNOTIFY" == "enable" ] && "$NOTIFY_BIN" -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Finished" -d "SnapRAID maintenance finished with success (after ${DURATION} ${DURATIONUNIT}). No operations performed without errors.${RAMWARNINGSHORT}" -i "normal"
 else
-    [ "$FINISHNOTIFY" == "enable" ] && $NOTIFY_BIN -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Finished" -d "SnapRAID maintenance finished with success (after ${DURATION} ${DURATIONUNIT}). ${SUCCESSOPS[*]} performed without errors.${RAMWARNINGSHORT}" -i "normal"
+    [ "$FINISHNOTIFY" == "enable" ] && "$NOTIFY_BIN" -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Finished" -d "SnapRAID maintenance finished with success (after ${DURATION} ${DURATIONUNIT}). ${SUCCESSOPS[*]} performed without errors.${RAMWARNINGSHORT}" -i "normal"
 fi
 
 logger -t "snapraid-cron" "(${CFGNAME}) array maintenance finished with success (exit code: 0)"
