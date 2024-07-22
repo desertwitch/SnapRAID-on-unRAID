@@ -91,7 +91,7 @@ data d5 /mnt/disk5/
 <div>The content files take up little space and are put on as many disks as possible (excluding the parity disks) to never be lost or corruptible during a disk failure.</div>
 <br>
 <div>For only partially protecting data (SnapRAID does large, rarely changing files best) like certain folders you can use include/exclude patterns (check the manual about this).</div>
-<div>Advanced setups are possible for disks which are not part of Unraid's array, e.g. pooling of self-mounted SnapRAID-protected disks using tools like mergerFS is possible for expert users.</div>
+<div>Advanced pooling setups are possible for disks not part of Unraid's array, e.g. pooling of self-mounted SnapRAID-protected disks using tools like mergerFS is possible for expert users.</div>
 </em></details><br>
 
 <form id="editform" method="POST">
