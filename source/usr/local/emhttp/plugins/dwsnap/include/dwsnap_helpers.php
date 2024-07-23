@@ -89,7 +89,7 @@ function dwsnap_time_ago($oldTime, $alertThreshold = 7) {
                 $timeCalc = "<span class='green-text'>" . intval($timeCalc/60/60/24) . " days ago</span>";
             }
         }else if ($timeCalc >= (60*60*24)){
-            $timeCalc = "<span class='green-text'>" . "1 day ago</span>";
+            $timeCalc = "<span class='green-text'>1 day ago</span>";
         }else if ($timeCalc >= (60*60*2)){
             $timeCalc = "<span class='green-text'>" . intval($timeCalc/60/60) . " hours ago</span>";
         }else if ($timeCalc >= (60*60)){
