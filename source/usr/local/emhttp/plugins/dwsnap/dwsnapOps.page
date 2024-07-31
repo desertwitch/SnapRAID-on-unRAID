@@ -292,12 +292,13 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
                     $snap_disk_status = ($snap_disk_fs !== "-") ? "<i class='fa fa-check green-text'></i>" : "<i class='fa fa-times red-text'></i>"; 
                     $snap_parity_level = htmlspecialchars(strtoupper($snap_parity_disk[1]));
                     $snap_parity_name = htmlspecialchars($snap_parity_disk[1]);
+                    $snap_parity_path = htmlspecialchars($snap_parity_disk[2]);
                     $snap_parity_mount = htmlspecialchars(trim(shell_exec("df -T " . escapeshellarg($snap_parity_disk[2]) . " 2>/dev/null | sed -n '2p' 2>/dev/null | awk '{print $7}' 2>/dev/null") ?? "-"));
                     echo <<<END
                     <tr>
                     <td class="snapdisktype">$snap_parity_level</td>
                     <td>$snap_parity_name</td>
-                    <td>
+                    <td class="snaphelptip" title="$snap_parity_path">
                         <a class="view" href="/Shares/Browse?dir=$snap_parity_mount/" target="_blank">
                         <i class="icon-u-tab" title="Browse $snap_parity_mount/"></i>
                         </a>$snap_parity_mount
@@ -324,12 +325,13 @@ END;
                     $snap_disk_total = htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 " . escapeshellarg($snap_data_disk[2]) . " 2>/dev/null | sed -n '2p' 2>/dev/null | awk '{print $2}' 2>/dev/null") ?? "-")));
                     $snap_disk_status = ($snap_disk_fs !== "-") ? "<i class='fa fa-check green-text'></i>" : "<i class='fa fa-times red-text'></i>"; 
                     $snap_data_name = htmlspecialchars($snap_data_disk[1]);
+                    $snap_data_path = htmlspecialchars($snap_data_disk[2]);
                     $snap_data_mount = htmlspecialchars(trim(shell_exec("df -T " . escapeshellarg($snap_data_disk[2]) . " 2>/dev/null | sed -n '2p' 2>/dev/null | awk '{print $7}' 2>/dev/null") ?? "-"));
                     echo <<<END
                     <tr>
                     <td class="snapdisktype">DATA</td>
                     <td>$snap_data_name</td>
-                    <td>
+                    <td class="snaphelptip" title="$snap_data_path">
                         <a class="view" href="/Shares/Browse?dir=$snap_data_mount/" target="_blank">
                         <i class="icon-u-tab" title="Browse $snap_data_mount/"></i>
                         </a>$snap_data_mount
