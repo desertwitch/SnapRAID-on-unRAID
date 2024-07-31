@@ -110,12 +110,12 @@ class SnapraidArrayConfiguration {
         $this->lastscrub = trim(file_exists("/boot/config/plugins/dwsnap/config/$cfg_name-lastscrub") ? htmlspecialchars(file_get_contents("/boot/config/plugins/dwsnap/config/$cfg_name-lastscrub")) : "-");
         $this->lastnodiff = trim(file_exists("/boot/config/plugins/dwsnap/config/$cfg_name-lastnodiff") ? htmlspecialchars(file_get_contents("/boot/config/plugins/dwsnap/config/$cfg_name-lastnodiff")) : "-");        
     
-        preg_match_all('/^((?:.-)?parity) (\/mnt\/(?:(?:addons|disks|remotes|rootshare)\/)?.*?)\//m', $this->snapcfg, $this->parity_disks, PREG_SET_ORDER);
-        preg_match_all('/^data (.*?) (\/mnt\/(?:(?:addons|disks|remotes|rootshare)\/)?.*?)(?:\/|$)/m', $this->snapcfg, $this->data_disks, PREG_SET_ORDER);
+        preg_match_all('/^((?:.-)?parity) (.+?)$/m', $this->snapcfg, $this->parity_disks, PREG_SET_ORDER);
+        preg_match_all('/^data (.+?) (.+?)$/m', $this->snapcfg, $this->data_disks, PREG_SET_ORDER);
 
-        preg_match_all('/^((?:.-)?parity) (.*?)$/m', $this->snapcfg, $this->parity_disks_raw, PREG_PATTERN_ORDER);
-        preg_match_all('/^data (.*?) (.*?)$/m', $this->snapcfg, $this->data_disks_raw, PREG_PATTERN_ORDER);
-        preg_match_all('/^content (.*?)$/m', $this->snapcfg, $this->content_files_raw, PREG_PATTERN_ORDER);
+        preg_match_all('/^((?:.-)?parity) (.+?)$/m', $this->snapcfg, $this->parity_disks_raw, PREG_PATTERN_ORDER);
+        preg_match_all('/^data (.+?) (.+?)$/m', $this->snapcfg, $this->data_disks_raw, PREG_PATTERN_ORDER);
+        preg_match_all('/^content (.+?)$/m', $this->snapcfg, $this->content_files_raw, PREG_PATTERN_ORDER);
     }
 
     public function getFooterHTML($snap_tip_class) {
@@ -134,11 +134,11 @@ class SnapraidArrayConfiguration {
                 if(count($this->parity_disks_raw[2]) === count($this->parity_disks) && count($this->data_disks_raw[2]) === count($this->data_disks)) {
                     $snap_all_disks_available = true;
                     foreach ($this->parity_disks as $snap_parity_disk){
-                        $snap_disk_fs = htmlspecialchars(trim(shell_exec("cat /etc/mtab 2>/dev/null | grep '" . $snap_parity_disk[2] . " ' 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
+                        $snap_disk_fs = htmlspecialchars(trim(shell_exec("df -T " . escapeshellarg($snap_parity_disk[2]) . " 2>/dev/null | sed -n '2p' 2>/dev/null | awk '{print $2}' 2>/dev/null") ?? "-"));
                         if($snap_disk_fs == "-") { $snap_all_disks_available = false; }
                     }
                     foreach ($this->data_disks as $snap_data_disk){
-                        $snap_disk_fs = htmlspecialchars(trim(shell_exec("cat /etc/mtab 2>/dev/null | grep '" . $snap_data_disk[2] . " ' 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-"));
+                        $snap_disk_fs = htmlspecialchars(trim(shell_exec("df -T " . escapeshellarg($snap_data_disk[2]) . " 2>/dev/null | sed -n '2p' 2>/dev/null | awk '{print $2}' 2>/dev/null") ?? "-"));
                         if($snap_disk_fs == "-") { $snap_all_disks_available = false; }
                     }
                     if($snap_all_disks_available) {
