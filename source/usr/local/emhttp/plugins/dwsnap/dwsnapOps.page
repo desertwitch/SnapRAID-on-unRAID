@@ -298,10 +298,10 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
                     <tr>
                     <td class="snapdisktype">$snap_parity_level</td>
                     <td>$snap_parity_name</td>
-                    <td class="snaphelptip" title="$snap_parity_path">
+                    <td>
                         <a class="view" href="/Shares/Browse?dir=$snap_parity_mount/" target="_blank">
                         <i class="icon-u-tab" title="Browse $snap_parity_mount/"></i>
-                        </a>$snap_parity_mount
+                        </a><span class="snaphelptip" title="$snap_parity_path">$snap_parity_mount</span>
                     </td>
                     <td>$snap_disk_status</td>
                     <td>$snap_disk_fs</td>
@@ -331,10 +331,10 @@ END;
                     <tr>
                     <td class="snapdisktype">DATA</td>
                     <td>$snap_data_name</td>
-                    <td class="snaphelptip" title="$snap_data_path">
+                    <td>
                         <a class="view" href="/Shares/Browse?dir=$snap_data_mount/" target="_blank">
                         <i class="icon-u-tab" title="Browse $snap_data_mount/"></i>
-                        </a>$snap_data_mount
+                        </a><span class="snaphelptip" title="$snap_data_path">$snap_data_mount</span>
                     </td>
                     <td>$snap_disk_status</td>
                     <td>$snap_disk_fs</td>
