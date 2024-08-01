@@ -71,7 +71,7 @@ if [ "$CRON" != "hourly" ] && [ "$CRON" != "daily" ] && [ "$CRON" != "weekly" ] 
     echo "Usage: snapraid-cron <array name>"
     echo "-- <array name>: name of the array configuration to perform the operation on (example: primary)"
     echo ""
-    echo "(${CFGNAME}) [error] SnapRAID maintenance is not enabled in array settings, exiting..." | logger -s -t "snapraid-cron"
+    echo "(${CFGNAME}) [error] SnapRAID maintenance is not enabled in array settings, exiting..." | tee -i "/var/lib/snapraid/logs/${CFGNAME}-snaplog" | logger -s -t "snapraid-cron"
     exit 1
 fi
 
