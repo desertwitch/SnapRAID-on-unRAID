@@ -95,7 +95,7 @@ failure_exit_cron() {
     [ "$DURATION" -ge 60 ] && DURATION=$((DURATION/60)) && DURATIONUNIT="hours"
     echo "$OPTIME" >"/var/lib/snapraid/logs/${CFGNAME}-lastfinish"
     echo "################################################################" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-    echo "### (${CFGNAMEBIG}) CRON -- FAILURE: ${OPTIME} (after ${DURATION} ${DURATIONUNIT})" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+    echo "### (${CFGNAMEBIG}) CRON -- FAILED: ${OPTIME} (after ${DURATION} ${DURATIONUNIT})" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     [ -n "$RAMWARNING" ] && echo "### (${CFGNAMEBIG}) CRON --${RAMWARNING}" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     cp "/var/lib/snapraid/logs/${CFGNAME}-snaplog" "/var/lib/snapraid/logs/${CFGNAME}/cron-${LOGTIME}.log"
     if [ -z "${SUCCESSOPS[*]}" ]; then
