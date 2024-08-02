@@ -18,6 +18,11 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2024.08.02
+- fix: allow disk directives anywhere on the system and not just inside /mnt
+- fix: no longer evaluate mtab for filesystem but rather same process as for space
+- fix: also show in GUI when maintenance fails because it was not enabled in settings
+- fix: make a failed maintenance more visible in logfiles by ending with a failure message
 ###2024.07.17
 - fix: improved interrupt signal handling for backend programs (SIGINT)
 - fix: improved the error handling and documentation for most backend scripts
