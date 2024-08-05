@@ -271,6 +271,7 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
             }
         }
     ?>
+    <div class="snapUpdate" style="width:inherit;"></div>
     <table class="tablesorter snapdisks">
         <thead>
             <tr>
@@ -408,9 +409,11 @@ function getSnapStatus() {
                 if(statusResponse[0] === "ANY:YES") {
                     $('.snapanyrun').prop('disabled', true);
                     $('.snapanynotrun').prop('disabled', false);
+                    $('.snapUpdate').hide();
                 } else if (statusResponse[0] === "ANY:NO") {
                     $('.snapanyrun').prop('disabled', false);
                     $('.snapanynotrun').prop('disabled', true);
+                    $('.snapUpdate').show();
                 } 
             }
             if(statusResponse[1]) {
@@ -1356,12 +1359,8 @@ END;
 
     $('div.title:contains(SnapRAID):first').append('<span class="right">OPERATING ON: <strong><?=strtoupper($dwsnap_active_cfg->cfgname);?></strong></span>');
 
-    // dynamix plugin update api
-    <?if (function_exists('plugin_update_available') && $version = plugin_update_available('dwsnap')):?>
-        showNotice('SnapRAID <?=htmlspecialchars($version);?> available. <a>Update</a>','dwsnap');
-        $('#user-notice a').on('click', function () {
-        $('#user-notice').empty();
-    });
-    <?endif;?>
+	if ( typeof caPluginUpdateCheck === "function" ) {
+	    caPluginUpdateCheck("dwsnap.plg",{name:"SnapRAID",element:".snapUpdate",debug:true});
+	}
 });
 </script>
