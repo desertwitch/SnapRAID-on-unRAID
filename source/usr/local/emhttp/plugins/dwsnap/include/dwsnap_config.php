@@ -33,6 +33,8 @@ class SnapraidArrayConfiguration {
     public $startnotify;
     public $finishnotify;
     public $errornotify;
+    public $healthcheck;
+    public $healthcheckuuid;
     public $noprogress;
     public $touch;
     public $touchnodiffs;
@@ -59,6 +61,8 @@ class SnapraidArrayConfiguration {
     public $lastscrub;
     public $lastnodiff;
     public $snapcfg;
+    public $crontab;
+    public $cronmatch = [];
     public $parity_disks = [];
     public $data_disks = [];
     public $parity_disks_raw = [];
@@ -71,6 +75,7 @@ class SnapraidArrayConfiguration {
 
         $this->cfg = file_exists("/boot/config/plugins/dwsnap/config/$cfg_name.cfg") ? parse_ini_file("/boot/config/plugins/dwsnap/config/$cfg_name.cfg") : [];
         $this->snapcfg = file_exists("/boot/config/plugins/dwsnap/config/$cfg_name.conf") ? file_get_contents("/boot/config/plugins/dwsnap/config/$cfg_name.conf") : "-";
+        $this->crontab = file_exists("/boot/config/plugins/dynamix/dwsnap-$cfg_name.cron") ? file_get_contents("/boot/config/plugins/dynamix/dwsnap-$cfg_name.cron") : "-";
 
         $this->prio = trim(isset($this->cfg['PRIO']) ? htmlspecialchars($this->cfg['PRIO']) : 'disable');
         $this->sync_expires = trim(isset($this->cfg['SYNCEXPIRES']) ? htmlspecialchars($this->cfg['SYNCEXPIRES']) : '7');
@@ -83,6 +88,8 @@ class SnapraidArrayConfiguration {
         $this->startnotify = trim(isset($this->cfg['STARTNOTIFY']) ? htmlspecialchars($this->cfg['STARTNOTIFY']) : 'disable');
         $this->finishnotify = trim(isset($this->cfg['FINISHNOTIFY']) ? htmlspecialchars($this->cfg['FINISHNOTIFY']) : 'enable');
         $this->errornotify = trim(isset($this->cfg['ERRORNOTIFY']) ? htmlspecialchars($this->cfg['ERRORNOTIFY']) : 'enable');
+        $this->healthcheck = trim(isset($this->cfg['HEALTHCHECK']) ? htmlspecialchars($this->cfg['HEALTHCHECK']) : 'disable');
+        $this->healthcheckuuid = trim(isset($this->cfg['HEALTHCHECKUUID']) ? htmlspecialchars($this->cfg['HEALTHCHECKUUID']) : '');
         $this->noprogress = trim(isset($this->cfg['NOPROGRESS']) ? htmlspecialchars($this->cfg['NOPROGRESS']) : 'enable');
         $this->touch = trim(isset($this->cfg['TOUCH']) ? htmlspecialchars($this->cfg['TOUCH']) : 'enable');
         $this->touchnodiffs = trim(isset($this->cfg['TOUCHNODIFFS']) ? htmlspecialchars($this->cfg['TOUCHNODIFFS']) : 'disable');
@@ -116,6 +123,8 @@ class SnapraidArrayConfiguration {
         preg_match_all('/^((?:.-)?parity) (.+?)$/m', $this->snapcfg, $this->parity_disks_raw, PREG_PATTERN_ORDER);
         preg_match_all('/^data (.+?) (.+?)$/m', $this->snapcfg, $this->data_disks_raw, PREG_PATTERN_ORDER);
         preg_match_all('/^content (.+?)$/m', $this->snapcfg, $this->content_files_raw, PREG_PATTERN_ORDER);
+
+        preg_match_all('/((((\d+,)+\d+|(\d+(\/|-)\d+)|\d+|\*) ?){5,7})/m', $this->crontab, $this->cronmatch, PREG_PATTERN_ORDER);
     }
 
     public function getFooterHTML($snap_tip_class) {

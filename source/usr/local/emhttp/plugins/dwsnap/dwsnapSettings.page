@@ -618,6 +618,48 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <p><strong>It is recommended to leave this setting on the default value.</strong></p>
         </blockquote>
     </div>
+
+    <hr>
+
+    <dl>
+        <dt>SnapRAID Maintenance - Healthcheck.io Service:</dt>
+        <dd>
+            <select class="snaprun" id="HEALTHCHECK" name="HEALTHCHECK" size="1">
+                <?=mk_option($dwsnap_active_cfg->healthcheck, "disable", "No");?>
+                <?=mk_option($dwsnap_active_cfg->healthcheck, "enable", "Yes");?>
+            </select>
+        </dd>
+    </dl>
+
+    <blockquote class="inline_help">
+    <p>This setting controls if service pings should be sent through the <em>Healthcheck.io</em> notification service.</p>
+    </blockquote>
+
+    <div id="HEALTHCHECKSETTINGS">
+        <?if(!empty($dwsnap_active_cfg->cronmatch[0][0])):?>
+        <dl>
+            <dt>SnapRAID Maintenance - Healthcheck.io Reference:</dt>
+            <dd>
+                <?=trim(htmlspecialchars($dwsnap_active_cfg->cronmatch[0][0]))?>
+            </dd>
+        </dl>
+
+        <blockquote class="inline_help">
+        <p>This shows the currently installed crontab for reference and use when configuring the <em>Healthcheck.io</em> notification service.</p>
+        </blockquote>
+        <?endif;?>
+
+        <dl>
+            <dt>SnapRAID Maintenance - Healthcheck.io UUID:</dt>
+            <dd>
+                <input id="HEALTHCHECKUUID" type="text" class="snaprun" name="HEALTHCHECKUUID" value="<?=$dwsnap_active_cfg->healthcheckuuid?>">
+            </dd>
+        </dl>
+
+        <blockquote class="inline_help">
+        <p>This setting defines the UUID that is used to send service pings through the <em>Healthcheck.io</em> notification service.</p>
+        </blockquote>
+    </div>
 </div>
 
 <dl>
@@ -654,6 +696,11 @@ function snapCronSettings() {
         $("#TOUCHSETTINGS").show();
     } else {
         $("#TOUCHSETTINGS").hide();
+    }
+    if ($("#HEALTHCHECK").val() === "enable") {
+        $("#HEALTHCHECKSETTINGS").show();
+    } else {
+        $("#HEALTHCHECKSETTINGS").hide();
     }
     if ($("#CRON").val() === "hourly") {
         $("#CRONSETTINGS").show();
@@ -754,6 +801,7 @@ $(function(){
     $("#SCRUB").change(snapCronSettings);
     $("#CRON").change(snapCronSettings);
     $("#TOUCH").change(snapCronSettings);
+    $("#HEALTHCHECK").change(snapCronSettings);
 
     snapCronSettings();
 

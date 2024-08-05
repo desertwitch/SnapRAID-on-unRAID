@@ -86,7 +86,29 @@ HOST=$(echo "$HOSTNAME" | awk '{print toupper($0)}')
 EVENT="SnapRAID Maintenance"
 SUBJECT="[${HOST}] SnapRAID - ${CFGNAMEBIG}:"
 
+do_healthcheck() {
+    if [ -z "$HEALTHCHECKUUID" ]; then
+        echo "(${CFGNAME}) [error] Healthcheck failure, the required UUID was not provided." | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog" | logger -s -t "snapraid-cron"
+        return 1
+    fi
+
+    case "$1" in
+    'start' )
+    curl -fsSk -m 10 --retry 3 --data-raw "$2" "https://hc-ping.com/${HEALTHCHECKUUID}/start" >/dev/null 2>&1
+    ;;
+    'success' )
+    curl -fsSk -m 10 --retry 3 --data-raw "$2" "https://hc-ping.com/${HEALTHCHECKUUID}" >/dev/null 2>&1
+    ;;
+    'failure' )
+    curl -fsSk -m 10 --retry 3 --data-raw "$2" "https://hc-ping.com/${HEALTHCHECKUUID}/fail" >/dev/null 2>&1
+    ;;
+    'log' )
+    curl -fsSk -m 10 --retry 3 --data-raw "$2" "https://hc-ping.com/${HEALTHCHECKUUID}/log" >/dev/null 2>&1
+    esac
+}
+
 failure_exit_cron() {
+    [ "$HEALTHCHECK" == "enable" ] && do_healthcheck log "${FAILUREMSG}"
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     MEASURESTOP=$(date +%s)
     DURATION=$((MEASURESTOP-MEASURESTART))
@@ -102,10 +124,12 @@ failure_exit_cron() {
         if [ "$FINISHNOTIFY" == "enable" ] || [ "$ERRORNOTIFY" == "enable" ]; then
             "$NOTIFY_BIN" -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "SnapRAID maintenance finished with errors (after ${DURATION} ${DURATIONUNIT}). ${FAILUREMSG} No operations performed without errors.${RAMWARNINGSHORT}" -i "alert"
         fi
+        [ "$HEALTHCHECK" == "enable" ] && do_healthcheck failure "SnapRAID maintenance finished with errors (after ${DURATION} ${DURATIONUNIT}). ${FAILUREMSG} No operations performed without errors.${RAMWARNINGSHORT}"
     else
         if [ "$FINISHNOTIFY" == "enable" ] || [ "$ERRORNOTIFY" == "enable" ]; then
             "$NOTIFY_BIN" -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Failure" -d "SnapRAID maintenance finished with errors (after ${DURATION} ${DURATIONUNIT}). ${FAILUREMSG} ${SUCCESSOPS[*]} performed without errors.${RAMWARNINGSHORT}" -i "alert"
         fi
+        [ "$HEALTHCHECK" == "enable" ] && do_healthcheck failure "SnapRAID maintenance finished with errors (after ${DURATION} ${DURATIONUNIT}). ${FAILUREMSG} ${SUCCESSOPS[*]} performed without errors.${RAMWARNINGSHORT}"
     fi
     logger -t "snapraid-cron" "(${CFGNAME}) [error] array maintenance finished with errors (exit code: 1)"
     exit 1
@@ -114,6 +138,7 @@ failure_exit_cron() {
 # shellcheck disable=SC2317
 signal_exit_cron() {
     FAILUREMSG="SIGTERM was received during ${RUNNINGOP}."
+    [ "$HEALTHCHECK" == "enable" ] && do_healthcheck log "${FAILUREMSG}"
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     MEASURESTOP=$(date +%s)
     DURATION=$((MEASURESTOP-MEASURESTART))
@@ -129,10 +154,12 @@ signal_exit_cron() {
         if [ "$FINISHNOTIFY" == "enable" ] || [ "$ERRORNOTIFY" == "enable" ]; then
             "$NOTIFY_BIN" -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Interrupted" -d "SnapRAID maintenance was interrupted during ${RUNNINGOP} (after ${DURATION} ${DURATIONUNIT}). ${FAILUREMSG} No operations performed without errors.${RAMWARNINGSHORT}" -i "alert"
         fi
+        [ "$HEALTHCHECK" == "enable" ] && do_healthcheck failure "SnapRAID maintenance was interrupted during ${RUNNINGOP} (after ${DURATION} ${DURATIONUNIT}). ${FAILUREMSG} No operations performed without errors.${RAMWARNINGSHORT}"
     else
         if [ "$FINISHNOTIFY" == "enable" ] || [ "$ERRORNOTIFY" == "enable" ]; then
             "$NOTIFY_BIN" -e "${EVENT}" -s "Alert ${SUBJECT} Maintenance Interrupted" -d "SnapRAID maintenance was interrupted during ${RUNNINGOP} (after ${DURATION} ${DURATIONUNIT}). ${FAILUREMSG} ${SUCCESSOPS[*]} performed without errors.${RAMWARNINGSHORT}" -i "alert"
         fi
+        [ "$HEALTHCHECK" == "enable" ] && do_healthcheck failure "SnapRAID maintenance was interrupted during ${RUNNINGOP} (after ${DURATION} ${DURATIONUNIT}). ${FAILUREMSG} ${SUCCESSOPS[*]} performed without errors.${RAMWARNINGSHORT}"
     fi
     logger -t "snapraid-cron" "(${CFGNAME}) [error] array maintenance interrupted (exit code: 1)"
     exit 1
@@ -167,6 +194,7 @@ echo "################################################################" 2>&1 | t
 trap signal_exit_cron SIGTERM SIGINT
 
 [ "$STARTNOTIFY" == "enable" ] && "$NOTIFY_BIN" -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Started" -d "The SnapRAID maintenance has started.${RAMWARNINGSHORT}" -i "warning"
+[ "$HEALTHCHECK" == "enable" ] && do_healthcheck start "SnapRAID maintenance has started."
 
 [ "$NOPROGRESS" == "enable" ] && QUIETARG="-q"
 
@@ -194,6 +222,7 @@ if [ "$TOUCH" == "enable" ]; then
         fi
         echo "### (${CFGNAMEBIG}) CRON -- Touch has finished, proceeding..." 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
         SUCCESSOPS+=("TOUCH(${TOUCH_COUNT})")
+        [ "$HEALTHCHECK" == "enable" ] && do_healthcheck log "${TOUCH_COUNT} files were touched."
     else
         echo "### (${CFGNAMEBIG}) CRON -- No files to be touched, proceeding..." 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     fi
@@ -276,6 +305,7 @@ if [ "$DIFF" == "enable" ]; then
     fi
     echo "### (${CFGNAMEBIG}) CRON -- No difference thresholds have been exceeded, proceeding..." 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     SUCCESSOPS+=("DIFF(${CHANGES_COUNT})")
+    [ "$HEALTHCHECK" == "enable" ] && do_healthcheck log "${CHANGES_COUNT} differences - no thresholds exceeded."
 else
     echo "### (${CFGNAMEBIG}) CRON -- Checking for differences is disabled, proceeding..." 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
 fi
@@ -330,6 +360,7 @@ if [ "$SYNC" == "enable" ]; then
             echo "### (${CFGNAMEBIG}) CRON -- Sync has finished, proceeding..." 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
         fi
         [ -n "$CHANGES_COUNT" ] && SUCCESSOPS+=("SYNC(${CHANGES_COUNT})") || SUCCESSOPS+=("SYNC")
+        [ "$HEALTHCHECK" == "enable" ] && do_healthcheck log "Sync has finished."
     fi
 else
     echo "### (${CFGNAMEBIG}) CRON -- Sync is disabled, proceeding..." 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
@@ -358,6 +389,7 @@ if [ "$SCRUB" == "enable" ]; then
         echo "### (${CFGNAMEBIG}) CRON -- Scrub New Blocks has finished, proceeding..." 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
         echo "################################################################" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
         SUCCESSOPS+=("SCRUBNEW")
+        [ "$HEALTHCHECK" == "enable" ] && do_healthcheck log "Scrub New Blocks has finished."
     fi
     RUNNINGOP="SCRUB"
     echo "### (${CFGNAMEBIG}) CRON -- Scrubbing [${SCRUBPERCENT} % / ${SCRUBAGE} days age]...${SCRUBERRORMSG}" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
@@ -373,6 +405,7 @@ if [ "$SCRUB" == "enable" ]; then
     fi
     echo "### (${CFGNAMEBIG}) CRON -- Scrub has finished, proceeding..." 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     SUCCESSOPS+=("SCRUB")
+    [ "$HEALTHCHECK" == "enable" ] && do_healthcheck log "Scrub has finished."
 else
     echo "### (${CFGNAMEBIG}) CRON -- Scrub is disabled, proceeding..." 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
 fi
@@ -395,8 +428,10 @@ cp "/var/lib/snapraid/logs/${CFGNAME}-snaplog" "/var/lib/snapraid/logs/${CFGNAME
 
 if [ -z "${SUCCESSOPS[*]}" ]; then
     [ "$FINISHNOTIFY" == "enable" ] && "$NOTIFY_BIN" -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Finished" -d "SnapRAID maintenance finished with success (after ${DURATION} ${DURATIONUNIT}). No operations performed without errors.${RAMWARNINGSHORT}" -i "normal"
+    [ "$HEALTHCHECK" == "enable" ] && do_healthcheck success "SnapRAID maintenance finished with success (after ${DURATION} ${DURATIONUNIT}). No operations performed without errors.${RAMWARNINGSHORT}"
 else
     [ "$FINISHNOTIFY" == "enable" ] && "$NOTIFY_BIN" -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Finished" -d "SnapRAID maintenance finished with success (after ${DURATION} ${DURATIONUNIT}). ${SUCCESSOPS[*]} performed without errors.${RAMWARNINGSHORT}" -i "normal"
+    [ "$HEALTHCHECK" == "enable" ] && do_healthcheck success "SnapRAID maintenance finished with success (after ${DURATION} ${DURATIONUNIT}). ${SUCCESSOPS[*]} performed without errors.${RAMWARNINGSHORT}"
 fi
 
 logger -t "snapraid-cron" "(${CFGNAME}) array maintenance finished with success (exit code: 0)"
