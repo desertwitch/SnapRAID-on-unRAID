@@ -622,7 +622,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
     <hr>
 
     <dl>
-        <dt>SnapRAID Maintenance - Healthcheck.io Service:</dt>
+        <dt>SnapRAID Maintenance - Healthchecks.io Service:</dt>
         <dd>
             <select class="snaprun" id="HEALTHCHECK" name="HEALTHCHECK" size="1">
                 <?=mk_option($dwsnap_active_cfg->healthcheck, "disable", "No");?>
@@ -632,32 +632,33 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
     </dl>
 
     <blockquote class="inline_help">
-    <p>This setting controls if service pings should be sent through the <em>Healthcheck.io</em> notification service.</p>
+    <p>This setting controls if service pings should be sent through the <em>Healthchecks.io</em> uptime monitoring service.</p>
     </blockquote>
 
     <div id="HEALTHCHECKSETTINGS">
         <?if(!empty($dwsnap_active_cfg->cronmatch[0][0])):?>
         <dl>
-            <dt>SnapRAID Maintenance - Healthcheck.io Reference:</dt>
+            <dt>SnapRAID Maintenance - Healthchecks.io Reference:</dt>
             <dd>
                 <?=trim(htmlspecialchars($dwsnap_active_cfg->cronmatch[0][0]))?>
             </dd>
         </dl>
 
         <blockquote class="inline_help">
-        <p>This shows the currently installed crontab for reference and use when configuring the <em>Healthcheck.io</em> notification service.</p>
+        <p>This shows the currently installed crontab for reference and use when configuring the <em>Healthchecks.io</em> uptime monitoring service.</p>
         </blockquote>
         <?endif;?>
 
         <dl>
-            <dt>SnapRAID Maintenance - Healthcheck.io UUID:</dt>
+            <dt>SnapRAID Maintenance - Healthchecks.io UUID:</dt>
             <dd>
                 <input id="HEALTHCHECKUUID" type="text" class="snaprun" name="HEALTHCHECKUUID" value="<?=$dwsnap_active_cfg->healthcheckuuid?>">
             </dd>
         </dl>
 
         <blockquote class="inline_help">
-        <p>This setting defines the UUID that is used to send service pings through the <em>Healthcheck.io</em> notification service.</p>
+        <p>This setting defines the UUID that is used to send service pings through the <em>Healthchecks.io</em> uptime monitoring service.</p>
+        <p>Make sure to put here exclusively the identifier part (e.g. <em>15525b37-1e9c-421e-ae83-42fafd853c8a</em>) and not the whole address that is displayed in the web interface.</p>
         </blockquote>
     </div>
 </div>
