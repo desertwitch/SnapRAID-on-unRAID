@@ -1360,7 +1360,7 @@ END;
     $('div.title:contains(SnapRAID):first').append('<span class="right">OPERATING ON: <strong><?=strtoupper($dwsnap_active_cfg->cfgname);?></strong></span>');
 
 	if ( typeof caPluginUpdateCheck === "function" ) {
-	    caPluginUpdateCheck("dwsnap.plg",{name:"SnapRAID",element:".snapUpdate",debug:true});
+	    caPluginUpdateCheck("dwsnap.plg",{name:"SnapRAID",element:".snapUpdate"});
 	}
 });
 </script>
