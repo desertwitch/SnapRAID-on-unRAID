@@ -171,7 +171,7 @@ trap signal_exit_snapraid SIGTERM SIGINT
 if [ "${OPCMD}" == "sync" ]; then
     # shellcheck disable=SC2015
     [ "$RAWREPORTS" == "enable" ] && LOGLINE="/var/lib/snapraid/logs/${CFGNAME}/${OPCMD}-${LOGTIME}.raw.log" || unset LOGLINE
-    "$SNAP_BIN" -c "$SNAP_CONF" ${LOGLINE:+"-l"} ${LOGLINE:+"$LOGLINE"} "${CMD[@]:2}" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+    $SNAP_BIN -c "$SNAP_CONF" ${LOGLINE:+"-l"} ${LOGLINE:+"$LOGLINE"} "${CMD[@]:2}" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     CMDRET="${PIPESTATUS[0]}"
     
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
@@ -192,7 +192,7 @@ if [ "${OPCMD}" == "sync" ]; then
 elif [ "${OPCMD}" == "scrub" ]; then
     # shellcheck disable=SC2015
     [ "$RAWREPORTS" == "enable" ] && LOGLINE="/var/lib/snapraid/logs/${CFGNAME}/${OPCMD}-${LOGTIME}.raw.log" || unset LOGLINE
-    "$SNAP_BIN" -c "$SNAP_CONF" ${LOGLINE:+"-l"} ${LOGLINE:+"$LOGLINE"} "${CMD[@]:2}" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+    $SNAP_BIN -c "$SNAP_CONF" ${LOGLINE:+"-l"} ${LOGLINE:+"$LOGLINE"} "${CMD[@]:2}" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     CMDRET="${PIPESTATUS[0]}"
     
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
@@ -211,7 +211,7 @@ elif [ "${OPCMD}" == "scrub" ]; then
 elif [ "${OPCMD}" == "diff" ]; then
     # shellcheck disable=SC2015
     [ "$RAWREPORTS" == "enable" ] && LOGLINE="/var/lib/snapraid/logs/${CFGNAME}/${OPCMD}-${LOGTIME}.raw.log" || unset LOGLINE
-    "$SNAP_BIN" -c "$SNAP_CONF" ${LOGLINE:+"-l"} ${LOGLINE:+"$LOGLINE"} "${CMD[@]:2}" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+    $SNAP_BIN -c "$SNAP_CONF" ${LOGLINE:+"-l"} ${LOGLINE:+"$LOGLINE"} "${CMD[@]:2}" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     CMDRET="${PIPESTATUS[0]}"
     
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
@@ -235,7 +235,7 @@ elif [ "${OPCMD}" == "diff" ]; then
 else
     # shellcheck disable=SC2015
     [ "$RAWREPORTS" == "enable" ] && LOGLINE="/var/lib/snapraid/logs/${CFGNAME}/${OPCMD}-${LOGTIME}.raw.log" || unset LOGLINE
-    "$SNAP_BIN" -c "$SNAP_CONF" ${LOGLINE:+"-l"} ${LOGLINE:+"$LOGLINE"} "${CMD[@]:2}" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+    $SNAP_BIN -c "$SNAP_CONF" ${LOGLINE:+"-l"} ${LOGLINE:+"$LOGLINE"} "${CMD[@]:2}" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     CMDRET="${PIPESTATUS[0]}"
     
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
