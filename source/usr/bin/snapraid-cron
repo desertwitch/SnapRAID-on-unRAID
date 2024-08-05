@@ -88,22 +88,42 @@ SUBJECT="[${HOST}] SnapRAID - ${CFGNAMEBIG}:"
 
 do_healthcheck() {
     if [ -z "$HEALTHCHECKUUID" ]; then
-        echo "(${CFGNAME}) [error] Healthcheck failure, the required UUID was not provided." | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog" | logger -s -t "snapraid-cron"
+        echo "(${CFGNAME}) [error] Healthcheck Failure: Service activated, but required UUID not provided." | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
         return 1
     fi
 
     case "$1" in
     'start' )
-    curl -fsSk -m 10 --retry 3 --data-raw "$2" "https://hc-ping.com/${HEALTHCHECKUUID}/start" >/dev/null 2>&1
+        curl -fsSk -m 10 --retry 3 -o /dev/null --data-raw "$2" "https://hc-ping.com/${HEALTHCHECKUUID}/start"
+        HEALTHCHECKRETVAL=$?
+        if [ ! "$HEALTHCHECKRETVAL" -eq 0 ]; then
+            echo "(${CFGNAME}) [error] Healthcheck Failure: Ping failed with 'curl' exit code ${HEALTHCHECKRETVAL}." | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+        fi
+        unset HEALTHCHECKRETVAL
     ;;
     'success' )
-    curl -fsSk -m 10 --retry 3 --data-raw "$2" "https://hc-ping.com/${HEALTHCHECKUUID}" >/dev/null 2>&1
+        curl -fsSk -m 10 --retry 3 -o /dev/null --data-raw "$2" "https://hc-ping.com/${HEALTHCHECKUUID}"
+        HEALTHCHECKRETVAL=$?
+        if [ ! "$HEALTHCHECKRETVAL" -eq 0 ]; then
+            echo "(${CFGNAME}) [error] Healthcheck Failure: Ping failed with 'curl' exit code ${HEALTHCHECKRETVAL}." | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+        fi
+        unset HEALTHCHECKRETVAL
     ;;
     'failure' )
-    curl -fsSk -m 10 --retry 3 --data-raw "$2" "https://hc-ping.com/${HEALTHCHECKUUID}/fail" >/dev/null 2>&1
+        curl -fsSk -m 10 --retry 3 -o /dev/null --data-raw "$2" "https://hc-ping.com/${HEALTHCHECKUUID}/fail"
+        HEALTHCHECKRETVAL=$?
+        if [ ! "$HEALTHCHECKRETVAL" -eq 0 ]; then
+            echo "(${CFGNAME}) [error] Healthcheck Failure: Ping failed with 'curl' exit code ${HEALTHCHECKRETVAL}." | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+        fi
+        unset HEALTHCHECKRETVAL
     ;;
     'log' )
-    curl -fsSk -m 10 --retry 3 --data-raw "$2" "https://hc-ping.com/${HEALTHCHECKUUID}/log" >/dev/null 2>&1
+        curl -fsSk -m 10 --retry 3 -o /dev/null --data-raw "$2" "https://hc-ping.com/${HEALTHCHECKUUID}/log"
+        HEALTHCHECKRETVAL=$?
+        if [ ! "$HEALTHCHECKRETVAL" -eq 0 ]; then
+            echo "(${CFGNAME}) [error] Healthcheck Failure: Ping failed with 'curl' exit code ${HEALTHCHECKRETVAL}." | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+        fi
+        unset HEALTHCHECKRETVAL
     esac
 }
 
@@ -131,7 +151,7 @@ failure_exit_cron() {
         fi
         [ "$HEALTHCHECK" == "enable" ] && do_healthcheck failure "SnapRAID maintenance finished with errors (after ${DURATION} ${DURATIONUNIT}). ${FAILUREMSG} ${SUCCESSOPS[*]} performed without errors.${RAMWARNINGSHORT}"
     fi
-    logger -t "snapraid-cron" "(${CFGNAME}) [error] array maintenance finished with errors (exit code: 1)"
+    logger -s -t "snapraid-cron" "(${CFGNAME}) [error] array maintenance finished with errors (exit code: 1)"
     exit 1
 }
 
@@ -161,14 +181,14 @@ signal_exit_cron() {
         fi
         [ "$HEALTHCHECK" == "enable" ] && do_healthcheck failure "SnapRAID maintenance was interrupted during ${RUNNINGOP} (after ${DURATION} ${DURATIONUNIT}). ${FAILUREMSG} ${SUCCESSOPS[*]} performed without errors.${RAMWARNINGSHORT}"
     fi
-    logger -t "snapraid-cron" "(${CFGNAME}) [error] array maintenance interrupted (exit code: 1)"
+    logger -s -t "snapraid-cron" "(${CFGNAME}) [error] array maintenance interrupted (exit code: 1)"
     exit 1
 }
 
 RUNNINGOP="START"
 SUCCESSOPS=()
 
-logger -t "snapraid-cron" "(${CFGNAME}) array maintenance started"
+logger -s -t "snapraid-cron" "(${CFGNAME}) array maintenance started"
 
 rm -f "/var/lib/snapraid/logs/${CFGNAME}-lastfinish"
 
@@ -434,5 +454,5 @@ else
     [ "$HEALTHCHECK" == "enable" ] && do_healthcheck success "SnapRAID maintenance finished with success (after ${DURATION} ${DURATIONUNIT}). ${SUCCESSOPS[*]} performed without errors.${RAMWARNINGSHORT}"
 fi
 
-logger -t "snapraid-cron" "(${CFGNAME}) array maintenance finished with success (exit code: 0)"
+logger -s -t "snapraid-cron" "(${CFGNAME}) array maintenance finished with success (exit code: 0)"
 exit 0
