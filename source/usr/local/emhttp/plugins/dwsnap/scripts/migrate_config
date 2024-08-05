@@ -48,6 +48,8 @@ cp -f /usr/local/emhttp/plugins/dwsnap/default.cfg /boot/config/plugins/dwsnap/d
 [ -n "${STARTNOTIFY}" ] && sed -i "s/STARTNOTIFY=.*/STARTNOTIFY=\"${STARTNOTIFY}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
 [ -n "${FINISHNOTIFY}" ] && sed -i "s/FINISHNOTIFY=.*/FINISHNOTIFY=\"${FINISHNOTIFY}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
 [ -n "${ERRORNOTIFY}" ] && sed -i "s/ERRORNOTIFY=.*/ERRORNOTIFY=\"${ERRORNOTIFY}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
+[ -n "${HEALTHCHECK}" ] && sed -i "s/HEALTHCHECK=.*/HEALTHCHECK=\"${HEALTHCHECK}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
+[ -n "${HEALTHCHECKUUID}" ] && sed -i "s/HEALTHCHECKUUID=.*/HEALTHCHECKUUID=\"${HEALTHCHECKUUID}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
 [ -n "${NOPROGRESS}" ] && sed -i "s/NOPROGRESS=.*/NOPROGRESS=\"${NOPROGRESS}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
 [ -n "${TOUCH}" ] && sed -i "s/TOUCH=.*/TOUCH=\"${TOUCH}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
 [ -n "${TOUCHNODIFFS}" ] && sed -i "s/TOUCHNODIFFS=.*/TOUCHNODIFFS=\"${TOUCHNODIFFS}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
