@@ -3,14 +3,14 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "dwsnap">
 <!ENTITY author    "desertwitch">
-<!ENTITY version   "2024.08.05a">
+<!ENTITY version   "2024.08.05b">
 <!ENTITY launch    "Settings/dwsnapOps">
 <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/SnapRAID-on-unRAID/main">
 <!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
 <!ENTITY pkgURL    "&gitURL;/packages">
 <!ENTITY plgPATH   "/boot/config/plugins/&name;">
-<!ENTITY plgNAME   "dwsnap-2024.08.05-x86_64-2">
-<!ENTITY plgMD5    "f8be2e84008eba611f6ca6e931f71d08">
+<!ENTITY plgNAME   "dwsnap-2024.08.05-x86_64-3">
+<!ENTITY plgMD5    "3791616e56258090cf2c7c11381266e6">
 <!ENTITY emhttp    "/usr/local/emhttp/plugins/&name;">
 ]>
 
@@ -18,8 +18,9 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
-###2024.08.05a
+###2024.08.05b
 - new: array maintenance integration for healthchecks.io uptime monitoring service
+- fix: ionice and specific process evaluations no longer cause respective operations to fail
 ###2024.08.02
 - fix: allow disk directives anywhere on the system and not just inside /mnt
 - fix: no longer evaluate mtab for filesystem but rather same process as for space
