@@ -658,7 +658,8 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 
         <blockquote class="inline_help">
         <p>This setting defines the UUID that is used to send service pings through the <em>Healthchecks.io</em> uptime monitoring service.</p>
-        <p>Make sure to put here exclusively the identifier part (e.g. <em>15525b37-1e9c-421e-ae83-42fafd853c8a</em>) and not the whole address that is displayed in the web interface.</p>
+        <p>Make sure to put here the identifier part (e.g. <em>15525b37-1e9c-421e-ae83-42fafd853c8a</em>) and not the whole address that is displayed in the <em>Healthchecks.io</em> web interface.</p>
+        <p>Be advised that it is considered best practice to create one UUID per array configuration and not use the same UUID for multiple array configurations (which can cause problems).</p>
         </blockquote>
     </div>
 </div>
