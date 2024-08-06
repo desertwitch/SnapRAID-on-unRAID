@@ -394,9 +394,9 @@ function getSnapLogs() {
     $.get('/plugins/dwsnap/include/dwsnap_logger.php', {"config": "<?=$dwsnap_active_cfg->cfgname;?>"}, function(data) {
         if (data) { 
             $('#logviewer').html(data); 
-	        var pre = $(".snaplog");
-	        pre.scrollTop(pre.prop("scrollHeight"));
-	    }
+            var pre = $(".snaplog");
+            pre.scrollTop(pre.prop("scrollHeight"));
+        }
     });
     clearTimeout(timers.getSnapLogs);
     timers.getSnapLogs = setTimeout(getSnapLogs, 1000);
@@ -432,7 +432,7 @@ function getSnapStatus() {
                     clearTimeout(timers.getSnapLogs);
                 }
             }
-	    }
+        }
     });
     clearTimeout(timers.getSnapStatus);
     timers.getSnapStatus = setTimeout(getSnapStatus, 3000);

@@ -53,7 +53,7 @@ function getSnapArrays() {
             $('#snap_arrays').html(data);
             $('.snaparraytip').tooltipster();
             $('.snaparrayhtmltip').tooltipster({contentAsHTML: true});
-	    }
+        }
     });
     clearTimeout(timers.getSnapArrays);
     timers.getSnapArrays = setTimeout(getSnapArrays, 5000);

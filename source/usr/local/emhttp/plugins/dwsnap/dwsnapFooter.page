@@ -111,7 +111,7 @@ function getSnapFooter() {
         if (data) { 
             $('#snap_footer').html(data);
             $('.snapfootertip').tooltipster();
-	    }
+        }
     });
     clearTimeout(timers.getSnapFooter);
     timers.getSnapFooter = setTimeout(getSnapFooter, 10000);

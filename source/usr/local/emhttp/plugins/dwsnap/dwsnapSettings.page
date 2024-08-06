@@ -45,7 +45,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 <dl>
     <dt>SnapRAID Backend:</dt>
     <dd>
-	    <strong><?=$dwsnap_backend?></strong>
+        <strong><?=$dwsnap_backend?></strong>
     </dd>
 </dl>
 
