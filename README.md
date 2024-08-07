@@ -2,6 +2,7 @@ SnapRAID on UNRAID
 ================
 _A plugin for advanced users installing SnapRAID onto UNRAID systems._
 
+![GitHub Tag](https://img.shields.io/github/v/tag/desertwitch/SnapRAID-on-unRAID?label=release&color=peru)
 [![CodeFactor](https://www.codefactor.io/repository/github/desertwitch/snapraid-on-unraid/badge)](https://www.codefactor.io/repository/github/desertwitch/snapraid-on-unraid)
 
 #### Possible Use-Cases:
