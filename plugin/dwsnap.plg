@@ -18,6 +18,8 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2024.08.07
+- new: switched from legacy to more recent update checking mechanism
 ###2024.08.05b
 - new: array maintenance integration for healthchecks.io uptime monitoring service
 - fix: ionice and specific process evaluations no longer cause respective operations to fail
