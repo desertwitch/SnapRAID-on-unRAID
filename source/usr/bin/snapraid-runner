@@ -40,14 +40,14 @@ if [ -z "$CFGNAME" ]; then
     exit 1
 fi
 
-if [ ! -f "$SNAP_CONF" ] || [ ! -f "$CONFIG" ]; then
+if [ ! -r "$SNAP_CONF" ] || [ ! -r "$CONFIG" ]; then
     echo "A backend helper program that facilitates communication between SnapRAID and UNRAID's web interface."
     echo "Usage: snapraid-runner <array name> <0|1> status|diff|sync|scrub|list|dup|up|down|touch|smart|pool|check|fix [options]"
     echo "-- <array name>: name of the array configuration to perform the operation on (example: primary)"
     echo "-- <0|1>: send notifications once the requested operation completes (0:no/1:yes)"
     echo "-- [options]: optional parameters for the requested operation (see SnapRAID manual)"
     echo ""
-    echo "(${CFGNAME}) [error] SnapRAID array configuration specified was not found, exiting..." | logger -s -t "snapraid-runner"
+    echo "(${CFGNAME}) [error] SnapRAID array configuration specified was not found/readable, exiting..." | logger -s -t "snapraid-runner"
     exit 1
 fi
 

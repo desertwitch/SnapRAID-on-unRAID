@@ -16,7 +16,7 @@
 # included in all copies or substantial portions of the Software.
 #
 CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
-[ -e "$CONFIG" ] && source $CONFIG
+[ -r "$CONFIG" ] && source $CONFIG
 
 if pgrep -x snapraid >/dev/null 2>&1 || pgrep -x snapraid-cron >/dev/null 2>&1 || pgrep -x snapraid-runner >/dev/null 2>&1; then
     if [ "$STOPARRAY" == "disable" ]; then

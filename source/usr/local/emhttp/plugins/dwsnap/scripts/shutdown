@@ -16,7 +16,7 @@
 # included in all copies or substantial portions of the Software.
 #
 CONFIG="/boot/config/plugins/dwsnap/dwsnap.cfg"
-[ -e "$CONFIG" ] && source $CONFIG
+[ -r "$CONFIG" ] && source $CONFIG
 
 if [ -z "$KILLTIME" ] || [[ ! $KILLTIME =~ ^[0-9]+$ ]]; then
     KILLTIME="30"
