@@ -379,7 +379,7 @@ if [ "$SYNC" == "enable" ]; then
             fi
             echo "### (${CFGNAMEBIG}) CRON -- Sync has finished, proceeding..." 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
         fi
-        [ -n "$CHANGES_COUNT" ] && SUCCESSOPS+=("SYNC(${CHANGES_COUNT})") || SUCCESSOPS+=("SYNC")
+        SUCCESSOPS+=("SYNC")
         [ "$HEALTHCHECK" == "enable" ] && do_healthcheck log "Sync has finished."
     fi
 else
