@@ -37,4 +37,4 @@ Plugin licensed under GPL2, GPL3 and/or MIT (where applicable, see respective so
 - SnapRAID © 2011-2024 Andrea Mazzoleni (https://github.com/amadvance/snapraid)
 - SnapRAID AIO Script © Oliver Cervera (https://github.com/auanasgheps/snapraid-aio-script)
 
-<sub>SnapRAID Source Code: https://github.com/amadvance/snapraid</sub> 
+<sub>SnapRAID Source Code: https://github.com/amadvance/snapraid</sub>
