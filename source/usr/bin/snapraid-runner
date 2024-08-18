@@ -155,7 +155,7 @@ MEASURESTART=$(date +%s)
 
 echo "$OPTIME" >"/var/lib/snapraid/logs/${CFGNAME}-laststart"
 echo "### (${CFGNAMEBIG}) ${BIGOP} STARTED: ${OPTIME}" 2>&1 | tee -i "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-echo "### (${CFGNAMEBIG}) RUNNING: ${SNAP_BIN} -c ${SNAP_CONF} ${CMD[*]:2}" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog" 
+echo "### ${SNAP_BIN} -c ${SNAP_CONF} ${CMD[*]:2}" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog" 
 
 RAMUTIL=$(df --output=pcent /var/lib/snapraid | tr -dc '0-9')
 if [ "$RAMUTIL" -gt 90 ]; then
