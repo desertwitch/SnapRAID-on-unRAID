@@ -263,7 +263,7 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
             }
 
             if(!$snap_all_disks_mounted) {
-                $snap_unmounted_disks_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='At least one configured disk is not online and/or mounted, please check both your configuration and the actual disks for issues.'><i class='fa fa-exclamation-triangle'></i> <strong>Missing Disk(s)</strong></span>";
+                $snap_unmounted_disks_html = "<span class='snaphelptip' style='margin-left:10px;color:red;' title='At least one configured disk is not mounted, please check both your configuration and the actual disks for issues.'><i class='fa fa-exclamation-triangle'></i> <strong>Missing Disk(s)</strong></span>";
             }
 
             if(file_exists("/boot/config/plugins/dwsnap/config/".$dwsnap_active_cfg->cfgname."-syncneeded")) {
