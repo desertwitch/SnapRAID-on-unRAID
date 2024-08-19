@@ -22,7 +22,7 @@
 - fix: reordered the warning messages in footer for better visibility
 - fix: no longer base the number of synced files on number of differences
 - fix: do not consider disks as online when they are spun down and/or sleeping
-- fix: check for readability and not just existence when loading configuration files
+- fix: check for existence and not being regular when loading configuration files
 ###2024.08.07
 - new: switched from legacy to more recent update checking mechanism
 ###2024.08.05b

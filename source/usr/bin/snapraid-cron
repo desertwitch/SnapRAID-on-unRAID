@@ -35,12 +35,12 @@ if [ -z "$CFGNAME" ]; then
     exit 1
 fi
 
-if [ ! -r "$SNAP_CONF" ] || [ ! -r "$CONFIG" ]; then
+if [ ! -e "$SNAP_CONF" ] || [ ! -e "$CONFIG" ]; then
     echo "A backend helper program that facilitates SnapRAID's periodic array maintenance."
     echo "Usage: snapraid-cron <array name>"
     echo "-- <array name>: name of the array configuration to perform the operation on (example: primary)"
     echo ""
-    echo "(${CFGNAME}) [error] SnapRAID array configuration specified was not found/readable, exiting..." | logger -s -t "snapraid-cron"
+    echo "(${CFGNAME}) [error] SnapRAID array configuration specified was not found, exiting..." | logger -s -t "snapraid-cron"
     exit 1
 fi
 
