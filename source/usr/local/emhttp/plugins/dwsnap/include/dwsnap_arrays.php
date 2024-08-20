@@ -34,9 +34,9 @@ foreach ($snap_array_files as $snaparrayFile) {
     }
     
     $snap_array_field_cfgname = "<span class='snaparraytip' title='/boot/config/plugins/dwsnap/config/".$snap_array_cfg_obj->cfgname.".conf'>".strtoupper($snap_array_cfg_obj->cfgname)."</span>";
-    $snap_array_field_paritydisks = "<span class='snaparrayhtmltip' title='".(implode("<br>", array_map("htmlspecialchars", $snap_array_cfg_obj->parity_disks_raw[2]))?:"-")."'>".count($snap_array_cfg_obj->parity_disks_raw[2])."</span>" ?? "0";
-    $snap_array_field_datadisks = "<span class='snaparrayhtmltip' title='".(implode("<br>", array_map("htmlspecialchars", $snap_array_cfg_obj->data_disks_raw[2]))?:"-")."'>".count($snap_array_cfg_obj->data_disks_raw[2])."</span>" ?? "0";
-    $snap_array_field_contentfiles = "<span class='snaparrayhtmltip' title='".(implode("<br>", array_map("htmlspecialchars",$snap_array_cfg_obj->content_files_raw[1]))?:"-")."'>".count($snap_array_cfg_obj->content_files_raw[1])."</span>" ?? "0";
+    $snap_array_field_paritydisks = "<span class='snaparrayhtmltip' title='".(implode("<br>", array_map("htmlspecialchars", $snap_array_cfg_obj->parity_disks_raw[2]))?:"-")."'>".(count($snap_array_cfg_obj->parity_disks_raw[2]) ?? "0")."</span>";
+    $snap_array_field_datadisks = "<span class='snaparrayhtmltip' title='".(implode("<br>", array_map("htmlspecialchars", $snap_array_cfg_obj->data_disks_raw[2]))?:"-")."'>".(count($snap_array_cfg_obj->data_disks_raw[2]) ?? "0")."</span>";
+    $snap_array_field_contentfiles = "<span class='snaparrayhtmltip' title='".(implode("<br>", array_map("htmlspecialchars",$snap_array_cfg_obj->content_files_raw[1]))?:"-")."'>".(count($snap_array_cfg_obj->content_files_raw[1]) ?? "0")."</span>";
     $snap_array_field_cron = strtoupper(str_replace("disable", "-", $snap_array_cfg_obj->cron));
 
     if($snap_array_cfg_obj->lastsync !== "-") {
