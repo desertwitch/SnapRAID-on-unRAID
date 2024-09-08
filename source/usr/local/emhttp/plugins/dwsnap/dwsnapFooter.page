@@ -107,7 +107,7 @@ $(function()
 <script type="text/javascript">
 function getSnapFooter() {
     $.get('/plugins/dwsnap/include/dwsnap_footer.php',function(data) {
-        if (data && data.success & data.success.response) { 
+        if (data && data.success && data.success.response) { 
             $('#snap_footer').html(data.success.response);
             $('.snapfootertip').tooltipster();
         }
