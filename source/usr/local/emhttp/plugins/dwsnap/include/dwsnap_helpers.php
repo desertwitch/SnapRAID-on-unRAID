@@ -34,9 +34,9 @@ function dwsnap_humanFileSize($sizeObj,$unit="") {
         } else {
             return "-";
         }
-    } catch (Throwable $e) { // For PHP 7
+    } catch (\Throwable $t) {
         return "-";
-    } catch (Exception $e) { // For PHP 5
+    } catch (\Exception $e) {
         return "-";
     }
 }
@@ -53,9 +53,9 @@ function dwsnap_get_conf_files() {
                     return 0;
                 }
             });
-        } catch (Throwable $e) { // For PHP 7
+        } catch (\Throwable $t) {
             $snap_files = $snap_files_bak;
-        } catch (Exception $e) { // For PHP 5
+        } catch (\Exception $e) {
             $snap_files = $snap_files_bak;
         }
     }
@@ -67,9 +67,9 @@ function dwsnap_time_ago($oldTime, $alertThreshold = 7) {
         if(!is_int($alertThreshold)) {
             $alertThreshold = intval($alertThreshold);
         }
-    } catch (Throwable $e) { // For PHP 7
+    } catch (\Throwable $t) {
         $alertThreshold = 7;
-    } catch (Exception $e) { // For PHP 5
+    } catch (\Exception $e) {
         $alertThreshold = 7;
     }
     try {
@@ -102,9 +102,11 @@ function dwsnap_time_ago($oldTime, $alertThreshold = 7) {
             $timeCalc = "<span class='green-text'>" . $timeCalc . " seconds ago</span>";
         }
         return $timeCalc;
-    } catch (Throwable $e) { // For PHP 7
+    } catch (\Throwable $t) {
+        error_log($t);
         return false;
-    } catch (Exception $e) { // For PHP 5
+    } catch (\Exception $e) {
+        error_log($e);
         return false;
     }
 }
@@ -127,9 +129,9 @@ function dwsnap_consider_nodiff($inputHtml, $lastNoDiff, $lastSync, $syncExpires
             }
         }
         return $outputHtml;
-    } catch (Throwable $e) { // For PHP 7
+    } catch (\Throwable $t) {
         return $outputHtml_onErr;
-    } catch (Exception $e) { // For PHP 5
+    } catch (\Exception $e) {
         return $outputHtml_onErr;
     }
 }

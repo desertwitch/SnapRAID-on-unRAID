@@ -302,9 +302,11 @@ class SnapraidArrayConfiguration {
             }
             $snap_footer_html = "<a href='/Settings/dwsnapOps?snapr=".$this->cfgname."' style='cursor:pointer;color:inherit;text-decoration:none;'>" . $snap_footer_html . "</a>";
             return $snap_footer_html;
-        } catch (Throwable $e) { // For PHP 7
+        } catch (\Throwable $t) {
+            error_log($t);
             return "";
-        } catch (Exception $e) { // For PHP 5
+        } catch (\Exception $e) {
+            error_log($e);
             return "";
         }
     }

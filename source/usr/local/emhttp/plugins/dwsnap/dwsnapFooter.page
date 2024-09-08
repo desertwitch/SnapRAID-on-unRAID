@@ -54,15 +54,19 @@ try {
             <tr class='snapdash' name='$snap_cfg_name'><td style="text-align:center;"><i class="fa fa-spinner fa-spin"></i> <em>Please wait, retrieving information...</em></td></tr>
             </tbody>
 EOT;
-        } catch (Throwable $e) { // For PHP 7
+        } catch (\Throwable $t) {
+            error_log($t);
             continue;
-        } catch (Exception $e) { // For PHP 5
+        } catch (\Exception $e) {
+            error_log($e);
             continue;
         }
     }
-} catch (Throwable $e) { // For PHP 7
+} catch (\Throwable $t) {
+    error_log($t);
     // do nothing, better show none of our dashboards than breaking the frontpage
-} catch (Exception $e) { // For PHP 5
+} catch (\Exception $e) {
+    error_log($e);
     // do nothing, better show none of our dashboards than breaking the frontpage
 }
 ?>
