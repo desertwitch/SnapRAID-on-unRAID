@@ -72,14 +72,13 @@ function getSnapDashboards() {
         var cfg = $(this).attr('name');
         if(cfg) {
             $.get('/plugins/dwsnap/include/dwsnap_dashboard.php', {"config": cfg}, function(data) {
-                if (data) {
-                    var snapDashResponse = data.split("|"); 
-                    $('.snaphead[name="'+cfg+'"]').html(snapDashResponse[0]);
-                    $('.snapdash[name="'+cfg+'"]').html(snapDashResponse[1]);
+                if (data && data.success && data.success.response && data.success.response.header && data.success.response.body) {
+                    $('.snaphead[name="'+cfg+'"]').html(data.success.response.header);
+                    $('.snapdash[name="'+cfg+'"]').html(data.success.response.body);
                     $('.snapdashtip').tooltipster();
                     $('.snapdashhtmltip').tooltipster({contentAsHTML: true});
                 }
-            });
+            }, 'json');
         }
     });
     clearTimeout(timers.getSnapDashboards);
@@ -108,11 +107,11 @@ $(function()
 <script type="text/javascript">
 function getSnapFooter() {
     $.get('/plugins/dwsnap/include/dwsnap_footer.php',function(data) {
-        if (data) { 
-            $('#snap_footer').html(data);
+        if (data && data.success & data.success.response) { 
+            $('#snap_footer').html(data.success.response);
             $('.snapfootertip').tooltipster();
         }
-    });
+    }, 'json');
     clearTimeout(timers.getSnapFooter);
     timers.getSnapFooter = setTimeout(getSnapFooter, 10000);
 }

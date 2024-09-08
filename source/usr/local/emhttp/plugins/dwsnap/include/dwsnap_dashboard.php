@@ -18,9 +18,9 @@
  *
  */
 require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
+$snap_dashboards_retarr = [];
 
 try {
-    $snap_dashboards = "";
     if(!empty($_GET["config"])) {
         $snap_dash_active_cfg = $_GET['config'];
         $snap_dash_cfg_obj = new SnapraidArrayConfiguration($snap_dash_active_cfg);
@@ -51,14 +51,24 @@ try {
             $snap_dash_field_lastscrub = "<span class='orange-text'>Never</span>"; 
         }
         
-        $snap_dashboards .= "Array Status: $snap_dash_field_status / Free: $snap_dash_field_free / $snap_dash_field_used used of $snap_dash_field_total ($snap_dash_field_util)|<td><span class='w18'>$snap_dash_field_paritydisks</span><span class='w18'>$snap_dash_field_datadisks</span><span class='w18'>$snap_dash_field_lastsync</span><span class='w18'>$snap_dash_field_lastscrub</span><span class='w26'>$snap_dash_field_cron</span></td>";
+        $snap_dashboards_retarr["success"]["response"]["header"] = "Array Status: $snap_dash_field_status / Free: $snap_dash_field_free / $snap_dash_field_used used of $snap_dash_field_total ($snap_dash_field_util)";
+        $snap_dashboards_retarr["success"]["response"]["body"] = "<td><span class='w18'>$snap_dash_field_paritydisks</span><span class='w18'>$snap_dash_field_datadisks</span><span class='w18'>$snap_dash_field_lastsync</span><span class='w18'>$snap_dash_field_lastscrub</span><span class='w26'>$snap_dash_field_cron</span></td>";
         
         unset($snap_dash_cfg_obj);
+    } else {
+        $snap_dashboards_retarr["error"]["response"] = "Missing GET variables!";
     }
-    echo($snap_dashboards);
-} catch (Throwable $e) { // For PHP 7
-    echo("");
-} catch (Exception $e) { // For PHP 5
-    echo("");
 }
+catch (\Throwable $t) {
+    error_log($t);
+    $snap_dashboards_retarr = [];
+    $snap_dashboards_retarr["error"]["response"] = $t->getMessage();
+}
+catch (\Exception $e) {
+    error_log($e);
+    $snap_dashboards_retarr = [];
+    $snap_dashboards_retarr["error"]["response"] = $e->getMessage();
+}
+
+echo(json_encode($snap_dashboards_retarr));
 ?>

@@ -18,6 +18,8 @@
  *
  */
 require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
+$snap_footer_retarr = [];
+
 try {
     $snap_footer = "<a href='/Settings/dwsnapOps' style='cursor:pointer;color:inherit;text-decoration:none;'>SnapRAID</a>";
     $snap_footer_files = dwsnap_get_conf_files() ?? [];
@@ -27,10 +29,18 @@ try {
         $snap_footer .= $snap_footer_cfg_obj->getFooterHTML("snapfootertip");
         unset($snap_footer_cfg_obj);
     }
-    echo($snap_footer);
-} catch (Throwable $e) { // For PHP 7
-    echo("");
-} catch (Exception $e) { // For PHP 5
-    echo("");
+    $snap_footer_retarr["success"]["response"] = $snap_footer;
 }
+catch (\Throwable $t) {
+    error_log($t);
+    $snap_footer_retarr = [];
+    $snap_footer_retarr["error"]["response"] = $t->getMessage();
+}
+catch (\Exception $e) {
+    error_log($e);
+    $snap_footer_retarr = [];
+    $snap_footer_retarr["error"]["response"] = $e->getMessage();
+}
+
+echo(json_encode($snap_footer_retarr));
 ?>

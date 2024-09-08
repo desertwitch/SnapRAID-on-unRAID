@@ -17,19 +17,35 @@
  * included in all copies or substantial portions of the Software.
  *
  */
-if(!empty($_GET["config"])) {
-    $snap_log_active_cfg = $_GET["config"];
-    if(file_exists("/var/lib/snapraid/logs/$snap_log_active_cfg-snaplog")) {
-        $snap_log = file_get_contents("/var/lib/snapraid/logs/$snap_log_active_cfg-snaplog");
-        if(!empty($snap_log)) {
-            echo("<pre class='snaplog'>".htmlspecialchars($snap_log)."</pre>");
+$snap_logger_retarr = [];
+
+try {
+    if(!empty($_GET["config"])) {
+        $snap_log_active_cfg = $_GET["config"];
+        if(file_exists("/var/lib/snapraid/logs/$snap_log_active_cfg-snaplog")) {
+            $snap_log = file_get_contents("/var/lib/snapraid/logs/$snap_log_active_cfg-snaplog");
+            if(!empty($snap_log)) {
+                $snap_logger_retarr["success"]["response"] = "<pre class='snaplog'>".htmlspecialchars($snap_log)."</pre>";
+            } else {
+                $snap_logger_retarr["success"]["response"] = "<pre class='snaplog'></pre>";
+            }
         } else {
-            echo("<pre class='snaplog'></pre>");
+            $snap_logger_retarr["success"]["response"] = "<pre class='snaplog'></pre>";
         }
     } else {
-        echo("<pre class='snaplog'></pre>");
+        $snap_logger_retarr["error"]["response"] = "Missing GET variables!";
     }
-} else {
-    echo("");
 }
+catch (\Throwable $t) {
+    error_log($t);
+    $snap_logger_retarr = [];
+    $snap_logger_retarr["error"]["response"] = $t->getMessage();
+}
+catch (\Exception $e) {
+    error_log($e);
+    $snap_logger_retarr = [];
+    $snap_logger_retarr["error"]["response"] = $e->getMessage();
+}
+
+echo(json_encode($snap_logger_retarr));
 ?>

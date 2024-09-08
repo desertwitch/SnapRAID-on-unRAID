@@ -392,36 +392,35 @@ END;
 <script type="text/javascript">
 function getSnapLogs() {
     $.get('/plugins/dwsnap/include/dwsnap_logger.php', {"config": "<?=$dwsnap_active_cfg->cfgname;?>"}, function(data) {
-        if (data) { 
-            $('#logviewer').html(data); 
+        if (data && data.success && data.success.response) { 
+            $('#logviewer').html(data.success.response); 
             var pre = $(".snaplog");
             pre.scrollTop(pre.prop("scrollHeight"));
         }
-    });
+    }, 'json');
     clearTimeout(timers.getSnapLogs);
     timers.getSnapLogs = setTimeout(getSnapLogs, 1000);
 }
 function getSnapStatus() {
     $.get('/plugins/dwsnap/include/dwsnap_status.php', {"config": "<?=$dwsnap_active_cfg->cfgname;?>"}, function(data) {
-        if (data) {
-            var statusResponse = data.split(",");
-            if(statusResponse[0]) {
-                if(statusResponse[0] === "ANY:YES") {
+        if (data && data.success && data.success.response) {
+            if(data.success.response.overall) {
+                if(data.success.response.overall === "YES") {
                     $('.snapanyrun').prop('disabled', true);
                     $('.snapanynotrun').prop('disabled', false);
                     $('.snapUpdate').hide();
-                } else if (statusResponse[0] === "ANY:NO") {
+                } else if (data.success.response.overall === "NO") {
                     $('.snapanyrun').prop('disabled', false);
                     $('.snapanynotrun').prop('disabled', true);
                     $('.snapUpdate').show();
                 } 
             }
-            if(statusResponse[1]) {
-                if(statusResponse[1] === "ARRAY:YES") {
+            if(data.success.response.array) {
+                if(data.success.response.array === "YES") {
                     $('#snapstatusicon').show();
                     $('.snaprun').prop('disabled', true);
                     $('.snapnotrun').prop('disabled', false);
-                } else if (statusResponse[1] === "ARRAY:NO") {
+                } else if (data.success.response.array === "NO") {
                     if($('#snapstatusicon').is(":visible")) {
                         location = '/Settings/dwsnapOps?snapr=<?=$dwsnap_active_cfg->cfgname;?>'; 
                     }
@@ -433,7 +432,7 @@ function getSnapStatus() {
                 }
             }
         }
-    });
+    }, 'json');
     clearTimeout(timers.getSnapStatus);
     timers.getSnapStatus = setTimeout(getSnapStatus, 3000);
 }
