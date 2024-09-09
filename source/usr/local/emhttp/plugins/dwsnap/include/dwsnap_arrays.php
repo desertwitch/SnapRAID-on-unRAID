@@ -75,5 +75,6 @@ catch (\Exception $e) {
     $snap_arrays_retarr = [];
     $snap_arrays_retarr["error"]["response"] = $e->getMessage();
 }
+
 echo(json_encode($snap_arrays_retarr));
 ?>
