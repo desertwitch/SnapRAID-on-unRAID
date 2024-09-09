@@ -18,6 +18,8 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2024.09.09
+- fix: improvements to error and backend communication handling
 ###2024.08.19
 - fix: reordered the warning messages in footer for better visibility
 - fix: no longer base the number of synced files on number of differences
