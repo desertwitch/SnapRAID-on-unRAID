@@ -18,6 +18,9 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2024.09.12
+- fix: made optical changes regarding wording, positioning and helptexts on the SnapRAID Settings page
+- new: use of plugin usage metric functions to aid development of new features and planning for plugin updates (toggleable)
 ###2024.09.09
 - fix: improvements to error and backend communication handling
 ###2024.08.19
@@ -145,6 +148,7 @@ echo "Making sure all running SnapRAID instances are stopped (before install/upg
 if [ -x /usr/local/emhttp/plugins/dwsnap/scripts/shutdown ]; then
     /usr/local/emhttp/plugins/dwsnap/scripts/shutdown nobackup
 fi
+killall snapraid-poller >/dev/null 2>&amp;1
 
 if [ -f /boot/config/plugins/dwsnap/dwsnap.cfg ]; then
     if [ ! -f /boot/config/plugins/dwsnap/config/primary.cfg ]; then
@@ -208,6 +212,7 @@ echo "Making sure all running SnapRAID instances are stopped (before uninstall).
 if [ -x /usr/local/emhttp/plugins/dwsnap/scripts/shutdown ]; then
     /usr/local/emhttp/plugins/dwsnap/scripts/shutdown nobackup
 fi
+killall snapraid-poller >/dev/null 2>&amp;1
 
 removepkg &plgPATH;/*.txz
 rm -rf &plgPATH;/*.txz
@@ -227,6 +232,7 @@ update_cron
 sleep 1
 
 rm -f /boot/config/plugins/dwsnap/config/*-snaplog
+rm -f /etc/cron.daily/snapraid-poller >/dev/null 2>&amp;1
 
 echo ""
 echo "-----------------------------------------------------------"

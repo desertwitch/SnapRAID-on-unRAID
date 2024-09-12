@@ -331,6 +331,7 @@ $dwsnap_dashboards = trim(isset($dwsnap_cfg['DASHBOARDS']) ? htmlspecialchars($d
 $dwsnap_screenimg = trim(isset($dwsnap_cfg['SCREENIMG']) ? htmlspecialchars($dwsnap_cfg['SCREENIMG']) : 'enable');
 $dwsnap_stoparray = trim(isset($dwsnap_cfg['STOPARRAY']) ? htmlspecialchars($dwsnap_cfg['STOPARRAY']) : 'enable');
 $dwsnap_killtime = trim(isset($dwsnap_cfg['KILLTIME']) ? htmlspecialchars($dwsnap_cfg['KILLTIME']) : '30');
+$dwsnap_metricsapi = trim(isset($dwsnap_cfg['METRICSAPI']) ? htmlspecialchars($dwsnap_cfg['METRICSAPI']) : 'enable');
 
 $dwsnap_backend = htmlspecialchars(trim(shell_exec("find /var/log/packages/ -type f -iname 'snapraid-*' -printf '%f\n' 2>/dev/null") ?? "n/a"));
 

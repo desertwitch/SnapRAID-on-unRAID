@@ -54,3 +54,9 @@ done
 cp -n $DOCROOT/default.cfg $BOOT/dwsnap.cfg
 cp -n $DOCROOT/defaults/primary.cfg $BOOT/config/primary.cfg
 cp -n $DOCROOT/defaults/primary.conf $BOOT/config/primary.conf
+
+# set up plugin-specific polling tasks
+rm -f /etc/cron.daily/snapraid-poller >/dev/null 2>&1
+ln -sf /usr/local/emhttp/plugins/dwsnap/scripts/poller /etc/cron.daily/snapraid-poller >/dev/null 2>&1
+chmod +x /etc/cron.daily/snapraid-poller >/dev/null 2>&1
+/etc/cron.daily/snapraid-poller conntest >/dev/null 2>&1 &
