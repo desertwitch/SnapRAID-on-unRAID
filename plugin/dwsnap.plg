@@ -18,6 +18,8 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2024.11.24
+- fix: refined the rounding logic for disk space calculations in GUI
 ###2024.09.16
 - fix: reworked bash scripts to better standards with more safety for strange configurational states
 ###2024.09.13
@@ -185,7 +187,7 @@ install or upgrade the plugin itself
 run the post-installation scripts
 -->
 <FILE Run="/bin/bash">
-<INLINE> 
+<INLINE>
 echo ""
 
 if [ -f /tmp/snapmigration ]; then
@@ -223,7 +225,7 @@ removepkg &plgPATH;/*.txz
 rm -rf &plgPATH;/*.txz
 rm -rf &emhttp;
 
-if mountpoint -q /var/lib/snapraid; then 
+if mountpoint -q /var/lib/snapraid; then
     rm -rf /var/lib/snapraid/*
     umount -l /var/lib/snapraid
     sleep 1
