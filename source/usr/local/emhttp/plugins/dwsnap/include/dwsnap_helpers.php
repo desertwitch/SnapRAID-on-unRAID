@@ -18,37 +18,39 @@
  *
  */
 
-function dwsnap_humanFileSize($sizeObj, $targetDecs = 2, $unit = "") {
+function dwsnap_humanFileSize($sizeObj, $targetDecs = 2, $format1024 = false, $unit = "") {
     try {
-        $size = intval($sizeObj);
+        $size = floatval($sizeObj);
+        $base = $format1024 ? 1024 : 1000;
+
         if ($size) {
-            if ((!$unit && $size >= 1000000000000) || $unit == "TB") {
-                $result = $size / 1000000000000;
-                if (round($result, $targetDecs) >= 1000 && !$unit) {
-                    return rtrim(rtrim(number_format(($size / 1000000000000000), $targetDecs), "0"), ".") . " PB";
+            if ((!$unit && $size >= $base ** 4) || $unit == "TB") {
+                $result = $size / ($base ** 4);
+                if (round($result, $targetDecs) >= $base && !$unit) {
+                    return rtrim(rtrim(number_format(($size / ($base ** 5)), $targetDecs), "0"), ".") . ($format1024 ? " PiB" : " PB");
                 }
-                return rtrim(rtrim(number_format($result, $targetDecs), "0"), ".") . " TB";
+                return rtrim(rtrim(number_format($result, $targetDecs), "0"), ".") . ($format1024 ? " TiB" : " TB");
             }
-            if ((!$unit && $size >= 1000000000) || $unit == "GB") {
-                $result = $size / 1000000000;
-                if (round($result, $targetDecs) >= 1000 && !$unit) {
-                    return rtrim(rtrim(number_format(($size / 1000000000000), $targetDecs), "0"), ".") . " TB";
+            if ((!$unit && $size >= $base ** 3) || $unit == "GB") {
+                $result = $size / ($base ** 3);
+                if (round($result, $targetDecs) >= $base && !$unit) {
+                    return rtrim(rtrim(number_format(($size / ($base ** 4)), $targetDecs), "0"), ".") . ($format1024 ? " TiB" : " TB");
                 }
-                return rtrim(rtrim(number_format($result, $targetDecs), "0"), ".") . " GB";
+                return rtrim(rtrim(number_format($result, $targetDecs), "0"), ".") . ($format1024 ? " GiB" : " GB");
             }
-            if ((!$unit && $size >= 1000000) || $unit == "MB") {
-                $result = $size / 1000000;
-                if (round($result, $targetDecs) >= 1000 && !$unit) {
-                    return rtrim(rtrim(number_format(($size / 1000000000), $targetDecs), "0"), ".") . " GB";
+            if ((!$unit && $size >= $base ** 2) || $unit == "MB") {
+                $result = $size / ($base ** 2);
+                if (round($result, $targetDecs) >= $base && !$unit) {
+                    return rtrim(rtrim(number_format(($size / ($base ** 3)), $targetDecs), "0"), ".") . ($format1024 ? " GiB" : " GB");
                 }
-                return rtrim(rtrim(number_format($result, $targetDecs), "0"), ".") . " MB";
+                return rtrim(rtrim(number_format($result, $targetDecs), "0"), ".") . ($format1024 ? " MiB" : " MB");
             }
-            if ((!$unit && $size >= 1000) || $unit == "KB") {
-                $result = $size / 1000;
-                if (round($result, $targetDecs) >= 1000 && !$unit) {
-                    return rtrim(rtrim(number_format(($size / 1000000), $targetDecs), "0"), ".") . " MB";
+            if ((!$unit && $size >= $base) || $unit == "KB") {
+                $result = $size / $base;
+                if (round($result, $targetDecs) >= $base && !$unit) {
+                    return rtrim(rtrim(number_format(($size / ($base ** 2)), $targetDecs), "0"), ".") . ($format1024 ? " MiB" : " MB");
                 }
-                return rtrim(rtrim(number_format($result, $targetDecs), "0"), ".") . " KB";
+                return rtrim(rtrim(number_format($result, $targetDecs), "0"), ".") . ($format1024 ? " KiB" : " KB");
             }
             return number_format($size) . " B";
         } else {
