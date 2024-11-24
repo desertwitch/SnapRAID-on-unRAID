@@ -289,7 +289,7 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
                     $snap_disk_util = htmlspecialchars(trim(shell_exec("df -B1 " . escapeshellarg($snap_parity_disk[2]) . " 2>/dev/null | sed -n '2p' 2>/dev/null | awk '{print $5}' 2>/dev/null") ?? "-"));
                     $snap_disk_free = htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 " . escapeshellarg($snap_parity_disk[2]) . " 2>/dev/null | sed -n '2p' 2>/dev/null | awk '{print $4}' 2>/dev/null") ?? "-")));
                     $snap_disk_used = htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 " . escapeshellarg($snap_parity_disk[2]) . " 2>/dev/null | sed -n '2p' 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-")));
-                    $snap_disk_total = htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 " . escapeshellarg($snap_parity_disk[2]) . " 2>/dev/null | sed -n '2p' 2>/dev/null | awk '{print $2}' 2>/dev/null") ?? "-"), 0));
+                    $snap_disk_total = htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 " . escapeshellarg($snap_parity_disk[2]) . " 2>/dev/null | sed -n '2p' 2>/dev/null | awk '{print $2}' 2>/dev/null") ?? "-")));
                     $snap_disk_status = ($snap_disk_fs !== "-") ? "<i class='fa fa-check green-text'></i>" : "<i class='fa fa-times red-text'></i>";
                     $snap_parity_level = htmlspecialchars(strtoupper($snap_parity_disk[1]));
                     $snap_parity_name = htmlspecialchars($snap_parity_disk[1]);
@@ -323,7 +323,7 @@ END;
                     $snap_disk_util = htmlspecialchars(trim(shell_exec("df -B1 " . escapeshellarg($snap_data_disk[2]) . " 2>/dev/null | sed -n '2p' 2>/dev/null | awk '{print $5}' 2>/dev/null") ?? "-"));
                     $snap_disk_free = htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 " . escapeshellarg($snap_data_disk[2]) . " 2>/dev/null | sed -n '2p' 2>/dev/null | awk '{print $4}' 2>/dev/null") ?? "-")));
                     $snap_disk_used = htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 " . escapeshellarg($snap_data_disk[2]) . " 2>/dev/null | sed -n '2p' 2>/dev/null | awk '{print $3}' 2>/dev/null") ?? "-")));
-                    $snap_disk_total = htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 " . escapeshellarg($snap_data_disk[2]) . " 2>/dev/null | sed -n '2p' 2>/dev/null | awk '{print $2}' 2>/dev/null") ?? "-"), 0));
+                    $snap_disk_total = htmlspecialchars(dwsnap_humanFileSize(trim(shell_exec("df -B1 " . escapeshellarg($snap_data_disk[2]) . " 2>/dev/null | sed -n '2p' 2>/dev/null | awk '{print $2}' 2>/dev/null") ?? "-")));
                     $snap_disk_status = ($snap_disk_fs !== "-") ? "<i class='fa fa-check green-text'></i>" : "<i class='fa fa-times red-text'></i>";
                     $snap_data_name = htmlspecialchars($snap_data_disk[1]);
                     $snap_data_path = htmlspecialchars($snap_data_disk[2]);
