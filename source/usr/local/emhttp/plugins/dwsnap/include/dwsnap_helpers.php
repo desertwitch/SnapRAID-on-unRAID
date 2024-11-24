@@ -18,36 +18,38 @@
  *
  */
 
-function dwsnap_humanFileSize($sizeObj, $targetDecs = 2, $format1024 = false, $unit = "") {
+function dwsnap_humanFileSize($sizeObj, $targetDecs = 2, $format1024 = false, $threshold = 0.98, $unit = "") {
     try {
         $size = floatval($sizeObj);
+        if ($size < 0) return "0 B";
+
         $base = $format1024 ? 1024 : 1000;
 
         if ($size) {
             if ((!$unit && $size >= $base ** 4) || $unit == "TB") {
                 $result = $size / ($base ** 4);
-                if (round($result, $targetDecs) >= $base && !$unit) {
+                if ($result >= $base * $threshold && !$unit) {
                     return rtrim(rtrim(number_format(($size / ($base ** 5)), $targetDecs), "0"), ".") . ($format1024 ? " PiB" : " PB");
                 }
                 return rtrim(rtrim(number_format($result, $targetDecs), "0"), ".") . ($format1024 ? " TiB" : " TB");
             }
             if ((!$unit && $size >= $base ** 3) || $unit == "GB") {
                 $result = $size / ($base ** 3);
-                if (round($result, $targetDecs) >= $base && !$unit) {
+                if ($result >= $base * $threshold && !$unit) {
                     return rtrim(rtrim(number_format(($size / ($base ** 4)), $targetDecs), "0"), ".") . ($format1024 ? " TiB" : " TB");
                 }
                 return rtrim(rtrim(number_format($result, $targetDecs), "0"), ".") . ($format1024 ? " GiB" : " GB");
             }
             if ((!$unit && $size >= $base ** 2) || $unit == "MB") {
                 $result = $size / ($base ** 2);
-                if (round($result, $targetDecs) >= $base && !$unit) {
+                if ($result >= $base * $threshold && !$unit) {
                     return rtrim(rtrim(number_format(($size / ($base ** 3)), $targetDecs), "0"), ".") . ($format1024 ? " GiB" : " GB");
                 }
                 return rtrim(rtrim(number_format($result, $targetDecs), "0"), ".") . ($format1024 ? " MiB" : " MB");
             }
             if ((!$unit && $size >= $base) || $unit == "KB") {
                 $result = $size / $base;
-                if (round($result, $targetDecs) >= $base && !$unit) {
+                if ($result >= $base * $threshold && !$unit) {
                     return rtrim(rtrim(number_format(($size / ($base ** 2)), $targetDecs), "0"), ".") . ($format1024 ? " MiB" : " MB");
                 }
                 return rtrim(rtrim(number_format($result, $targetDecs), "0"), ".") . ($format1024 ? " KiB" : " KB");
