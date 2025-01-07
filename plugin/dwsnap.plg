@@ -3,14 +3,14 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "dwsnap">
 <!ENTITY author    "desertwitch">
-<!ENTITY version   "2024.11.24">
+<!ENTITY version   "2025.01.07">
 <!ENTITY launch    "Settings/dwsnapOps">
 <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/SnapRAID-on-unRAID/main">
 <!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
 <!ENTITY pkgURL    "&gitURL;/packages">
 <!ENTITY plgPATH   "/boot/config/plugins/&name;">
-<!ENTITY plgNAME   "dwsnap-2024.11.24-x86_64-1">
-<!ENTITY plgMD5    "f7f4a005ad1df15f481b0369dd8ba6a7">
+<!ENTITY plgNAME   "dwsnap-2025.01.07-x86_64-1">
+<!ENTITY plgMD5    "a6d5b2c60cd66a7cdd9d9b2b5268771b">
 <!ENTITY emhttp    "/usr/local/emhttp/plugins/&name;">
 ]>
 
@@ -18,6 +18,11 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2025.01.07
+- new: added setting to output file paths in different formats
+- new: added setting to toggle how many log lines are shown in GUI
+- new: added setting to suppress not fatal error messages in screen logs
+- fix: improved the overall handling regarding extremely large operation log files
 ###2024.11.24
 - fix: refined the rounding logic for disk space calculations in GUI
 ###2024.09.16

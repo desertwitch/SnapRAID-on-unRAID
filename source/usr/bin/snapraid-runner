@@ -117,6 +117,7 @@ fi
 for LOGPARAM in "${CMD[@]:2}"; do
     if [ "$LOGPARAM" == "-l" ]; then
         RAWREPORTS="disable"
+        LOGPARAMEXISTS="YES"
     fi
 done
 
@@ -142,7 +143,7 @@ signal_exit_snapraid() {
     [ -n "$RAMWARNING" ] && echo "### (${CFGNAMEBIG})${RAMWARNING}" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
 
     cp "/var/lib/snapraid/logs/${CFGNAME}-snaplog" "/var/lib/snapraid/logs/${CFGNAME}/${OPCMD}-${LOGTIME}.log"
-    
+
     exit 1
 }
 
@@ -155,7 +156,7 @@ MEASURESTART=$(date +%s)
 
 echo "$OPTIME" >"/var/lib/snapraid/logs/${CFGNAME}-laststart"
 echo "### (${CFGNAMEBIG}) ${BIGOP} STARTED: ${OPTIME}" 2>&1 | tee -i "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
-echo "### ${SNAP_BIN} -c ${SNAP_CONF} ${CMD[*]:2}" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog" 
+echo "### ${SNAP_BIN} -c ${SNAP_CONF} ${CMD[*]:2}" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
 
 RAMUTIL=$(df --output=pcent /var/lib/snapraid | tr -dc '0-9')
 if [ "$RAMUTIL" -gt 90 ]; then
@@ -166,14 +167,20 @@ fi
 
 echo "################################################################" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
 
-trap signal_exit_snapraid SIGTERM SIGINT 
+trap signal_exit_snapraid SIGTERM SIGINT
+
+if [ "$MANDISCERRS" == "enable" ] && [ ! "$RAWREPORTS" == "enable" ] && [ ! "$LOGPARAMEXISTS" == "YES" ]; then
+    echo "WARNING: Not fatal errors are set to be discarded, consider this when interpreting results." 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+    echo "################################################################" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+fi
 
 if [ "${OPCMD}" == "sync" ]; then
     # shellcheck disable=SC2015
     [ "$RAWREPORTS" == "enable" ] && LOGLINE="/var/lib/snapraid/logs/${CFGNAME}/${OPCMD}-${LOGTIME}.raw.log" || unset LOGLINE
+    [ "$MANDISCERRS" == "enable" ] && [ ! "$RAWREPORTS" == "enable" ] && [ ! "$LOGPARAMEXISTS" == "YES" ] && LOGLINE="/dev/null"
     $SNAP_BIN -c "$SNAP_CONF" ${LOGLINE:+"-l"} ${LOGLINE:+"$LOGLINE"} "${CMD[@]:2}" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     CMDRET="${PIPESTATUS[0]}"
-    
+
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     MEASURESTOP=$(date +%s)
     DURATION=$((MEASURESTOP-MEASURESTART))
@@ -192,9 +199,10 @@ if [ "${OPCMD}" == "sync" ]; then
 elif [ "${OPCMD}" == "scrub" ]; then
     # shellcheck disable=SC2015
     [ "$RAWREPORTS" == "enable" ] && LOGLINE="/var/lib/snapraid/logs/${CFGNAME}/${OPCMD}-${LOGTIME}.raw.log" || unset LOGLINE
+    [ "$MANDISCERRS" == "enable" ] && [ ! "$RAWREPORTS" == "enable" ] && [ ! "$LOGPARAMEXISTS" == "YES" ] && LOGLINE="/dev/null"
     $SNAP_BIN -c "$SNAP_CONF" ${LOGLINE:+"-l"} ${LOGLINE:+"$LOGLINE"} "${CMD[@]:2}" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     CMDRET="${PIPESTATUS[0]}"
-    
+
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     MEASURESTOP=$(date +%s)
     DURATION=$((MEASURESTOP-MEASURESTART))
@@ -211,9 +219,10 @@ elif [ "${OPCMD}" == "scrub" ]; then
 elif [ "${OPCMD}" == "diff" ]; then
     # shellcheck disable=SC2015
     [ "$RAWREPORTS" == "enable" ] && LOGLINE="/var/lib/snapraid/logs/${CFGNAME}/${OPCMD}-${LOGTIME}.raw.log" || unset LOGLINE
+    [ "$MANDISCERRS" == "enable" ] && [ ! "$RAWREPORTS" == "enable" ] && [ ! "$LOGPARAMEXISTS" == "YES" ] && LOGLINE="/dev/null"
     $SNAP_BIN -c "$SNAP_CONF" ${LOGLINE:+"-l"} ${LOGLINE:+"$LOGLINE"} "${CMD[@]:2}" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     CMDRET="${PIPESTATUS[0]}"
-    
+
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     MEASURESTOP=$(date +%s)
     DURATION=$((MEASURESTOP-MEASURESTART))
@@ -235,9 +244,10 @@ elif [ "${OPCMD}" == "diff" ]; then
 else
     # shellcheck disable=SC2015
     [ "$RAWREPORTS" == "enable" ] && LOGLINE="/var/lib/snapraid/logs/${CFGNAME}/${OPCMD}-${LOGTIME}.raw.log" || unset LOGLINE
+    [ "$MANDISCERRS" == "enable" ] && [ ! "$RAWREPORTS" == "enable" ] && [ ! "$LOGPARAMEXISTS" == "YES" ] && LOGLINE="/dev/null"
     $SNAP_BIN -c "$SNAP_CONF" ${LOGLINE:+"-l"} ${LOGLINE:+"$LOGLINE"} "${CMD[@]:2}" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     CMDRET="${PIPESTATUS[0]}"
-    
+
     OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
     MEASURESTOP=$(date +%s)
     DURATION=$((MEASURESTOP-MEASURESTART))

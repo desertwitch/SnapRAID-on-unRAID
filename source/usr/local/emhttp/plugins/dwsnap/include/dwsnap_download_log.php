@@ -17,18 +17,20 @@
  * included in all copies or substantial portions of the Software.
  *
  */
-
-if(empty($_GET["editfile"])) {
-    exit;
+if(isset($_GET["config"])) {
+    $snap_log_active_cfg = $_GET["config"];
+    $snap_log_active_cfg_file = "/var/lib/snapraid/logs/$snap_log_active_cfg-snaplog";
+    if(file_exists($snap_log_active_cfg_file)) {
+        $snap_log_timestamp = date("Y-m-d_H-i-s");
+        $snap_log_dl_filename = "$snap_log_active_cfg-snaplog_$snap_log_timestamp.log";
+        header("Content-Disposition: attachment; filename=\"$snap_log_dl_filename\"");
+        header("Content-Type: application/octet-stream");
+        header("Content-Length: " . filesize($snap_log_active_cfg_file));
+        header("Connection: close");
+        readfile($snap_log_active_cfg_file);
+        exit;
+    } else {
+        die("Log file does not exist (yet), try again...");
+    }
 }
-
-$base = '/boot/config/plugins/dwsnap/config/';
-$file = realpath($_GET['editfile']);
-$editfile = 'Invalid File';
-
-if(file_exists($file)) {
-    $editfile = file_get_contents($file);
-}
-
-echo json_encode($editfile);
 ?>

@@ -98,7 +98,6 @@ data d5 /mnt/disk5/
 
 <img id="editfolder" style="cursor:pointer;margin-left: 10px;" src="/webGui/images/explore.png" >
 <input id="editfile" type="text" name="editfile" value="" readonly="" data-picktop="/boot/config/plugins/dwsnap/config" data-pickcloseonfile="true" data-pickfilter="conf,log" data-pickroot="/boot/config/plugins/dwsnap/config" data-pickfolders="false" required="required" >
-
 <textarea id="editdata" name="editdata" placeholder="Select Configuration File"></textarea>
 <input type="hidden" name="commit" value="1" />
 
@@ -159,7 +158,7 @@ $(function(){
             if(data.success)
                 swal({title: Title+'Saved', text: data.saved, timer: 2000, showConfirmButton: false, type:'success'},
                 function(){
-                   location = '/Settings/dwsnapOps?snapr=<?=$dwsnap_active_cfg->cfgname;?>'; 
+                   location = '/Settings/dwsnapOps?snapr=<?=$dwsnap_active_cfg->cfgname;?>';
                 });
             if(data.error)
                 swal({title:Title+'Error', text: data.error+'\n\nThere was an error saving the configuration file.', type:'error'});

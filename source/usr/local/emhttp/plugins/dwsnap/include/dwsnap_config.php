@@ -26,6 +26,8 @@ class SnapraidArrayConfiguration {
     public $sync_expires;
     public $scrub_expires;
     public $rawreports;
+    public $mandiscerrs;
+    public $maindiscerrs;
     public $cron;
     public $cronhour;
     public $crondow;
@@ -81,6 +83,8 @@ class SnapraidArrayConfiguration {
         $this->sync_expires = trim(isset($this->cfg['SYNCEXPIRES']) ? htmlspecialchars($this->cfg['SYNCEXPIRES']) : '7');
         $this->scrub_expires = trim(isset($this->cfg['SCRUBEXPIRES']) ? htmlspecialchars($this->cfg['SCRUBEXPIRES']) : '7');
         $this->rawreports = trim(isset($this->cfg['RAWREPORTS']) ? htmlspecialchars($this->cfg['RAWREPORTS']) : 'disable');
+        $this->mandiscerrs = trim(isset($this->cfg['MANDISCERRS']) ? htmlspecialchars($this->cfg['MANDISCERRS']) : 'disable');
+        $this->maindiscerrs = trim(isset($this->cfg['MAINDISCERRS']) ? htmlspecialchars($this->cfg['MAINDISCERRS']) : 'disable');
         $this->cron = trim(isset($this->cfg['CRON']) ? htmlspecialchars($this->cfg['CRON']) : 'disable');
         $this->cronhour = trim(isset($this->cfg['CRONHOUR']) ? htmlspecialchars($this->cfg['CRONHOUR']) : '1');
         $this->crondow = trim(isset($this->cfg['CRONDOW']) ? htmlspecialchars($this->cfg['CRONDOW']) : '0');
@@ -115,8 +119,8 @@ class SnapraidArrayConfiguration {
         $this->lastfinish = trim(file_exists("/var/lib/snapraid/logs/$cfg_name-lastfinish") ? htmlspecialchars(file_get_contents("/var/lib/snapraid/logs/$cfg_name-lastfinish")) : "-");
         $this->lastsync = trim(file_exists("/boot/config/plugins/dwsnap/config/$cfg_name-lastsync") ? htmlspecialchars(file_get_contents("/boot/config/plugins/dwsnap/config/$cfg_name-lastsync")) : "-");
         $this->lastscrub = trim(file_exists("/boot/config/plugins/dwsnap/config/$cfg_name-lastscrub") ? htmlspecialchars(file_get_contents("/boot/config/plugins/dwsnap/config/$cfg_name-lastscrub")) : "-");
-        $this->lastnodiff = trim(file_exists("/boot/config/plugins/dwsnap/config/$cfg_name-lastnodiff") ? htmlspecialchars(file_get_contents("/boot/config/plugins/dwsnap/config/$cfg_name-lastnodiff")) : "-");        
-    
+        $this->lastnodiff = trim(file_exists("/boot/config/plugins/dwsnap/config/$cfg_name-lastnodiff") ? htmlspecialchars(file_get_contents("/boot/config/plugins/dwsnap/config/$cfg_name-lastnodiff")) : "-");
+
         preg_match_all('/^((?:.-)?parity) (.+\/)(.*)$/m', $this->snapcfg, $this->parity_disks, PREG_SET_ORDER);
         preg_match_all('/^data (.+?) (.+?)$/m', $this->snapcfg, $this->data_disks, PREG_SET_ORDER);
 
@@ -131,13 +135,13 @@ class SnapraidArrayConfiguration {
         try {
             $snap_footer_html = "";
             $snap_array_name = strtoupper($this->cfgname);
-            
+
             $snap_config_name = $this->cfgname;
             $snap_config_name_esc = "\"" . escapeshellarg($snap_config_name) . "\"";
             $snap_running = htmlspecialchars(trim(shell_exec( "if pgrep -f \"^(/usr/bin/ionice -c [0-9] )?/usr/bin/snapraid -c /boot/config/plugins/dwsnap/config/$snap_config_name_esc.conf\" >/dev/null 2>&1 || pgrep -f \"^(/bin/bash )?/usr/bin/snapraid-cron $snap_config_name_esc\" >/dev/null 2>&1 || pgrep -f \"^(/bin/bash )?/usr/bin/snapraid-runner $snap_config_name_esc\" >/dev/null 2>&1; then echo YES; else echo NO; fi" ) ?? "-"));
-            
+
             if($snap_running === "YES") { return "<a href='/Settings/dwsnapOps?snapr=".$this->cfgname."' style='cursor:pointer;color:inherit;text-decoration:none;'><span class='$snap_tip_class' title='$snap_array_name: Array Operation in Progress'><i class='fa fa-cog fa-spin'></i></span></a>"; }
-    
+
             $snap_ramdisk_util = htmlspecialchars(trim(shell_exec("df --output=pcent /var/lib/snapraid 2>/dev/null | tr -dc '0-9' 2>/dev/null") ?? "-"));
             if(!empty($this->parity_disks) && !empty($this->data_disks) && !empty($this->parity_disks_raw[2]) && !empty($this->data_disks_raw[2])) {
                 if(count($this->parity_disks_raw[2]) === count($this->parity_disks) && count($this->data_disks_raw[2]) === count($this->data_disks)) {
@@ -178,7 +182,7 @@ class SnapraidArrayConfiguration {
                                     } else {
                                         if($snap_ramdisk_util > 90) {
                                             $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: (!) RAM Disk > 90% / All disks are mounted / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-exclamation-triangle red-text'></i></span>";
-                                        } else {   
+                                        } else {
                                             $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: All disks are mounted / Last Sync: ".strip_tags($snap_lastsync_ago)." / Last Scrub: ".strip_tags($snap_lastscrub_ago)."'><i class='fa fa-check green-text'></i></span>";
                                         }
                                     }
@@ -291,7 +295,7 @@ class SnapraidArrayConfiguration {
                         $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: (!) RAM Disk > 90% / (!) No parseable data disks - wrong mounts or malformed directives?'><i class='fa fa-times red-text'></i></span>";
                     } else {
                         $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: (!) No parseable data disks - wrong mounts or malformed directives?'><i class='fa fa-times red-text'></i></span>";
-                    }            
+                    }
                 } else {
                     if($snap_ramdisk_util > 90) {
                         $snap_footer_html = "<span class='$snap_tip_class' title='$snap_array_name: (!) RAM Disk > 90% / (!) No parity and/or data disks are configured'><i class='fa fa-times red-text'></i></span>";

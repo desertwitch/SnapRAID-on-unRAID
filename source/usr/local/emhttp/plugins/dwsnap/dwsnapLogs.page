@@ -34,6 +34,7 @@ $snap_log_last = shell_exec("ls -Art /var/lib/snapraid/logs/".escapeshellarg($dw
     .errortext {color: #EF3D47;display: none;}
     .fileTree {color:#486dba;width:305px;max-height:150px;overflow:scroll;position:absolute;z-index:100;display:none;}
     #editfile2 { width:600px; }
+    #snaparchive-lines {font-size: inherit;padding: 0px;margin: 0px;}
 </style>
 
 <div><strong>INFORMATION:</strong></div>
@@ -45,6 +46,22 @@ $snap_log_last = shell_exec("ls -Art /var/lib/snapraid/logs/".escapeshellarg($dw
 
 <img id="editfolder2" style="cursor:pointer;margin-left: 10px;" src="/webGui/images/explore.png" >
 <input id="editfile2" type="text" name="editfile2" value="" readonly="" data-picktop="/var/lib/snapraid/logs/" data-pickcloseonfile="true" data-pickfilter="log" data-pickroot="/var/lib/snapraid/logs/" data-pickfolders="true" required="required" >
+<span style="margin-left:5px;">
+<span id="snaparchive-spin" style="display:none;margin-right:2px;"><i class="fa fa-spinner fa-spin"></i></span>
+<strong>Showing Last:</strong>
+<select class="narrow" id="snaparchive-lines">
+    <option value="25">25</option>
+    <option value="75">75</option>
+    <option value="125">125</option>
+    <option value="250">250</option>
+    <option value="500">500</option>
+    <option value="750" selected>750</option>
+    <option value="1000">1000</option>
+    <option value="2500">2500</option>
+    <option value="5000">5000</option>
+    <option value="Max">Max</option>
+</select><span> Lines</span>
+</span>
 <span style="float:right;margin-right:10px;"><i class="fa fa-download"></i> <a href="/plugins/dwsnap/include/dwsnap_download.php" class="snaphelptip" title="Downloads all stored SnapRAID logfiles">Download Log Package (.zip)</a></span>
 <textarea id="editdata2" name="editdata2" placeholder="Select Configuration File"></textarea>
 <input type="hidden" name="commit" value="1" />
@@ -73,19 +90,45 @@ $(function(){
 
     $('#editfile2').on('change', function () {
         var Editfile2 = $('#editfile2').val();
-        $.getJSON('/plugins/dwsnap/include/dwsnap_edit.php', {editfile: Editfile2}, function (data) {
-                editor2.setValue(data);
-            }
-        );
+        if (Editfile2) {
+            $('#snaparchive-spin').show();
+            $.getJSON('/plugins/dwsnap/include/dwsnap_edit_log.php', {editfile: Editfile2, lines: $('#snaparchive-lines').val()}, function (data) {
+                    editor2.setValue(data);
+                }
+            )
+            .always(function() {
+                $('#snaparchive-spin').hide();
+            });
+        }
+    });
+
+    $('#snaparchive-lines').on('change', function () {
+        var EditfileLines = $('#editfile2').val();
+        if (EditfileLines) {
+            $('#snaparchive-spin').show();
+            $.getJSON('/plugins/dwsnap/include/dwsnap_edit_log.php', {editfile: EditfileLines, lines: $('#snaparchive-lines').val()}, function (data) {
+                    editor2.setValue(data);
+                }
+            )
+            .always(function() {
+                $('#snaparchive-spin').hide();
+            });
+        }
     });
 
     <?if ($snap_log_last):?>
-    $('#editfile2').val("<?=trim($snap_log_last)?>");
-    var EditfileDefault2 = $('#editfile2').val();
-    $.getJSON('/plugins/dwsnap/include/dwsnap_edit.php', {editfile: EditfileDefault2}, function (data) {
-            editor2.setValue(data);
+        $('#editfile2').val("<?=trim($snap_log_last)?>");
+        var EditfileDefault2 = $('#editfile2').val();
+        if (EditfileDefault2) {
+            $('#snaparchive-spin').show();
+            $.getJSON('/plugins/dwsnap/include/dwsnap_edit_log.php', {editfile: EditfileDefault2, lines: $('#snaparchive-lines').val()}, function (data) {
+                    editor2.setValue(data);
+                }
+            )
+            .always(function() {
+                $('#snaparchive-spin').hide();
+            });
         }
-    );
     <?endif;?>
 });
 </script>

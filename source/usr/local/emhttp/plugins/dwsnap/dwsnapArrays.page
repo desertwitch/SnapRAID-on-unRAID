@@ -48,15 +48,17 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 
 <script type="text/javascript">
 function getSnapArrays() {
+    clearTimeout(timers.getSnapArrays);
     $.get('/plugins/dwsnap/include/dwsnap_arrays.php', {"config": "<?=$dwsnap_active_cfg->cfgname;?>"}, function(data) {
-        if (data && data.success && data.success.response) { 
+        if (data && data.success && data.success.response) {
             $('#snap_arrays').html(data.success.response);
             $('.snaparraytip').tooltipster();
             $('.snaparrayhtmltip').tooltipster({contentAsHTML: true});
         }
-    }, 'json');
-    clearTimeout(timers.getSnapArrays);
-    timers.getSnapArrays = setTimeout(getSnapArrays, 5000);
+    }, 'json')
+    .always(function() {
+        timers.getSnapArrays = setTimeout(getSnapArrays, 5000);
+    });
 }
 $(function()
 {

@@ -213,6 +213,11 @@ echo "################################################################" 2>&1 | t
 
 trap signal_exit_cron SIGTERM SIGINT
 
+if [ "$MAINDISCERRS" == "enable" ] && [ ! "$RAWREPORTS" == "enable" ]; then
+    echo "WARNING: Not fatal errors are set to be discarded, consider this when interpreting results." 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+    echo "################################################################" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
+fi
+
 [ "$STARTNOTIFY" == "enable" ] && "$NOTIFY_BIN" -e "${EVENT}" -s "Notice ${SUBJECT} Maintenance Started" -d "The SnapRAID maintenance has started.${RAMWARNINGSHORT}" -i "warning"
 [ "$HEALTHCHECK" == "enable" ] && do_healthcheck start "SnapRAID maintenance has started."
 
@@ -223,6 +228,7 @@ if [ "$TOUCH" == "enable" ]; then
     echo "### (${CFGNAMEBIG}) CRON -- Checking for files to be touched..." 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     # shellcheck disable=SC2015
     [ "$RAWREPORTS" == "enable" ] && LOGLINE="/var/lib/snapraid/logs/${CFGNAME}/cron-${LOGTIME}/01a-status-${LOGTIME}.raw.log" || unset LOGLINE
+    [ "$MAINDISCERRS" == "enable" ] && [ ! "$RAWREPORTS" == "enable" ] && LOGLINE="/dev/null"
     TIMESTATUS=$($SNAP_BIN -c "$SNAP_CONF" ${LOGLINE:+"-l"} ${LOGLINE:+"$LOGLINE"} status 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog" | grep -E 'You have [1-9][0-9]* files with( a)? zero sub-second timestamp\.' 2>/dev/null)
     if [ -n "$TIMESTATUS" ] || [ "$TOUCHNODIFFS" == "enable" ]; then
         if [ -n "$TIMESTATUS" ]; then
@@ -235,6 +241,7 @@ if [ "$TOUCH" == "enable" ]; then
         fi
         # shellcheck disable=SC2015
         [ "$RAWREPORTS" == "enable" ] && LOGLINE="/var/lib/snapraid/logs/${CFGNAME}/cron-${LOGTIME}/01b-touch-${LOGTIME}.raw.log" || unset LOGLINE
+        [ "$MAINDISCERRS" == "enable" ] && [ ! "$RAWREPORTS" == "enable" ] && LOGLINE="/dev/null"
         if ! $SNAP_BIN -c "$SNAP_CONF" ${LOGLINE:+"-l"} ${LOGLINE:+"$LOGLINE"} ${QUIETARG:+"$QUIETARG"} touch >>"/var/lib/snapraid/logs/${CFGNAME}-snaplog" 2>&1; then
             echo "### (${CFGNAMEBIG}) CRON -- Touching selected files has failed (received non-zero return code), exiting..." 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
             FAILUREMSG="The touching of selected files has failed (see logs)."
@@ -257,9 +264,10 @@ if [ "$DIFF" == "enable" ]; then
     echo "### (${CFGNAMEBIG}) CRON -- Checking for differences..." 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     # shellcheck disable=SC2015
     [ "$RAWREPORTS" == "enable" ] && LOGLINE="/var/lib/snapraid/logs/${CFGNAME}/cron-${LOGTIME}/02-diff-${LOGTIME}.raw.log" || unset LOGLINE
+    [ "$MAINDISCERRS" == "enable" ] && [ ! "$RAWREPORTS" == "enable" ] && LOGLINE="/dev/null"
     DIFFOUT=$($SNAP_BIN -c "$SNAP_CONF" ${LOGLINE:+"-l"} ${LOGLINE:+"$LOGLINE"} diff 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog" ; exit "${PIPESTATUS[0]}")
     DIFFRET=$?
-    
+
     if [ "$DIFFRET" -eq 0 ]; then
         OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
         echo "$OPTIME" >"/boot/config/plugins/dwsnap/config/${CFGNAME}-lastnodiff"
@@ -269,7 +277,7 @@ if [ "$DIFF" == "enable" ]; then
         touch "/boot/config/plugins/dwsnap/config/${CFGNAME}-syncneeded"
         rm -f "/boot/config/plugins/dwsnap/config/${CFGNAME}-lastnodiff"
     fi
-    
+
     EQ_COUNT=$(grep -wE '^ *[0-9]+ equal' 2>/dev/null <<< "$DIFFOUT" | sed 's/^ *//g' 2>/dev/null | cut -d ' ' -f1 2>/dev/null)
     ADD_COUNT=$(grep -wE '^ *[0-9]+ added' 2>/dev/null <<< "$DIFFOUT" | sed 's/^ *//g' 2>/dev/null | cut -d ' ' -f1 2>/dev/null)
     DEL_COUNT=$(grep -wE '^ *[0-9]+ removed' 2>/dev/null <<< "$DIFFOUT" | sed 's/^ *//g' 2>/dev/null | cut -d ' ' -f1 2>/dev/null)
@@ -352,6 +360,7 @@ if [ "$SYNC" == "enable" ]; then
             echo "### (${CFGNAMEBIG}) CRON -- Prehashed Syncing...${FORCEZEROMSG}${SYNCERRORMSG}" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
             # shellcheck disable=SC2015
             [ "$RAWREPORTS" == "enable" ] && LOGLINE="/var/lib/snapraid/logs/${CFGNAME}/cron-${LOGTIME}/03-hsync-${LOGTIME}.raw.log" || unset LOGLINE
+            [ "$MAINDISCERRS" == "enable" ] && [ ! "$RAWREPORTS" == "enable" ] && LOGLINE="/dev/null"
             if ! $SNAP_BIN -c "$SNAP_CONF" ${LOGLINE:+"-l"} ${LOGLINE:+"$LOGLINE"} ${QUIETARG:+"$QUIETARG"} -h ${FORCEZEROARG:+"$FORCEZEROARG"} ${SYNCERRORARG:+"-L"} ${SYNCERRORARG:+"$SYNCERRORARG"} sync >>"/var/lib/snapraid/logs/${CFGNAME}-snaplog" 2>&1; then
                 echo "### (${CFGNAMEBIG}) CRON -- Prehashed Sync has failed (received non-zero return code), exiting..." 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
                 FAILUREMSG="The prehashed sync has failed (see logs)."
@@ -367,6 +376,7 @@ if [ "$SYNC" == "enable" ]; then
             echo "### (${CFGNAMEBIG}) CRON -- Syncing...${FORCEZEROMSG}${SYNCERRORMSG}" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
             # shellcheck disable=SC2015
             [ "$RAWREPORTS" == "enable" ] && LOGLINE="/var/lib/snapraid/logs/${CFGNAME}/cron-${LOGTIME}/03-sync-${LOGTIME}.raw.log" || unset LOGLINE
+            [ "$MAINDISCERRS" == "enable" ] && [ ! "$RAWREPORTS" == "enable" ] && LOGLINE="/dev/null"
             if ! $SNAP_BIN -c "$SNAP_CONF" ${LOGLINE:+"-l"} ${LOGLINE:+"$LOGLINE"} ${QUIETARG:+"$QUIETARG"} ${FORCEZEROARG:+"$FORCEZEROARG"} ${SYNCERRORARG:+"-L"} ${SYNCERRORARG:+"$SYNCERRORARG"} sync >>"/var/lib/snapraid/logs/${CFGNAME}-snaplog" 2>&1; then
                 echo "### (${CFGNAMEBIG}) CRON -- Sync has failed (received non-zero return code), exiting..." 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
                 FAILUREMSG="The sync has failed (see logs)."
@@ -398,6 +408,7 @@ if [ "$SCRUB" == "enable" ]; then
         echo "### (${CFGNAMEBIG}) CRON -- Scrubbing New Blocks...${SCRUBERRORMSG}" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
         # shellcheck disable=SC2015
         [ "$RAWREPORTS" == "enable" ] && LOGLINE="/var/lib/snapraid/logs/${CFGNAME}/cron-${LOGTIME}/04a-scrubnew-${LOGTIME}.raw.log" || unset LOGLINE
+        [ "$MAINDISCERRS" == "enable" ] && [ ! "$RAWREPORTS" == "enable" ] && LOGLINE="/dev/null"
         if ! $SNAP_BIN -c "$SNAP_CONF" ${LOGLINE:+"-l"} ${LOGLINE:+"$LOGLINE"} ${QUIETARG:+"$QUIETARG"} -p new ${SCRUBERRORARG:+"-L"} ${SCRUBERRORARG:+"$SCRUBERRORARG"} scrub >>"/var/lib/snapraid/logs/${CFGNAME}-snaplog" 2>&1; then
                 echo "### (${CFGNAMEBIG}) CRON -- Scrub New Blocks has failed (received non-zero return code), exiting..." 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
                 FAILUREMSG="The new block scrub has failed (see logs)."
@@ -415,6 +426,7 @@ if [ "$SCRUB" == "enable" ]; then
     echo "### (${CFGNAMEBIG}) CRON -- Scrubbing [${SCRUBPERCENT} % / ${SCRUBAGE} days age]...${SCRUBERRORMSG}" 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
     # shellcheck disable=SC2015
     [ "$RAWREPORTS" == "enable" ] && LOGLINE="/var/lib/snapraid/logs/${CFGNAME}/cron-${LOGTIME}/04b-scrub-${LOGTIME}.raw.log" || unset LOGLINE
+    [ "$MAINDISCERRS" == "enable" ] && [ ! "$RAWREPORTS" == "enable" ] && LOGLINE="/dev/null"
     if ! $SNAP_BIN -c "$SNAP_CONF" ${LOGLINE:+"-l"} ${LOGLINE:+"$LOGLINE"} ${QUIETARG:+"$QUIETARG"} -p "$SCRUBPERCENT" -o "$SCRUBAGE" ${SCRUBERRORARG:+"-L"} ${SCRUBERRORARG:+"$SCRUBERRORARG"} scrub >>"/var/lib/snapraid/logs/${CFGNAME}-snaplog" 2>&1; then
             echo "### (${CFGNAMEBIG}) CRON -- Scrub has failed (received non-zero return code), exiting..." 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
             FAILUREMSG="The scrub has failed (see logs)."

@@ -41,6 +41,8 @@ cp -f /usr/local/emhttp/plugins/dwsnap/default.cfg /boot/config/plugins/dwsnap/d
 [ -n "${SYNCEXPIRES}" ] && sed -i "s/SYNCEXPIRES=.*/SYNCEXPIRES=\"${SYNCEXPIRES}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
 [ -n "${SCRUBEXPIRES}" ] && sed -i "s/SCRUBEXPIRES=.*/SCRUBEXPIRES=\"${SCRUBEXPIRES}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
 [ -n "${RAWREPORTS}" ] && sed -i "s/RAWREPORTS=.*/RAWREPORTS=\"${RAWREPORTS}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
+[ -n "${MANDISCERRS}" ] && sed -i "s/MANDISCERRS=.*/MANDISCERRS=\"${MANDISCERRS}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
+[ -n "${MAINDISCERRS}" ] && sed -i "s/MAINDISCERRS=.*/MAINDISCERRS=\"${MAINDISCERRS}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
 [ -n "${CRON}" ] && sed -i "s/CRON=.*/CRON=\"${CRON}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
 [ -n "${CRONHOUR}" ] && sed -i "s/CRONHOUR=.*/CRONHOUR=\"${CRONHOUR}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg
 [ -n "${CRONDOW}" ] && sed -i "s/CRONDOW=.*/CRONDOW=\"${CRONDOW}\"/g" /boot/config/plugins/dwsnap/config/primary.cfg

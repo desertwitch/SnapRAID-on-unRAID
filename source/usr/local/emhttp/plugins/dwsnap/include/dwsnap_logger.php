@@ -19,11 +19,46 @@
  */
 $snap_logger_retarr = [];
 
+function getMemoryLimitInBytes() {
+    try {
+        $memoryLimit = ini_get('memory_limit');
+        $unit = strtolower(substr($memoryLimit, -1));
+        $size = (int)$memoryLimit;
+        switch ($unit) {
+            case 'g': // Gigabytes
+                $size *= 1024;
+            case 'm': // Megabytes
+                $size *= 1024;
+            case 'k': // Kilobytes
+                $size *= 1024;
+        }
+        return (int)($size * 0.8);
+    } catch(\Throwable $t) {
+        error_log($t);
+        return 104857600;
+    } catch(\Exception $e) {
+        error_log($e);
+        return 104857600;
+    }
+}
+
 try {
     if(!empty($_GET["config"])) {
         $snap_log_active_cfg = $_GET["config"];
+        if(!empty($_GET["lines"])) {
+            if($_GET["lines"] === "Max") {
+                $snap_logger_lines = escapeshellarg(getMemoryLimitInBytes());
+                $tailarg = "c";
+            } else {
+                $snap_logger_lines = escapeshellarg($_GET["lines"]);
+                $tailarg = "n";
+            }
+        } else {
+            $snap_logger_lines = escapeshellarg("500");
+            $tailarg = "n";
+        }
         if(file_exists("/var/lib/snapraid/logs/$snap_log_active_cfg-snaplog")) {
-            $snap_log = file_get_contents("/var/lib/snapraid/logs/$snap_log_active_cfg-snaplog");
+            $snap_log = shell_exec("tail -$tailarg $snap_logger_lines '/var/lib/snapraid/logs/$snap_log_active_cfg-snaplog' 2>/dev/null");
             if(!empty($snap_log)) {
                 $snap_logger_retarr["success"]["response"] = "<pre class='snaplog'>".htmlspecialchars($snap_log)."</pre>";
             } else {

@@ -108,7 +108,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 <blockquote class="inline_help">
     <p>Enables collection of <strong>anonymized</strong> plugin usage statistics through the plugin usage metrics API.</p>
     <p>This aids prioritization of bug reports, development of new features and planning for plugin updates/deprecation.</p>
-    <p><em>Attributes: Metric ID, Plugin Version, Unraid Version, SnapRAID Backend Version, SnapRAID Array Count (Number), SnapRAID Array Synced (Yes/No).</em></p> 
+    <p><em>Attributes: Metric ID, Plugin Version, Unraid Version, SnapRAID Backend Version, SnapRAID Array Count (Number), SnapRAID Array Synced (Yes/No).</em></p>
     <p><strong><i class="fa fa-heart" style="color:red;"></i> If possible, please keep this setting <u>enabled</u> to support the continued development of this plugin - thank you!</strong></p>
 </blockquote>
 
@@ -233,6 +233,44 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 <p><strong>It is therefore recommended to keep this setting disabled, unless running into problems and needing such diagnostic information, on any systems with limited RAM reserves.</strong></p>
 <p>You can also keep this setting generally disabled, but enable on demand (for individual operations) raw operation reports to another (less space constrained) location by utilizing the additional parameters above.</p>
 </blockquote>
+
+<div id="MANDISCERRSETT">
+    <dl>
+        <dt>SnapRAID Manual Operations - Discard Not Fatal Errors:</dt>
+        <dd>
+            <select class="snaprun" id="MANDISCERRS" name="MANDISCERRS" size="1">
+                <?=mk_option($dwsnap_active_cfg->mandiscerrs, "disable", "No");?>
+                <?=mk_option($dwsnap_active_cfg->mandiscerrs, "enable", "Yes");?>
+            </select>
+        </dd>
+    </dl>
+
+    <blockquote class="inline_help">
+    <p>When <em>Raw Operation Reports</em> are disabled, non-fatal errors can quickly fill up the output screen log.</p>
+    <p>This can cause very large operational log file sizes and possibly eventually result in RAM disk space problems on servers with little RAM.</p>
+    <p>Enabling this setting will discard any errors that SnapRAID considers as not fatal, while still reporting any critical errors in the screen log.</p>
+    <p>Regardless of this setting, fatal errors will always be reported and SnapRAID will print a summary of encounterd problems after the operation has finished.</p>
+    </blockquote>
+</div>
+
+<div id="MAINDISCERRSETT">
+    <dl>
+        <dt>SnapRAID Maintenance Operations - Discard Not Fatal Errors:</dt>
+        <dd>
+            <select class="snaprun" id="MAINDISCERRS" name="MAINDISCERRS" size="1">
+                <?=mk_option($dwsnap_active_cfg->maindiscerrs, "disable", "No");?>
+                <?=mk_option($dwsnap_active_cfg->maindiscerrs, "enable", "Yes");?>
+            </select>
+        </dd>
+    </dl>
+
+    <blockquote class="inline_help">
+    <p>When <em>Raw Operation Reports</em> are disabled, non-fatal errors can quickly fill up the maintenance log.</p>
+    <p>This can cause very large operational log file sizes and possibly eventually result in RAM disk space problems on servers with little RAM.</p>
+    <p>Enabling this setting will discard any errors that SnapRAID considers as not fatal, while still reporting any critical errors in the maintenance log.</p>
+    <p>Regardless of this setting, fatal errors will always be reported and SnapRAID will print a summary of encounterd problems after the operation has finished.</p>
+    </blockquote>
+</div>
 
 <dl>
     <dt><strong>SnapRAID Maintenance - Schedule:</strong></dt>
@@ -376,7 +414,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 
     <blockquote class="inline_help">
     <p>Sets arbitrarily the sub-second time-stamp of all the files that have it at zero.</p>
-    <p>This improves the SnapRAID capability to recognize moved and copied files as it makes the time-stamp almost unique, removing possible duplicates.</p> 
+    <p>This improves the SnapRAID capability to recognize moved and copied files as it makes the time-stamp almost unique, removing possible duplicates.</p>
     </blockquote>
 
     <div id="TOUCHSETTINGS">
@@ -548,7 +586,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 
         <blockquote class="inline_help">
         <p>When enabled a preliminary hashing phase of all the new data (to have an additional verification before the parity computation) will be performed.</p>
-        <p>This can be useful to detect corruption and bit-flips during parity computation (when the machine is under heavy load), it will however take longer than a regular sync.</p> 
+        <p>This can be useful to detect corruption and bit-flips during parity computation (when the machine is under heavy load), it will however take longer than a regular sync.</p>
         </blockquote>
 
         <dl>
@@ -618,7 +656,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <blockquote class="inline_help">
         <p>By default newly synced blocks are not instantly scrubbed due to being at lower risk for data corruption.</p>
         <p>When enabled an additional scrub operation is performed scrubbing also any newly synced blocks, in addition to the older blocks to be scrubbed.</p>
-        <p>Be advised that when enabled and no scrubs have been performed on the array yet (ever), this will result in the whole array being scrubbed (as all blocks will be considered new).</p> 
+        <p>Be advised that when enabled and no scrubs have been performed on the array yet (ever), this will result in the whole array being scrubbed (as all blocks will be considered new).</p>
         </blockquote>
 
         <dl>
@@ -748,6 +786,26 @@ function snapCronSettings() {
         $("#CRONDOMSETTING").hide();
     }
 }
+function snapErrSettings() {
+    switch ($("#RAWREPORTS").val()) {
+        case "enable":
+            $('#MANDISCERRSETT').hide();
+            $('#MAINDISCERRSETT').hide();
+            break;
+        case "disable":
+            $('#MANDISCERRSETT').show();
+            $('#MAINDISCERRSETT').show();
+            break;
+        case "manual":
+            $('#MANDISCERRSETT').hide();
+            $('#MAINDISCERRSETT').show();
+            break;
+        case "cron":
+            $('#MANDISCERRSETT').show();
+            $('#MAINDISCERRSETT').hide();
+            break;
+    }
+}
 $(function(){
     $('#RESETCONF').click(function(){
         swal({
@@ -821,8 +879,10 @@ $(function(){
     $("#CRON").change(snapCronSettings);
     $("#TOUCH").change(snapCronSettings);
     $("#HEALTHCHECK").change(snapCronSettings);
+    $("#RAWREPORTS").change(snapErrSettings);
 
     snapCronSettings();
+    snapErrSettings();
 
     if (typeof $.fn.mask === "function" ) {
         $('.snapnumber').mask('ZZZZZZZZZZZZZZZ', {translation:  {'Z': {pattern: /[0-9]/, optional: true}}});
@@ -830,4 +890,4 @@ $(function(){
     }
 });
 </script>
-    
+

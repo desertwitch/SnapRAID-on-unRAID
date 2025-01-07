@@ -63,14 +63,43 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
     font-family: bitstream;
     font-size: 1.1rem;
 }
+#snaplog-lines {
+    font-size: inherit;
+    padding: 0px;
+    margin: 0px;
+}
 </style>
 
 <table class="tablesorter shift" autofocus>
     <thead>
         <tr>
             <th><i id="snapstatusicon" class="fa fa-cog fa-spin" style="display:none;"></i> <strong>(<?=$dwsnap_active_cfg->cfgname;?>) Array Operation Screen</strong></th>
-            <th style="text-transform: none;"><strong>Started:</strong> <em><?=$dwsnap_active_cfg->laststart?></em></th>
-            <th style="text-transform: none;"><strong>Finished:</strong> <em><?=$dwsnap_active_cfg->lastfinish?></em><span style="float:right;"><strong>Refresh:</strong> <i id="logcontrol" class="fa fa-refresh fa-spin"></i></span></th>
+            <th style="text-transform: none;"><strong>Started:</strong> <?=$dwsnap_active_cfg->laststart?></th>
+            <th style="text-transform: none;"><strong>Finished:</strong> <?=$dwsnap_active_cfg->lastfinish?></th>
+            <th style="text-transform: none;">
+                <span id="snaplog-spin" style="display:none;margin-right:2px;"><i class="fa fa-spinner fa-spin"></i></span>
+                <strong>Showing Last:</strong>
+                <select class="narrow" id="snaplog-lines">
+                    <option value="25">25</option>
+                    <option value="75">75</option>
+                    <option value="125">125</option>
+                    <option value="250" selected>250</option>
+                    <option value="500">500</option>
+                    <option value="750">750</option>
+                    <option value="1000">1000</option>
+                    <option value="2500">2500</option>
+                    <option value="5000">5000</option>
+                    <option value="Max">Max</option>
+                </select><span> Lines</span>
+                <?php if (file_exists("/var/lib/snapraid/logs/{$dwsnap_active_cfg->cfgname}-snaplog")): ?>
+                    <span> - </span>
+                    <a href="/plugins/dwsnap/include/dwsnap_download_log.php?config=<?= htmlspecialchars($dwsnap_active_cfg->cfgname); ?>"
+                    style="color: inherit; cursor: pointer;">
+                    <i class="fa fa-download snaphelptip" title="Download Full Log"></i>
+                    </a>
+                <?php endif; ?>
+            </th>
+            <th style="text-transform: none;"><span style="float:right;"><strong>Refresh:</strong> <i id="logcontrol" class="fa fa-refresh fa-spin"></i></span></th>
         </tr>
     </thead>
 </table>
@@ -98,6 +127,8 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
     <input type="hidden" id="arg17" name="#arg[17]" value="">
     <input type="hidden" id="arg18" name="#arg[18]" value="">
     <input type="hidden" id="arg19" name="#arg[19]" value="">
+    <input type="hidden" id="arg20" name="#arg[20]" value="">
+    <input type="hidden" id="arg21" name="#arg[21]" value="">
 
     <input class="snaprun snaphelptip" type="button" id="snapstatus" value="STATUS" title="Prints a summary of the state of the disk array. It includes information about the parity fragmentation, how long the blocks have not been checked, and all the recorded silent errors encountered while scrubbing. Note that the information presented refers to the last time you ran SYNC. Later modifications to the array data are not taken into account.">
     <input class="snaprun snaphelptip" type="button" id="snaplist" value="LIST" title="Lists all the files contained in the array at the time of the last SYNC.">
@@ -189,6 +220,14 @@ if($dwsnap_active_cfg->lastsync !== "-" && $dwsnap_active_cfg->lastnodiff !== "-
 
         <br><strong>Raw Operation Report Alternative Location:</strong>
         <input type="text" id="snap-rawreport" title="An alternative path for the raw operation report file, which can grow extremely large in size (up to many GBs). This can be useful on systems where SnapRAID's RAM disk is too small for raw operation report files. This parameter overrides the setting which generally controls creation of raw operation report files, meaning when an alternative path is set, a raw operation report file will always be generated for the single operation." class="snaphelptip" placeholder="Full File Path (e.g. /mnt/cache/operation-raw.log)">
+
+        <br><strong>Screen Output Format Settings for File Paths:</strong>
+        <input type="radio" id="snap-fmt-file" name="snap-fmtpath" value="snap-fmt-file">
+        <span title="Prints the location relative to SnapRAID." class="snaphelptip">Relative File</span>
+        <input type="radio" id="snap-fmt-disk" name="snap-fmtpath" value="snap-fmt-disk">
+        <span title="Prints the location relative to the SnapRAID array and the SnapRAID disk number." class="snaphelptip">Disk Number</span>
+        <input type="radio" id="snap-fmt-path" name="snap-fmtpath" value="snap-fmt-path">
+        <span title="Prints the location with the system path." class="snaphelptip">Full Location</span>
 
     </div><br>
 
@@ -390,18 +429,29 @@ END;
 </form>
 
 <script type="text/javascript">
-function getSnapLogs() {
-    $.get('/plugins/dwsnap/include/dwsnap_logger.php', {"config": "<?=$dwsnap_active_cfg->cfgname;?>"}, function(data) {
+function getSnapLogs(manuallyInvoked) {
+    if(!manuallyInvoked) {
+        clearTimeout(timers.getSnapLogs);
+    } else {
+        $('#snaplog-spin').show();
+    }
+    $.get('/plugins/dwsnap/include/dwsnap_logger.php', {"config": "<?=$dwsnap_active_cfg->cfgname;?>", "lines": $('#snaplog-lines').val() }, function(data) {
         if (data && data.success && data.success.response) {
             $('#logviewer').html(data.success.response);
             var pre = $(".snaplog");
             pre.scrollTop(pre.prop("scrollHeight"));
         }
-    }, 'json');
-    clearTimeout(timers.getSnapLogs);
-    timers.getSnapLogs = setTimeout(getSnapLogs, 1000);
+    }, 'json')
+    .always(function() {
+        if(!manuallyInvoked) {
+            timers.getSnapLogs = setTimeout(getSnapLogs, 1000);
+        } else {
+            $('#snaplog-spin').hide();
+        }
+    });
 }
 function getSnapStatus() {
+    clearTimeout(timers.getSnapStatus);
     $.get('/plugins/dwsnap/include/dwsnap_status.php', {"config": "<?=$dwsnap_active_cfg->cfgname;?>"}, function(data) {
         if (data && data.success && data.success.response) {
             if(data.success.response.overall) {
@@ -432,9 +482,10 @@ function getSnapStatus() {
                 }
             }
         }
-    }, 'json');
-    clearTimeout(timers.getSnapStatus);
-    timers.getSnapStatus = setTimeout(getSnapStatus, 3000);
+    }, 'json')
+    .always(function() {
+        timers.getSnapStatus = setTimeout(getSnapStatus, 3000);
+    });
 }
 function toggleSnapLogs() {
     if($('#logcontrol').attr("class") == "fa fa-refresh fa-spin") {
@@ -491,6 +542,16 @@ $(function(){
             $('#arg4').val('-l');
             $('#arg5').val($('#snap-rawreport').val());
         }
+        if($('#snap-fmt-file').is(':checked')) {
+            $('#arg6').val('--test-fmt');
+            $('#arg7').val('file');
+        } else if ($('#snap-fmt-disk').is(':checked')) {
+            $('#arg6').val('--test-fmt');
+            $('#arg7').val('disk');
+        } else if ($('#snap-fmt-path').is(':checked')) {
+            $('#arg6').val('--test-fmt');
+            $('#arg7').val('path');
+        }
         confirmCommandAndSubmit();
     });
     $('#snaplist').click(function(){
@@ -504,6 +565,16 @@ $(function(){
         if($('#snap-rawreport').val()) {
             $('#arg4').val('-l');
             $('#arg5').val($('#snap-rawreport').val());
+        }
+        if($('#snap-fmt-file').is(':checked')) {
+            $('#arg6').val('--test-fmt');
+            $('#arg7').val('file');
+        } else if ($('#snap-fmt-disk').is(':checked')) {
+            $('#arg6').val('--test-fmt');
+            $('#arg7').val('disk');
+        } else if ($('#snap-fmt-path').is(':checked')) {
+            $('#arg6').val('--test-fmt');
+            $('#arg7').val('path');
         }
         confirmCommandAndSubmit();
     });
@@ -522,6 +593,16 @@ $(function(){
         if($('#snapcheck-forceuuid').is(':checked')) {
             $('#arg6').val('-U');
         }
+        if($('#snap-fmt-file').is(':checked')) {
+            $('#arg7').val('--test-fmt');
+            $('#arg8').val('file');
+        } else if ($('#snap-fmt-disk').is(':checked')) {
+            $('#arg7').val('--test-fmt');
+            $('#arg8').val('disk');
+        } else if ($('#snap-fmt-path').is(':checked')) {
+            $('#arg7').val('--test-fmt');
+            $('#arg8').val('path');
+        }
         confirmCommandAndSubmit();
     });
     $('#snapdup').click(function(){
@@ -535,6 +616,16 @@ $(function(){
         if($('#snap-rawreport').val()) {
             $('#arg4').val('-l');
             $('#arg5').val($('#snap-rawreport').val());
+        }
+        if($('#snap-fmt-file').is(':checked')) {
+            $('#arg6').val('--test-fmt');
+            $('#arg7').val('file');
+        } else if ($('#snap-fmt-disk').is(':checked')) {
+            $('#arg6').val('--test-fmt');
+            $('#arg7').val('disk');
+        } else if ($('#snap-fmt-path').is(':checked')) {
+            $('#arg6').val('--test-fmt');
+            $('#arg7').val('path');
         }
         confirmCommandAndSubmit();
     });
@@ -580,6 +671,16 @@ $(function(){
             $('#arg12').val('-q');
         } else if ($('#snap-verbose').is(':checked')) {
             $('#arg12').val('-v');
+        }
+        if($('#snap-fmt-file').is(':checked')) {
+            $('#arg13').val('--test-fmt');
+            $('#arg14').val('file');
+        } else if ($('#snap-fmt-disk').is(':checked')) {
+            $('#arg13').val('--test-fmt');
+            $('#arg14').val('disk');
+        } else if ($('#snap-fmt-path').is(':checked')) {
+            $('#arg13').val('--test-fmt');
+            $('#arg14').val('path');
         }
         confirmCommandAndSubmit();
     });
@@ -630,6 +731,16 @@ $(function(){
             $('#arg19').val('-q');
         } else if ($('#snap-verbose').is(':checked')) {
             $('#arg19').val('-v');
+        }
+        if($('#snap-fmt-file').is(':checked')) {
+            $('#arg20').val('--test-fmt');
+            $('#arg21').val('file');
+        } else if ($('#snap-fmt-disk').is(':checked')) {
+            $('#arg20').val('--test-fmt');
+            $('#arg21').val('disk');
+        } else if ($('#snap-fmt-path').is(':checked')) {
+            $('#arg20').val('--test-fmt');
+            $('#arg21').val('path');
         }
         confirmCommandAndSubmit();
     });
@@ -758,6 +869,16 @@ $(function(){
                 } else if ($('#snap-verbose').is(':checked')) {
                     $('#arg14').val('-v');
                 }
+                if($('#snap-fmt-file').is(':checked')) {
+                    $('#arg15').val('--test-fmt');
+                    $('#arg16').val('file');
+                } else if ($('#snap-fmt-disk').is(':checked')) {
+                    $('#arg15').val('--test-fmt');
+                    $('#arg16').val('disk');
+                } else if ($('#snap-fmt-path').is(':checked')) {
+                    $('#arg15').val('--test-fmt');
+                    $('#arg16').val('path');
+                }
                 confirmCommandAndSubmit();
             });
     });
@@ -811,6 +932,16 @@ $(function(){
                 } else if ($('#snap-verbose').is(':checked')) {
                     $('#arg15').val('-v');
                 }
+                if($('#snap-fmt-file').is(':checked')) {
+                    $('#arg16').val('--test-fmt');
+                    $('#arg17').val('file');
+                } else if ($('#snap-fmt-disk').is(':checked')) {
+                    $('#arg16').val('--test-fmt');
+                    $('#arg17').val('disk');
+                } else if ($('#snap-fmt-path').is(':checked')) {
+                    $('#arg16').val('--test-fmt');
+                    $('#arg17').val('path');
+                }
                 confirmCommandAndSubmit();
             });
     });
@@ -835,6 +966,16 @@ $(function(){
                 if($('#snap-rawreport').val()) {
                     $('#arg4').val('-l');
                     $('#arg5').val($('#snap-rawreport').val());
+                }
+                if($('#snap-fmt-file').is(':checked')) {
+                    $('#arg6').val('--test-fmt');
+                    $('#arg7').val('file');
+                } else if ($('#snap-fmt-disk').is(':checked')) {
+                    $('#arg6').val('--test-fmt');
+                    $('#arg7').val('disk');
+                } else if ($('#snap-fmt-path').is(':checked')) {
+                    $('#arg6').val('--test-fmt');
+                    $('#arg7').val('path');
                 }
                 confirmCommandAndSubmit();
             });
@@ -890,6 +1031,16 @@ $(function(){
                     $('#arg17').val('-q');
                 } else if ($('#snap-verbose').is(':checked')) {
                     $('#arg17').val('-v');
+                }
+                if($('#snap-fmt-file').is(':checked')) {
+                    $('#arg18').val('--test-fmt');
+                    $('#arg19').val('file');
+                } else if ($('#snap-fmt-disk').is(':checked')) {
+                    $('#arg18').val('--test-fmt');
+                    $('#arg19').val('disk');
+                } else if ($('#snap-fmt-path').is(':checked')) {
+                    $('#arg18').val('--test-fmt');
+                    $('#arg19').val('path');
                 }
                 confirmCommandAndSubmit();
             });
@@ -947,6 +1098,16 @@ $(function(){
                 } else if ($('#snap-verbose').is(':checked')) {
                     $('#arg18').val('-v');
                 }
+                if($('#snap-fmt-file').is(':checked')) {
+                    $('#arg19').val('--test-fmt');
+                    $('#arg20').val('file');
+                } else if ($('#snap-fmt-disk').is(':checked')) {
+                    $('#arg19').val('--test-fmt');
+                    $('#arg20').val('disk');
+                } else if ($('#snap-fmt-path').is(':checked')) {
+                    $('#arg19').val('--test-fmt');
+                    $('#arg20').val('path');
+                }
                 confirmCommandAndSubmit();
             });
     });
@@ -1002,6 +1163,16 @@ $(function(){
                     $('#arg18').val('-q');
                 } else if ($('#snap-verbose').is(':checked')) {
                     $('#arg18').val('-v');
+                }
+                if($('#snap-fmt-file').is(':checked')) {
+                    $('#arg19').val('--test-fmt');
+                    $('#arg20').val('file');
+                } else if ($('#snap-fmt-disk').is(':checked')) {
+                    $('#arg19').val('--test-fmt');
+                    $('#arg20').val('disk');
+                } else if ($('#snap-fmt-path').is(':checked')) {
+                    $('#arg19').val('--test-fmt');
+                    $('#arg20').val('path');
                 }
                 confirmCommandAndSubmit();
             });
@@ -1066,6 +1237,16 @@ $(function(){
                 } else if (\$('#snap-verbose').is(':checked')) {
                     \$('#arg17').val('-v');
                 }
+                if(\$('#snap-fmt-file').is(':checked')) {
+                    \$('#arg18').val('--test-fmt');
+                    \$('#arg19').val('file');
+                } else if (\$('#snap-fmt-disk').is(':checked')) {
+                    \$('#arg18').val('--test-fmt');
+                    \$('#arg19').val('disk');
+                } else if (\$('#snap-fmt-path').is(':checked')) {
+                    \$('#arg18').val('--test-fmt');
+                    \$('#arg19').val('path');
+                }
                 confirmCommandAndSubmit();
             });
             \$('#$snap_parity_name-fix').click(function() {
@@ -1116,6 +1297,16 @@ $(function(){
                         \$('#arg17').val('-q');
                     } else if (\$('#snap-verbose').is(':checked')) {
                         \$('#arg17').val('-v');
+                    }
+                    if(\$('#snap-fmt-file').is(':checked')) {
+                        \$('#arg18').val('--test-fmt');
+                        \$('#arg19').val('file');
+                    } else if (\$('#snap-fmt-disk').is(':checked')) {
+                        \$('#arg18').val('--test-fmt');
+                        \$('#arg19').val('disk');
+                    } else if (\$('#snap-fmt-path').is(':checked')) {
+                        \$('#arg18').val('--test-fmt');
+                        \$('#arg19').val('path');
                     }
                     confirmCommandAndSubmit();
                 });
@@ -1170,6 +1361,16 @@ $(function(){
                     } else if (\$('#snap-verbose').is(':checked')) {
                         \$('#arg18').val('-v');
                     }
+                    if(\$('#snap-fmt-file').is(':checked')) {
+                        \$('#arg19').val('--test-fmt');
+                        \$('#arg20').val('file');
+                    } else if (\$('#snap-fmt-disk').is(':checked')) {
+                        \$('#arg19').val('--test-fmt');
+                        \$('#arg20').val('disk');
+                    } else if (\$('#snap-fmt-path').is(':checked')) {
+                        \$('#arg19').val('--test-fmt');
+                        \$('#arg20').val('path');
+                    }
                     confirmCommandAndSubmit();
                 });
             });
@@ -1217,6 +1418,16 @@ END;
                     \$('#arg17').val('-q');
                 } else if (\$('#snap-verbose').is(':checked')) {
                     \$('#arg17').val('-v');
+                }
+                if(\$('#snap-fmt-file').is(':checked')) {
+                    \$('#arg18').val('--test-fmt');
+                    \$('#arg19').val('file');
+                } else if (\$('#snap-fmt-disk').is(':checked')) {
+                    \$('#arg18').val('--test-fmt');
+                    \$('#arg19').val('disk');
+                } else if (\$('#snap-fmt-path').is(':checked')) {
+                    \$('#arg18').val('--test-fmt');
+                    \$('#arg19').val('path');
                 }
                 confirmCommandAndSubmit();
             });
@@ -1268,6 +1479,16 @@ END;
                         \$('#arg17').val('-q');
                     } else if (\$('#snap-verbose').is(':checked')) {
                         \$('#arg17').val('-v');
+                    }
+                    if(\$('#snap-fmt-file').is(':checked')) {
+                        \$('#arg18').val('--test-fmt');
+                        \$('#arg19').val('file');
+                    } else if (\$('#snap-fmt-disk').is(':checked')) {
+                        \$('#arg18').val('--test-fmt');
+                        \$('#arg19').val('disk');
+                    } else if (\$('#snap-fmt-path').is(':checked')) {
+                        \$('#arg18').val('--test-fmt');
+                        \$('#arg19').val('path');
                     }
                     confirmCommandAndSubmit();
                 });
@@ -1322,6 +1543,16 @@ END;
                     } else if (\$('#snap-verbose').is(':checked')) {
                         \$('#arg18').val('-v');
                     }
+                    if(\$('#snap-fmt-file').is(':checked')) {
+                        \$('#arg19').val('--test-fmt');
+                        \$('#arg20').val('file');
+                    } else if (\$('#snap-fmt-disk').is(':checked')) {
+                        \$('#arg19').val('--test-fmt');
+                        \$('#arg20').val('disk');
+                    } else if (\$('#snap-fmt-path').is(':checked')) {
+                        \$('#arg19').val('--test-fmt');
+                        \$('#arg20').val('path');
+                    }
                     confirmCommandAndSubmit();
                 });
             });
@@ -1332,6 +1563,10 @@ END;
 
     getSnapStatus()
     getSnapLogs();
+
+    $('#snaplog-lines').on('change', function() {
+        getSnapLogs(true);
+    });
 
     $('.snaphelptip').tooltipster({
         maxWidth: 300
