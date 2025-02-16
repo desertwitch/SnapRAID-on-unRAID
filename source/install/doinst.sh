@@ -43,11 +43,13 @@ if [ ! -d /var/lib/snapraid/logs ]; then
 fi
 
 for logfile in "$BOOT"/config/*-snaplog; do
-    logname=$(basename "$logfile")
-    if [ ! -f "/var/lib/snapraid/logs/${logname}" ]; then
-        mv -f "$logfile" "/var/lib/snapraid/logs/${logname}"
-    else
-        rm -f "$logfile"
+    if [ -f "$logfile" ]; then
+        logname=$(basename "$logfile")
+        if [ ! -f "/var/lib/snapraid/logs/${logname}" ]; then
+            mv -f "$logfile" "/var/lib/snapraid/logs/${logname}"
+        else
+            rm -f "$logfile"
+        fi
     fi
 done
 
