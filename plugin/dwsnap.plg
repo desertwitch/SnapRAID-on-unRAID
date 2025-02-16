@@ -18,6 +18,8 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2025.02.16
+- fix: update the array status also to error if maintenance syncs/scrubs failed
 ###2025.01.07
 - new: added setting to output file paths in different formats
 - new: added setting to toggle how many log lines are shown in GUI
