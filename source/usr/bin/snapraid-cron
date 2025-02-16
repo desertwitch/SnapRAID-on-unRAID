@@ -364,6 +364,8 @@ if [ "$SYNC" == "enable" ]; then
             if ! $SNAP_BIN -c "$SNAP_CONF" ${LOGLINE:+"-l"} ${LOGLINE:+"$LOGLINE"} ${QUIETARG:+"$QUIETARG"} -h ${FORCEZEROARG:+"$FORCEZEROARG"} ${SYNCERRORARG:+"-L"} ${SYNCERRORARG:+"$SYNCERRORARG"} sync >>"/var/lib/snapraid/logs/${CFGNAME}-snaplog" 2>&1; then
                 echo "### (${CFGNAMEBIG}) CRON -- Prehashed Sync has failed (received non-zero return code), exiting..." 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
                 FAILUREMSG="The prehashed sync has failed (see logs)."
+                touch "/boot/config/plugins/dwsnap/config/${CFGNAME}-syncneeded"
+                rm -f "/boot/config/plugins/dwsnap/config/${CFGNAME}-lastnodiff"
                 failure_exit_cron
             else
                 OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
@@ -380,6 +382,8 @@ if [ "$SYNC" == "enable" ]; then
             if ! $SNAP_BIN -c "$SNAP_CONF" ${LOGLINE:+"-l"} ${LOGLINE:+"$LOGLINE"} ${QUIETARG:+"$QUIETARG"} ${FORCEZEROARG:+"$FORCEZEROARG"} ${SYNCERRORARG:+"-L"} ${SYNCERRORARG:+"$SYNCERRORARG"} sync >>"/var/lib/snapraid/logs/${CFGNAME}-snaplog" 2>&1; then
                 echo "### (${CFGNAMEBIG}) CRON -- Sync has failed (received non-zero return code), exiting..." 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
                 FAILUREMSG="The sync has failed (see logs)."
+                touch "/boot/config/plugins/dwsnap/config/${CFGNAME}-syncneeded"
+                rm -f "/boot/config/plugins/dwsnap/config/${CFGNAME}-lastnodiff"
                 failure_exit_cron
             else
                 OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
@@ -412,6 +416,8 @@ if [ "$SCRUB" == "enable" ]; then
         if ! $SNAP_BIN -c "$SNAP_CONF" ${LOGLINE:+"-l"} ${LOGLINE:+"$LOGLINE"} ${QUIETARG:+"$QUIETARG"} -p new ${SCRUBERRORARG:+"-L"} ${SCRUBERRORARG:+"$SCRUBERRORARG"} scrub >>"/var/lib/snapraid/logs/${CFGNAME}-snaplog" 2>&1; then
                 echo "### (${CFGNAMEBIG}) CRON -- Scrub New Blocks has failed (received non-zero return code), exiting..." 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
                 FAILUREMSG="The new block scrub has failed (see logs)."
+                touch "/boot/config/plugins/dwsnap/config/${CFGNAME}-syncneeded"
+                rm -f "/boot/config/plugins/dwsnap/config/${CFGNAME}-lastnodiff"
                 failure_exit_cron
         else
             OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
@@ -430,6 +436,8 @@ if [ "$SCRUB" == "enable" ]; then
     if ! $SNAP_BIN -c "$SNAP_CONF" ${LOGLINE:+"-l"} ${LOGLINE:+"$LOGLINE"} ${QUIETARG:+"$QUIETARG"} -p "$SCRUBPERCENT" -o "$SCRUBAGE" ${SCRUBERRORARG:+"-L"} ${SCRUBERRORARG:+"$SCRUBERRORARG"} scrub >>"/var/lib/snapraid/logs/${CFGNAME}-snaplog" 2>&1; then
             echo "### (${CFGNAMEBIG}) CRON -- Scrub has failed (received non-zero return code), exiting..." 2>&1 | tee -i -a "/var/lib/snapraid/logs/${CFGNAME}-snaplog"
             FAILUREMSG="The scrub has failed (see logs)."
+            touch "/boot/config/plugins/dwsnap/config/${CFGNAME}-syncneeded"
+            rm -f "/boot/config/plugins/dwsnap/config/${CFGNAME}-lastnodiff"
             failure_exit_cron
     else
         OPTIME=$(date +"%d.%m.%Y %H:%M:%S %Z")
