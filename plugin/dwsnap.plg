@@ -18,7 +18,7 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
-###2025.02.16
+###2025.02.16a
 - fix: update the array status also to error if maintenance syncs/scrubs failed
 ###2025.01.07
 - new: added setting to output file paths in different formats
