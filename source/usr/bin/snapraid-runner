@@ -194,6 +194,8 @@ if [ "${OPCMD}" == "sync" ]; then
         rm -f "/boot/config/plugins/dwsnap/config/${CFGNAME}-lastnodiff"
         [ "$NOTIFYDONE" == "YES" ] && "$NOTIFY_BIN" -e "${EVENT}" -s "Notice ${SUBJECT} Operation Finished" -d "SnapRAID operation ${BIGOP} finished with success (after ${DURATION} ${DURATIONUNIT}).${RAMWARNINGSHORT}" -i "normal"
     else
+        touch "/boot/config/plugins/dwsnap/config/${CFGNAME}-syncneeded"
+        rm -f "/boot/config/plugins/dwsnap/config/${CFGNAME}-lastnodiff"
         [ "$NOTIFYDONE" == "YES" ] && "$NOTIFY_BIN" -e "${EVENT}" -s "Alert ${SUBJECT} Operation Failure" -d "SnapRAID operation ${BIGOP} finished with errors (after ${DURATION} ${DURATIONUNIT}).${RAMWARNINGSHORT}" -i "alert"
     fi
 elif [ "${OPCMD}" == "scrub" ]; then
@@ -214,6 +216,8 @@ elif [ "${OPCMD}" == "scrub" ]; then
         echo "$OPTIME" > "/boot/config/plugins/dwsnap/config/${CFGNAME}-lastscrub"
         [ "$NOTIFYDONE" == "YES" ] && "$NOTIFY_BIN" -e "${EVENT}" -s "Notice ${SUBJECT} Operation Finished" -d "SnapRAID operation ${BIGOP} finished with success (after ${DURATION} ${DURATIONUNIT}).${RAMWARNINGSHORT}" -i "normal"
     else
+        touch "/boot/config/plugins/dwsnap/config/${CFGNAME}-syncneeded"
+        rm -f "/boot/config/plugins/dwsnap/config/${CFGNAME}-lastnodiff"
         [ "$NOTIFYDONE" == "YES" ] && "$NOTIFY_BIN" -e "${EVENT}" -s "Alert ${SUBJECT} Operation Failure" -d "SnapRAID operation ${BIGOP} finished with errors (after ${DURATION} ${DURATIONUNIT}).${RAMWARNINGSHORT}" -i "alert"
     fi
 elif [ "${OPCMD}" == "diff" ]; then
