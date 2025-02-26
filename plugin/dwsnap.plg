@@ -18,6 +18,8 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2025.02.26
+- fix: future-proofing changes to base plugin structure
 ###2025.02.16b
 - fix: update the array status also to error if maintenance syncs/scrubs failed
 - fix: suppress ambiguous diagnostic message on boot screen (mv)
@@ -208,7 +210,6 @@ if [ -x /usr/local/emhttp/plugins/dwsnap/scripts/write_config ]; then
     /usr/local/emhttp/plugins/dwsnap/scripts/write_config
 fi
 
-/etc/cron.daily/snapraid-poller conntest >/dev/null 2>&amp;1 &amp;
 echo ""
 echo "-------------------------------------------------------------"
 echo " SnapRAID on UNRAID has been installed."

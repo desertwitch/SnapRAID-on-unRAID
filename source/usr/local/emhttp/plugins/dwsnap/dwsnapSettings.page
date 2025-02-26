@@ -96,23 +96,6 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 <?endif;?>
 
 <dl>
-    <dt>SnapRAID Plugin Usage Metric Functions:</dt>
-    <dd>
-        <select class="" name="METRICSAPI" size="1">
-            <?=mk_option($dwsnap_metricsapi, 'disable', 'No');?>
-            <?=mk_option($dwsnap_metricsapi, 'enable', 'Yes');?>
-        </select>
-    </dd>
-</dl>
-
-<blockquote class="inline_help">
-    <p>Enables collection of <strong>anonymized</strong> plugin usage statistics through the plugin usage metrics API.</p>
-    <p>This aids prioritization of bug reports, development of new features and planning for plugin updates/deprecation.</p>
-    <p><em>Attributes: Metric ID, Plugin Version, Unraid Version, SnapRAID Backend Version, SnapRAID Array Count (Number), SnapRAID Array Synced (Yes/No).</em></p>
-    <p><strong><i class="fa fa-heart" style="color:red;"></i> If possible, please keep this setting <u>enabled</u> to support the continued development of this plugin - thank you!</strong></p>
-</blockquote>
-
-<dl>
     <dt>SnapRAID Synchronize Array Shutdowns:</dt>
     <dd>
         <select id="STOPARRAY" name="STOPARRAY" size="1">
