@@ -18,6 +18,8 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2025.04.12
+- fix: footer was no longer showing with versions 7.1.0-beta.4
 ###2025.02.26
 - fix: future-proofing changes to base plugin structure
 ###2025.02.16b

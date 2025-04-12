@@ -123,7 +123,7 @@ function getSnapFooter() {
 }
 $(function()
 {
-    var snap_footer = $("<span id='snap_footer'></span>").insertAfter("div#footer > span#copyright");
+    var snap_footer = $("<span id='snap_footer'></span>").insertAfter("#footer > span#copyright");
     getSnapFooter();
 });
 </script>
