@@ -102,7 +102,10 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
             <?=mk_option($dwsnap_stoparray, "disable", "No");?>
             <?=mk_option($dwsnap_stoparray, "enable", "Yes");?>
         </select>
-        <span style="margin-left:10px;"><i class="fa fa-exclamation-triangle snaphelptip" title="Keep this setting enabled unless having read and fully understood the help description."></i></span>
+        <span style="margin-left:10px;">
+            <i class="fa fa-exclamation-triangle snaphelptip" title="Keep this setting enabled unless having read and fully understood the help description."></i>
+            <?if(version_compare(parse_ini_file('/etc/unraid-version')['version'],'7.1.99', '>')):?> Keep enabled unless having read the help description.<?endif;?>
+        </span>
     </dd>
 </dl>
 
@@ -116,7 +119,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 <dl>
     <dt>SnapRAID Running Operation Hard-Kill Timeout:</dt>
     <dd>
-        <input id="KILLTIME" type="text" class="narrow snapnumber" name="KILLTIME" maxlength="30" value="<?=$dwsnap_killtime?>">seconds
+        <input id="KILLTIME" type="text" class="<?if(version_compare(parse_ini_file('/etc/unraid-version')['version'],'7.1.99', '<')):?>narrow <?endif;?>snapnumber" name="KILLTIME" maxlength="30" value="<?=$dwsnap_killtime?>">seconds
     </dd>
 </dl>
 
@@ -129,11 +132,15 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 
 <dl>
     <dt>
-        <input id="RESETCONF" class="snapanyrun" type="button" value="Reset Configuration">
+        <span>
+            <input id="RESETCONF" class="snapanyrun" type="button" value="Reset Configuration">
+        </span>
     </dt>
     <dd>
-        <input type="submit" id="btnApply" name="#apply" value="Apply">
-        <input type="button" value="Done" onclick="done()">
+        <span>
+            <input type="submit" id="btnApply" name="#apply" value="Apply">
+            <input type="button" value="Done" onclick="done()">
+        </span>
     </dd>
 </dl>
 
@@ -206,7 +213,10 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
             <?=mk_option($dwsnap_active_cfg->rawreports, "manual", "Manual Operations");?>
             <?=mk_option($dwsnap_active_cfg->rawreports, "cron", "Maintenance Operations");?>
         </select>
-        <span style="margin-left:10px;"><i class="fa fa-exclamation-triangle snaphelptip" title="Keep this setting disabled unless having read and fully understood the help description."></i></span>
+        <span style="margin-left:10px;">
+            <i class="fa fa-exclamation-triangle snaphelptip" title="Keep this setting disabled unless having read and fully understood the help description."></i>
+            <?if(version_compare(parse_ini_file('/etc/unraid-version')['version'],'7.1.99', '>')):?> Keep disabled unless having read the help description.<?endif;?>
+        </span>
     </dd>
 </dl>
 
@@ -437,7 +447,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Added Files Threshold:</dt>
             <dd>
-                <input id="ADDED" type="text" class="narrow snaprun snapnegativenumber" name="ADDED" maxlength="30" value="<?=$dwsnap_active_cfg->added?>">files
+                <input id="ADDED" type="text" class="<?if(version_compare(parse_ini_file('/etc/unraid-version')['version'],'7.1.99', '<')):?>narrow <?endif;?>snaprun snapnegativenumber" name="ADDED" maxlength="30" value="<?=$dwsnap_active_cfg->added?>">files
             </dd>
         </dl>
 
@@ -449,7 +459,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Deleted Files Threshold:</dt>
             <dd>
-                <input id="DELETED" type="text" class="narrow snaprun snapnegativenumber" name="DELETED" maxlength="30" value="<?=$dwsnap_active_cfg->deleted?>">files
+                <input id="DELETED" type="text" class="<?if(version_compare(parse_ini_file('/etc/unraid-version')['version'],'7.1.99', '<')):?>narrow <?endif;?>snaprun snapnegativenumber" name="DELETED" maxlength="30" value="<?=$dwsnap_active_cfg->deleted?>">files
             </dd>
         </dl>
 
@@ -461,7 +471,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Updated Files Threshold:</dt>
             <dd>
-                <input id="UPDATED" type="text" class="narrow snaprun snapnegativenumber" name="UPDATED" maxlength="30" value="<?=$dwsnap_active_cfg->updated?>">files
+                <input id="UPDATED" type="text" class="<?if(version_compare(parse_ini_file('/etc/unraid-version')['version'],'7.1.99', '<')):?>narrow <?endif;?>snaprun snapnegativenumber" name="UPDATED" maxlength="30" value="<?=$dwsnap_active_cfg->updated?>">files
             </dd>
         </dl>
 
@@ -473,7 +483,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Moved Files Threshold:</dt>
             <dd>
-                <input id="MOVED" type="text" class="narrow snaprun snapnegativenumber" name="MOVED" maxlength="30" value="<?=$dwsnap_active_cfg->moved?>">files
+                <input id="MOVED" type="text" class="<?if(version_compare(parse_ini_file('/etc/unraid-version')['version'],'7.1.99', '<')):?>narrow <?endif;?>snaprun snapnegativenumber" name="MOVED" maxlength="30" value="<?=$dwsnap_active_cfg->moved?>">files
             </dd>
         </dl>
 
@@ -485,7 +495,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Copied Files Threshold:</dt>
             <dd>
-                <input id="COPIED" type="text" class="narrow snaprun snapnegativenumber" name="COPIED" maxlength="30" value="<?=$dwsnap_active_cfg->copied?>">files
+                <input id="COPIED" type="text" class="<?if(version_compare(parse_ini_file('/etc/unraid-version')['version'],'7.1.99', '<')):?>narrow <?endif;?>snaprun snapnegativenumber" name="COPIED" maxlength="30" value="<?=$dwsnap_active_cfg->copied?>">files
             </dd>
         </dl>
 
@@ -497,7 +507,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Restored Files Threshold:</dt>
             <dd>
-                <input id="RESTORED" type="text" class="narrow snaprun snapnegativenumber" name="RESTORED" maxlength="30" value="<?=$dwsnap_active_cfg->restored?>">files
+                <input id="RESTORED" type="text" class="<?if(version_compare(parse_ini_file('/etc/unraid-version')['version'],'7.1.99', '<')):?>narrow <?endif;?>snaprun snapnegativenumber" name="RESTORED" maxlength="30" value="<?=$dwsnap_active_cfg->restored?>">files
             </dd>
         </dl>
 
@@ -575,7 +585,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Sync I/O Premature Interrupt:</dt>
             <dd>
-                <input id="SYNCERRORS" type="text" class="narrow snaprun snapnumber" name="SYNCERRORS" maxlength="30" value="<?=$dwsnap_active_cfg->sync_errors?>">errors
+                <input id="SYNCERRORS" type="text" class="<?if(version_compare(parse_ini_file('/etc/unraid-version')['version'],'7.1.99', '<')):?>narrow <?endif;?>snaprun snapnumber" name="SYNCERRORS" maxlength="30" value="<?=$dwsnap_active_cfg->sync_errors?>">errors
             </dd>
         </dl>
 
@@ -607,7 +617,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Scrub Age:</dt>
             <dd>
-                <input id="SCRUBAGE" type="text" class="narrow snaprun snapnumber" name="SCRUBAGE" maxlength="30" value="<?=$dwsnap_active_cfg->scrubage?>">days
+                <input id="SCRUBAGE" type="text" class="<?if(version_compare(parse_ini_file('/etc/unraid-version')['version'],'7.1.99', '<')):?>narrow <?endif;?>snaprun snapnumber" name="SCRUBAGE" maxlength="30" value="<?=$dwsnap_active_cfg->scrubage?>">days
             </dd>
         </dl>
 
@@ -618,7 +628,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Scrub Percentage:</dt>
             <dd>
-                <input id="SCRUBPERCENT" type="text" class="narrow snaprun snapnumber" name="SCRUBPERCENT" maxlength="30" value="<?=$dwsnap_active_cfg->scrubpercent?>">%
+                <input id="SCRUBPERCENT" type="text" class="<?if(version_compare(parse_ini_file('/etc/unraid-version')['version'],'7.1.99', '<')):?>narrow <?endif;?>snaprun snapnumber" name="SCRUBPERCENT" maxlength="30" value="<?=$dwsnap_active_cfg->scrubpercent?>">%
             </dd>
         </dl>
 
@@ -645,7 +655,7 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
         <dl>
             <dt>SnapRAID Maintenance - Scrub I/O Premature Interrupt:</dt>
             <dd>
-                <input id="SCRUBERRORS" type="text" class="narrow snaprun snapnumber" name="SCRUBERRORS" maxlength="30" value="<?=$dwsnap_active_cfg->scrub_errors?>">errors
+                <input id="SCRUBERRORS" type="text" class="<?if(version_compare(parse_ini_file('/etc/unraid-version')['version'],'7.1.99', '<')):?>narrow <?endif;?>snaprun snapnumber" name="SCRUBERRORS" maxlength="30" value="<?=$dwsnap_active_cfg->scrub_errors?>">errors
             </dd>
         </dl>
 
@@ -704,12 +714,16 @@ require_once '/usr/local/emhttp/plugins/dwsnap/include/dwsnap_config.php';
 
 <dl>
     <dt>
-        <input id="NEWARRAY" type="button" value="Create New Array">
-        <input id="DELARRAY" class="snaprun" type="button" value="Delete This Array">
+        <span>
+            <input id="NEWARRAY" type="button" value="Create New Array">
+            <input id="DELARRAY" class="snaprun" type="button" value="Delete This Array">
+        </span>
     </dt>
     <dd>
-        <input type="submit" id="btnApply2" name="#apply" value="Apply">
-        <input type="button" value="Done" onclick="done()">
+        <span>
+            <input type="submit" id="btnApply2" name="#apply" value="Apply">
+            <input type="button" value="Done" onclick="done()">
+        </span>
     </dd>
 </dl>
 

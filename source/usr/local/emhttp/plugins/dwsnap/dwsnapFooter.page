@@ -42,6 +42,44 @@ try {
             $snap_cfg_name_upper = strtoupper($snap_cfg_name);
 
             $pluginname = "snapraid" . $snap_cfg_counter;
+
+            if(version_compare(parse_ini_file('/etc/unraid-version')['version'],'7.1.99', '>')) {
+            // -------------------------------------------------------------
+            // RESPONSIVE DASHBOARD
+            // -------------------------------------------------------------
+            $mytiles[$pluginname]['column2'] =
+            <<<EOT
+            <tbody id="$pluginname" title="SnapRAID: $snap_cfg_name_upper">
+                <tr>
+                <td>
+                    <span class='tile-header'>
+                    <span class='tile-header-left'>
+                    <i class='icon-disks f32'></i>
+                    <div class='section'>
+                        <h3 class='tile-header-main'>SnapRAID: $snap_cfg_name_upper</h3>
+                        <span class='snaphead' name='$snap_cfg_name'>Array Status: <i class="fa fa-spinner fa-spin"></i></span>
+                    </div>
+                    </span>
+                    <span class='tile-header-right'>
+                        <span class='tile-ctrl'>
+                        </span>
+                        <span class='tile-header-right-controls'>
+                        <a href='/Settings/dwsnapOps?snapr=$snap_cfg_name' title='Go to SnapRAID Settings'>
+                            <i class='fa fa-fw fa-cog control'></i>
+                        </a>
+                        </span>
+                    </span>
+                    </span>
+                </td>
+                </tr>
+                <tr class='header'><td><span class='w18'>Parity Disks</span><span class='w18'>Data Disks</span><span class='w18'>Last Sync</span><span class='w18'>Last Scrub</span><span class='w26'>Maintenance</span></td></tr>
+                <tr class='snapdash' name='$snap_cfg_name'><td style="text-align:center;"><i class="fa fa-spinner fa-spin"></i> <em>Please wait, retrieving information...</em></td></tr>
+            </tbody>
+EOT;
+            } else {
+            // -------------------------------------------------------------
+            // NON-RESPONSIVE DASHBOARD
+            // -------------------------------------------------------------
             $mytiles[$pluginname]['column2'] = <<<EOT
             <tbody id="$pluginname" title="SnapRAID: $snap_cfg_name_upper">
             <tr><td>
@@ -54,6 +92,7 @@ try {
             <tr class='snapdash' name='$snap_cfg_name'><td style="text-align:center;"><i class="fa fa-spinner fa-spin"></i> <em>Please wait, retrieving information...</em></td></tr>
             </tbody>
 EOT;
+            }
         } catch (\Throwable $t) {
             error_log($t);
             continue;
@@ -100,7 +139,9 @@ $(function()
 <style type="text/css">
 #snap_footer {
     float: right;
+    <?if(version_compare(parse_ini_file('/etc/unraid-version')['version'],'7.1.99', '<')):?>
     margin-right: 24px;
+    <?endif;?>
     font-size: 1.1rem;
 }
 #snap_footer i {
@@ -123,7 +164,14 @@ function getSnapFooter() {
 }
 $(function()
 {
-    var snap_footer = $("<span id='snap_footer'></span>").insertAfter("#footer > span#copyright");
+    var snap_footer = $("<span id='snap_footer'></span>");
+
+    <?if(version_compare(parse_ini_file('/etc/unraid-version')['version'],'7.1.99', '>')):?>
+    snap_footer.appendTo(".footer-right");
+    <?else:?>
+    snap_footer.insertAfter("#footer > span#copyright");
+    <?endif;?>
+
     getSnapFooter();
 });
 </script>

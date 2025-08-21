@@ -103,8 +103,10 @@ data d5 /mnt/disk5/
 
 <dl>
     <dt>
-        <input type="button" class="snaprun" value="Save" id="btnSubmit" title="Save Configuration File" />
-        <input type="button" class="snaprun" value="Cancel" id="btnCancel" />
+        <span>
+            <input type="button" class="snaprun" value="Save" id="btnSubmit" title="Save Configuration File" />
+            <input type="button" class="snaprun" value="Cancel" id="btnCancel" />
+        </span>
     </dt>
     <dd></dd>
 </dl>
