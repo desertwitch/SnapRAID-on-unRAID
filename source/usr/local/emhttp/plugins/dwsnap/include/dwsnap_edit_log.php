@@ -64,7 +64,7 @@ if(!empty($_GET["lines"])) {
 }
 
 if(file_exists($file)) {
-    $editfile = shell_exec("tail -$tailarg $snap_archive_lines $escfile 2>/dev/null");
+    $editfile = shell_exec("tr '\\r' '\\n' < $escfile 2>/dev/null | tail -$tailarg $snap_archive_lines");
 }
 
 echo json_encode($editfile);

@@ -58,7 +58,7 @@ try {
             $tailarg = "n";
         }
         if(file_exists("/var/lib/snapraid/logs/$snap_log_active_cfg-snaplog")) {
-            $snap_log = shell_exec("tail -$tailarg $snap_logger_lines '/var/lib/snapraid/logs/$snap_log_active_cfg-snaplog' 2>/dev/null");
+            $snap_log = shell_exec("tr '\\r' '\\n' < '/var/lib/snapraid/logs/$snap_log_active_cfg-snaplog' 2>/dev/null | tail -$tailarg $snap_logger_lines");
             if(!empty($snap_log)) {
                 $snap_logger_retarr["success"]["response"] = "<pre class='snaplog'>".htmlspecialchars($snap_log)."</pre>";
             } else {
