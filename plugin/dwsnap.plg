@@ -3,14 +3,14 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "dwsnap">
 <!ENTITY author    "desertwitch">
-<!ENTITY version   "2025.08.21">
+<!ENTITY version   "2026.01.26">
 <!ENTITY launch    "Settings/dwsnapOps">
 <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/SnapRAID-on-unRAID/main">
 <!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
 <!ENTITY pkgURL    "&gitURL;/packages">
 <!ENTITY plgPATH   "/boot/config/plugins/&name;">
-<!ENTITY plgNAME   "dwsnap-2025.08.21-x86_64-1">
-<!ENTITY plgMD5    "cbbb4e9b39ed81eb1264c403371b6aa7">
+<!ENTITY plgNAME   "dwsnap-2026.01.26-x86_64-1">
+<!ENTITY plgMD5    "3baeeb24b83963b96bd74d846154c29f">
 <!ENTITY emhttp    "/usr/local/emhttp/plugins/&name;">
 ]>
 
@@ -18,6 +18,8 @@
 
 <CHANGES>
 ## SnapRAID on UNRAID
+###2026.01.26
+- fix: treat carriage returns as separate lines
 ###2025.08.21
 - fix: make pages and dashboards compliant with new responsive UI
 ###2025.04.12
